@@ -4,6 +4,7 @@
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import { Action } from "@radix-ui/react-toast";
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -28,23 +29,24 @@ function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
   return count.toString();
 }
-
+// s
 type ActionType = keyof typeof actionTypes;
+
 type Action =
   | {
-      type: "ADD_TOAST";
+      type: typeof actionTypes.ADD_TOAST;
       toast: ToasterToast;
     }
   | {
-      type: "UPDATE_TOAST";
+      type: typeof actionTypes.UPDATE_TOAST;
       toast: Partial<ToasterToast>;
     }
   | {
-      type: "DISMISS_TOAST";
+      type: typeof actionTypes.DISMISS_TOAST;
       toastId?: ToasterToast["id"];
     }
   | {
-      type: "REMOVE_TOAST";
+      type: typeof actionTypes.REMOVE_TOAST;
       toastId?: ToasterToast["id"];
     };
 
