@@ -29,7 +29,7 @@ function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
   return count.toString();
 }
-// s
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type ActionType = keyof typeof actionTypes;
 
 type Action =
