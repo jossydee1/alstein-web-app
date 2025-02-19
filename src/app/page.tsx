@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 // vscode:extension/bradlc.vscode-tailwindcss
 export default function Home() {
   return (
