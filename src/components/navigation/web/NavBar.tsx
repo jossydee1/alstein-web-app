@@ -1,27 +1,21 @@
 "use client";
 
-import {
-  Building2,
-  ChevronDown,
-  DollarSign,
-  House,
-  Menu,
-  X,
-} from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { usePathname } from "next/navigation";
 import { webRoutes } from "@/utils";
+import { Button } from "@/components/ui/button";
 
 // CSS Classes
 const STYLES = {
   icon: "me-3 block size-4 shrink-0 md:me-2 md:hidden",
-  link: "flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 focus:bg-gray-100",
+  link: "flex items-center rounded-lg p-2 text-[#7F7F7F] hover:text-[#2F2F2F] focus:text-[#2F2F2F]",
   subLink:
-    "flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 focus:bg-gray-100 md:px-3",
-  activeLink: "bg-gray-100 font-semibold text-black",
+    "flex items-center rounded-lg p-2 hover:text-[#2F2F2F] focus:text-[#2F2F2F] md:px-3",
+  activeLink: "text-[#2F2F2F] font-semibold text-black",
   activeSubLink: "font-semibold text-black1",
 } as const;
 
@@ -30,7 +24,7 @@ interface NavItem {
   name: string;
   href?: string;
   icon?: React.ComponentType<{ className?: string }>;
-  isActive: (path: string, type?: string) => boolean;
+  isActive: (path: string) => boolean;
   isDropdown?: boolean;
   dropdownItems?: DropdownItem[];
 }
@@ -46,25 +40,21 @@ const NAV_ITEMS: NavItem[] = [
   {
     name: "Home",
     href: webRoutes.home,
-    icon: House,
     isActive: path => path === webRoutes.home,
   },
   {
     name: "Services",
     href: webRoutes.services,
-    icon: Building2,
     isActive: (path: string) => path === webRoutes.services,
   },
   {
     name: "About",
     href: webRoutes.about,
-    icon: Building2,
     isActive: (path: string) => path === webRoutes.about,
   },
   {
     name: "Contact",
     href: webRoutes.contact,
-    icon: DollarSign,
     isActive: path => path === webRoutes.contact,
   },
 ];
@@ -87,7 +77,6 @@ const NavBar = () => {
             aria-expanded="false"
             aria-label="Dropdown"
           >
-            {item.icon && <item.icon className={STYLES.icon} />}
             {item.name}
             <ChevronDown className="ms-auto size-4 shrink-0 duration-300 hs-dropdown-open:-rotate-180 md:ms-1 md:hs-dropdown-open:rotate-0" />
           </button>
@@ -117,18 +106,17 @@ const NavBar = () => {
         className={`${STYLES.link} ${item.isActive(path) ? STYLES.activeLink : ""}`}
         href={item.href || "#"}
       >
-        {item.icon && <item.icon className={STYLES.icon} />}
         {item.name}
       </Link>
     );
   };
 
   return (
-    <div className="sticky top-0 z-50 flex w-full flex-wrap border-b border-gray-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 md:flex-nowrap md:justify-start">
-      <nav className="relative mx-auto w-full max-w-[85rem] px-4 py-2 sm:px-6 md:flex md:items-center md:justify-between md:gap-3 lg:px-8">
+    <div className="flex w-full flex-wrap bg-white md:flex-nowrap lg:justify-start">
+      <nav className="relative mx-auto w-full max-w-screen-2xl gap-x-[60px] px-4 py-2 sm:px-6 md:px-[50px] md:py-6 lg:flex lg:items-center lg:justify-between lg:gap-[60px] lg:px-[100px] xl:px-[150px]">
         <div className="flex items-center justify-between gap-x-1">
           <Link
-            className="flex-none text-xl font-semibold"
+            className="w-[130px] flex-none text-xl font-semibold"
             href={webRoutes.home}
             aria-label="Brand"
           >
@@ -142,7 +130,7 @@ const NavBar = () => {
 
           <button
             type="button"
-            className="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-lg border border-gray-200 text-[12px] font-medium hover:bg-gray-100 focus:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 md:hidden"
+            className="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-lg border border-gray-200 text-[12px] font-medium hover:bg-gray-100 focus:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 lg:hidden"
             id="hs-header-base-collapse"
             aria-expanded="false"
             aria-controls="hs-header-base"
@@ -157,19 +145,26 @@ const NavBar = () => {
 
         <div
           id="hs-header-base"
-          className="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 md:block"
+          className="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 lg:block"
           aria-labelledby="hs-header-base-collapse"
         >
           <div className="max-h-[75vh] overflow-hidden overflow-y-auto [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
-            <div className="flex flex-col gap-0.5 py-2 md:flex-row md:items-center md:gap-1 md:py-0">
-              <div className="m-2 flex grow flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-1">
-                <div className="m-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-1">
+            <div className="flex flex-col gap-0.5 py-2 lg:flex-row lg:items-center lg:gap-1 lg:py-0">
+              <div className="flex grow flex-col gap-9 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
+                <div className="m-2 flex flex-col gap-0.5 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   {NAV_ITEMS.map(renderNavItem)}
                 </div>
 
-                <div className="m-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-1">
-                  {/* <SecondaryButton text="Join as a Partner" variant="plain" />
-                  <PrimaryButton text="Register/Log in" /> */}
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
+                  <Button
+                    variant="ghost"
+                    className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0"
+                  >
+                    Join as a Partner
+                  </Button>
+                  <Button className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal">
+                    Register/Log in
+                  </Button>
                 </div>
               </div>
             </div>
