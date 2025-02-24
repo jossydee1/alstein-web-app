@@ -24,7 +24,7 @@ const WhyUs = () => {
             }}
           >
             <CalendarCheck size={STYLES.icon} />
-            <h2 className={STYLES.title}>24/7 Booking Accessibility</h2>
+            <h3 className={STYLES.title}>24/7 Booking Accessibility</h3>
             <p className={STYLES.description}>
               Schedule laboratory services at your convenience, day or night.
             </p>
@@ -38,9 +38,9 @@ const WhyUs = () => {
             }}
           >
             <ShieldCheck size={STYLES.icon} />
-            <h2 className={STYLES.title}>
+            <h3 className={STYLES.title}>
               Secure Payments & Insurance Integration
-            </h2>
+            </h3>
             <p className={STYLES.description}>
               Pay securely online and easily use your health insurance{" "}
             </p>
@@ -54,11 +54,18 @@ const WhyUs = () => {
             }}
           >
             <Handshake size={STYLES.icon} />
-            <h2 className={STYLES.title}>Trusted Laboratory Partners</h2>
+            <h3 className={STYLES.title}>Trusted Laboratory Partners</h3>
             <p className={STYLES.description}>
               Connect with certified laboratories and diagnostic centers.{" "}
             </p>
           </article>
+        </div>
+
+        <div className="flex w-full justify-center">
+          <div className="mx-auto mt-6 inline-flex gap-1.5 rounded-full bg-[#B1B1B180] p-2">
+            <div className="h-4 w-4 rounded-full bg-white"></div>
+            <div className="h-4 w-4 rounded-full bg-[#A6A6A6]"></div>
+          </div>
         </div>
       </section>
     </div>
