@@ -2,10 +2,12 @@ export const webRoutes = {
   home: "/",
   about: "/about",
   products: "/products",
+  services: "/services",
+  contact: "/contact",
+
   product_1: "/products?type=one",
   product_2: "/products?type=two",
   pricing: "/pricing",
-  contact: "/contact",
   blog: "/blog",
   shop: "/shop",
   faq: "/#faq",
