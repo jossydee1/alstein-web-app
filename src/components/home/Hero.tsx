@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 const Hero = () => {
   return (
     <div
-      className="flex min-h-screen w-full flex-col justify-center px-[24px] py-[40px] text-white md:px-[50px] md:py-[40px] lg:px-[100px] lg:py-[66px] xl:px-[150px] xl:py-[88px]"
+      className="min-h-screen text-white"
       style={{
         backgroundImage: "url('/images/doctor.png')",
         backgroundSize: "cover",
@@ -19,7 +19,10 @@ const Hero = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <header className="w-full max-w-screen-2xl">
+      <header
+        className="section-container"
+        // className="mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[50px] md:py-[40px] lg:px-[100px] lg:py-[66px] xl:px-[150px] xl:py-[88px]"
+      >
         <div className="w-full max-w-[700px]">
           <section className="mb-20">
             <h1 className="leading-[72px mb-[30px] text-[57px] font-bold">
