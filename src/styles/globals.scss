@@ -89,7 +89,8 @@ body {
 
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
-  src: url("../../public/fonts/NeueHaasDisplay-Black.woff2") format("woff2"),
+  src:
+    url("../../public/fonts/NeueHaasDisplay-Black.woff2") format("woff2"),
     url("../../public/fonts/NeueHaasDisplay-Black.woff") format("woff");
   font-weight: 900;
   font-style: normal;
@@ -98,7 +99,8 @@ body {
 
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
-  src: url("../../public/fonts/NeueHaasDisplay-Bold.woff2") format("woff2"),
+  src:
+    url("../../public/fonts/NeueHaasDisplay-Bold.woff2") format("woff2"),
     url("../../public/fonts/NeueHaasDisplay-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
@@ -107,7 +109,8 @@ body {
 
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
-  src: url("../../public/fonts/NeueHaasDisplay-Light.woff2") format("woff2"),
+  src:
+    url("../../public/fonts/NeueHaasDisplay-Light.woff2") format("woff2"),
     url("../../public/fonts/NeueHaasDisplay-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
@@ -116,7 +119,8 @@ body {
 
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
-  src: url("../../public/fonts/NeueHaasDisplay-Mediu.woff2") format("woff2"),
+  src:
+    url("../../public/fonts/NeueHaasDisplay-Mediu.woff2") format("woff2"),
     url("../../public/fonts/NeueHaasDisplay-Mediu.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -125,9 +129,15 @@ body {
 
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
-  src: url("../../public/fonts/NeueHaasDisplay-Roman.woff2") format("woff2"),
+  src:
+    url("../../public/fonts/NeueHaasDisplay-Roman.woff2") format("woff2"),
     url("../../public/fonts/NeueHaasDisplay-Roman.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+}
+
+// to set padding margin, and max width for the container
+.section-container {
+  @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[100px] md:py-[50px] xl:px-[150px] xl:py-[100px];
 }
