@@ -3,6 +3,7 @@ import Hero from "./Hero";
 import WhyUs from "./WhyUs";
 import Categories from "./Categories";
 import Partners from "./Partners";
+import Testimonials from "./Testimonials";
 
 const HomeContent = () => {
   return (
@@ -11,6 +12,7 @@ const HomeContent = () => {
       <WhyUs />
       <Categories />
       <Partners />
+      <Testimonials />
     </main>
   );
 };
