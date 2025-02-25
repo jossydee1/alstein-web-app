@@ -11,13 +11,6 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 
 const WhyUs = () => {
-  const STYLES = {
-    card: "rounded-md px-8 py-12 text-white max-w-[390px]",
-    icon: "48",
-    title: "mb-4 mt-3 text-[32px] leading-[40px]",
-    description: "text-[#A4A4A4] text-[18px] leading-[20px]",
-  };
-
   const slides = [
     {
       icon: CalendarCheck,
@@ -124,12 +117,16 @@ const WhyUs = () => {
                 style={{ width: `${slideWidth}px` }}
               >
                 <article
-                  className={STYLES.card}
+                  className="max-w-[390px] rounded-md px-8 py-12 text-white"
                   style={{ background: slide.bg }}
                 >
-                  <slide.icon size={STYLES.icon} />
-                  <h3 className={STYLES.title}>{slide.title}</h3>
-                  <p className={STYLES.description}>{slide.description}</p>
+                  <slide.icon size="48" />
+                  <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+                    {slide.title}
+                  </h3>
+                  <p className="text-[18px] leading-[20px] text-[#A4A4A4]">
+                    {slide.description}
+                  </p>
                 </article>
               </div>
             ))}

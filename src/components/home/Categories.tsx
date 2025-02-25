@@ -2,15 +2,9 @@ import Image from "next/image";
 import React from "react";
 import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
-import { Button } from "../ui/button";
+import Link from "next/link";
 
 const Categories = () => {
-  const STYLES = {
-    card: "min-w-[260px] max-w-[260px] rounded-2xl px-4 py-7 text-white relative overflow-hidden",
-    title: "mb-4 mt-3 text-[32px] leading-[40px]",
-    lists: "list-inside list-disc",
-  };
-
   const categories = [
     {
       title: "Medical and Clinical",
@@ -65,9 +59,9 @@ const Categories = () => {
   return (
     <div className="bg-white">
       <section className="section-container">
-        <div className="flex items-center gap-2.5 text-brandColor">
-          <hr className="w-[22px] border border-brandColor" />
-          <span className="mb-2.5 text-lg font-medium uppercase">
+        <div className="mb-2.5 flex items-center gap-2.5 text-brandColor">
+          <hr className="w-[22px] border-2 border-brandColor" />
+          <span className="text-lg font-medium uppercase">
             Our Top Categories
           </span>
         </div>
@@ -77,10 +71,10 @@ const Categories = () => {
 
         <div className="scrollbar-hide mt-8 flex w-full flex-nowrap gap-7 overflow-x-auto">
           <article className="min-w-[362px] max-w-[362px] rounded-2xl bg-[#181818] px-6 py-8 text-white">
-            <h3 className="text-[36px] font-light leading-[48px]">
+            <p className="text-[36px] font-light leading-[48px]">
               Compare providers, view equipment&apos;s state and book
               appointments effortlessly.
-            </h3>
+            </p>
             <div className="relative mt-[64px]">
               <Image src={arrow} alt="arrow right" />
             </div>
@@ -89,7 +83,7 @@ const Categories = () => {
           {categories.map(category => (
             <article
               key={category.title}
-              className={STYLES.card}
+              className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
                 backgroundImage: "url('/images/doctor.png')",
                 backgroundSize: "cover",
@@ -97,8 +91,10 @@ const Categories = () => {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <h2 className={STYLES.title}>{category.title}</h2>
-              <ul className={STYLES.lists}>
+              <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+                {category.title}
+              </h3>
+              <ul className="list-inside list-disc">
                 {category.lists.map(list => (
                   <li key={list}>{list}</li>
                 ))}
@@ -109,9 +105,13 @@ const Categories = () => {
                   <Image src={users} alt="arrow right" />
                   {category.partners} Partners
                 </span>
-                <Button className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white hover:bg-white hover:text-[#0F0F0F]">
+
+                <Link
+                  href={category.url}
+                  className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
+                >
                   View & Book
-                </Button>
+                </Link>
               </div>
             </article>
           ))}
