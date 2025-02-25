@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import image from "@/public/images/doctor.png";
 import { MapPin, Star } from "lucide-react";
 import Link from "next/link";
@@ -11,13 +13,7 @@ const Partners = () => {
       equipment: "Membrane Osmometers",
       address: "2 Iyalla street Alausa Ikeja Lagos",
       count: 300,
-      images: [
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-      ],
+      images: [image, image, image, image, image],
       ratings: 3,
       url: "#",
     },
@@ -26,13 +22,7 @@ const Partners = () => {
       equipment: "Membrane Osmometers",
       address: "2 Iyalla street Alausa Ikeja Lagos",
       count: 300,
-      images: [
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-      ],
+      images: [image, image, image, image, image],
       ratings: 3,
       url: "#",
     },
@@ -41,13 +31,7 @@ const Partners = () => {
       equipment: "Membrane Osmometers",
       address: "2 Iyalla street Alausa Ikeja Lagos",
       count: 300,
-      images: [
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-      ],
+      images: [image, image, image, image, image],
       ratings: 3,
       url: "#",
     },
@@ -56,13 +40,7 @@ const Partners = () => {
       equipment: "Membrane Osmometers",
       address: "2 Iyalla street Alausa Ikeja Lagos",
       count: 300,
-      images: [
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-        "url('/images/doctor.png')",
-      ],
+      images: [image, image, image, image, image],
       ratings: 3,
       url: "#",
     },
@@ -82,22 +60,12 @@ const Partners = () => {
         </h2>
 
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {partners.map(p => (
+          {partners.map((p, index) => (
             <article
-              key={p.name}
+              key={index}
               className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
             >
-              <div className="relative">
-                <div className="absolute right-1.5 top-2.5 flex items-center rounded-lg bg-[#00000033] p-1 text-white">
-                  <Star className="" fill="#FFD700" size={20} stroke="0" />
-                  |30
-                </div>
-                <Image
-                  src={image}
-                  alt=""
-                  className="aspect-[4.9/5] rounded-md"
-                />
-              </div>
+              <ImageSlider images={p.images} />
 
               <div>
                 <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
@@ -123,6 +91,61 @@ const Partners = () => {
           ))}
         </div>
       </section>
+    </div>
+  );
+};
+
+import { StaticImageData } from "next/image";
+
+const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const slideRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative overflow-hidden rounded-md">
+      <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-lg bg-[#00000033] p-1 text-white">
+        <Star className="" fill="#FFD700" size={20} stroke="0" />
+        |30
+      </div>
+      <div
+        ref={slideRef}
+        className="relative flex transition-transform duration-500 ease-in-out"
+        style={{
+          transform: `translateX(-${currentIndex * 100}%)`,
+          width: `${images.length * 100}%`,
+        }}
+      >
+        {images.map((img, index) => (
+          <div key={index} className="w-full flex-shrink-0 object-contain">
+            <Image
+              src={img}
+              alt=""
+              className="aspect-[4.9/5] max-h-[300px] w-full rounded-md object-cover"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Dots */}
+      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`h-2.5 w-2.5 rounded-full transition-all ${
+              index === currentIndex ? "scale-125 bg-white" : "bg-gray-400"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
