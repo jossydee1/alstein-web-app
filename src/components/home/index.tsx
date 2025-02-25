@@ -2,8 +2,9 @@ import React from "react";
 import Hero from "./Hero";
 import WhyUs from "./WhyUs";
 import Categories from "./Categories";
-import Partners from "./Partners";
+import Listings from "./Listings";
 import Testimonials from "./Testimonials";
+import Partners from "./Partners";
 
 const HomeContent = () => {
   return (
@@ -11,8 +12,9 @@ const HomeContent = () => {
       <Hero />
       <WhyUs />
       <Categories />
-      <Partners />
+      <Listings />
       <Testimonials />
+      <Partners />
     </main>
   );
 };

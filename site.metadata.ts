@@ -1,6 +1,6 @@
 const site = {
   url: "https://example.com",
-  title: "ProdPlates",
+  title: "Alstein",
   description: "#",
   cover_image: "#",
   cover_image_alt: "#",
@@ -12,6 +12,12 @@ const site = {
 
   blog: "#",
   author: "#",
+
+  contacts: {
+    address: "367 Hilcrest lane Irvine California",
+    phone: "234 5678 9000",
+    email: "Alstine@Example.com",
+  },
 
   emails: {
     hello: "#",
