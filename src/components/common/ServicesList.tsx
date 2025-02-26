@@ -97,12 +97,12 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
         {images.map((img, index) => (
           <div
             key={index}
-            className="aspect-square h-[280px] w-full flex-shrink-0"
+            className="aspect-square h-auto w-full flex-shrink-0"
           >
             <Image
               src={img}
               alt=""
-              className="aspect-square h-[280px] w-full rounded-md object-cover"
+              className="aspect-square h-auto w-full rounded-md object-cover"
             />
           </div>
         ))}
