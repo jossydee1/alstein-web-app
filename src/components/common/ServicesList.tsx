@@ -8,7 +8,7 @@ import React, { useRef, useState } from "react";
 
 export const ServicesList = ({ services }: { services: ServicesProps[] }) => {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {services.map((p, index) => (
         <article
           key={index}
@@ -87,19 +87,22 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
         ref={slideRef}
         className="relative flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${currentIndex * 280}px)`,
-          width: `${images.length * 280}px`,
+          transform: `translateX(-${currentIndex * 100}%)`,
+          width: `${images.length * 100}%`,
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         {images.map((img, index) => (
-          <div key={index} className="h-[280px] w-[280px] flex-shrink-0">
+          <div
+            key={index}
+            className="aspect-square max-h-[280px] w-full flex-shrink-0"
+          >
             <Image
               src={img}
               alt=""
-              className="h-full w-full rounded-md object-cover"
+              className="aspect-square max-h-[280px] w-full rounded-md object-cover"
             />
           </div>
         ))}

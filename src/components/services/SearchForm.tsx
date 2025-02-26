@@ -29,9 +29,9 @@ const Header = () => {
 
   return (
     <div className="bg-white">
-      <header className="section-container">
+      <header className="section-container !pb-0 !pt-3">
         <div
-          className="flex min-h-[260px] flex-col items-center justify-center gap-6 overflow-hidden rounded-md px-[112px] py-11 text-white"
+          className="flex min-h-[260px] flex-col items-center justify-center gap-6 overflow-hidden rounded-md px-[40px] py-11 text-white lg:px-[80px] xl:px-[112px]"
           style={{
             backgroundImage: "url('/images/search-bg.png')",
             backgroundSize: "cover",
@@ -62,7 +62,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#BBBBBB] py-6">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[#BBBBBB] py-6">
           <div className="flex flex-wrap items-start gap-2">
             {/* Filters */}
             <DropdownMenu>

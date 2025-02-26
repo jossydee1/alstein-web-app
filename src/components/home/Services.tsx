@@ -11,15 +11,17 @@ const Services = () => {
     <div className="bg-white">
       <section className="section-container">
         <div>
-          <div className="mb-2.5 flex items-center justify-center gap-2.5 text-brandColor">
-            <hr className="w-[22px] border-2 border-brandColor" />
-            <span className="text-lg font-medium uppercase">
-              Trusted Partners
-            </span>
+          <div className="mb-8">
+            <div className="mb-2.5 flex items-center justify-center gap-2.5 text-brandColor">
+              <hr className="w-[22px] border-2 border-brandColor" />
+              <span className="text-lg font-medium uppercase">
+                Trusted Partners
+              </span>
+            </div>
+            <h2 className="text-center text-[40px] font-normal leading-[48px]">
+              Find the Right Equipment & Service for Your Needs
+            </h2>
           </div>
-          <h2 className="text-center text-[40px] font-normal leading-[48px]">
-            Find the Right Equipment & Service for Your Needs
-          </h2>
 
           <ServicesList services={servicesData} />
         </div>

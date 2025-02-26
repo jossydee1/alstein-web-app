@@ -22,45 +22,43 @@ const Services = () => {
 
   return (
     <div className="bg-white">
-      <section className="section-container">
-        <div>
-          <ServicesList services={servicesData} />
+      <section className="section-container md:pt-[40px] xl:py-[64px]">
+        <ServicesList services={servicesData} />
 
-          <Pagination className="mt-[70px]">
-            <PaginationContent className={PAGINATION_STYLES.content}>
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  className={PAGINATION_STYLES.button}
-                />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink
-                  href="#"
-                  className={`${PAGINATION_STYLES.button} ${PAGINATION_STYLES.isActive}`}
-                >
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" className={PAGINATION_STYLES.button}>
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" className={PAGINATION_STYLES.button}>
-                  3
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis className={PAGINATION_STYLES.button} />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" className={PAGINATION_STYLES.button} />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+        <Pagination className="mt-[70px]">
+          <PaginationContent className={PAGINATION_STYLES.content}>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                className={PAGINATION_STYLES.button}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#"
+                className={`${PAGINATION_STYLES.button} ${PAGINATION_STYLES.isActive}`}
+              >
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" className={PAGINATION_STYLES.button}>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" className={PAGINATION_STYLES.button}>
+                3
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis className={PAGINATION_STYLES.button} />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" className={PAGINATION_STYLES.button} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </section>
     </div>
   );
