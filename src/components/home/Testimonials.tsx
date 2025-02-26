@@ -108,7 +108,7 @@ const Testimonials = () => {
     <div
       className="relative bg-white"
       style={{
-        backgroundImage: "url('/images/testimonials.png')",
+        backgroundImage: "url('/images/testimonials-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
