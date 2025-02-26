@@ -74,13 +74,4 @@ export const servicesData: ServicesProps[] = [
     ratings: 3,
     url: "#",
   },
-  {
-    name: "Osmolality Measurement",
-    equipment: "Membrane Osmometers",
-    address: "2 Iyalla street Alausa Ikeja Lagos",
-    count: 300,
-    images: [image, image, image, image, image],
-    ratings: 3,
-    url: "#",
-  },
 ];
