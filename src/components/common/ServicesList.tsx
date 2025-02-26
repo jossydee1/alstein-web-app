@@ -1,3 +1,5 @@
+"use client";
+
 import { ServicesProps } from "@/types";
 import { MapPin, Star } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
@@ -6,7 +8,7 @@ import React, { useRef, useState } from "react";
 
 export const ServicesList = ({ services }: { services: ServicesProps[] }) => {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {services.map((p, index) => (
         <article
           key={index}
@@ -43,27 +45,61 @@ export const ServicesList = ({ services }: { services: ServicesProps[] }) => {
 const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  // Handle touch start
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  // Handle touch move
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  // Handle touch end
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const deltaX = touchStartX.current - touchEndX.current;
+
+      if (deltaX > 50) {
+        // Swiped left -> Next slide
+        setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+      } else if (deltaX < -50) {
+        // Swiped right -> Previous slide
+        setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
+      }
+    }
+    // Reset touch values
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   return (
     <div className="relative overflow-hidden rounded-md">
       <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-lg bg-[#00000033] p-1 text-white">
-        <Star className="" fill="#FFD700" size={20} stroke="0" />
+        <Star fill="#FFD700" size={20} stroke="0" />
         |30
       </div>
+
       <div
         ref={slideRef}
         className="relative flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${currentIndex * 100}%)`,
-          width: `${images.length * 100}%`,
+          transform: `translateX(-${currentIndex * 280}px)`,
+          width: `${images.length * 280}px`,
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {images.map((img, index) => (
-          <div key={index} className="w-full flex-shrink-0 object-contain">
+          <div key={index} className="h-[280px] w-[280px] flex-shrink-0">
             <Image
               src={img}
               alt=""
-              className="aspect-[4.9/5] max-h-[300px] w-full rounded-md object-cover"
+              className="h-full w-full rounded-md object-cover"
             />
           </div>
         ))}
