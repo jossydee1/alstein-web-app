@@ -66,7 +66,7 @@ const Header = () => {
           <div className="flex flex-wrap items-start gap-2">
             {/* Filters */}
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" className={dropdownStyles}>
                   <SlidersHorizontal size={16} className="#8B8B8B mr-2" />
                   All Filters
@@ -82,7 +82,7 @@ const Header = () => {
 
             {/* Distance */}
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" className={dropdownStyles}>
                   Distance
                   <ChevronDown size={16} className="#8B8B8B" />
@@ -98,7 +98,7 @@ const Header = () => {
 
             {/* Categories */}
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" className={dropdownStyles}>
                   Categories
                   <ChevronDown size={16} className="#8B8B8B" />
