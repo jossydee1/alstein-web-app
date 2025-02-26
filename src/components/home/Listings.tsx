@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import image from "@/public/images/doctor.png";
 import { MapPin, Star } from "lucide-react";
 import Link from "next/link";
@@ -100,14 +100,6 @@ import { StaticImageData } from "next/image";
 const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [images.length]);
 
   return (
     <div className="relative overflow-hidden rounded-md">
