@@ -88,7 +88,7 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
         className="relative flex transition-transform duration-500 ease-in-out"
         style={{
           transform: `translateX(-${currentIndex * 100}%)`,
-          width: `${images.length * 100}%`,
+          width: `100%`,
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -97,12 +97,12 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
         {images.map((img, index) => (
           <div
             key={index}
-            className="aspect-square max-h-[280px] w-full flex-shrink-0"
+            className="aspect-square h-[280px] w-full flex-shrink-0"
           >
             <Image
               src={img}
               alt=""
-              className="aspect-square max-h-[280px] w-full rounded-md object-cover"
+              className="aspect-square h-[280px] w-full rounded-md object-cover"
             />
           </div>
         ))}
