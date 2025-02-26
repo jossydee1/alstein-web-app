@@ -1,14 +1,27 @@
-import {
-  CalendarCheck,
-  FlaskConical,
-  MapPin,
-  Microscope,
-  Search,
-} from "lucide-react";
-import React from "react";
-import { Button } from "../ui/button";
+"use client";
+
+import { CalendarCheck, FlaskConical } from "lucide-react";
+import React, { FormEvent, useState } from "react";
+import { SearchForm } from "../common";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
+  const [equipment, setEquipment] = useState("");
+  const [region, setRegion] = useState("");
+
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const queryParams = new URLSearchParams({
+      equipment,
+      region,
+    }).toString();
+
+    router.push(`/services?${queryParams}`);
+  };
+
   return (
     <div
       className="min-h-screen text-white"
@@ -35,40 +48,15 @@ const Hero = () => {
           </section>
 
           <section className="flex flex-col gap-8">
-            <form className="flex max-w-screen-sm flex-col items-center justify-between gap-1 rounded-lg bg-white p-1 text-[#454545] md:flex-row md:gap-0">
-              <label
-                htmlFor="equipment"
-                className="flex min-h-[54px] w-full flex-1 items-center gap-3 rounded-sm border border-[#909090] pl-6 md:rounded-none md:border-y-0 md:border-l-0 md:border-r md:border-r-[#909090]"
-              >
-                <Microscope size="24" className="" />
-                <input
-                  className="w-full border-none p-0 focus:outline-none focus:ring-0"
-                  type="text"
-                  name="equipment"
-                  id="equipment"
-                  required
-                  placeholder="Equipment/Analysis Name"
-                />
-              </label>
-              <label
-                htmlFor="region"
-                className="flex min-h-[54px] w-full flex-1 items-center gap-3 rounded-sm border border-[#909090] pl-6 md:border-none"
-              >
-                <MapPin size="24" />
-                <input
-                  className="w-full border-none p-0 focus:outline-none focus:ring-0"
-                  type="text"
-                  name="region"
-                  id="region"
-                  required
-                  placeholder="Any Region"
-                />
-              </label>
-
-              <Button className="flex min-h-[54px] w-full items-center justify-center bg-brandColor px-6 py-4 md:w-auto">
-                <Search size="40" className="" />
-              </Button>
-            </form>
+            <div className="max-w-screen-sm">
+              <SearchForm
+                equipment={equipment}
+                region={region}
+                setEquipment={setEquipment}
+                setRegion={setRegion}
+                handleSearch={handleSearch}
+              />
+            </div>
 
             <div className="flex flex-wrap gap-5 md:gap-11">
               <div

@@ -1,5 +1,5 @@
 import HomeContent from "@/components/home";
 
-export default function Home() {
+export default function Page() {
   return <HomeContent />;
 }

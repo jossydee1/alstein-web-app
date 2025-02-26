@@ -113,18 +113,18 @@ export const Footer = () => {
           <div className="col-span-6 md:col-span-2 lg:col-span-2">
             <p className={titleStyle}>Follow Us</p>
             <div className="mb-12 flex gap-4">
-              <span className={iconStyle}>
+              <Link href={site.social_handles.instagram} className={iconStyle}>
                 <Instagram size={24} />
-              </span>
-              <span className={iconStyle}>
+              </Link>
+              <Link href={site.social_handles.facebook} className={iconStyle}>
                 <Facebook size={24} />
-              </span>
-              <span className={iconStyle}>
+              </Link>
+              <Link href={site.social_handles.twitter} className={iconStyle}>
                 <Twitter size={24} />
-              </span>
-              <span className={iconStyle}>
+              </Link>
+              <Link href={site.social_handles.linkedin} className={iconStyle}>
                 <Linkedin size={24} />
-              </span>
+              </Link>
             </div>
 
             <h2 className={titleStyle}>Newsletter Signup</h2>
