@@ -19,6 +19,7 @@ const Services = () => {
     button: "rounded-sm  border-[0.5px] border-[#7B7485]",
     isActive: "bg-[#2C2C2C] border-[#303030] text-white",
   };
+
   return (
     <div className="bg-white">
       <section className="section-container">

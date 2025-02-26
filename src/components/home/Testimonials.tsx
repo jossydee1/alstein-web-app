@@ -108,13 +108,13 @@ const Testimonials = () => {
     <div
       className="relative bg-white"
       style={{
-        backgroundImage: "url('/images/doctor.png')",
+        backgroundImage: "url('/images/testimonials.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <section className="section-container">
+      <section className="section-container z-100 bg-black bg-opacity-70">
         <div className="mb-2.5 flex items-center justify-center gap-2.5 text-white">
           <hr className="w-[22px] border-2 border-white" />
           <span className="text-lg font-medium uppercase">Testimonials</span>
