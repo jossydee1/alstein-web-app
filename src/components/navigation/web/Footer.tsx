@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 
 const quickLinks = [
   { name: "About Us", href: webRoutes.about },
-  { name: "Categories", href: webRoutes.products },
+  { name: "Categories", href: webRoutes.categories },
   {
     name: "Listings",
     href: webRoutes.listings,

@@ -57,7 +57,7 @@ const Categories = () => {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white" id="categories">
       <section className="section-container">
         <div className="mb-2.5 flex items-center gap-2.5 text-brandColor">
           <hr className="w-[22px] border-2 border-brandColor" />

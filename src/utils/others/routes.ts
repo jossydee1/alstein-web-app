@@ -1,7 +1,7 @@
 export const webRoutes = {
   home: "/",
   about: "/about",
-  products: "/products",
+  categories: "/#categories",
   listings: "/listings",
   contact: "/contact",
 
