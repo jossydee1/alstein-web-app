@@ -1,15 +1,15 @@
 "use client";
 
-import { ServicesProps } from "@/types";
+import { ListingsProps } from "@/types";
 import { MapPin, Star } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 
-export const ServicesList = ({ services }: { services: ServicesProps[] }) => {
+export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {services.map((p, index) => (
+      {listings.map((p, index) => (
         <article
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
@@ -30,7 +30,7 @@ export const ServicesList = ({ services }: { services: ServicesProps[] }) => {
             <p className="mb-4 text-[#161616]">#{p.count} Day</p>
 
             <Link
-              href={p.url}
+              href={p.url || "#"}
               className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
             >
               View Details

@@ -107,7 +107,7 @@ const Categories = () => {
                 </span>
 
                 <Link
-                  href={category.url}
+                  href={category.url || "#"}
                   className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
                 >
                   View & Book

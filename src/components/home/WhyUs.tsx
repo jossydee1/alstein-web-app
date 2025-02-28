@@ -16,7 +16,7 @@ const WhyUs = () => {
       icon: CalendarCheck,
       title: "24/7 Booking Accessibility",
       description:
-        "Schedule laboratory services at your convenience, day or night.",
+        "Schedule laboratory listings at your convenience, day or night.",
       bg: "linear-gradient(59.63deg, #090909 1.29%, #6F6F6F 98.89%)",
     },
     {
@@ -42,7 +42,7 @@ const WhyUs = () => {
     {
       icon: Globe,
       title: "Global Network of Providers",
-      description: "Find and book services from top labs around the world.",
+      description: "Find and book listings from top labs around the world.",
       bg: "linear-gradient(59.63deg, #0A2342 1.29%, #4A6F91 98.89%)",
     },
     {

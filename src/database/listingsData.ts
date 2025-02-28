@@ -1,7 +1,7 @@
 import image from "@/public/images/doctor.png";
-import { ServicesProps } from "@/types";
+import { ListingsProps } from "@/types";
 
-export const servicesData: ServicesProps[] = [
+export const listingsData: ListingsProps[] = [
   {
     name: "Osmolality Measurement",
     equipment: "Membrane Osmometers",

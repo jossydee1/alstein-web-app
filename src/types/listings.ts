@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image";
 
-export interface ServicesProps {
+export interface ListingsProps {
   name: string;
   equipment: string;
   address: string;

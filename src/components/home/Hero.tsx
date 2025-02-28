@@ -19,7 +19,7 @@ const Hero = () => {
       region,
     }).toString();
 
-    router.push(`/services?${queryParams}`);
+    router.push(`/listings?${queryParams}`);
   };
 
   return (

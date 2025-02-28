@@ -1,14 +1,14 @@
 import React from "react";
-import Services from "./Services";
+import Listings from "./Listings";
 import SearchForm from "./SearchForm";
 
-const ServicesContent = () => {
+const ListingsContent = () => {
   return (
     <main>
       <SearchForm />
-      <Services />
+      <Listings />
     </main>
   );
 };
 
-export default ServicesContent;
+export default ListingsContent;

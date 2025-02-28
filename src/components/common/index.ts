@@ -1,2 +1,2 @@
-export * from "./ServicesList";
+export * from "./ListingsList";
 export * from "./SearchForm";

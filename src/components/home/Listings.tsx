@@ -3,10 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
-import { servicesData } from "@/database/servicesData";
-import { ServicesList } from "../common";
+import { listingsData } from "@/database/listingsData";
+import { ListingsList } from "../common";
 
-const Services = () => {
+const Listings = () => {
+  if (!listingsData) return null;
+
   return (
     <div className="bg-white">
       <section className="section-container">
@@ -23,12 +25,12 @@ const Services = () => {
             </h2>
           </div>
 
-          <ServicesList services={servicesData} />
+          <ListingsList listings={listingsData} />
         </div>
 
         <div className="mt-[64px] flex justify-center">
           <Link
-            href={webRoutes.services}
+            href={webRoutes.listings || "#"}
             className="h-auto rounded-md bg-brandColor px-[74px] py-4 font-Groteskbold text-lg font-normal text-white"
           >
             View All
@@ -39,4 +41,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Listings;

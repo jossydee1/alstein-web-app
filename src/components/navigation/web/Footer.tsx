@@ -23,8 +23,8 @@ const quickLinks = [
   { name: "About Us", href: webRoutes.about },
   { name: "Categories", href: webRoutes.products },
   {
-    name: "Services",
-    href: webRoutes.services,
+    name: "Listings",
+    href: webRoutes.listings,
   },
   { name: "Blog Grid", href: webRoutes.blog },
 ];

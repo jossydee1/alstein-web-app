@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { servicesData } from "@/database/servicesData";
-import { ServicesList } from "../common";
+import { listingsData } from "@/database/listingsData";
+import { ListingsList } from "../common";
 import {
   Pagination,
   PaginationContent,
@@ -13,17 +13,19 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const Services = () => {
+const Listings = () => {
   const PAGINATION_STYLES = {
     content: "flex justify-center gap-3",
     button: "rounded-sm  border-[0.5px] border-[#7B7485]",
     isActive: "bg-[#2C2C2C] border-[#303030] text-white",
   };
 
+  if (!listingsData) return null;
+
   return (
     <div className="bg-white">
       <section className="section-container md:pt-[40px] xl:py-[64px]">
-        <ServicesList services={servicesData} />
+        <ListingsList listings={listingsData} />
 
         <Pagination className="mt-[70px]">
           <PaginationContent className={PAGINATION_STYLES.content}>
@@ -64,4 +66,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Listings;
