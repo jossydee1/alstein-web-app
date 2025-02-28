@@ -5,7 +5,7 @@ export interface ListingsProps {
   equipment: string;
   address: string;
   count: number;
-  url: string;
+  id: string;
   ratings: number;
   images: StaticImageData[];
 }

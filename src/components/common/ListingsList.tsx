@@ -1,6 +1,7 @@
 "use client";
 
 import { ListingsProps } from "@/types";
+import { webRoutes } from "@/utils";
 import { MapPin, Star } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
@@ -30,7 +31,7 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
             <p className="mb-4 text-[#161616]">#{p.count} Day</p>
 
             <Link
-              href={p.url || "#"}
+              href={`${webRoutes.listings}/${p.id}`}
               className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
             >
               View Details
