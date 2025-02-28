@@ -4,6 +4,7 @@ import Header from "./Header";
 import Details from "./Details";
 import Summary from "./Summary";
 import Location from "./Location";
+import Reviews from "./Reviews";
 
 const ListingDetailsContent = () => {
   const links = [
@@ -34,9 +35,9 @@ const ListingDetailsContent = () => {
         </div>
 
         <Location />
-      </main>
 
-      <aside></aside>
+        <Reviews />
+      </main>
     </div>
   );
 };

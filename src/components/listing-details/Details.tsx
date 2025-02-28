@@ -1,5 +1,5 @@
 import React from "react";
-import image from "@/public/images/business.png";
+import photo from "@/public/images/business.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { BadgeCheck } from "lucide-react";
@@ -29,12 +29,12 @@ const Details = () => {
       <section className="business mt-16 flex items-center justify-between gap-4 rounded-md border p-4">
         <div className="flex items-center gap-3">
           <Image
-            src={image}
+            src={photo}
             alt="Business"
             className="h-[65px] w-[65px] rounded-full bg-[#ddd] object-cover"
           />
           <div>
-            <h3 className="mb-2 text-xl font-medium text-[#161616]">
+            <h3 className="mb-2 text-xl font-semibold text-[#161616]">
               HealthPro Labs
             </h3>
             <p className="font-medium text-[#8B8B8B]">
