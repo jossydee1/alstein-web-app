@@ -3,6 +3,7 @@ import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import photo from "@/public/images/business.png";
 import { Button } from "../ui/button";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 
 const Reviews = () => {
   return (
@@ -27,8 +28,8 @@ const Reviews = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-start justify-between gap-6 md:flex-row">
-        <div className="grid w-full max-w-[580px] gap-16">
+      <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
+        <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
           {[1, 1].map((_, i) => (
             <div key={i}>
               <div className="flex items-center gap-3">
@@ -60,7 +61,7 @@ const Reviews = () => {
           </Button>
         </div>
 
-        <div className="w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4">
+        <div className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4">
           <h3 className="text-xl font-semibold text-[#010814]">
             Share your feedback
           </h3>
@@ -70,12 +71,21 @@ const Reviews = () => {
               <label className="mb-16 text-sm text-[#354259]">
                 How was you experience?
               </label>
+              <div className="mt-2 flex gap-4">
+                <button className="flex items-center justify-center rounded-full bg-[#FEF2E1] p-3">
+                  <ThumbsUp className="fill-[#FB9506] text-white" />
+                </button>
+                <button className="flex items-center justify-center rounded-full bg-[#EBEDEF] p-3">
+                  <ThumbsDown className="fill-[#FFFFFF] text-[#354259]" />
+                </button>
+              </div>
             </div>
 
             <div>
               <label className="text-sm text-[#354259]">
                 Can you tell us more?
               </label>
+
               <textarea className="block h-[160px] w-full rounded-md border border-[#E6E7EA] p-3"></textarea>
             </div>
 

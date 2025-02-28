@@ -19,7 +19,7 @@ const ListingDetailsContent = () => {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative mb-16">
       <Breadcrumbs links={links} />
 
       <Header />
