@@ -9,7 +9,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -18,7 +18,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -27,7 +27,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -36,7 +36,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -45,7 +45,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -54,7 +54,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -63,7 +63,7 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
   {
     name: "Osmolality Measurement",
@@ -72,6 +72,6 @@ export const listingsData: ListingsProps[] = [
     count: 300,
     images: [image, image, image, image, image],
     ratings: 3,
-    url: "#",
+    id: "fefefeft4t4tg4t4t4tg",
   },
 ];
