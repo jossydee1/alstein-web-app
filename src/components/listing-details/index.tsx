@@ -23,8 +23,8 @@ const ListingDetailsContent = () => {
 
       <Header />
       <main className="section-container !pb-9 !pt-0">
-        <div className="flex justify-between gap-7">
-          <div className="max-w-[540px] flex-1">
+        <div className="flex flex-col justify-between gap-7 lg:flex-row">
+          <div className="w-full flex-1 lg:max-w-[540px]">
             <Details />
           </div>
 

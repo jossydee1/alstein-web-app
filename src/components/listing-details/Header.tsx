@@ -17,31 +17,31 @@ const Header = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
           <Image
             src={image}
             alt="Blood Sugar Analyzer"
-            className="h-full w-full object-cover md:col-span-2 md:row-span-2"
+            className="h-full max-h-[400px] w-full object-cover md:col-span-2 md:row-span-2"
           />
           <Image
             src={image}
             alt="Blood Sugar Analyzer"
-            className="h-full w-full object-cover"
+            className="hidden h-full w-full object-cover md:block"
           />
           <Image
             src={image}
             alt="Blood Sugar Analyzer"
-            className="h-full w-full object-cover"
+            className="hidden h-full w-full object-cover md:block"
           />
           <Image
             src={image}
             alt="Blood Sugar Analyzer"
-            className="h-full w-full object-cover"
+            className="hidden h-full w-full object-cover md:block"
           />
           <Image
             src={image}
             alt="Blood Sugar Analyzer"
-            className="h-full w-full object-cover"
+            className="hidden h-full w-full object-cover md:block"
           />
         </div>
       </header>
