@@ -61,7 +61,7 @@ const Reviews = () => {
           </Button>
         </div>
 
-        <div className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4">
+        <div className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0">
           <h3 className="text-xl font-semibold text-[#010814]">
             Share your feedback
           </h3>
