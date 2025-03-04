@@ -45,7 +45,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     name: "Listings",
     href: webRoutes.listings,
-    isActive: (path: string) => path === webRoutes.listings,
+    isActive: (path: string) => path.startsWith(webRoutes.listings),
   },
   {
     name: "About",
