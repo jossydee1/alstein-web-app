@@ -50,7 +50,7 @@ export const ListingImageModal = ({
         }}
         onClick={e => e.stopPropagation()}
       >
-        <header className="flex w-full items-center justify-between gap-4 border-b border-b-[#ECECEC] bg-white px-6 py-3 lg:py-6">
+        <header className="sticky left-0 top-0 z-50 flex w-full items-center justify-between gap-4 border-b border-b-[#ECECEC] bg-white px-6 py-3 lg:py-6">
           <h2 className="text-2xl font-semibold text-[#161616]">Images</h2>
 
           {/* Image Count */}
