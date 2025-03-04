@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const DefaultSlide = ({
   images,
@@ -20,6 +20,24 @@ export const DefaultSlide = ({
   const prevSlide = () => {
     setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
   };
+
+  // Handle left/right keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+      }
+      if (e.key === "ArrowLeft") {
+        setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
+      }
+      if (e.key === "Escape") {
+        onClick();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [images.length, onClick]);
 
   return (
     <div className="relative overflow-hidden rounded-md">
