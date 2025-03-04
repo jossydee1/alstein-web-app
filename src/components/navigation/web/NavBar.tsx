@@ -153,7 +153,7 @@ const NavBar = () => {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <Button
                     variant="ghost"
-                    className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0"
+                    className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                   >
                     Join as a Partner
                   </Button>

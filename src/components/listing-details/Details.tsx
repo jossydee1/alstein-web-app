@@ -50,7 +50,7 @@ const Details = () => {
           </p>
           <Button
             variant="ghost"
-            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B]"
+            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] hover:bg-transparent hover:underline"
           >
             View Profile
           </Button>

@@ -272,7 +272,7 @@ const FilterMenu = () => {
                   }}
                 >
                   <Button
-                    className="px-0 py-0 text-sm text-[#454545]"
+                    className="px-0 py-0 text-sm text-[#454545] hover:bg-transparent hover:underline"
                     variant="ghost"
                     type="button"
                     onClick={() => {

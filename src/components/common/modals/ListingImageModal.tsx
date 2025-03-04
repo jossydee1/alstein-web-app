@@ -45,7 +45,7 @@ export const ListingImageModal = ({
       {/* Close Button */}
       <Button
         variant="ghost"
-        className="absolute left-8 top-4 flex items-center gap-2"
+        className="absolute left-8 top-4 flex items-center gap-2 hover:bg-transparent hover:underline"
         onClick={onClose}
       >
         <X size={20} />

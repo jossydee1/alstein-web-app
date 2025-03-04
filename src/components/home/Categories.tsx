@@ -3,6 +3,7 @@ import React from "react";
 import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
+import { webRoutes } from "@/utils";
 
 const Categories = () => {
   const categories = [
@@ -16,7 +17,7 @@ const Categories = () => {
         "Machines (e.g., ECG, X-Ray)",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=medical-and-clinical`,
     },
     {
       title: "Dental",
@@ -28,7 +29,7 @@ const Categories = () => {
         "Dental Autoclaves",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=dental`,
     },
     {
       title: "Veterinary",
@@ -40,7 +41,7 @@ const Categories = () => {
         "Veterinary Ultrasound",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=veterinary`,
     },
     {
       title: "Research",
@@ -52,7 +53,7 @@ const Categories = () => {
         "Laboratory Ovens",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=research`,
     },
   ];
 
@@ -86,7 +87,7 @@ const Categories = () => {
               key={category.title}
               className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
-                backgroundImage: "url('/images/doctor.png')",
+                backgroundImage: category.bgImage,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
