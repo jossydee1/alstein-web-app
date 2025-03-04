@@ -1,31 +1,16 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { SearchForm } from "../common";
-import { Button } from "../ui/button";
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
+import FilterMenu from "../common/FilterMenu";
 
 const Header = () => {
   const [equipment, setEquipment] = useState("");
   const [region, setRegion] = useState("");
-  const [availabilty, setAvailbility] = useState(false);
-  const [lease, setLease] = useState(false);
-  const [onSite, setOnSite] = useState(false);
 
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(equipment, region);
+  const handleSearch = () => {
+    console.log("searching...");
   };
-
-  const dropdownStyles =
-    "flex items-center gap-2.5 rounded-xl border border-[#8B8B8B] px-3 pt-2 text-sm text-[#454545]";
 
   return (
     <div className="bg-white">
@@ -62,81 +47,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[#BBBBBB] py-6">
-          <div className="flex flex-wrap items-start gap-2">
-            {/* Filters */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className={dropdownStyles}>
-                  <SlidersHorizontal size={16} className="#8B8B8B mr-2" />
-                  All Filters
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Distance */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className={dropdownStyles}>
-                  Distance
-                  <ChevronDown size={16} className="#8B8B8B" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Categories */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className={dropdownStyles}>
-                  Categories
-                  <ChevronDown size={16} className="#8B8B8B" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          <div className="flex flex-wrap items-start gap-2">
-            <div className="flex items-center gap-2 text-[#8B8B8B]">
-              <Switch
-                checked={availabilty}
-                onCheckedChange={() => setAvailbility(!availabilty)}
-              />
-              Available Now
-            </div>
-            <div className="flex items-center gap-2 text-[#8B8B8B]">
-              <Switch
-                checked={lease}
-                onCheckedChange={() => setLease(!lease)}
-              />
-              Available For Lease
-            </div>
-            <div className="flex items-center gap-2 text-[#8B8B8B]">
-              <Switch
-                checked={onSite}
-                onCheckedChange={() => setOnSite(!onSite)}
-              />
-              Available On-Site Only
-            </div>
-          </div>
-        </div>
+        <FilterMenu />
       </header>
     </div>
   );
