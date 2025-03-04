@@ -2,7 +2,7 @@
 
 import { ListingsProps } from "@/types";
 import { webRoutes } from "@/utils";
-import { MapPin, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Star } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
@@ -11,14 +11,13 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {listings.map((p, index) => (
-        <Link
-          href={`${webRoutes.listings}/${p.id}`}
+        <article
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
         >
-          <article>
-            <ImageSlider images={p.images} />
+          <ImageSlider images={p.images} />
 
+          <Link href={`${webRoutes.listings}/${p.id}`}>
             <div>
               <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
                 {p.name}
@@ -39,8 +38,8 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
                 View Details
               </Link>
             </div>
-          </article>
-        </Link>
+          </Link>
+        </article>
       ))}
     </div>
   );
@@ -51,6 +50,14 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
   const slideRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  const nextSlide = () => {
+    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
+  };
 
   // Handle touch start
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -124,6 +131,23 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
           />
         ))}
       </div>
+
+      {/* PREV & NEXT BUTTONS */}
+      <button
+        className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        onClick={prevSlide}
+        disabled={currentIndex === 0}
+      >
+        <ChevronLeft size={20} className="text-black/80 hover:text-black" />
+      </button>
+
+      <button
+        className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        onClick={nextSlide}
+        disabled={currentIndex === images.length - 1}
+      >
+        <ChevronRight size={20} className="text-black/80 hover:text-black" />
+      </button>
     </div>
   );
 };
