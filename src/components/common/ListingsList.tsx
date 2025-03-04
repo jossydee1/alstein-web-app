@@ -2,7 +2,7 @@
 
 import { ListingsProps } from "@/types";
 import { webRoutes } from "@/utils";
-import { MapPin, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Star } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
@@ -17,26 +17,28 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
         >
           <ImageSlider images={p.images} />
 
-          <div>
-            <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
-              {p.name}
-            </h3>
-            <p className="mb-1 text-xs text-[#474747]">
-              Equipment: {p.equipment}
-            </p>
-            <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
-              <MapPin size="12" /> {p.address}
-            </p>
+          <Link href={`${webRoutes.listings}/${p.id}`}>
+            <div>
+              <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
+                {p.name}
+              </h3>
+              <p className="mb-1 text-xs text-[#474747]">
+                Equipment: {p.equipment}
+              </p>
+              <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
+                <MapPin size="12" /> {p.address}
+              </p>
 
-            <p className="mb-4 text-[#161616]">#{p.count} Day</p>
+              <p className="mb-4 text-[#161616]">#{p.count} Day</p>
 
-            <Link
-              href={`${webRoutes.listings}/${p.id}`}
-              className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
-            >
-              View Details
-            </Link>
-          </div>
+              <Link
+                href={`${webRoutes.listings}/${p.id}`}
+                className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
+              >
+                View Details
+              </Link>
+            </div>
+          </Link>
         </article>
       ))}
     </div>
@@ -48,6 +50,14 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
   const slideRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  const nextSlide = () => {
+    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
+  };
 
   // Handle touch start
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -121,6 +131,23 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
           />
         ))}
       </div>
+
+      {/* PREV & NEXT BUTTONS */}
+      <button
+        className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        onClick={prevSlide}
+        disabled={currentIndex === 0}
+      >
+        <ChevronLeft size={20} className="text-black/80 hover:text-black" />
+      </button>
+
+      <button
+        className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        onClick={nextSlide}
+        disabled={currentIndex === images.length - 1}
+      >
+        <ChevronRight size={20} className="text-black/80 hover:text-black" />
+      </button>
     </div>
   );
 };

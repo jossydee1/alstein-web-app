@@ -3,6 +3,7 @@ import React from "react";
 import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
+import { webRoutes } from "@/utils";
 
 const Categories = () => {
   const categories = [
@@ -16,7 +17,7 @@ const Categories = () => {
         "Machines (e.g., ECG, X-Ray)",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=medical-and-clinical`,
     },
     {
       title: "Dental",
@@ -28,7 +29,7 @@ const Categories = () => {
         "Dental Autoclaves",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=dental`,
     },
     {
       title: "Veterinary",
@@ -40,7 +41,7 @@ const Categories = () => {
         "Veterinary Ultrasound",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=veterinary`,
     },
     {
       title: "Research",
@@ -52,7 +53,7 @@ const Categories = () => {
         "Laboratory Ovens",
       ],
       partners: 20,
-      url: "#",
+      url: `${webRoutes.listings}?category=research`,
     },
   ];
 
@@ -81,39 +82,42 @@ const Categories = () => {
           </article>
 
           {categories.map(category => (
-            <article
+            <Link
+              href={category.url || "#"}
               key={category.title}
               className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
-                backgroundImage: "url('/images/doctor.png')",
+                backgroundImage: category.bgImage,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-                {category.title}
-              </h3>
-              <ul className="list-inside list-disc">
-                {category.lists.map(list => (
-                  <li key={list}>{list}</li>
-                ))}
-              </ul>
+              <article>
+                <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+                  {category.title}
+                </h3>
+                <ul className="list-inside list-disc">
+                  {category.lists.map(list => (
+                    <li key={list}>{list}</li>
+                  ))}
+                </ul>
 
-              <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
-                <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
-                  <Image src={users} alt="arrow right" />
-                  {category.partners} Partners
-                </span>
+                <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
+                  <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
+                    <Image src={users} alt="arrow right" />
+                    {category.partners} Partners
+                  </span>
 
-                <Link
-                  href={category.url || "#"}
-                  className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
-                >
-                  View & Book
-                </Link>
-              </div>
-            </article>
+                  <Link
+                    href={category.url || "#"}
+                    className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
+                  >
+                    View & Book
+                  </Link>
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
       </section>

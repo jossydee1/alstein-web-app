@@ -45,7 +45,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     name: "Listings",
     href: webRoutes.listings,
-    isActive: (path: string) => path === webRoutes.listings,
+    isActive: (path: string) => path.startsWith(webRoutes.listings),
   },
   {
     name: "About",
@@ -112,7 +112,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="flex w-full flex-wrap bg-white md:flex-nowrap lg:justify-start">
+    <div className="sticky top-0 z-50 flex w-full flex-wrap bg-white shadow-sm md:flex-nowrap lg:justify-start">
       <nav className="relative mx-auto w-full max-w-screen-2xl gap-x-[60px] px-4 py-2 sm:px-6 md:px-[50px] md:py-6 lg:flex lg:items-center lg:justify-between lg:gap-[60px] lg:px-[100px] xl:px-[150px]">
         <div className="flex items-center justify-between gap-x-1">
           <Link
@@ -153,7 +153,7 @@ const NavBar = () => {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <Button
                     variant="ghost"
-                    className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0"
+                    className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                   >
                     Join as a Partner
                   </Button>

@@ -5,12 +5,17 @@ import Details from "./Details";
 import Summary from "./Summary";
 import Location from "./Location";
 import Reviews from "./Reviews";
+import { webRoutes } from "@/utils";
 
 const ListingDetailsContent = () => {
   const links = [
     {
+      title: "Listings",
+      link: webRoutes.listings,
+    },
+    {
       title: "Testing Equipment",
-      link: "#",
+      link: `${webRoutes.listings}?category=testing-equipment`,
     },
     {
       title: "Blood Sugar Analyzer",
