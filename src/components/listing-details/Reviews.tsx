@@ -8,7 +8,7 @@ import { ThumbsDown, ThumbsUp } from "lucide-react";
 const Reviews = () => {
   return (
     <section>
-      <hr className="my-6border border-[#EBEBEB]" />
+      <hr className="my-6 border border-[#EBEBEB]" />
 
       <div>
         <h2 className="font-500 mb-3 text-center text-2xl">Likes & Reviews</h2>
@@ -72,10 +72,16 @@ const Reviews = () => {
                 How was you experience?
               </label>
               <div className="mt-2 flex gap-4">
-                <button className="flex items-center justify-center rounded-full bg-[#FEF2E1] p-3">
+                <button
+                  type="button"
+                  className="flex items-center justify-center rounded-full bg-[#FEF2E1] p-3"
+                >
                   <ThumbsUp className="fill-[#FB9506] text-white" />
                 </button>
-                <button className="flex items-center justify-center rounded-full bg-[#EBEDEF] p-3">
+                <button
+                  type="button"
+                  className="flex items-center justify-center rounded-full bg-[#EBEDEF] p-3"
+                >
                   <ThumbsDown className="fill-[#FFFFFF] text-[#354259]" />
                 </button>
               </div>
@@ -91,12 +97,14 @@ const Reviews = () => {
 
             <div className="mt-4 flex gap-4">
               <Button
+                type="button"
                 variant="outline"
                 className="flex-1 px-6 py-2.5 font-medium text-[#031330]"
               >
                 Cancel
               </Button>
               <Button
+                type="button"
                 variant="outline"
                 className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white"
               >
