@@ -17,28 +17,26 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
         >
           <ImageSlider images={p.images} />
 
-          <Link href={`${webRoutes.listings}/${p.id}`}>
-            <div>
-              <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
-                {p.name}
-              </h3>
-              <p className="mb-1 text-xs text-[#474747]">
-                Equipment: {p.equipment}
-              </p>
-              <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
-                <MapPin size="12" /> {p.address}
-              </p>
+          <div>
+            <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
+              {p.name}
+            </h3>
+            <p className="mb-1 text-xs text-[#474747]">
+              Equipment: {p.equipment}
+            </p>
+            <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
+              <MapPin size="12" /> {p.address}
+            </p>
 
-              <p className="mb-4 text-[#161616]">#{p.count} Day</p>
+            <p className="mb-4 text-[#161616]">#{p.count} Day</p>
 
-              <Link
-                href={`${webRoutes.listings}/${p.id}`}
-                className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
-              >
-                View Details
-              </Link>
-            </div>
-          </Link>
+            <Link
+              href={`${webRoutes.listings}/${p.id}`}
+              className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
+            >
+              View Details
+            </Link>
+          </div>
         </article>
       ))}
     </div>
