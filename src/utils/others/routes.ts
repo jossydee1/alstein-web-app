@@ -3,15 +3,9 @@ export const webRoutes = {
   about: "/about",
   categories: "/#categories",
   listings: "/listings",
+  partners: "/partners",
   contact: "/contact",
-
-  product_1: "/products?type=one",
-  product_2: "/products?type=two",
-  pricing: "/pricing",
   blog: "/blog",
-  shop: "/shop",
-  faq: "/#faq",
-  newsletter: "/newsletter",
   terms: "/terms",
   privacy: "/privacy",
 };

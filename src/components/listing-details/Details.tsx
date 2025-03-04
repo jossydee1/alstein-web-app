@@ -1,8 +1,9 @@
 import React from "react";
 import photo from "@/public/images/business.png";
 import Image from "next/image";
-import { Button } from "../ui/button";
 import { BadgeCheck } from "lucide-react";
+import Link from "next/link";
+import { webRoutes } from "@/utils";
 
 const Details = () => {
   return (
@@ -48,12 +49,12 @@ const Details = () => {
             <BadgeCheck className="fill-brandColor text-white" />
             Verified Partner
           </p>
-          <Button
-            variant="ghost"
-            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] hover:bg-transparent hover:underline"
+          <Link
+            href={`${webRoutes.partners}/healthpro-labs`}
+            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] transition-all hover:bg-transparent hover:text-neutral-800 hover:underline"
           >
             View Profile
-          </Button>
+          </Link>
         </div>
       </section>
 
