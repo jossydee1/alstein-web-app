@@ -129,7 +129,7 @@ export const Footer = () => {
 
             <h2 className={titleStyle}>Newsletter Signup</h2>
             <form
-              className="flex max-w-screen-sm items-center justify-between gap-1 rounded-lg border border-[#454545] p-1 text-white"
+              className="flex max-w-screen-sm items-center justify-between gap-1 rounded-lg border border-[#454545] p-1 text-white focus-within:border-[#8B8B8B]"
               onSubmit={e => handleSubmit(e)}
             >
               <label
@@ -158,8 +158,13 @@ export const Footer = () => {
         <section className="flex flex-wrap items-center justify-between text-sm">
           <p> © {currentYear} ALSTEIN All rights reserved.</p>
           <div>
-            <Link href={webRoutes.terms}>Terms and Conditions</Link> |{" "}
-            <Link href={webRoutes.privacy}>Privacy</Link>
+            <Link href={webRoutes.terms} className={itemStyle}>
+              Terms and Conditions
+            </Link>{" "}
+            |{" "}
+            <Link href={webRoutes.privacy} className={itemStyle}>
+              Privacy
+            </Link>
           </div>
         </section>
       </footer>

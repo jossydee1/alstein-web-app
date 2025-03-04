@@ -60,14 +60,14 @@ const Profile = () => {
         <div className="mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <Link
             href="mailto:support@greenlab.com"
-            className="flex items-center gap-2 text-[#343434]"
+            className="flex items-center gap-2 text-[#343434] hover:underline"
           >
             <Mail size={24} />
             support@greenlab.com
           </Link>
           <Link
             href="tel:1234567890"
-            className="flex items-center gap-2 text-[#343434]"
+            className="flex items-center gap-2 text-[#343434] hover:underline"
           >
             <Phone size={24} />
             (123) 456-7890

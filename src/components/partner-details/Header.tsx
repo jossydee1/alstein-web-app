@@ -43,7 +43,7 @@ const Header = () => {
           {/* Show all photos button */}
           <Button
             variant="ghost"
-            className="absolute bottom-6 right-6 rounded-md border border-[#676767] bg-white px-4 py-1.5 text-[#1F1F1F] hover:bg-transparent hover:underline"
+            className="absolute bottom-6 right-6 rounded-md border border-[#676767] bg-white px-4 py-1.5 text-[#1F1F1F]"
             onClick={() => setIsModalOpen(true)}
           >
             <Grid3x3 size="16" /> Show all photos

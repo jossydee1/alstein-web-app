@@ -82,8 +82,7 @@ const Categories = () => {
           </article>
 
           {categories.map(category => (
-            <Link
-              href={category.url || "#"}
+            <article
               key={category.title}
               className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
@@ -93,31 +92,29 @@ const Categories = () => {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <article>
-                <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-                  {category.title}
-                </h3>
-                <ul className="list-inside list-disc">
-                  {category.lists.map(list => (
-                    <li key={list}>{list}</li>
-                  ))}
-                </ul>
+              <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+                {category.title}
+              </h3>
+              <ul className="list-inside list-disc">
+                {category.lists.map(list => (
+                  <li key={list}>{list}</li>
+                ))}
+              </ul>
 
-                <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
-                  <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
-                    <Image src={users} alt="arrow right" />
-                    {category.partners} Partners
-                  </span>
+              <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
+                <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
+                  <Image src={users} alt="arrow right" />
+                  {category.partners} Partners
+                </span>
 
-                  <Link
-                    href={category.url || "#"}
-                    className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
-                  >
-                    View & Book
-                  </Link>
-                </div>
-              </article>
-            </Link>
+                <Link
+                  href={category.url || "#"}
+                  className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
+                >
+                  View & Book
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       </section>

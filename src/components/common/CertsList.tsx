@@ -19,11 +19,13 @@ export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
           >
             <h3 className="font-semibold text-[#343434]">{p.title}</h3>
             <p>{p.description}</p>
-            <Image
-              src={p.image}
-              alt={p.title}
-              className="aspect-video h-[110px] w-auto rounded-lg object-cover"
-            />
+            <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-lg hover:shadow-lg">
+              <Image
+                src={p.image}
+                alt={p.title}
+                className="aspect-video h-[110px] w-auto rounded-lg object-cover transition-transform hover:scale-105"
+              />
+            </div>
           </button>
 
           {isModalOpen && (
