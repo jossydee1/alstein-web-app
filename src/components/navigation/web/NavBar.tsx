@@ -112,7 +112,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="flex w-full flex-wrap bg-white md:flex-nowrap lg:justify-start">
+    <div className="sticky top-0 z-50 flex w-full flex-wrap bg-white shadow-sm md:flex-nowrap lg:justify-start">
       <nav className="relative mx-auto w-full max-w-screen-2xl gap-x-[60px] px-4 py-2 sm:px-6 md:px-[50px] md:py-6 lg:flex lg:items-center lg:justify-between lg:gap-[60px] lg:px-[100px] xl:px-[150px]">
         <div className="flex items-center justify-between gap-x-1">
           <Link
