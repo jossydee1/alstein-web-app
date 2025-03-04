@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import PartnerListings from "./Listings";
 import { listingsData } from "@/database/listingsData";
 import Certifications from "./Certifications";
+import { certsData } from "@/database/certsData";
 
 const PartnerDetailsContent = () => {
   const links = [
@@ -28,9 +29,13 @@ const PartnerDetailsContent = () => {
 
       <main className="section-container !pb-9 !pt-0">
         <Profile />
+
         <hr className="my-[57px] border border-[#EBEBEB]" />
-        <Certifications certs={listingsData.slice(0, 5)} />
+
+        <Certifications certs={certsData} />
+
         <hr className="my-[57px] border border-[#EBEBEB]" />
+
         <PartnerListings listings={listingsData.slice(0, 5)} />
       </main>
     </div>

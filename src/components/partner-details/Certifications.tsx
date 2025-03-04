@@ -1,12 +1,19 @@
 import React from "react";
-import { ListingsList } from "../common";
-import { ListingsProps } from "@/types";
+import { CertsProps } from "@/types";
+import { CertsList } from "../common/CertsList";
 
-const Certifications = ({ certs }: { certs: ListingsProps[] }) => {
+const Certifications = ({ certs }: { certs: CertsProps[] }) => {
   return (
     <section>
-      <h2 className="font-500 mb-4 text-2xl">Certifications</h2>
-      <ListingsList listings={certs} />
+      <div className="mb-10 md:mb-20">
+        <h2 className="font-500 mb-2 text-2xl">Trust & Certification</h2>
+        <p className="mb-4 max-w-[440px]">
+          We are committed to providing transparent and reliable services. To
+          ensure trust and safety, we&apos;ve made the following documents
+          available for your review:
+        </p>
+      </div>
+      <CertsList certs={certs} />
     </section>
   );
 };
