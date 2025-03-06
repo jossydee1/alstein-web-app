@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { SearchForm } from "../common";
-import FilterMenu from "../common/FilterMenu";
+import { SearchForm } from "@/components/common";
+import FilterMenu from "@/components/common/FilterMenu";
 
 const Header = () => {
   const [equipment, setEquipment] = useState("");

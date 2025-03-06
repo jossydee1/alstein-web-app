@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { BookmarkPlus, Grid3x3 } from "lucide-react";
 import image from "@/public/images/blood-sugar-analyser.png";
 import Image from "next/image";
-import { ListingImageModal } from "../common/modals";
-import { DefaultSlide } from "../common";
+import { ListingImageModal } from "@/components/common/modals";
+import { DefaultSlide } from "@/components/common";
 
 const Header = () => {
   const images = [

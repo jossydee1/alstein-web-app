@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumbs } from "../common";
+import { Breadcrumbs } from "@/components/common";
 import Header from "./Header";
 import Details from "./Details";
 import Summary from "./Summary";

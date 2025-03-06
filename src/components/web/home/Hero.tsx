@@ -2,8 +2,8 @@
 
 import { CalendarCheck, FlaskConical } from "lucide-react";
 import React, { FormEvent, useState } from "react";
-import { SearchForm } from "../common";
 import { useRouter } from "next/navigation";
+import { SearchForm } from "@/components/common";
 
 const Hero = () => {
   const router = useRouter();

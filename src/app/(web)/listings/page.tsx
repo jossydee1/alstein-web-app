@@ -1,4 +1,4 @@
-import ListingsContent from "@/components/listings";
+import ListingsContent from "@/components/web/listings";
 import React from "react";
 
 const Page = () => {

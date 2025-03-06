@@ -9,8 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Ratings } from "../common";
-import { Button } from "../ui/button";
+import { Ratings } from "@/components/common";
+import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
 import {
   Popover,

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { listingsData } from "@/database/listingsData";
-import { ListingsList } from "../common";
+import { ListingsList } from "@/components/common";
 import {
   Pagination,
   PaginationContent,
