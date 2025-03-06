@@ -1,0 +1,122 @@
+.wrapper {
+  @apply grid h-screen grid-cols-1 overflow-hidden md:grid-cols-6 xl:grid-cols-5;
+}
+
+.banner {
+  background-image: url("/images/auth-image.png");
+  @apply relative col-span-3 hidden overflow-hidden bg-cover bg-center px-[36px] py-8 md:block lg:py-12 xl:col-span-2 xl:px-[72px];
+}
+
+.container {
+  @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-6 py-16 md:col-span-3;
+
+  .formWrapper {
+    @apply mx-auto flex max-w-[358px] flex-col items-center justify-center overflow-auto px-1;
+
+    // checkbox and radio
+    input[type="checkbox"] {
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    input[type="radio"] {
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    input[type="checkbox"]:checked,
+    input[type="radio"]:checked {
+      @apply ring-2 ring-[#454545] checked:bg-[#454545] checked:ring-[#454545];
+    }
+
+    header {
+      @apply text-center;
+
+      .logo {
+        @apply m-auto mb-6 flex items-center justify-center;
+      }
+      .title {
+        @apply mb-1 text-3xl font-bold;
+      }
+      .subtitle {
+        @apply mb-6 font-medium;
+      }
+    }
+
+    form {
+      @apply flex w-full flex-col items-center justify-center gap-6;
+
+      .inputGroup {
+        @apply w-full;
+        label {
+          @apply mb-1.5 block font-medium;
+        }
+        input {
+          @apply w-full rounded-lg border border-[#D5DAE1] px-3 py-2 text-black;
+        }
+      }
+
+      .passwordWrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        input {
+          width: 100%;
+          padding-right: 2.5rem; /* Add space for the icon */
+        }
+
+        .togglePasswordButton {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #7a7a7a;
+
+          &:hover {
+            color: #243814;
+          }
+        }
+      }
+      .passwordError {
+        @apply mt-1 bg-white text-sm text-red-500;
+      }
+
+      .formFooter {
+        @apply flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-1;
+
+        .checkboxGroup {
+          @apply flex items-center gap-1;
+
+          input[type="checkbox"] {
+            @apply mr-2.5 h-4 w-4;
+          }
+          label {
+            @apply font-medium;
+          }
+        }
+
+        .forgotPassword {
+          @apply font-medium text-[#243814];
+        }
+      }
+
+      .submitButton {
+        @apply mt-3 w-full rounded-lg bg-[#2E481A] px-3 py-2 text-center font-medium;
+      }
+    }
+
+    footer {
+      @apply mt-6;
+
+      .link {
+        @apply mt-6 font-medium text-[#243814];
+      }
+    }
+  }
+}

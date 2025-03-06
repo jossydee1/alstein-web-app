@@ -11,10 +11,10 @@ export const webRoutes = {
 };
 
 export const authRoutes = {
-  login: "/auth/login",
-  register: "/auth/register",
-  forgot_password: "/auth/forgot-password",
-  reset_password: "/auth/reset-password",
+  login: "/login",
+  register: "/register",
+  forgot_password: "/forgot-password",
+  reset_password: "/reset-password",
 };
 
 export const dashboardRoutes = {
