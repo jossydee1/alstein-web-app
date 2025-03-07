@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { authRoutes, webRoutes } from "@/utils";
+import logoLight from "@/public/logo-rectangle-light.svg";
 
 const LoginContent = () => {
   const [email, setEmail] = useState("");
@@ -33,19 +34,25 @@ const LoginContent = () => {
       <Banner />
 
       <div className={style.container}>
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 md:justify-end">
+          <Link href={webRoutes.home} className="md:hidden">
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+          <p className="text-right text-lg text-[#8692A6]">
+            Already have an account?{" "}
+            <Link href={authRoutes.register} className="text-brandColor">
+              Sign In
+            </Link>
+          </p>
+        </div>
+
         <main className={style.formWrapper}>
           <header>
-            <Link href={webRoutes.home} className={style.logo}>
-              <Image
-                src="/logo-large-white.svg"
-                alt="logo"
-                width={113}
-                height={48}
-              />
-            </Link>
-
-            <h1 className={style.title}>Login to PayScrow</h1>
-            <p className={style.subtitle}>The safest way to trade online</p>
+            <h1 className={style.title}>Join Us!</h1>
+            <p className={style.subtitle}>
+              To begin this journey, tell us what type of account you will be
+              opening.
+            </p>
           </header>
 
           <form onSubmit={handleSubmit}>

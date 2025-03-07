@@ -6,7 +6,3 @@ const Page = () => {
 };
 
 export default Page;
-
-Page.getLayout = function PageLayout(page: React.ReactNode) {
-  return <div>{page}</div>;
-};
