@@ -59,6 +59,20 @@
         }
       }
 
+      .inputGroupPhone {
+        @apply flex w-full items-center space-x-2.5 rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500;
+        select,
+        input {
+          @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
+        }
+        input {
+          @apply border-r-0;
+        }
+        select {
+          @apply inline-block w-[120px] !border-r border-[#BCC0C7];
+        }
+      }
+
       .inputGroupCheckbox {
         @apply flex w-full items-center space-x-2.5;
         label {

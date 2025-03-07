@@ -5,7 +5,7 @@ import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { authRoutes, webRoutes } from "@/utils";
+import { authRoutes, countriesList, webRoutes } from "@/utils";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -36,6 +36,7 @@ const PersonalDetails = ({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
@@ -44,13 +45,19 @@ const PersonalDetails = ({
     e.preventDefault();
     setError("");
 
-    if (!firstName || !lastName || !phone || !email) {
+    if (!firstName || !lastName || !countryCode || !phone || !email) {
       setError("All fields are required");
       return;
     }
 
     // Handle signup logic here
-    console.warn("Form submitted with:", { firstName, lastName, phone, email });
+    console.warn("Form submitted with:", {
+      firstName,
+      lastName,
+      countryCode,
+      phone,
+      email,
+    });
 
     // Update parent state to show next step
     setCompletedStepOne(true);
@@ -59,6 +66,7 @@ const PersonalDetails = ({
     setFirstName("");
     setLastName("");
     setPhone("");
+    setCountryCode("");
     setEmail("");
   };
 
@@ -124,7 +132,20 @@ const PersonalDetails = ({
             </div>
             <div className={style.inputGroup}>
               <label htmlFor="phone">Phone Number*</label>
-              <div className={style.phoneWrapper}>
+              <div className={style.inputGroupPhone}>
+                <select
+                  name="country_code"
+                  id="country_code"
+                  required
+                  value={countryCode}
+                  onChange={e => setCountryCode(e.target.value)}
+                >
+                  {countriesList.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {country.flag} {country.dial_code}
+                    </option>
+                  ))}
+                </select>
                 <input
                   type="tel"
                   id="phone"
