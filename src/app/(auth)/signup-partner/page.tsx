@@ -1,8 +1,8 @@
-import SignupContent from "@/components/auth/Signup";
+import PartnerSignupContent from "@/components/auth/PartnerSignup";
 import React from "react";
 
 const Page = () => {
-  return <SignupContent />;
+  return <PartnerSignupContent />;
 };
 
 export default Page;
