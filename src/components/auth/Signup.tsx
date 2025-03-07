@@ -5,14 +5,32 @@ import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { authRoutes } from "@/utils";
+import { authRoutes, webRoutes } from "@/utils";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
+import logoLight from "@/public/logo-rectangle-light.svg";
+import { Checkbox } from "../ui/checkbox";
 
-const SignupContent = () => {
+const Signup = () => {
+  const [completedStepOne, setCompletedStepOne] = useState(false);
+
+  return !completedStepOne ? (
+    <PersonalDetails setCompletedStepOne={setCompletedStepOne} />
+  ) : (
+    <Security />
+  );
+};
+
+export default Signup;
+
+const PersonalDetails = ({
+  setCompletedStepOne,
+}: {
+  setCompletedStepOne: (value: boolean) => void;
+}) => {
   const router = useRouter();
 
   const [firstName, setFirstName] = useState("");
@@ -27,6 +45,9 @@ const SignupContent = () => {
     // Handle signup logic here
     console.warn("Form submitted with:", { firstName, lastName, phone, email });
 
+    // Update parent state to show next step
+    setCompletedStepOne(true);
+
     // Reset form inputs after submission
     setFirstName("");
     setLastName("");
@@ -39,15 +60,25 @@ const SignupContent = () => {
       <Banner />
 
       <div className={style.container}>
-        <Button
-          variant="ghost"
-          type="button"
-          onClick={() => router.back()}
-          className={style.backButton}
-        >
-          <ChevronLeft />
-          Back
-        </Button>
+        <div className={style.topBar}>
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={() => router.back()}
+            className={style.backButton}
+          >
+            <ChevronLeft />
+            Back
+          </Button>
+
+          <Link
+            className={style.logoLink}
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+        </div>
 
         <main className={style.formWrapper}>
           <header className={style.header}>
@@ -145,4 +176,105 @@ const SignupContent = () => {
   );
 };
 
-export default SignupContent;
+const Security = () => {
+  const router = useRouter();
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [acceptTOC, setAcceptTOC] = useState(false);
+
+  // Form submission handler
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Handle signup logic here
+    console.warn("Form submitted with:", { password, confirmPassword });
+
+    // Reset form inputs after submission
+    setPassword("");
+    setConfirmPassword("");
+
+    router.push(authRoutes.login);
+  };
+
+  return (
+    <div className={style.wrapper}>
+      <Banner />
+
+      <div className={style.container}>
+        <div className={style.topBar}>
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={() => router.back()}
+            className={style.backButton}
+          >
+            <ChevronLeft />
+            Back
+          </Button>
+
+          <Link
+            className={style.logoLink}
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+        </div>
+
+        <main className={style.formWrapper}>
+          <header className={style.header}>
+            <p className={style.step}>STEP 2 of 2</p>
+            <Progress value={100} />
+            <h1 className={style.title}>Personal Information</h1>
+            <hr className={style.hr} />
+          </header>
+
+          <form onSubmit={handleSubmit}>
+            <div className={style.inputGroup}>
+              <label htmlFor="password">Create Password*</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className={style.inputGroup}>
+              <label htmlFor="confirm_password">Re-Enter Password *</label>
+              <input
+                type="confirm_password"
+                id="confirm_password"
+                name="password"
+                required
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <div className={style.inputGroupCheckbox}>
+              <Checkbox
+                id="accept_toc"
+                name="accept_toc"
+                checked={acceptTOC}
+                onCheckedChange={checked => setAcceptTOC(checked === true)}
+              />
+              <label htmlFor="accept_toc">I agree to terms & conditions</label>
+            </div>
+
+            <div className={style.inputGroup}>
+              <Button type="submit" className={style.submitButton}>
+                Register Account
+              </Button>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+  );
+};

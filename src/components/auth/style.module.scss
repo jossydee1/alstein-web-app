@@ -10,12 +10,18 @@
 .container {
   @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-[36px] py-8 md:col-span-3 lg:py-12 xl:px-[72px];
 
-  .formWrapper {
-    @apply relative mx-auto flex max-w-[477px] flex-col items-center justify-center overflow-auto px-1;
-
+  .topBar {
+    @apply mb-6 flex items-center justify-between md:mb-0;
     .backButton {
       @apply mb-4 space-x-2.5 text-[#8692A6];
     }
+    .logoLink {
+      @apply md:hidden;
+    }
+  }
+
+  .formWrapper {
+    @apply relative mx-auto flex max-w-[477px] flex-col items-center justify-center overflow-auto px-1;
 
     .header {
       @apply w-full;
@@ -33,21 +39,6 @@
       }
     }
 
-    // checkbox and radio
-    // input[type="checkbox"] {
-    //   cursor: pointer;
-    //   border-radius: 2px;
-    // }
-
-    // input[type="radio"] {
-    //   cursor: pointer;
-    //   border-radius: 50%;
-    // }
-    // input[type="checkbox"]:checked,
-    // input[type="radio"]:checked {
-    //   @apply ring-2 ring-[#454545] checked:bg-[#454545] checked:ring-[#454545];
-    // }
-
     form {
       @apply flex w-full flex-col items-center justify-center gap-4;
 
@@ -61,59 +52,15 @@
         }
       }
 
+      .inputGroupCheckbox {
+        @apply flex w-full items-center space-x-2.5;
+        label {
+          @apply text-[#696F79];
+        }
+      }
+
       .submitButton {
         @apply mt-4 h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-[#454545];
-      }
-
-      .passwordWrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-
-        input {
-          width: 100%;
-          padding-right: 2.5rem; /* Add space for the icon */
-        }
-
-        .togglePasswordButton {
-          position: absolute;
-          right: 10px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #7a7a7a;
-
-          &:hover {
-            color: #243814;
-          }
-        }
-      }
-      .passwordError {
-        @apply mt-1 bg-white text-sm text-red-500;
-      }
-
-      .formFooter {
-        @apply flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-1;
-
-        .checkboxGroup {
-          @apply flex items-center gap-1;
-
-          input[type="checkbox"] {
-            @apply mr-2.5 h-4 w-4;
-          }
-          label {
-            @apply font-medium;
-          }
-        }
-
-        .forgotPassword {
-          @apply font-medium text-[#243814];
-        }
       }
     }
 
