@@ -39,6 +39,10 @@
       }
     }
 
+    .error {
+      @apply w-full rounded-lg bg-red-100 p-4 text-center text-red-500;
+    }
+
     form {
       @apply flex w-full flex-col items-center justify-center gap-4;
 

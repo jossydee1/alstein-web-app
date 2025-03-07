@@ -37,10 +37,17 @@ const PersonalDetails = ({
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
 
   // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+
+    if (!firstName || !lastName || !phone || !email) {
+      setError("All fields are required");
+      return;
+    }
 
     // Handle signup logic here
     console.warn("Form submitted with:", { firstName, lastName, phone, email });
@@ -89,6 +96,8 @@ const PersonalDetails = ({
           </header>
 
           <form onSubmit={handleSubmit}>
+            {error && <p className={style.error}>{error}</p>}
+
             <div className={style.inputGroup}>
               <label htmlFor="first_name">First Name*</label>
               <input
@@ -113,7 +122,6 @@ const PersonalDetails = ({
                 onChange={e => setLastName(e.target.value)}
               />
             </div>
-
             <div className={style.inputGroup}>
               <label htmlFor="phone">Phone Number*</label>
               <div className={style.phoneWrapper}>
@@ -128,7 +136,6 @@ const PersonalDetails = ({
                 />
               </div>
             </div>
-
             <div className={style.inputGroup}>
               <label htmlFor="email">Email Address*</label>
               <div className={style.emailWrapper}>
@@ -143,7 +150,6 @@ const PersonalDetails = ({
                 />
               </div>
             </div>
-
             <div className={style.inputGroup}>
               <Button type="submit" className={style.submitButton}>
                 Continue
@@ -182,10 +188,32 @@ const Security = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTOC, setAcceptTOC] = useState(false);
+  const [error, setError] = useState("");
+
+  const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
   // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+
+    //  validate password is btw 8 and 20 chaacters and pattern is matched
+    if (!passwordPattern.test(password)) {
+      setError(
+        "Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter",
+      );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (!acceptTOC) {
+      setError("Please accept the terms & conditions");
+      return;
+    }
 
     // Handle signup logic here
     console.warn("Form submitted with:", { password, confirmPassword });
@@ -231,14 +259,14 @@ const Security = () => {
           </header>
 
           <form onSubmit={handleSubmit}>
+            {error && <p className={style.error}>{error}</p>}
+
             <div className={style.inputGroup}>
               <label htmlFor="password">Create Password*</label>
               <input
                 type="password"
                 id="password"
                 name="password"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -248,9 +276,9 @@ const Security = () => {
             <div className={style.inputGroup}>
               <label htmlFor="confirm_password">Re-Enter Password *</label>
               <input
-                type="confirm_password"
+                type="password"
                 id="confirm_password"
-                name="password"
+                name="confirm_password"
                 required
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
@@ -261,6 +289,7 @@ const Security = () => {
               <Checkbox
                 id="accept_toc"
                 name="accept_toc"
+                required
                 checked={acceptTOC}
                 onCheckedChange={checked => setAcceptTOC(checked === true)}
               />
