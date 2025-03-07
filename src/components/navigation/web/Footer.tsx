@@ -146,7 +146,10 @@ export const Footer = () => {
                 />
               </label>
 
-              <Button className="flex min-h-[44px] max-w-[44px] items-center justify-center bg-brandColor px-6 py-4 hover:bg-white hover:text-[#454545] md:w-auto">
+              <Button
+                type="button"
+                className="flex min-h-[44px] max-w-[44px] items-center justify-center bg-brandColor px-6 py-4 hover:bg-white hover:text-[#454545] md:w-auto"
+              >
                 <ArrowRight size="40" className="" />
               </Button>
             </form>

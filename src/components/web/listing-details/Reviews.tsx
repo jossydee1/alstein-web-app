@@ -54,6 +54,7 @@ const Reviews = () => {
           ))}
 
           <Button
+            type="button"
             variant="outline"
             className="w-fit px-6 py-2.5 font-medium text-[#031330]"
           >

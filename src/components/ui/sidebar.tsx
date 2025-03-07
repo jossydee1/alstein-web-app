@@ -273,6 +273,7 @@ const SidebarTrigger = React.forwardRef<
 
   return (
     <Button
+      type="button"
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"

@@ -152,16 +152,18 @@ const NavBar = () => {
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <Button
+                    type="button"
                     variant="ghost"
                     className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                   >
                     <Link href={webRoutes.partners}>Join as a Partner</Link>
                   </Button>
                   <Button
+                    type="button"
                     className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal"
                     asChild
                   >
-                    <Link href={authRoutes.login}>Register/Log in</Link>
+                    <Link href={authRoutes.register}>Register/Log in</Link>
                   </Button>
                 </div>
               </div>
