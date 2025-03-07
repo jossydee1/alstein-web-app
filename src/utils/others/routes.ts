@@ -11,8 +11,9 @@ export const webRoutes = {
 };
 
 export const authRoutes = {
-  login: "/login",
   register: "/register",
+  signup: "/signup",
+  login: "/login",
   forgot_password: "/forgot-password",
   reset_password: "/reset-password",
 };
