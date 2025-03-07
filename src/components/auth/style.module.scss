@@ -24,7 +24,7 @@
     @apply relative mx-auto flex max-w-[477px] flex-col items-center justify-center overflow-auto px-1;
 
     .header {
-      @apply w-full;
+      @apply mb-6 w-full;
       .step {
         @apply mb-4 text-right text-sm uppercase text-[#0A0A0A];
       }
@@ -35,7 +35,10 @@
         @apply mt-[50px] text-xl font-medium;
       }
       .hr {
-        @apply mb-6 mt-3 border-[#E5E5E5];
+        @apply mt-3 border-[#E5E5E5];
+      }
+      .subtitle {
+        @apply mt-1 text-[#696F79];
       }
     }
 
@@ -65,9 +68,6 @@
 
       .info {
         @apply mt-2 text-sm font-medium;
-        a {
-          @apply text-[#FF7D31];
-        }
       }
 
       .submitButton {

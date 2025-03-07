@@ -11,7 +11,7 @@ import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 
-const Login = () => {
+const LoginContent = () => {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -84,7 +84,10 @@ const Login = () => {
                 onChange={e => setPassword(e.target.value)}
               />
               <p className={style.info}>
-                <Link className={style.link} href={authRoutes.forgot_password}>
+                <Link
+                  className="text-[#FF7D31]"
+                  href={authRoutes.forgot_password}
+                >
                   Forgotten Password?
                 </Link>
               </p>
@@ -122,4 +125,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginContent;

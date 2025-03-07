@@ -14,7 +14,7 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { Checkbox } from "../ui/checkbox";
 
-const Signup = () => {
+const SignupContent = () => {
   const [completedStepOne, setCompletedStepOne] = useState(false);
 
   return !completedStepOne ? (
@@ -24,7 +24,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupContent;
 
 const PersonalDetails = ({
   setCompletedStepOne,
