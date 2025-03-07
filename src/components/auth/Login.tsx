@@ -4,29 +4,37 @@ import React, { useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
+import { authRoutes, dashboardRoutes, webRoutes } from "@/utils";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
-import { authRoutes, webRoutes } from "@/utils";
 import logoLight from "@/public/logo-rectangle-light.svg";
 
-const LoginContent = () => {
+const Login = () => {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [error, setError] = useState("");
 
   // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
 
-    // Handle login logic here
-    console.warn("Form submitted with:", { email, password, rememberMe });
+    if (!email || !password) {
+      setError("All fields are required");
+      return;
+    }
+
+    // Handle signup logic here
+    console.warn("Form submitted with:", { email, password });
+    router.push(dashboardRoutes.overview);
 
     // Reset form inputs after submission
     setEmail("");
     setPassword("");
-    setRememberMe(false);
-    setIsPasswordVisible(false);
   };
 
   return (
@@ -34,94 +42,77 @@ const LoginContent = () => {
       <Banner />
 
       <div className={style.container}>
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 md:justify-end">
-          <Link href={webRoutes.home} className="md:hidden">
+        <div className={style.topBar}>
+          <Link
+            className={style.logoLink}
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
             <Image alt="Company Logo" src={logoLight} width={130} height={48} />
           </Link>
-          <p className="text-right text-lg text-[#8692A6]">
-            Already have an account?{" "}
-            <Link href={authRoutes.register} className="text-brandColor">
-              Sign In
-            </Link>
-          </p>
         </div>
 
         <main className={style.formWrapper}>
-          <header>
-            <h1 className={style.title}>Join Us!</h1>
-            <p className={style.subtitle}>
-              To begin this journey, tell us what type of account you will be
-              opening.
-            </p>
+          <header className={style.header}>
+            <h1 className={style.title}>Welcome Back!</h1>
+            <hr className={style.hr} />
           </header>
 
           <form onSubmit={handleSubmit}>
+            {error && <p className={style.error}>{error}</p>}
+
             <div className={style.inputGroup}>
-              <label htmlFor="email">Email*</label>
+              <label htmlFor="email">Email/Phone Number</label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
                 required
-                placeholder="hello@mail.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
 
             <div className={style.inputGroup}>
-              <label htmlFor="password">Password*</label>
-              <div className={style.passwordWrapper}>
-                <input
-                  type={isPasswordVisible ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  required
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className={style.togglePasswordButton}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                  aria-label={
-                    isPasswordVisible ? "Hide password" : "Show password"
-                  }
-                >
-                  {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            <div className={style.formFooter}>
-              <div className={style.checkboxGroup}>
-                <input
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                  checked={rememberMe}
-                  onChange={e => setRememberMe(e.target.checked)}
-                />
-                <label htmlFor="remember">Remember me</label>
-              </div>
-              <p className={style.forgotPassword}>
-                <Link href={authRoutes.forgot_password}>
-                  Forgot your password?
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <p className={style.info}>
+                <Link className={style.link} href={authRoutes.forgot_password}>
+                  Forgotten Password?
                 </Link>
               </p>
             </div>
 
-            <button type="submit" className={style.submitButton}>
-              Login
-            </button>
+            <div className={style.inputGroup}>
+              <Button type="submit" className={style.submitButton}>
+                Sign In
+              </Button>
+            </div>
           </form>
 
-          <footer>
-            <p className={style.info}>
+          <footer className={style.footer}>
+            <div className={style.or}>
+              <hr className={style.hr} /> Or <hr className={style.hr} />
+            </div>
+
+            <div className={style.altBtns}>
+              <button type="button" className={style.altBtn}>
+                <Image src={google} alt="Google Logo" width={24} height={24} />
+                Sign up with Google
+              </button>
+            </div>
+
+            <p className={style.cta}>
               Don&apos;t have an account?{" "}
-              <Link className={style.link} href={authRoutes.register}>
-                Sign up
+              <Link className={style.link} href={authRoutes.signup}>
+                Sign Up
               </Link>
             </p>
           </footer>
@@ -131,4 +122,4 @@ const LoginContent = () => {
   );
 };
 
-export default LoginContent;
+export default Login;

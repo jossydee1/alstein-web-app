@@ -63,6 +63,13 @@
         }
       }
 
+      .info {
+        @apply mt-2 text-sm font-medium;
+        a {
+          @apply text-[#FF7D31];
+        }
+      }
+
       .submitButton {
         @apply mt-4 h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-[#454545];
       }
