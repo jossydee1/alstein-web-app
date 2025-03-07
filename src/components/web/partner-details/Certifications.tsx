@@ -1,6 +1,6 @@
 import React from "react";
 import { CertsProps } from "@/types";
-import { CertsList } from "../common/CertsList";
+import { CertsList } from "@/components/common/CertsList";
 
 const Certifications = ({ certs }: { certs: CertsProps[] }) => {
   return (

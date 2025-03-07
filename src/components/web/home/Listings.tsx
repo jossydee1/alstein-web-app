@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
 import { listingsData } from "@/database/listingsData";
-import { ListingsList } from "../common";
+import { ListingsList } from "@/components/common";
 
 const Listings = () => {
   if (!listingsData) return null;

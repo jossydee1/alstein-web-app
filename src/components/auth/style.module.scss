@@ -1,0 +1,105 @@
+.wrapper {
+  @apply grid h-screen grid-cols-1 overflow-hidden md:grid-cols-6 xl:grid-cols-5;
+}
+
+.banner {
+  background-image: url("/images/auth-image.png");
+  @apply relative col-span-3 hidden overflow-hidden bg-cover bg-center px-[36px] py-8 md:block lg:py-12 xl:col-span-2 xl:px-[72px];
+}
+
+.container {
+  @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-[36px] py-8 md:col-span-3 lg:py-12 xl:px-[72px];
+
+  .topBar {
+    @apply mb-6 flex flex-wrap items-center justify-between md:mb-0;
+    .backButton {
+      @apply mb-4 space-x-2.5 text-[#8692A6];
+    }
+    .logoLink {
+      @apply md:hidden;
+    }
+  }
+
+  .formWrapper {
+    @apply relative mx-auto flex max-w-[477px] flex-col items-center justify-center overflow-auto px-1;
+
+    .header {
+      @apply mb-6 w-full;
+      .step {
+        @apply mb-4 text-right text-sm uppercase text-[#0A0A0A];
+      }
+      .logo {
+        @apply m-auto mb-6 flex items-center justify-center;
+      }
+      .title {
+        @apply mt-[50px] text-xl font-medium;
+      }
+      .hr {
+        @apply mt-3 border-[#E5E5E5];
+      }
+      .subtitle {
+        @apply mt-1 text-[#696F79];
+      }
+    }
+
+    .error {
+      @apply w-full rounded-lg bg-red-100 p-4 text-center text-red-500;
+    }
+
+    form {
+      @apply flex w-full flex-col items-center justify-center gap-4;
+
+      .inputGroup {
+        @apply w-full space-y-2.5;
+        label {
+          @apply block font-semibold text-[#696F79];
+        }
+        input {
+          @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79];
+        }
+      }
+
+      .inputGroupCheckbox {
+        @apply flex w-full items-center space-x-2.5;
+        label {
+          @apply text-[#696F79];
+        }
+      }
+
+      .info {
+        @apply mt-2 text-sm font-medium;
+      }
+
+      .submitButton {
+        @apply mt-4 h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-[#454545];
+      }
+    }
+
+    .footer {
+      @apply mt-8 w-full;
+
+      .or {
+        @apply flex w-full items-center gap-8;
+
+        .hr {
+          @apply w-full border border-[#BCC0C7];
+        }
+      }
+
+      .altBtns {
+        @apply mt-4 flex w-full items-center justify-between gap-3;
+
+        .altBtn {
+          @apply flex w-full items-center justify-center gap-3 rounded-lg border border-[#D5D7DA] bg-white px-8 py-4 font-semibold text-[#414651] hover:bg-[#F7F8FA];
+        }
+      }
+
+      .cta {
+        @apply mt-8 text-center text-sm font-medium;
+        a {
+          @apply text-brandColor;
+        }
+      }
+    }
+  }
+}

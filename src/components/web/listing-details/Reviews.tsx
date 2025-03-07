@@ -2,7 +2,7 @@ import React from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import photo from "@/public/images/business.png";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 
 const Reviews = () => {
@@ -54,6 +54,7 @@ const Reviews = () => {
           ))}
 
           <Button
+            type="button"
             variant="outline"
             className="w-fit px-6 py-2.5 font-medium text-[#031330]"
           >

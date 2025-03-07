@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { usePathname } from "next/navigation";
-import { webRoutes } from "@/utils";
+import { authRoutes, webRoutes } from "@/utils";
 import { Button } from "@/components/ui/button";
 
 // CSS Classes
@@ -152,13 +152,18 @@ const NavBar = () => {
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <Button
+                    type="button"
                     variant="ghost"
                     className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                   >
-                    Join as a Partner
+                    <Link href={webRoutes.partners}>Join as a Partner</Link>
                   </Button>
-                  <Button className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal">
-                    Register/Log in
+                  <Button
+                    type="button"
+                    className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal"
+                    asChild
+                  >
+                    <Link href={authRoutes.register}>Register/Log in</Link>
                   </Button>
                 </div>
               </div>

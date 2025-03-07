@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { BookmarkPlus, Grid3x3 } from "lucide-react";
 import image from "@/public/images/blood-sugar-analyser.png";
 import Image from "next/image";
-import { ListingImageModal } from "../common/modals";
-import { DefaultSlide } from "../common";
+import { ListingImageModal } from "@/components/common/modals";
+import { DefaultSlide } from "@/components/common";
 
 const Header = () => {
   const images = [
@@ -32,6 +32,7 @@ const Header = () => {
             High-Precision Blood Sugar Analyzer
           </h1>
           <Button
+            type="button"
             variant="ghost"
             className="px-0 text-[#1F1F1F] hover:bg-transparent hover:underline"
           >
@@ -42,6 +43,7 @@ const Header = () => {
         <div className="relative">
           {/* Show all photos button */}
           <Button
+            type="button"
             variant="ghost"
             className="absolute bottom-6 right-6 rounded-md border border-[#676767] bg-white px-4 py-1.5 text-[#1F1F1F]"
             onClick={() => setIsModalOpen(true)}

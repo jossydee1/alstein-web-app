@@ -2,7 +2,7 @@
 
 import { MapPin, Microscope, Search } from "lucide-react";
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface SearchFormProps {
   equipment: string;
@@ -57,7 +57,10 @@ export const SearchForm = ({
         />
       </label>
 
-      <Button className="flex min-h-[54px] w-full items-center justify-center bg-brandColor px-6 py-4 lg:w-auto">
+      <Button
+        type="button"
+        className="flex min-h-[54px] w-full items-center justify-center bg-brandColor px-6 py-4 lg:w-auto"
+      >
         <Search size="40" className="" />
       </Button>
     </form>

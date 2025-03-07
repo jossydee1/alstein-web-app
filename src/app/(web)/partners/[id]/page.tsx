@@ -1,4 +1,4 @@
-import PartnerDetailsContent from "@/components/partner-details";
+import PartnerDetailsContent from "@/components/web/partner-details";
 import React from "react";
 
 const Page = () => {

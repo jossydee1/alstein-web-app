@@ -11,14 +11,16 @@ export const webRoutes = {
 };
 
 export const authRoutes = {
-  login: "/auth/login",
-  register: "/auth/register",
-  forgot_password: "/auth/forgot-password",
-  reset_password: "/auth/reset-password",
+  register: "/register",
+  signup: "/signup",
+  partner_signup: "/signup-partner",
+  login: "/login",
+  forgot_password: "/forgot-password",
+  reset_password: "/reset-password",
 };
 
 export const dashboardRoutes = {
-  overview: "/dashboard/overview",
+  overview: "/dashboard",
   create_invite: "/dashboard/create-invite",
   transactions: "/dashboard/transactions",
   wallets_settlements: "/dashboard/wallets-settlements",

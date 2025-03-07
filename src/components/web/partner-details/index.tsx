@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumbs } from "../common";
+import { Breadcrumbs } from "@/components/common";
 import { webRoutes } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";

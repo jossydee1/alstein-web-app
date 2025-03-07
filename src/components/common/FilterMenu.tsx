@@ -9,8 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Ratings } from "../common";
-import { Button } from "../ui/button";
+import { Ratings } from "@/components/common";
+import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
 import {
   Popover,
@@ -118,7 +118,11 @@ const FilterMenu = () => {
         <div className="flex flex-wrap items-start gap-2">
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" className={STYLES.dropdownStyles}>
+              <Button
+                variant="outline"
+                type="button"
+                className={STYLES.dropdownStyles}
+              >
                 <SlidersHorizontal size={16} className="#8B8B8B mr-2" />
                 All Filters
               </Button>

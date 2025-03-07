@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/utils";
 
 const Summary = () => {
@@ -21,6 +21,7 @@ const Summary = () => {
 
       <div>
         <Button
+          type="button"
           className="h-auto w-full !p-3"
           style={{
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",

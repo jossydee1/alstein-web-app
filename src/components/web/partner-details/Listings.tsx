@@ -1,5 +1,5 @@
 import React from "react";
-import { ListingsList } from "../common";
+import { ListingsList } from "@/components/common";
 import { ListingsProps } from "@/types";
 
 const PartnerListings = ({ listings }: { listings: ListingsProps[] }) => {
