@@ -20,7 +20,7 @@ export const authRoutes = {
 };
 
 export const dashboardRoutes = {
-  overview: "/dashboard/overview",
+  overview: "/dashboard",
   create_invite: "/dashboard/create-invite",
   transactions: "/dashboard/transactions",
   wallets_settlements: "/dashboard/wallets-settlements",

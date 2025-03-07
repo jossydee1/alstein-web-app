@@ -28,7 +28,7 @@ const RegisterContent = () => {
             Already have an account?{" "}
             <Link
               className="text-brandColor"
-              href={webRoutes.home}
+              href={authRoutes.login}
               aria-label="Brand"
             >
               Sign In

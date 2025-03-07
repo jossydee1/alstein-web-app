@@ -1,20 +1,22 @@
 "use client";
 
-// import React, { useState } from "react";
+import React from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
-// import Link from "next/link";
-// import { ChevronLeft } from "lucide-react";
-// import { authRoutes, webRoutes } from "@/utils";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
+import { webRoutes } from "@/utils";
 // import { Progress } from "../ui/progress";
-// import { Button } from "../ui/button";
-// import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 // import google from "@/public/images/logos/google.svg";
-// import Image from "next/image";
-// import logoLight from "@/public/logo-rectangle-light.svg";
+import Image from "next/image";
+import logoLight from "@/public/logo-rectangle-light.svg";
 // import { Checkbox } from "../ui/checkbox";
 
 const PartnerSignupContent = () => {
+  const router = useRouter();
+
   //   const [completedStepOne, setCompletedStepOne] = useState(false);
 
   //  return !completedStepOne ? (
@@ -28,7 +30,33 @@ const PartnerSignupContent = () => {
       <Banner />
 
       <div className={style.container}>
-        <h1>Register Partner Account!</h1>
+        <div className={style.topBar}>
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={() => router.back()}
+            className={style.backButton}
+          >
+            <ChevronLeft />
+            Back
+          </Button>
+
+          <Link
+            className={style.logoLink}
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+        </div>
+
+        <main className={style.formWrapper}>
+          <header className="">
+            <h1 className="text-[30px] font-bold text-[#2D2D2D]">
+              Register Partner Account!
+            </h1>
+          </header>
+        </main>
       </div>
     </div>
   );

@@ -114,7 +114,7 @@ const LoginContent = () => {
 
             <p className={style.cta}>
               Don&apos;t have an account?{" "}
-              <Link className={style.link} href={authRoutes.signup}>
+              <Link className={style.link} href={authRoutes.register}>
                 Sign Up
               </Link>
             </p>
