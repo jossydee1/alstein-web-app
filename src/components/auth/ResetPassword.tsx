@@ -1,154 +1,119 @@
+"use client";
+
 import React, { useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
+import { authRoutes, webRoutes } from "@/utils";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
-import { webRoutes } from "@/utils";
+import logoLight from "@/public/logo-rectangle-light.svg";
 
-const ResetPassword = () => {
-  const [email, setEmail] = useState("");
+const ResetPasswordContent = () => {
+  const router = useRouter();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-  const [showPasswordError, setShowPasswordError] = useState(false);
+  const [error, setError] = useState("");
+
+  const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
   // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setShowPasswordError(false);
+    setError("");
 
-    // Validate passwords match
-    if (password !== confirmPassword) {
-      setShowPasswordError(true);
+    //  validate password is btw 8 and 20 chaacters and pattern is matched
+    if (!passwordPattern.test(password)) {
+      setError(
+        "Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter",
+      );
       return;
     }
 
-    // Handle registration logic here
-    console.warn("Form submitted with:", {
-      email,
-      password,
-    });
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    // Handle signup logic here
+    console.warn("Form submitted with:", { password, confirmPassword });
 
     // Reset form inputs after submission
-    setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setIsPasswordVisible(false);
-    setIsConfirmPasswordVisible(false);
-    setShowPasswordError(false);
+
+    router.push(authRoutes.login);
   };
 
   return (
     <div className={style.wrapper}>
-      <div className={style.container}>
-        <main className={style.formWrapper}>
-          <header>
-            <Link href={webRoutes.home} className={style.logo}>
-              <Image
-                src="/logo-large-white.svg"
-                alt="logo"
-                width={113}
-                height={48}
-              />
-            </Link>
+      <Banner />
 
-            <h1 className={style.title}>Reset your Password</h1>
+      <div className={style.container}>
+        <div className={style.topBar}>
+          <Link
+            className={style.logoLink}
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+        </div>
+
+        <main className={style.formWrapper}>
+          <header className={style.header}>
+            <h1 className={style.title}>Reset Your Password?</h1>
+            <hr className={style.hr} />
             <p className={style.subtitle}>
-              Enter your email and new password to reset your password.
+              Create a new password for your account
             </p>
           </header>
 
           <form onSubmit={handleSubmit}>
-            {/* Email Input */}
+            {error && <p className={style.error}>{error}</p>}
+
             <div className={style.inputGroup}>
-              <label htmlFor="email">Email*</label>
+              <label htmlFor="password">New Password</label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="password"
+                id="password"
+                name="password"
                 required
-                placeholder="hello@mail.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
 
-            {/* Password Input */}
             <div className={style.inputGroup}>
-              <label htmlFor="password">Password*</label>
-              <div className={style.passwordWrapper}>
-                <input
-                  type={isPasswordVisible ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  required
-                  placeholder="********"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className={style.togglePasswordButton}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                  aria-label={
-                    isPasswordVisible ? "Hide password" : "Show password"
-                  }
-                >
-                  {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+              <label htmlFor="confirm_password">Re-Enter Password</label>
+              <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                required
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+              />
+              <p className={style.info}>
+                Back to{" "}
+                <Link className="text-brandColor" href={authRoutes.login}>
+                  Sign In
+                </Link>
+              </p>
             </div>
 
-            {/* Confirm Password Input */}
             <div className={style.inputGroup}>
-              <label htmlFor="confirmPassword">Confirm Password*</label>
-              <div className={style.passwordWrapper}>
-                <input
-                  type={isConfirmPasswordVisible ? "text" : "password"}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  required
-                  placeholder="********"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className={style.togglePasswordButton}
-                  onClick={() =>
-                    setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                  }
-                  aria-label={
-                    isConfirmPasswordVisible ? "Hide password" : "Show password"
-                  }
-                >
-                  {isConfirmPasswordVisible ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
-                </button>
-              </div>
-              {showPasswordError && (
-                <p className={style.passwordError}>
-                  Passwords do not match. Please try again.
-                </p>
-              )}
+              <Button type="submit" className={style.submitButton}>
+                Reset Password
+              </Button>
             </div>
-
-            <button type="submit" className={style.submitButton}>
-              Reset Password
-            </button>
           </form>
         </main>
       </div>
-
-      <Banner />
     </div>
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordContent;

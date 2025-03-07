@@ -28,10 +28,11 @@ const ForgotPasswordContent = () => {
 
     // Handle signup logic here
     console.warn("Form submitted with:", { email });
-    router.push(authRoutes.reset_password);
 
     // Reset form inputs after submission
     setEmail("");
+
+    router.push(authRoutes.reset_password);
   };
 
   return (
