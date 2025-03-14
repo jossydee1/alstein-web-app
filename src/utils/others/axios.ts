@@ -1,8 +1,9 @@
 import axios from "axios";
-import { API_URL } from "./constants";
+import { getBaseURL } from "./envUtils";
+
 // Create an Axios instance with default settings
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: getBaseURL(),
   timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
