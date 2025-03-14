@@ -10,28 +10,26 @@ import React, { useRef, useState } from "react";
 export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {listings.map((p, index) => (
+      {listings.map((l, index) => (
         <article
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
         >
-          <ImageSlider images={p.images} />
+          <ImageSlider images={l?.images} />
 
           <div>
             <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
-              {p.name}
+              {l?.name}
             </h3>
-            <p className="mb-1 text-xs text-[#474747]">
-              Equipment: {p.equipment}
-            </p>
+            <p className="mb-1 text-xs text-[#474747]">Equipment: {l?.name}</p>
             <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
-              <MapPin size="12" /> {p.address}
+              <MapPin size="12" /> {l?.address}
             </p>
 
-            <p className="mb-4 text-[#161616]">#{p.count} Day</p>
+            <p className="mb-4 text-[#161616]">#{l?.count} Day</p>
 
             <Link
-              href={`${webRoutes.listings}/${p.id}`}
+              href={`${webRoutes.listings}/${l?.id}`}
               className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
             >
               View Details
@@ -84,6 +82,8 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  if (!images || images?.length === 0) return null;
 
   return (
     <div className="relative overflow-hidden rounded-md">
