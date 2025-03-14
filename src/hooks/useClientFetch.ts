@@ -1,7 +1,10 @@
+"use client";
+
 import { api, formatError } from "@/utils";
 import { QueryOptions, useQuery } from "@tanstack/react-query";
 import { ApiResponseProps } from "@/types";
-export function useQueryFetch<T>(
+
+export function useClientFetch<T>(
   endpoint: string,
   params?: Record<string, string | number | boolean | null>,
   enabled: boolean = true,
