@@ -36,7 +36,7 @@ const Categories = ({ categories }: { categories: CategoryProps[] }) => {
               key={c.title}
               className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
-                backgroundImage: c.image_url || "none",
+                backgroundImage: c.image_url || 'url("/images/doctor.png")',
                 backgroundColor: "#181818",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
