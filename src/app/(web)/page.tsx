@@ -1,3 +1,5 @@
+"use client";
+
 import HomeContent from "@/components/web/home";
 
 export default function Page() {
