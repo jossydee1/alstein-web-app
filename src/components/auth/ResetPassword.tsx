@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useScrollToID } from "@/hooks";
 
 const ResetPasswordContent = () => {
   const router = useRouter();
@@ -28,11 +29,7 @@ const ResetPasswordContent = () => {
     }
   }, [router, token]);
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error]);
+  useScrollToID(error, "error");
 
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

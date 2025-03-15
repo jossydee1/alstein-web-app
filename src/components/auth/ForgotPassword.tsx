@@ -8,6 +8,7 @@ import { api, authRoutes, formatError, webRoutes } from "@/utils";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useScrollToID } from "@/hooks";
 
 const ForgotPasswordContent = () => {
   const [email, setEmail] = useState("");
@@ -16,16 +17,8 @@ const ForgotPasswordContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-    if (success) {
-      document
-        .getElementById("success")
-        ?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error, success]);
+  useScrollToID(error, "error");
+  useScrollToID(success, "success");
 
   useEffect(() => {
     let timer: NodeJS.Timeout;

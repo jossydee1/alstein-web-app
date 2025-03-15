@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { useAuth } from "@/context";
+import { useScrollToID } from "@/hooks";
 
 const LoginContent = () => {
   const router = useRouter();
@@ -27,11 +28,7 @@ const LoginContent = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error]);
+  useScrollToID(error, "error");
 
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

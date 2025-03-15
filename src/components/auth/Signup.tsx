@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import {
 import style from "./style.module.scss";
 import google from "@/public/images/logos/google.svg";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useScrollToID } from "@/hooks";
 
 // Main component
 const SignupContent = () => {
@@ -146,11 +147,7 @@ const PersonalDetails = ({
   });
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error]);
+  useScrollToID(error, "error");
 
   const handleChange = (
     e:
@@ -322,11 +319,7 @@ const OTP = ({
 
   const otpPattern = /^\d{4}$/;
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error]);
+  useScrollToID(error, "error");
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -419,11 +412,7 @@ const Security = ({
 
   const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
-  useEffect(() => {
-    if (error) {
-      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [error]);
+  useScrollToID(error, "error");
 
   const handleChange = (
     e:
