@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import PrelineScript from "@/components/PrelineScript";
 import ReactQueryProvider from "./providers/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthProvider } from "@/context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <ReactQueryProvider>
-          <ToastContainer />
-          {children}
+          <AuthProvider>
+            <ToastContainer />
+            {children}
+          </AuthProvider>
           <PrelineScript />
           <ReactQueryDevtools initialIsOpen={false} />
         </ReactQueryProvider>
