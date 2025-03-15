@@ -1,6 +1,8 @@
+"use client";
+
 import { useAuth } from "@/context";
 import { dashboardRoutes } from "@/utils";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AuthLayout({
