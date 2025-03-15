@@ -64,7 +64,7 @@ const ForgotPasswordContent = () => {
             {error && <p className={style.error}>{error}</p>}
 
             <div className={style.inputGroup}>
-              <label htmlFor="email">Email/Phone Number</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="text"
                 id="email"
