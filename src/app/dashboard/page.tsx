@@ -1,7 +1,16 @@
-import React from "react";
+"use client";
+import { useAuth } from "@/context";
 
 const Page = () => {
-  return <div>Dashboard Overview Page</div>;
+  const { userId, token, logout } = useAuth();
+
+  return (
+    <div>
+      <h2>Welcome User {userId}</h2>
+      <p>Your token: {token}</p>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
 };
 
 export default Page;
