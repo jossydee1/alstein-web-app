@@ -1,79 +1,96 @@
 "use client";
 
-import React, { useState } from "react";
-import Banner from "./Banner";
-import style from "./style.module.scss";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { authRoutes, countriesList, webRoutes } from "@/utils";
+import Banner from "./Banner";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import google from "@/public/images/logos/google.svg";
-import Image from "next/image";
-import logoLight from "@/public/logo-rectangle-light.svg";
 import { Checkbox } from "../ui/checkbox";
+import {
+  api,
+  authRoutes,
+  countriesList,
+  formatError,
+  webRoutes,
+} from "@/utils";
+import style from "./style.module.scss";
+import google from "@/public/images/logos/google.svg";
+import logoLight from "@/public/logo-rectangle-light.svg";
 
+interface ResponseData {
+  id?: string;
+  token?: string;
+  status: string;
+  message: string;
+}
+
+// Main component
 const SignupContent = () => {
-  const [completedStepOne, setCompletedStepOne] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userData, setUserData] = useState<ResponseData>({
+    id: "",
+    token: "",
+    status: "",
+    message: "",
+  });
 
-  return !completedStepOne ? (
-    <PersonalDetails setCompletedStepOne={setCompletedStepOne} />
-  ) : (
-    <Security />
-  );
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <PersonalDetails
+            nextStep={() => setCurrentStep(2)}
+            setUserData={setUserData}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+          />
+        );
+      case 2:
+        return (
+          <OTP
+            nextStep={() => setCurrentStep(3)}
+            userData={userData}
+            setUserData={setUserData}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+          />
+        );
+      case 3:
+        return (
+          <Security
+            userData={userData}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return renderStep();
 };
 
 export default SignupContent;
-
-const PersonalDetails = ({
-  setCompletedStepOne,
+// Common layout component
+const FormLayout = ({
+  children,
+  step,
+  title,
 }: {
-  setCompletedStepOne: (value: boolean) => void;
+  children: React.ReactNode;
+  step: number;
+  title: string;
 }) => {
   const router = useRouter();
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("");
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-
-  // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-
-    if (!firstName || !lastName || !countryCode || !phone || !email) {
-      setError("All fields are required");
-      return;
-    }
-
-    // Handle signup logic here
-    console.warn("Form submitted with:", {
-      firstName,
-      lastName,
-      countryCode,
-      phone,
-      email,
-    });
-
-    // Update parent state to show next step
-    setCompletedStepOne(true);
-
-    // Reset form inputs after submission
-    setFirstName("");
-    setLastName("");
-    setPhone("");
-    setCountryCode("");
-    setEmail("");
-  };
 
   return (
     <div className={style.wrapper}>
       <Banner />
-
       <div className={style.container}>
         <div className={style.topBar}>
           <Button
@@ -97,234 +114,446 @@ const PersonalDetails = ({
 
         <main className={style.formWrapper}>
           <header className={style.header}>
-            <p className={style.step}>STEP 1 of 2</p>
-            <Progress value={50} />
-            <h1 className={style.title}>Personal Information</h1>
+            <p className={style.step}>STEP {step} of 3</p>
+            <Progress value={step * 33.33} />
+            <h1 className={style.title}>{title}</h1>
             <hr className={style.hr} />
           </header>
-
-          <form onSubmit={handleSubmit}>
-            {error && <p className={style.error}>{error}</p>}
-
-            <div className={style.inputGroup}>
-              <label htmlFor="first_name">First Name*</label>
-              <input
-                type="text"
-                id="first_name"
-                name="first_name"
-                required
-                placeholder="John"
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-              />
-            </div>
-            <div className={style.inputGroup}>
-              <label htmlFor="last_name">Last Name*</label>
-              <input
-                type="text"
-                id="last_name"
-                name="last_name"
-                required
-                placeholder="Doe"
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-              />
-            </div>
-            <div className={style.inputGroup}>
-              <label htmlFor="phone">Phone Number*</label>
-              <div className={style.inputGroupPhone}>
-                <select
-                  name="country_code"
-                  id="country_code"
-                  required
-                  value={countryCode}
-                  onChange={e => setCountryCode(e.target.value)}
-                >
-                  {countriesList.map(country => (
-                    <option key={country.code} value={country.code}>
-                      {country.flag} {country.dial_code}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  placeholder="123-456-7890"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className={style.inputGroup}>
-              <label htmlFor="email">Email Address*</label>
-              <div className={style.emailWrapper}>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="john@doe.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className={style.inputGroup}>
-              <Button type="submit" className={style.submitButton}>
-                Continue
-              </Button>
-            </div>
-          </form>
-
-          <footer className={style.footer}>
-            <div className={style.or}>
-              <hr className={style.hr} /> Or <hr className={style.hr} />
-            </div>
-
-            <div className={style.altBtns}>
-              <button type="button" className={style.altBtn}>
-                <Image src={google} alt="Google Logo" width={24} height={24} />
-                Sign up with Google
-              </button>
-            </div>
-
-            <p className={style.cta}>
-              Already have an account?{" "}
-              <Link className={style.link} href={authRoutes.login}>
-                Sign In
-              </Link>
-            </p>
-          </footer>
+          {children}
         </main>
       </div>
     </div>
   );
 };
 
-const Security = () => {
-  const router = useRouter();
+// Error component
+const ErrorMessage = ({ error }: { error: string }) => {
+  if (!error) return null;
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  return (
+    <p id="error" className={style.error}>
+      {error}
+    </p>
+  );
+};
+
+// Step 1: Personal Details
+const PersonalDetails = ({
+  nextStep,
+  setUserData,
+  isSubmitting,
+  setIsSubmitting,
+}: {
+  nextStep: () => void;
+  setUserData: (userData: ResponseData) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+}) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    countryCode: "",
+    email: "",
+  });
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (error) {
+      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [error]);
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    const { firstName, lastName, countryCode, phone, email } = formData;
+
+    // Validate required fields
+    if (!firstName || !lastName || !countryCode || !phone || !email) {
+      setError("All fields are required");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const params = {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone_number: `${countryCode}${phone}`,
+        email: email.trim().toLowerCase(),
+        auth_type: "email",
+        password: "",
+      };
+
+      const response = await api.post("/client/public/api/v1/signup", params);
+
+      if (response.status === 200) {
+        localStorage.setItem("userToken", response.data.token);
+        localStorage.setItem("userId", response.data.id);
+        setUserData(response.data);
+        nextStep();
+      }
+    } catch (error) {
+      setError(formatError(error, "An error occurred during signup"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <FormLayout step={1} title="Personal Information">
+      <form onSubmit={handleSubmit}>
+        <ErrorMessage error={error} />
+
+        <div className={style.inputGroup}>
+          <label htmlFor="firstName">First Name*</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+            placeholder="John"
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={style.inputGroup}>
+          <label htmlFor="lastName">Last Name*</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            placeholder="Doe"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={style.inputGroup}>
+          <label htmlFor="phone">Phone Number*</label>
+          <div className={style.inputGroupPhone}>
+            <select
+              name="countryCode"
+              id="countryCode"
+              required
+              value={formData.countryCode}
+              onChange={handleChange}
+            >
+              {countriesList.map(country => (
+                <option key={country.code} value={country.dial_code}>
+                  {country.flag} {country.dial_code}
+                </option>
+              ))}
+            </select>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              placeholder="123-456-7890"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className={style.inputGroup}>
+          <label htmlFor="email">Email Address*</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="john@doe.com"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={style.inputGroup}>
+          <Button
+            type="submit"
+            className={style.submitButton}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Register Account"}
+          </Button>
+        </div>
+      </form>
+
+      <footer className={style.footer}>
+        <div className={style.or}>
+          <hr className={style.hr} /> Or <hr className={style.hr} />
+        </div>
+
+        <div className={style.altBtns}>
+          <button type="button" className={style.altBtn}>
+            <Image src={google} alt="Google Logo" width={24} height={24} />
+            Sign up with Google
+          </button>
+        </div>
+
+        <p className={style.cta}>
+          Already have an account?{" "}
+          <Link className={style.link} href={authRoutes.login}>
+            Sign In
+          </Link>
+        </p>
+      </footer>
+    </FormLayout>
+  );
+};
+
+// Step 2: OTP Verification
+const OTP = ({
+  nextStep,
+  userData,
+  isSubmitting,
+  setIsSubmitting,
+}: {
+  nextStep: () => void;
+  userData: ResponseData;
+  setUserData: (userData: ResponseData) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+}) => {
+  const [otp, setOtp] = useState("");
+  const [error, setError] = useState("");
+
+  const otpPattern = /^\d{4}$/;
+
+  useEffect(() => {
+    if (error) {
+      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [error]);
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    if (!otpPattern.test(otp)) {
+      setError("OTP must be 4 digits");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!userData?.id) {
+      setError("User ID not found");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const params = {
+        id: userData.id,
+        otp: otp,
+      };
+
+      const response = await api.post(
+        "/client/public/api/v1/activate-profile",
+        params,
+      );
+
+      if (response.status === 200) {
+        nextStep();
+      }
+    } catch (error) {
+      setError(formatError(error, "An error occurred while verifying OTP"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <FormLayout step={2} title="Verify OTP">
+      <form onSubmit={handleSubmit}>
+        <ErrorMessage error={error} />
+
+        <div className={style.inputGroup}>
+          <label htmlFor="otp">Enter OTP*</label>
+          <input
+            type="text"
+            id="otp"
+            name="otp"
+            required
+            placeholder="Enter 4-digit OTP"
+            maxLength={4}
+            value={otp}
+            onChange={e => setOtp(e.target.value)}
+          />
+        </div>
+
+        <div className={style.inputGroup}>
+          <Button
+            type="submit"
+            className={style.submitButton}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Verify OTP"}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
+  );
+};
+
+// Step 3: Security
+const Security = ({
+  userData,
+  isSubmitting,
+  setIsSubmitting,
+}: {
+  userData: ResponseData;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+}) => {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [acceptTOC, setAcceptTOC] = useState(false);
   const [error, setError] = useState("");
 
   const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
-  // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (error) {
+      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [error]);
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
-    //  validate password is btw 8 and 20 chaacters and pattern is matched
+    const { password, confirmPassword } = formData;
+
     if (!passwordPattern.test(password)) {
       setError(
         "Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter",
       );
+      setIsSubmitting(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setIsSubmitting(false);
       return;
     }
 
     if (!acceptTOC) {
       setError("Please accept the terms & conditions");
+      setIsSubmitting(false);
       return;
     }
 
-    // Handle signup logic here
-    console.warn("Form submitted with:", { password, confirmPassword });
+    if (userData?.status !== "successful") {
+      setError("Account verification failed");
+      setIsSubmitting(false);
+      return;
+    }
 
-    // Reset form inputs after submission
-    setPassword("");
-    setConfirmPassword("");
+    try {
+      const params = {
+        id: userData.id,
+        password: password,
+      };
 
-    router.push(authRoutes.login);
+      const response = await api.post(
+        "/client/public/api/v1/set-password",
+        params,
+      );
+
+      if (response.status === 200) {
+        router.push(authRoutes.login);
+      }
+    } catch (error) {
+      setError(formatError(error, "An error occurred while setting password"));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className={style.wrapper}>
-      <Banner />
+    <FormLayout step={3} title="Create Password">
+      <form onSubmit={handleSubmit}>
+        <ErrorMessage error={error} />
 
-      <div className={style.container}>
-        <div className={style.topBar}>
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={() => router.back()}
-            className={style.backButton}
-          >
-            <ChevronLeft />
-            Back
-          </Button>
-
-          <Link
-            className={style.logoLink}
-            href={webRoutes.home}
-            aria-label="Brand"
-          >
-            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
-          </Link>
+        <div className={style.inputGroup}>
+          <label htmlFor="password">Create Password*</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Enter password"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </div>
 
-        <main className={style.formWrapper}>
-          <header className={style.header}>
-            <p className={style.step}>STEP 2 of 2</p>
-            <Progress value={100} />
-            <h1 className={style.title}>Personal Information</h1>
-            <hr className={style.hr} />
-          </header>
+        <div className={style.inputGroup}>
+          <label htmlFor="confirmPassword">Re-Enter Password*</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            placeholder="Re-enter password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+        </div>
 
-          <form onSubmit={handleSubmit}>
-            {error && <p className={style.error}>{error}</p>}
+        <div className={style.inputGroupCheckbox}>
+          <Checkbox
+            id="acceptTOC"
+            name="acceptTOC"
+            required
+            checked={acceptTOC}
+            onCheckedChange={checked => setAcceptTOC(checked === true)}
+          />
+          <label htmlFor="acceptTOC">I agree to terms & conditions</label>
+        </div>
 
-            <div className={style.inputGroup}>
-              <label htmlFor="password">Create Password*</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-            </div>
-
-            <div className={style.inputGroup}>
-              <label htmlFor="confirm_password">Re-Enter Password *</label>
-              <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                required
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-              />
-            </div>
-
-            <div className={style.inputGroupCheckbox}>
-              <Checkbox
-                id="accept_toc"
-                name="accept_toc"
-                required
-                checked={acceptTOC}
-                onCheckedChange={checked => setAcceptTOC(checked === true)}
-              />
-              <label htmlFor="accept_toc">I agree to terms & conditions</label>
-            </div>
-
-            <div className={style.inputGroup}>
-              <Button type="submit" className={style.submitButton}>
-                Register Account
-              </Button>
-            </div>
-          </form>
-        </main>
-      </div>
-    </div>
+        <div className={style.inputGroup}>
+          <Button
+            type="submit"
+            className={style.submitButton}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Set Password"}
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   );
 };

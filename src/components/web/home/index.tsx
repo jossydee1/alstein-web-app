@@ -16,7 +16,7 @@ const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
     isLoading: listingsLoading,
     error: listingsError,
   } = useClientFetch<ListingsProps[]>(
-    "client/public/api/v1/equipments/get-equipments?skip=0&take=8",
+    "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   );
 
   if (listingsLoading) return <p>Loading...</p>;
