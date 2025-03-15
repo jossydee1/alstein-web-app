@@ -11,16 +11,9 @@ import { useClientFetch } from "@/hooks";
 import { CategoryProps, ListingsProps } from "@/types";
 
 const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
-  const {
-    data: listings,
-    isLoading: listingsLoading,
-    error: listingsError,
-  } = useClientFetch<ListingsProps[]>(
+  const { data: listings } = useClientFetch<ListingsProps[]>(
     "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   );
-
-  if (listingsLoading) return <p>Loading...</p>;
-  if (listingsError) return <p>Error: {listingsError?.message}</p>;
 
   return (
     <main>
