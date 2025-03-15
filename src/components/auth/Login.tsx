@@ -4,37 +4,63 @@ import React, { useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
-import { authRoutes, dashboardRoutes, webRoutes } from "@/utils";
+import {
+  api,
+  authRoutes,
+  dashboardRoutes,
+  formatError,
+  webRoutes,
+} from "@/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useAuth } from "@/context";
+import { useScrollToID } from "@/hooks";
 
 const LoginContent = () => {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useScrollToID(error, "error");
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
     if (!email || !password) {
       setError("All fields are required");
+      setIsSubmitting(false);
       return;
     }
 
-    // Handle signup logic here
-    console.warn("Form submitted with:", { email, password });
-    router.push(dashboardRoutes.overview);
+    try {
+      const params = {
+        email: email.trim().toLowerCase(),
+        password: password,
+      };
 
-    // Reset form inputs after submission
-    setEmail("");
-    setPassword("");
+      const response = await api.post("/client/public/api/v1/login", params);
+
+      if (response.status === 200) {
+        login(response.data.id, response.data.token);
+        setEmail("");
+        setPassword("");
+        router.push(dashboardRoutes.overview);
+      }
+    } catch (error) {
+      setError(formatError(error, "An error occurred during login"));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -62,7 +88,7 @@ const LoginContent = () => {
             {error && <p className={style.error}>{error}</p>}
 
             <div className={style.inputGroup}>
-              <label htmlFor="email">Email/Phone Number</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="text"
                 id="email"
@@ -94,8 +120,12 @@ const LoginContent = () => {
             </div>
 
             <div className={style.inputGroup}>
-              <Button type="submit" className={style.submitButton}>
-                Sign In
+              <Button
+                type="submit"
+                className={style.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Signing In..." : "Sign In"}
               </Button>
             </div>
           </form>

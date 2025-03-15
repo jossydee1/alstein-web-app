@@ -6,8 +6,9 @@ import Link from "next/link";
 import React from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { usePathname } from "next/navigation";
-import { authRoutes, webRoutes } from "@/utils";
+import { authRoutes, dashboardRoutes, webRoutes } from "@/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context";
 
 // CSS Classes
 const STYLES = {
@@ -61,6 +62,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const NavBar = () => {
   const path = usePathname() || "";
+  const { userId, logout } = useAuth();
 
   const renderNavItem = (item: (typeof NAV_ITEMS)[0]) => {
     if (item.isDropdown) {
@@ -156,15 +158,31 @@ const NavBar = () => {
                     variant="ghost"
                     className="h-auto border border-[#7B7B7B] px-6 py-4 font-Groteskbold text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                   >
-                    <Link href={webRoutes.partners}>Join as a Partner</Link>
+                    <Link
+                      href={
+                        !userId ? webRoutes.partners : dashboardRoutes.overview
+                      }
+                    >
+                      {!userId ? "Join as a Partner" : "Dashboard"}
+                    </Link>
                   </Button>
-                  <Button
-                    type="button"
-                    className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal"
-                    asChild
-                  >
-                    <Link href={authRoutes.register}>Register/Log in</Link>
-                  </Button>
+                  {!userId ? (
+                    <Button
+                      type="button"
+                      className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal"
+                      asChild
+                    >
+                      <Link href={authRoutes.register}>Register/Log in</Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      className="h-auto bg-brandColor px-12 py-4 font-Groteskbold text-lg font-normal"
+                      onClick={logout}
+                    >
+                      Logout
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

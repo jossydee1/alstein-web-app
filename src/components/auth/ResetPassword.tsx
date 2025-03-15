@@ -1,50 +1,90 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
-import { authRoutes, webRoutes } from "@/utils";
+import { api, authRoutes, formatError, webRoutes } from "@/utils";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useScrollToID } from "@/hooks";
 
 const ResetPasswordContent = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | React.ReactNode>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
 
+  useEffect(() => {
+    if (!token) {
+      router.push(authRoutes.login);
+    }
+  }, [router, token]);
+
+  useScrollToID(error, "error");
+
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
-    //  validate password is btw 8 and 20 chaacters and pattern is matched
     if (!passwordPattern.test(password)) {
       setError(
         "Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter",
       );
+      setIsSubmitting(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setIsSubmitting(false);
       return;
     }
 
-    // Handle signup logic here
-    console.warn("Form submitted with:", { password, confirmPassword });
+    try {
+      const params = {
+        token: token,
+        password: password,
+      };
 
-    // Reset form inputs after submission
-    setPassword("");
-    setConfirmPassword("");
+      const response = await api.post(
+        "/client/public/api/v1/reset-password",
+        params,
+      );
 
-    router.push(authRoutes.login);
+      if (response.status === 200) {
+        router.push(authRoutes.login);
+      }
+    } catch (error) {
+      const errorMessage = formatError(
+        error,
+        "An error occurred while sending reset link",
+      );
+      if (errorMessage.toLowerCase().includes("jwt expired")) {
+        setError(
+          <>
+            Your reset link has expired. Please request a new reset link.{" "}
+            <Link className="underline" href={authRoutes.forgot_password}>
+              Click here
+            </Link>
+          </>,
+        );
+      } else {
+        setError(errorMessage);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -105,8 +145,12 @@ const ResetPasswordContent = () => {
             </div>
 
             <div className={style.inputGroup}>
-              <Button type="submit" className={style.submitButton}>
-                Reset Password
+              <Button
+                type="submit"
+                className={style.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Resetting..." : "Reset Password"}
               </Button>
             </div>
           </form>

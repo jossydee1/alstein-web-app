@@ -1,3 +1,5 @@
+"use client";
+
 import React, { SetStateAction, useEffect } from "react";
 
 interface CloseMenuOnOutsideClickProps {

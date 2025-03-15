@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { SearchForm } from "@/components/common";
 import FilterMenu from "@/components/common/FilterMenu";
+import { CategoryProps } from "@/types";
 
-const Header = () => {
+const Header = ({ categories }: { categories: CategoryProps[] }) => {
   const [equipment, setEquipment] = useState("");
   const [region, setRegion] = useState("");
 
@@ -47,7 +48,7 @@ const Header = () => {
           </div>
         </div>
 
-        <FilterMenu />
+        <FilterMenu categories={categories} />
       </header>
     </div>
   );

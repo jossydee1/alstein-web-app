@@ -1,18 +1,12 @@
-export type CustomNodeEnv = "local" | "development" | "staging" | "production";
+export const getBaseURL = () => {
+  if (typeof window === "undefined") return "https://alstein.com/dev"; // Default for SSR
 
-const envUrls: { [key in CustomNodeEnv]: string } = {
-  local: process.env.NEXT_PUBLIC_LOCAL_URL || "",
-  development: process.env.NEXT_PUBLIC_DEVELOPMENT_URL || "",
-  staging: process.env.NEXT_PUBLIC_STAGING_URL || "",
-  production: process.env.NEXT_PUBLIC_PRODUCTION_URL || "",
+  const hostname = window.location.hostname;
+
+  if (hostname.includes("alstein.com")) {
+    return "https://alstein.com/dev";
+  } else if (hostname.includes("localhost")) {
+    return "https://gg1l8ijqo1.execute-api.us-east-1.amazonaws.com/dev";
+  }
+  return "https://gg1l8ijqo1.execute-api.us-east-1.amazonaws.com/dev";
 };
-
-export const getEnvUrl = (): string => {
-  const env = process.env.NEXT_PUBLIC_NODE_ENV as CustomNodeEnv;
-  return envUrls[env];
-};
-
-// example
-// const envUrl = getEnvUrl();
-// alert(envUrl);
-// Output: https://example.com

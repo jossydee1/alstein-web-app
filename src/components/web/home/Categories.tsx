@@ -4,59 +4,9 @@ import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
+import { CategoryProps } from "@/types";
 
-const Categories = () => {
-  const categories = [
-    {
-      title: "Medical and Clinical",
-      bgImage: "url('/images/doctor.png')",
-      lists: [
-        "Laboratory Analyzers",
-        "Patient Monitoring",
-        "Devices Diagnostic",
-        "Machines (e.g., ECG, X-Ray)",
-      ],
-      partners: 20,
-      url: `${webRoutes.listings}?category=medical-and-clinical`,
-    },
-    {
-      title: "Dental",
-      bgImage: "url('/images/doctor.png')",
-      lists: [
-        "Dental Chairs",
-        "Dental Units",
-        "Dental X-Ray Machines",
-        "Dental Autoclaves",
-      ],
-      partners: 20,
-      url: `${webRoutes.listings}?category=dental`,
-    },
-    {
-      title: "Veterinary",
-      bgImage: "url('/images/doctor.png')",
-      lists: [
-        "Veterinary Anesthesia",
-        "Veterinary Monitors",
-        "Veterinary X-Ray",
-        "Veterinary Ultrasound",
-      ],
-      partners: 20,
-      url: `${webRoutes.listings}?category=veterinary`,
-    },
-    {
-      title: "Research",
-      bgImage: "url('/images/doctor.png')",
-      lists: [
-        "Microscopes",
-        "Centrifuges",
-        "Laboratory Incubators",
-        "Laboratory Ovens",
-      ],
-      partners: 20,
-      url: `${webRoutes.listings}?category=research`,
-    },
-  ];
-
+const Categories = ({ categories }: { categories: CategoryProps[] }) => {
   return (
     <div className="bg-white" id="categories">
       <section className="section-container">
@@ -81,34 +31,34 @@ const Categories = () => {
             </div>
           </article>
 
-          {categories.map(category => (
+          {categories.map(c => (
             <article
-              key={category.title}
+              key={c.title}
               className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
               style={{
-                backgroundImage: category.bgImage,
+                backgroundImage: c.image_url || 'url("/images/doctor.png")',
+                backgroundColor: "#181818",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
               }}
             >
               <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-                {category.title}
+                {c.title}
               </h3>
               <ul className="list-inside list-disc">
-                {category.lists.map(list => (
-                  <li key={list}>{list}</li>
+                {c.subcategory.map(sub => (
+                  <li key={sub.id}>{sub.description}</li>
                 ))}
               </ul>
 
               <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
                 <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
-                  <Image src={users} alt="arrow right" />
-                  {category.partners} Partners
+                  <Image src={users} alt="arrow right" />0 Partners
                 </span>
 
                 <Link
-                  href={category.url || "#"}
+                  href={`${webRoutes.listings}?category=${c.title_slug}`}
                   className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
                 >
                   View & Book

@@ -3,12 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
-import { listingsData } from "@/database/listingsData";
 import { ListingsList } from "@/components/common";
+import { ListingsProps } from "@/types";
 
-const Listings = () => {
-  if (!listingsData) return null;
-
+const Listings = ({ listings }: { listings: ListingsProps[] }) => {
   return (
     <div className="bg-white">
       <section className="section-container">
@@ -25,17 +23,23 @@ const Listings = () => {
             </h2>
           </div>
 
-          <ListingsList listings={listingsData} />
+          {listings.length > 0 ? (
+            <ListingsList listings={listings} />
+          ) : (
+            <p>No listings found</p>
+          )}
         </div>
 
-        <div className="mt-[64px] flex justify-center">
-          <Link
-            href={webRoutes.listings || "#"}
-            className="h-auto rounded-md bg-brandColor px-[74px] py-4 font-Groteskbold text-lg font-normal text-white"
-          >
-            View All
-          </Link>
-        </div>
+        {listings.length > 0 && (
+          <div className="mt-[64px] flex justify-center">
+            <Link
+              href={webRoutes.listings || "#"}
+              className="h-auto rounded-md bg-brandColor px-[74px] py-4 font-Groteskbold text-lg font-normal text-white"
+            >
+              View All
+            </Link>
+          </div>
+        )}
       </section>
     </div>
   );

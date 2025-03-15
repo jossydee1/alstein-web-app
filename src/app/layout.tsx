@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import "@/src/styles/globals.scss";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import PrelineScript from "@/components/PrelineScript";
+import ReactQueryProvider from "./providers/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthProvider } from "@/context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        {children}
-        <PrelineScript />
+        <ReactQueryProvider>
+          <AuthProvider>
+            <ToastContainer />
+            {children}
+          </AuthProvider>
+          <PrelineScript />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -18,9 +18,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
+import { CategoryProps } from "@/types";
 
 // interface FilterOptions {
-//   availabilty: boolean;
+//   availability: boolean;
 //   lease: boolean;
 //   onSite: boolean;
 //   categories: string[];
@@ -29,7 +30,7 @@ import { Switch } from "@/components/ui/switch";
 //   ratings: number[];
 // }
 
-const FilterMenu = () => {
+const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
   const STYLES = {
     dropdownStyles:
       "flex items-center gap-2.5 rounded-xl border border-[#8B8B8B] px-3 pt-2 text-sm text-[#454545]",
@@ -44,13 +45,7 @@ const FilterMenu = () => {
 
   const distances = [5, 10, 15, 20, 50, 100];
   const ratings = [5, 4, 3, 2, 1];
-  const categories = [
-    "Category 1",
-    "Category 2",
-    "Category 3",
-    "Category 4",
-    "Category 5",
-  ];
+
   const insuranceOptions = [
     "Insurance 1",
     "Insurance 2",
@@ -60,7 +55,7 @@ const FilterMenu = () => {
   ];
 
   const [isOpen, setIsOpen] = useState(false);
-  const [availabilty, setAvailbility] = useState(false);
+  const [availability, setAvailability] = useState(false);
   const [lease, setLease] = useState(false);
   const [onSite, setOnSite] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -87,10 +82,10 @@ const FilterMenu = () => {
     );
   };
 
-  // handle availabilty, lease, onSite
+  // handle availability, lease, onSite
   useEffect(() => {
-    console.log("availabilty: ", availabilty);
-  }, [availabilty]);
+    console.log("availability: ", availability);
+  }, [availability]);
 
   useEffect(() => {
     console.log("lease: ", lease);
@@ -165,19 +160,22 @@ const FilterMenu = () => {
                     </AccordionTrigger>
                     <AccordionContent className={STYLES.accordionContentGrid}>
                       {categories.map(category => (
-                        <div className={STYLES.optionWrapper} key={category}>
+                        <div className={STYLES.optionWrapper} key={category.id}>
                           <Checkbox
-                            id={category}
-                            checked={selectedCategories.includes(category)}
+                            id={category.id}
+                            checked={selectedCategories.includes(category.id)}
                             onCheckedChange={() =>
-                              toggleSelection(category, setSelectedCategories)
+                              toggleSelection(
+                                category.title,
+                                setSelectedCategories,
+                              )
                             }
                           />
                           <label
-                            htmlFor={category}
+                            htmlFor={category.id}
                             className={STYLES.optionLabel}
                           >
-                            {category}
+                            {category.title}
                           </label>
                         </div>
                       ))}
@@ -304,8 +302,8 @@ const FilterMenu = () => {
         <div className="flex flex-wrap items-start gap-2">
           <div className="flex items-center gap-2 text-[#8B8B8B]">
             <Switch
-              checked={availabilty}
-              onCheckedChange={() => setAvailbility(!availabilty)}
+              checked={availability}
+              onCheckedChange={() => setAvailability(!availability)}
             />
             Available Now
           </div>
