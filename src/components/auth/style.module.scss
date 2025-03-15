@@ -43,7 +43,11 @@
     }
 
     .error {
-      @apply w-full rounded-lg bg-red-100 p-4 text-center text-red-500;
+      @apply w-full rounded-lg bg-red-100 p-4 text-center text-red-700;
+    }
+
+    .success {
+      @apply w-full rounded-lg bg-green-100 p-4 text-center text-green-700;
     }
 
     form {

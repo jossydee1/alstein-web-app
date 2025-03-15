@@ -1,38 +1,76 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
-import { authRoutes, webRoutes } from "@/utils";
+import { api, authRoutes, formatError, webRoutes } from "@/utils";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 
 const ForgotPasswordContent = () => {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    if (error) {
+      document.getElementById("error")?.scrollIntoView({ behavior: "smooth" });
+    }
+    if (success) {
+      document
+        .getElementById("success")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [error, success]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   // Form submission handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
+    setIsSubmitting(true);
 
     if (!email) {
       setError("Email is required");
+      setIsSubmitting(false);
       return;
     }
 
-    // Handle signup logic here
-    console.warn("Form submitted with:", { email });
+    try {
+      const params = {
+        email: email.trim().toLowerCase(),
+      };
 
-    // Reset form inputs after submission
-    setEmail("");
+      const response = await api.post(
+        "/client/public/api/v1/forgot-password",
+        params,
+      );
 
-    router.push(authRoutes.reset_password);
+      if (response.status === 200) {
+        setSuccess(response.data.message);
+        setCountdown(90);
+      }
+    } catch (error) {
+      setError(
+        formatError(error, "An error occurred while sending reset link"),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -61,7 +99,16 @@ const ForgotPasswordContent = () => {
           </header>
 
           <form onSubmit={handleSubmit}>
-            {error && <p className={style.error}>{error}</p>}
+            {error && (
+              <p id="error" className={style.error}>
+                {error}
+              </p>
+            )}
+            {success && (
+              <p id="success" className={style.success}>
+                {success}
+              </p>
+            )}
 
             <div className={style.inputGroup}>
               <label htmlFor="email">Email</label>
@@ -82,8 +129,16 @@ const ForgotPasswordContent = () => {
             </div>
 
             <div className={style.inputGroup}>
-              <Button type="submit" className={style.submitButton}>
-                Send Reset Link
+              <Button
+                type="submit"
+                className={style.submitButton}
+                disabled={isSubmitting || countdown > 0}
+              >
+                {isSubmitting
+                  ? "Sending..."
+                  : countdown > 0
+                    ? `Resend in ${countdown}s`
+                    : "Send Reset Link"}
               </Button>
             </div>
           </form>
