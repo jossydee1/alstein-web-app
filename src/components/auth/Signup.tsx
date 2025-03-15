@@ -20,23 +20,11 @@ import style from "./style.module.scss";
 import google from "@/public/images/logos/google.svg";
 import logoLight from "@/public/logo-rectangle-light.svg";
 
-interface ResponseData {
-  id?: string;
-  token?: string;
-  status: string;
-  message: string;
-}
-
 // Main component
 const SignupContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userData, setUserData] = useState<ResponseData>({
-    id: "",
-    token: "",
-    status: "",
-    message: "",
-  });
+  const [userId, setUserId] = useState("");
 
   const renderStep = () => {
     switch (currentStep) {
@@ -44,7 +32,7 @@ const SignupContent = () => {
         return (
           <PersonalDetails
             nextStep={() => setCurrentStep(2)}
-            setUserData={setUserData}
+            setUserId={setUserId}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
           />
@@ -53,8 +41,8 @@ const SignupContent = () => {
         return (
           <OTP
             nextStep={() => setCurrentStep(3)}
-            userData={userData}
-            setUserData={setUserData}
+            userId={userId}
+            setUserId={setUserId}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
           />
@@ -62,7 +50,7 @@ const SignupContent = () => {
       case 3:
         return (
           <Security
-            userData={userData}
+            userId={userId}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
           />
@@ -140,12 +128,12 @@ const ErrorMessage = ({ error }: { error: string }) => {
 // Step 1: Personal Details
 const PersonalDetails = ({
   nextStep,
-  setUserData,
+  setUserId,
   isSubmitting,
   setIsSubmitting,
 }: {
   nextStep: () => void;
-  setUserData: (userData: ResponseData) => void;
+  setUserId: (userId: string) => void;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
 }) => {
@@ -200,9 +188,7 @@ const PersonalDetails = ({
       const response = await api.post("/client/public/api/v1/signup", params);
 
       if (response.status === 200) {
-        localStorage.setItem("userToken", response.data.token);
-        localStorage.setItem("userId", response.data.id);
-        setUserData(response.data);
+        setUserId(response.data.id);
         nextStep();
       }
     } catch (error) {
@@ -321,13 +307,13 @@ const PersonalDetails = ({
 // Step 2: OTP Verification
 const OTP = ({
   nextStep,
-  userData,
+  userId,
   isSubmitting,
   setIsSubmitting,
 }: {
   nextStep: () => void;
-  userData: ResponseData;
-  setUserData: (userData: ResponseData) => void;
+  userId: string;
+  setUserId: (userId: string) => void;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
 }) => {
@@ -353,7 +339,7 @@ const OTP = ({
       return;
     }
 
-    if (!userData?.id) {
+    if (!userId) {
       setError("User ID not found");
       setIsSubmitting(false);
       return;
@@ -361,7 +347,7 @@ const OTP = ({
 
     try {
       const params = {
-        id: userData.id,
+        id: userId,
         otp: otp,
       };
 
@@ -415,11 +401,11 @@ const OTP = ({
 
 // Step 3: Security
 const Security = ({
-  userData,
+  userId,
   isSubmitting,
   setIsSubmitting,
 }: {
-  userData: ResponseData;
+  userId: string;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
 }) => {
@@ -475,7 +461,7 @@ const Security = ({
       return;
     }
 
-    if (userData?.status !== "successful") {
+    if (!userId) {
       setError("Account verification failed");
       setIsSubmitting(false);
       return;
@@ -483,7 +469,7 @@ const Security = ({
 
     try {
       const params = {
-        id: userData.id,
+        id: userId,
         password: password,
       };
 
