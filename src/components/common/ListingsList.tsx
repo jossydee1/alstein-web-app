@@ -2,7 +2,7 @@
 
 import { ListingsProps } from "@/types";
 import { webRoutes } from "@/utils";
-import { ChevronLeft, ChevronRight, MapPin, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, MapPin } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
@@ -87,9 +87,8 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
 
   return (
     <div className="relative overflow-hidden rounded-md">
-      <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-lg bg-[#00000033] p-1 text-white">
-        <Star fill="#FFD700" size={20} stroke="0" />
-        |30
+      <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-lg p-1 text-white">
+        <Heart fill="" size={24} />
       </div>
 
       <div
@@ -132,7 +131,7 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
 
       {/* PREV & NEXT BUTTONS */}
       <button
-        className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 opacity-0 transition hover:bg-[#dedede] disabled:hidden disabled:hover:bg-[#C3C3C38F] group-hover:opacity-100"
         onClick={prevSlide}
         disabled={currentIndex === 0}
       >
@@ -140,7 +139,7 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
       </button>
 
       <button
-        className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
+        className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 opacity-0 transition hover:bg-[#dedede] disabled:hidden disabled:hover:bg-[#C3C3C38F] group-hover:opacity-100"
         onClick={nextSlide}
         disabled={currentIndex === images.length - 1}
       >

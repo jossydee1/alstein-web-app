@@ -51,10 +51,10 @@ const LoginContent = () => {
       const response = await api.post("/client/public/api/v1/login", params);
 
       if (response.status === 200) {
-        login(response.data.id, response.data.token);
+        login(response.data);
         setEmail("");
         setPassword("");
-        router.push(dashboardRoutes.overview);
+        router.push(dashboardRoutes.client_order_history);
       }
     } catch (error) {
       setError(formatError(error, "An error occurred during login"));

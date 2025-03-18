@@ -229,19 +229,43 @@ const PersonalDetails = ({
         <div className={style.inputGroup}>
           <label htmlFor="phone">Phone Number*</label>
           <div className={style.inputGroupPhone}>
-            <select
-              name="countryCode"
-              id="countryCode"
-              required
-              value={formData.countryCode}
-              onChange={handleChange}
-            >
-              {countriesList.map(country => (
-                <option key={country.code} value={country.dial_code}>
-                  {country.flag} {country.dial_code}
+            <div className={style.customSelect}>
+              <select
+                name="countryCode"
+                id="countryCode"
+                required
+                value={formData.countryCode}
+                onChange={handleChange}
+                data-display-type="flag-code"
+              >
+                <option value="" disabled>
+                  Select country
                 </option>
-              ))}
-            </select>
+                {countriesList.map(country => (
+                  <option
+                    key={country.code}
+                    value={country.dial_code}
+                    data-flag={country.flag}
+                  >
+                    {country.name} {country.flag} {country.dial_code}
+                  </option>
+                ))}
+              </select>
+              <div className={style.selectedFlag}>
+                {formData.countryCode ? (
+                  <>
+                    {
+                      countriesList.find(
+                        c => c.dial_code === formData.countryCode,
+                      )?.flag
+                    }{" "}
+                    {formData.countryCode}
+                  </>
+                ) : (
+                  <>🌐 Select</>
+                )}
+              </div>
+            </div>
             <input
               type="tel"
               id="phone"
