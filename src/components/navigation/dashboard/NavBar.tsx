@@ -1,0 +1,113 @@
+import { dashboardRoutes, webRoutes } from "@/utils";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState, useRef } from "react";
+import logoLight from "@/public/logo-rectangle-light.svg";
+import { ArrowRightLeft, BellDot, Handshake, LogOut } from "lucide-react";
+import { useCloseMenuWhenClickedOutside } from "@/hooks";
+import avatar from "@/public/icons/avatar.svg";
+
+const NavBar = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useCloseMenuWhenClickedOutside({
+    showMenu: showDropdown,
+    showMenuRef: dropdownRef,
+    setShowMenu: setShowDropdown,
+  });
+
+  return (
+    <div className="sticky top-0 z-50 flex w-full flex-wrap bg-white shadow-sm md:flex-nowrap lg:justify-start">
+      <nav className="relative mx-auto w-full max-w-screen-2xl gap-x-[60px] px-4 py-2 sm:px-6 md:px-[50px] md:py-6 lg:flex lg:items-center lg:justify-between lg:gap-[60px] lg:px-[100px] xl:px-[150px]">
+        <div className="flex items-center justify-between gap-x-1">
+          <Link
+            className="w-[130px] flex-none text-xl font-semibold"
+            href={webRoutes.home}
+            aria-label="Brand"
+          >
+            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+          </Link>
+        </div>
+
+        <div className="flex gap-5 py-2">
+          <Link
+            href={dashboardRoutes.notifications}
+            className="flex h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+          >
+            <BellDot size="24" strokeWidth={1.5} />
+          </Link>
+
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              className="overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <Image alt="Avatar" src={avatar} width={50} height={50} />
+            </button>
+
+            {showDropdown && (
+              <div
+                className="absolute right-0 mt-2 grid w-[250px] gap-6 rounded-[10px] bg-white p-5 sm:w-[300px]"
+                style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
+              >
+                <div className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700 hover:bg-gray-100">
+                  <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
+                    <Image
+                      alt="Avatar"
+                      src="https://picsum.photos/200"
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                      objectFit="cover"
+                    />
+                  </span>
+                  <span className="text-lg font-medium leading-4 text-brandColor">
+                    Sarah Williams
+                  </span>
+                </div>
+
+                <Link
+                  href={webRoutes.partners}
+                  className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                >
+                  <span className="mr-2 inline-block">
+                    <Handshake size={20} />
+                  </span>
+                  <span className="font-medium leading-6">
+                    Become a Partner
+                  </span>
+                </Link>
+
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                >
+                  <span className="mr-2 inline-block">
+                    <ArrowRightLeft size={20} />
+                  </span>
+                  <span className="font-medium leading-6">
+                    Switch to Vendor account
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                >
+                  <span className="mr-2 inline-block">
+                    <LogOut size={20} />
+                  </span>
+                  <span className="font-medium leading-6">Logout</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+};
+
+export default NavBar;

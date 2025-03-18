@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useState, useEffect, useContext } from "react";
-
 interface AuthContextType {
   userId: string | null;
   token: string | null;
@@ -38,6 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     localStorage.removeItem("userId");
     localStorage.removeItem("userToken");
+    window.location.reload();
   };
 
   return (

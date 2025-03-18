@@ -1,11 +1,12 @@
 "use client";
 
+import NavBar from "@/components/navigation/dashboard/NavBar";
 import { withAuth } from "@/utils/auth/withAuth";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <h1>This is the dashboard layout</h1>
+    <div className="flex flex-col">
+      <NavBar />
       {children}
     </div>
   );
