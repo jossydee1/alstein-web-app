@@ -47,25 +47,14 @@ const NavBar = () => {
               className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              {!user?.profile_picture ? (
-                <Image
-                  alt="Avatar"
-                  src={avatar}
-                  width={50}
-                  height={50}
-                  className="rounded-md"
-                  objectFit="contain"
-                />
-              ) : (
-                <Image
-                  alt="Avatar"
-                  src="https://picsum.photos/200"
-                  width={50}
-                  height={50}
-                  className="rounded-md"
-                  objectFit="contain"
-                />
-              )}
+              <Image
+                alt="Avatar"
+                src={!user?.profile_picture ? avatar : user?.profile_picture}
+                width={50}
+                height={50}
+                className="rounded-md"
+                objectFit="contain"
+              />
             </button>
 
             {showDropdown && (

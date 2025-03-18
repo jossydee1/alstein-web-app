@@ -1,7 +1,7 @@
-import OrderHistoryContent from "@/components/client/order-history";
+import NotificationsContent from "@/components/client/notifications";
 
 const Page = () => {
-  return <OrderHistoryContent />;
+  return <NotificationsContent />;
 };
 
 export default Page;

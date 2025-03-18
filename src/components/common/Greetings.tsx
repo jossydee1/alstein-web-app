@@ -26,25 +26,14 @@ const Greetings = () => {
         }}
       >
         <div className="flex items-start gap-x-1.5">
-          {!user?.profile_picture ? (
-            <Image
-              alt="Avatar"
-              src={avatar}
-              width={62}
-              height={62}
-              className="rounded-md"
-              objectFit="contain"
-            />
-          ) : (
-            <Image
-              alt="Avatar"
-              src="https://picsum.photos/200"
-              width={62}
-              height={62}
-              className="rounded-md"
-              objectFit="contain"
-            />
-          )}
+          <Image
+            alt="Avatar"
+            src={!user?.profile_picture ? avatar : user?.profile_picture}
+            width={62}
+            height={62}
+            className="rounded-md"
+            objectFit="contain"
+          />
           <button type="button">
             <Edit className="text-white" size={17} />
           </button>
