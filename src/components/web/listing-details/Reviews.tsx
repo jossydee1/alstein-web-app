@@ -1,11 +1,41 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import photo from "@/public/images/business.png";
 import { Button } from "@/components/ui/button";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { Star } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const Reviews = () => {
+  const reviews = [1, 1, 1, 1, 1];
+
+  const [rating, setRating] = useState(0);
+  const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
+
+  const handleShowAllReviews = () => {
+    if (filteredReviews.length === reviews.length) {
+      setFilteredReviews(reviews.slice(0, 2));
+    } else {
+      setFilteredReviews(reviews);
+    }
+  };
+
+  const PAGINATION_STYLES = {
+    content: "flex justify-center gap-3",
+    button: "rounded-sm  border-[0.5px] border-[#7B7485]",
+    isActive: "bg-[#2C2C2C] border-[#303030] text-white",
+  };
+
   return (
     <section>
       <hr className="my-6 border border-[#EBEBEB]" />
@@ -29,36 +59,81 @@ const Reviews = () => {
       </div>
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
-        <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
-          {[1, 1].map((_, i) => (
-            <div key={i}>
-              <div className="flex items-center gap-3">
-                <Image
-                  src={photo}
-                  alt="Business"
-                  className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
-                />
-                <div>
-                  <h3 className="font-semibold text-[#404040]">
-                    Ikechukwu Jude
-                  </h3>
-                  <p className="font-medium text-[#404040]">1 month ago</p>
+        <div>
+          <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
+            {filteredReviews.map((_, i) => (
+              <div key={i}>
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={photo}
+                    alt="Business"
+                    className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
+                  />
+                  <div>
+                    <h3 className="font-semibold text-[#404040]">
+                      Ikechukwu Jude
+                    </h3>
+                    <p className="font-medium text-[#404040]">1 month ago</p>
+                  </div>
                 </div>
+                <p className="mt-3 text-[#4E4E4E]">
+                  I recently booked an equipment through Alstein and was
+                  incredibly impressed with the experience. The process was
+                  seamless and efficient, saving me a lot of time.
+                </p>{" "}
               </div>
-              <p className="mt-3 text-[#4E4E4E]">
-                I recently booked an equipment through Alstein and was
-                incredibly impressed with the experience. The process was
-                seamless and efficient, saving me a lot of time.
-              </p>{" "}
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {filteredReviews.length > 20 && (
+            <Pagination className="mt-4 justify-start">
+              <PaginationContent className={PAGINATION_STYLES.content}>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    className={PAGINATION_STYLES.button}
+                  />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    href="#"
+                    className={`${PAGINATION_STYLES.button} ${PAGINATION_STYLES.isActive}`}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" className={PAGINATION_STYLES.button}>
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" className={PAGINATION_STYLES.button}>
+                    3
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis className={PAGINATION_STYLES.button} />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    className={PAGINATION_STYLES.button}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
 
           <Button
             type="button"
             variant="outline"
-            className="w-fit px-6 py-2.5 font-medium text-[#031330]"
+            onClick={handleShowAllReviews}
+            className="mt-8 w-fit px-6 py-2.5 font-medium text-[#031330]"
           >
-            Show all reviews
+            {filteredReviews.length === reviews.length
+              ? "Show less reviews"
+              : "Show all reviews"}
           </Button>
         </div>
 
@@ -72,19 +147,25 @@ const Reviews = () => {
               <label className="mb-16 text-sm text-[#354259]">
                 How was you experience?
               </label>
-              <div className="mt-2 flex gap-4">
-                <button
-                  type="button"
-                  className="flex items-center justify-center rounded-full bg-[#FEF2E1] p-3"
-                >
-                  <ThumbsUp className="fill-[#FB9506] text-white" />
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center justify-center rounded-full bg-[#EBEDEF] p-3"
-                >
-                  <ThumbsDown className="fill-[#FFFFFF] text-[#354259]" />
-                </button>
+              <div className="mt-2 flex gap-1">
+                {[1, 2, 3, 4, 5].map(star => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className="p-1"
+                    aria-label={`Rate ${star} stars`}
+                  >
+                    <Star
+                      className={`${
+                        star <= rating
+                          ? "fill-[#FB9506] text-[#FB9506]"
+                          : "fill-[#EBEDEF] text-[#354259]"
+                      } transition-colors`}
+                      size={24}
+                    />
+                  </button>
+                ))}
               </div>
             </div>
 

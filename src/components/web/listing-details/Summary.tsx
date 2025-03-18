@@ -6,7 +6,7 @@ import { formatPrice } from "@/utils";
 
 const Summary = () => {
   return (
-    <section className="sticky top-20 grid gap-6 rounded-md border border-[#DEDEDE] bg-[#F9F9F9] p-6">
+    <section className="sticky top-40 grid gap-6 rounded-md border border-[#DEDEDE] bg-[#F9F9F9] p-6">
       <p className="text-[#161616]">
         <span className="text-xl font-semibold text-[#343434]">#3000</span> per
         Day

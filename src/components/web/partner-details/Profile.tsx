@@ -1,7 +1,7 @@
 import React from "react";
 import photo from "@/public/images/business.png";
 import Image from "next/image";
-import { Mail, Phone, Star } from "lucide-react";
+import { BadgeCheck, Mail, Phone, Star } from "lucide-react";
 import Link from "next/link";
 
 const Profile = () => {
@@ -20,6 +20,10 @@ const Profile = () => {
                 HealthPro Labs
               </h3>
               <p className="font-medium text-[#8B8B8B]">Lab Partner</p>
+              <p className="flex items-center gap-1 text-sm font-medium text-[#8B8B8B]">
+                Verified Partner
+                <BadgeCheck className="fill-brandColor text-white" />
+              </p>
             </div>
           </div>
 
