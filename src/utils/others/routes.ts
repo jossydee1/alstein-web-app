@@ -25,6 +25,6 @@ export const dashboardRoutes = {
   client_account_settings: "/client/account-settings",
   client_manage_password: "/client/manage-password",
   client_notifications: "/client/notifications",
-  client_payment_methods: "/client/payment-methods",
+  client_payment_methods: "/client/payment-method",
   vendor_overview: "/vendor",
 };
