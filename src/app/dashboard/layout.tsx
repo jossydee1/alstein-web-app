@@ -7,7 +7,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col">
       <NavBar />
-      {children}
+      <div className="bg-white">
+        <div className="section-container-dashboard">{children}</div>
+      </div>
     </div>
   );
 }
