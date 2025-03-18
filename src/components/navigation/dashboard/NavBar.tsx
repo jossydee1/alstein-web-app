@@ -9,7 +9,7 @@ import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 
 const NavBar = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,14 @@ const NavBar = () => {
               className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <Image alt="Avatar" src={avatar} width={50} height={50} />
+              <Image
+                alt="Avatar"
+                src={!user?.profile_picture ? avatar : user?.profile_picture}
+                width={50}
+                height={50}
+                className="rounded-md"
+                objectFit="contain"
+              />
             </button>
 
             {showDropdown && (

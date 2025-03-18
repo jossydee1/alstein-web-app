@@ -4,8 +4,7 @@ import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
-
-import EditIcon from "@/public/icons/tabler_edit.svg";
+import { Edit } from "lucide-react";
 
 const Greetings = () => {
   const { user, userId, token } = useAuth();
@@ -14,12 +13,12 @@ const Greetings = () => {
 
   return (
     <header className="grid gap-y-6">
-      <h1 className="text-lg">
+      <p className="text-lg">
         Welcome back,{" "}
         <span className="font-semibold text-[#172554]">{user?.first_name}</span>
-      </h1>
+      </p>
 
-      <div
+      <section
         className="rounded-lg px-10 py-7 text-white"
         style={{
           background:
@@ -27,27 +26,16 @@ const Greetings = () => {
         }}
       >
         <div className="flex items-start gap-x-1.5">
-          {!user?.profile_picture ? (
-            <Image
-              alt="Avatar"
-              src={avatar}
-              width={62}
-              height={62}
-              className="rounded-md"
-              objectFit="contain"
-            />
-          ) : (
-            <Image
-              alt="Avatar"
-              src="https://picsum.photos/200"
-              width={62}
-              height={62}
-              className="rounded-md"
-              objectFit="contain"
-            />
-          )}
+          <Image
+            alt="Avatar"
+            src={!user?.profile_picture ? avatar : user?.profile_picture}
+            width={62}
+            height={62}
+            className="rounded-md"
+            objectFit="contain"
+          />
           <button type="button">
-            <Image alt="Edit Icon" src={EditIcon} width={17} height={17} />
+            <Edit className="text-white" size={17} />
           </button>
         </div>
 
@@ -59,7 +47,7 @@ const Greetings = () => {
             {user?.email}
           </span>
         </p>
-      </div>
+      </section>
     </header>
   );
 };

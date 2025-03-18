@@ -153,3 +153,19 @@ html {
 .section-container-dashboard {
   @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[24px] md:px-[100px] xl:px-[150px];
 }
+
+.dashboard-section-card {
+  @apply rounded-[25px] border-[0.2px] border-[#9CA3AF] px-8 py-6;
+}
+
+.dashboard-section-card-header {
+  @apply grid max-w-[570px] gap-6;
+}
+
+.dashboard-section-card-title {
+  @apply text-xl font-semibold leading-none text-[#1F2937];
+}
+
+.dashboard-section-card-description {
+  @apply text-[#6B7280];
+}
