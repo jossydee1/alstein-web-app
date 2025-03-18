@@ -86,11 +86,12 @@ const OrderHistoryContent = () => {
   };
 
   return (
-    <main className="rounded-[25px] border-[0.2px] border-[#9CA3AF] px-8 py-6">
+    <main className="dashboard-section-card">
       {/* <header className="mb-6 flex items-center justify-between border-b-[0.2px] border-[#9CA3AF] pb-2.5">
         <h1 className="text-2xl font-bold">Order History</h1>
         <button>View All</button>
       </header> */}
+      <h1 className="hidden">Order History</h1>
 
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">

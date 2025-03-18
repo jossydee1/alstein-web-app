@@ -4,8 +4,7 @@ import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
-
-import EditIcon from "@/public/icons/tabler_edit.svg";
+import { Edit } from "lucide-react";
 
 const Greetings = () => {
   const { user, userId, token } = useAuth();
@@ -47,7 +46,7 @@ const Greetings = () => {
             />
           )}
           <button type="button">
-            <Image alt="Edit Icon" src={EditIcon} width={17} height={17} />
+            <Edit className="text-white" size={17} />
           </button>
         </div>
 

@@ -64,17 +64,13 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
             key={index}
             href={tab.link}
             className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors ${
-              pathname === tab.link ? "bg-[#EFF6FF]" : "text-[#6B7280]"
+              pathname === tab.link
+                ? "bg-[#EFF6FF] text-brandColor"
+                : "text-[#6B7280]"
             }`}
           >
             {tab.icon}
-            <h1
-              className={`group-hover:text-brandColor ${
-                pathname === tab.link ? "text-brandColor" : ""
-              }`}
-            >
-              {tab.title}
-            </h1>
+            <h2>{tab.title}</h2>
           </Link>
         ))}
       </div>
