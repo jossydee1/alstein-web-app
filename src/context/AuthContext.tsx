@@ -4,43 +4,54 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 
 interface UserProps {
   id: string;
-  name: string;
-  email: string;
-  role: string;
+  token: string;
+  user: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    profile_picture: string | null;
+  };
 }
 
 interface AuthContextType {
-  user: UserProps | null;
+  user: UserProps["user"] | null;
   userId: string | null;
   token: string | null;
-  login: (id: string, token: string) => void;
+  login: (user: UserProps) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserProps | null>(null);
+  const [user, setUser] = useState<UserProps["user"] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load from local storage on initial render
     const storedUserId = localStorage.getItem("userId");
     const storedToken = localStorage.getItem("userToken");
+    const storedUser = localStorage.getItem("user");
 
     if (storedUserId && storedToken) {
       setUserId(storedUserId);
       setToken(storedToken);
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
     }
   }, []);
 
-  const login = (id: string, token: string) => {
-    setUserId(id);
-    setUser(user);
-    setToken(token);
-    localStorage.setItem("userId", id);
-    localStorage.setItem("userToken", token);
+  const login = (user: UserProps) => {
+    setUserId(user.id);
+    setUser(user.user);
+    setToken(user.token);
+    localStorage.setItem("userId", user.id);
+    localStorage.setItem("userToken", user.token);
+    localStorage.setItem("user", JSON.stringify(user.user));
   };
 
   const logout = () => {
@@ -49,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     localStorage.removeItem("userId");
     localStorage.removeItem("userToken");
-    window.location.reload();
+    localStorage.removeItem("user");
   };
 
   return (

@@ -1,5 +1,6 @@
 "use client";
 
+import Greetings from "@/components/common/Greetings";
 import NavBar from "@/components/navigation/dashboard/NavBar";
 import { withAuth } from "@/utils/auth/withAuth";
 
@@ -8,7 +9,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col">
       <NavBar />
       <div className="bg-white">
-        <div className="section-container-dashboard">{children}</div>
+        <div className="section-container-dashboard">
+          <Greetings />
+          {children}
+        </div>
       </div>
     </div>
   );

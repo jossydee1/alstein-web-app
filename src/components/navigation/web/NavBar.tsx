@@ -162,7 +162,7 @@ const NavBar = () => {
                       href={
                         !userId
                           ? webRoutes.partners
-                          : dashboardRoutes.client_overview
+                          : dashboardRoutes.client_order_history
                       }
                     >
                       {!userId ? "Join as a Partner" : "Dashboard"}

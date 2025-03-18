@@ -15,7 +15,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     if (userId && token) {
-      router.push(dashboardRoutes.client_overview);
+      router.push(dashboardRoutes.client_order_history);
     }
   }, [token, userId, router]);
 

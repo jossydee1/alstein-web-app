@@ -1,9 +1,5 @@
 const Page = () => {
-  return (
-    <div className="border">
-      <h2>Welcome User</h2>
-    </div>
-  );
+  return <div className="">Order History Page</div>;
 };
 
 export default Page;
