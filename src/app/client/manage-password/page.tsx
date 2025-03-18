@@ -1,4 +1,4 @@
-import ManagePasswordContent from "@/components/dashboard/manage-password";
+import ManagePasswordContent from "@/components/client/manage-password";
 
 const Page = () => {
   return <ManagePasswordContent />;

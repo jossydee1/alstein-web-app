@@ -1,4 +1,4 @@
-import AccountSettingsContent from "@/components/dashboard/account-settings";
+import AccountSettingsContent from "@/components/client/account-settings";
 
 const Page = () => {
   return <AccountSettingsContent />;
