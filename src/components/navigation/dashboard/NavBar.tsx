@@ -35,7 +35,7 @@ const NavBar = () => {
 
         <div className="flex gap-5 py-2">
           <Link
-            href={dashboardRoutes.notifications}
+            href={dashboardRoutes.client_notifications}
             className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
           >
             <BellDot size="24" strokeWidth={1.5} />
@@ -83,8 +83,8 @@ const NavBar = () => {
                   </span>
                 </Link>
 
-                <button
-                  type="button"
+                <Link
+                  href={dashboardRoutes.vendor_overview}
                   className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                 >
                   <span className="mr-2 inline-block">
@@ -93,7 +93,7 @@ const NavBar = () => {
                   <span className="font-medium leading-6">
                     Switch to Vendor account
                   </span>
-                </button>
+                </Link>
 
                 <button
                   type="button"

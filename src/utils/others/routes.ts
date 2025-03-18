@@ -20,13 +20,11 @@ export const authRoutes = {
 };
 
 export const dashboardRoutes = {
-  overview: "/dashboard",
-  create_invite: "/dashboard/create-invite",
-  transactions: "/dashboard/transactions",
-  wallets_settlements: "/dashboard/wallets-settlements",
-  notifications: "/dashboard/notifications",
-  api_integration: "/dashboard/api-integration",
-  disputes: "/dashboard/disputes",
-  profile: "/dashboard/profile",
-  settings: "/dashboard/settings",
+  client_overview: "/client",
+  client_order_history: "/client/order-history",
+  client_account_settings: "/client/account-settings",
+  client_manage_password: "/client/manage-password",
+  client_notifications: "/client/notifications",
+  client_payment_methods: "/client/payment-methods",
+  vendor_overview: "/vendor",
 };

@@ -1,7 +1,16 @@
 "use client";
 
 import React, { createContext, useState, useEffect, useContext } from "react";
+
+interface UserProps {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 interface AuthContextType {
+  user: UserProps | null;
   userId: string | null;
   token: string | null;
   login: (id: string, token: string) => void;
@@ -11,6 +20,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<UserProps | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
@@ -27,6 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = (id: string, token: string) => {
     setUserId(id);
+    setUser(user);
     setToken(token);
     localStorage.setItem("userId", id);
     localStorage.setItem("userToken", token);
@@ -34,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setUserId(null);
+    setUser(null);
     setToken(null);
     localStorage.removeItem("userId");
     localStorage.removeItem("userToken");
@@ -41,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userId, token, login, logout }}>
+    <AuthContext.Provider value={{ user, userId, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -54,7 +54,7 @@ const LoginContent = () => {
         login(response.data.id, response.data.token);
         setEmail("");
         setPassword("");
-        router.push(dashboardRoutes.overview);
+        router.push(dashboardRoutes.client_order_history);
       }
     } catch (error) {
       setError(formatError(error, "An error occurred during login"));
