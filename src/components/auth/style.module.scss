@@ -75,6 +75,18 @@
         select {
           @apply inline-block w-[120px] !border-r border-[#BCC0C7];
         }
+
+        .customSelect {
+          @apply relative h-full w-[100px];
+
+          select {
+            @apply absolute inset-0 z-10 w-full cursor-pointer appearance-none opacity-0;
+          }
+
+          .selectedFlag {
+            @apply inline-block w-full border-r border-[#BCC0C7] pr-2;
+          }
+        }
       }
 
       .inputGroupCheckbox {
