@@ -1,5 +1,7 @@
+import OrderHistoryContent from "@/components/dashboard/order-history";
+
 const Page = () => {
-  return <div className="">Order History Page</div>;
+  return <OrderHistoryContent />;
 };
 
 export default Page;

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TabItem {
   title: string;
@@ -42,26 +43,14 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
   };
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <nav className={`relative w-full ${className}`}>
       {showScrollButtons && (
         <button
           onClick={() => scroll("left")}
           className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
           aria-label="Scroll left"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
+          <ChevronLeft size="24" />
         </button>
       )}
 
@@ -79,13 +68,13 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
             }`}
           >
             {tab.icon}
-            <span
+            <h1
               className={`group-hover:text-brandColor ${
                 pathname === tab.link ? "text-brandColor" : ""
               }`}
             >
               {tab.title}
-            </span>
+            </h1>
           </Link>
         ))}
       </div>
@@ -96,21 +85,9 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
           className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
           aria-label="Scroll right"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+          <ChevronRight size="24" />
         </button>
       )}
-    </div>
+    </nav>
   );
 };

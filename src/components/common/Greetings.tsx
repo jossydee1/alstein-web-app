@@ -14,12 +14,12 @@ const Greetings = () => {
 
   return (
     <header className="grid gap-y-6">
-      <h1 className="text-lg">
+      <p className="text-lg">
         Welcome back,{" "}
         <span className="font-semibold text-[#172554]">{user?.first_name}</span>
-      </h1>
+      </p>
 
-      <div
+      <section
         className="rounded-lg px-10 py-7 text-white"
         style={{
           background:
@@ -59,7 +59,7 @@ const Greetings = () => {
             {user?.email}
           </span>
         </p>
-      </div>
+      </section>
     </header>
   );
 };
