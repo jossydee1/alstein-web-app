@@ -1,7 +1,8 @@
 "use client";
 
+import { listingsData } from "@/database/listingsData";
 import { ListingsProps } from "@/types";
-import { webRoutes } from "@/utils";
+import { formatPrice, webRoutes } from "@/utils";
 import { ChevronLeft, ChevronRight, Heart, MapPin } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
@@ -15,18 +16,23 @@ export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
         >
-          <ImageSlider images={l?.images} />
+          {/* TODO: Update this to use the actual images */}
+          <ImageSlider images={listingsData[0]?.images} />
 
           <div>
             <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
               {l?.name}
             </h3>
-            <p className="mb-1 text-xs text-[#474747]">Equipment: {l?.name}</p>
+            <p className="mb-1 text-xs text-[#474747]">
+              {l?.description.slice(0, 100)}...
+            </p>
             <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
               <MapPin size="12" /> {l?.address}
             </p>
 
-            <p className="mb-4 text-[#161616]">#{l?.count} Day</p>
+            <p className="mb-4 text-[#161616]">
+              {formatPrice(l?.price, "NGN")}
+            </p>
 
             <Link
               href={`${webRoutes.listings}/${l?.id}`}

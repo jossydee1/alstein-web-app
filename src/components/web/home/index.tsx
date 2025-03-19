@@ -9,7 +9,6 @@ import Testimonials from "./Testimonials";
 import Partners from "./Partners";
 import { useClientFetch } from "@/hooks";
 import { CategoryProps, ListingsProps } from "@/types";
-import { listingsData } from "@/database/listingsData";
 
 const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
   const { data: listings } = useClientFetch<ListingsProps[]>(
@@ -21,7 +20,7 @@ const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
       <Hero />
       <WhyUs />
       <Categories categories={categories} />
-      <Listings listings={listingsData || listings} />
+      <Listings listings={listings || []} />
       <Testimonials />
       <Partners />
     </main>
