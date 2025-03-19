@@ -1,5 +1,5 @@
 "use client";
-
+import image from "@/public/images/doctor.png";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -104,7 +104,7 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
                   <div className="flex items-center gap-4">
                     {slide.user.user_avatar ? (
                       <Image
-                        src={slide.user.user_avatar}
+                        src={image}
                         alt={slide.user.first_name}
                         width={50}
                         height={50}
