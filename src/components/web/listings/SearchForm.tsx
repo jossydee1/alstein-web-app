@@ -3,9 +3,17 @@
 import React, { useState } from "react";
 import { SearchForm } from "@/components/common";
 import FilterMenu from "@/components/common/FilterMenu";
-import { CategoryProps } from "@/types";
+import { CategoryProps, ListingsProps } from "@/types";
 
-const Header = ({ categories }: { categories: CategoryProps[] }) => {
+const Header = ({
+  categories,
+  setFilteredListings,
+  listings,
+}: {
+  categories: CategoryProps[];
+  setFilteredListings: (listings: ListingsProps[]) => void;
+  listings: ListingsProps[];
+}) => {
   const [equipment, setEquipment] = useState("");
   const [region, setRegion] = useState("");
 
@@ -48,7 +56,11 @@ const Header = ({ categories }: { categories: CategoryProps[] }) => {
           </div>
         </div>
 
-        <FilterMenu categories={categories} />
+        <FilterMenu
+          categories={categories}
+          listings={listings}
+          setFilteredListings={setFilteredListings}
+        />
       </header>
     </div>
   );

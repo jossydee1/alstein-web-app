@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ListingsList } from "@/components/common";
 import {
@@ -13,9 +11,16 @@ import {
 } from "@/components/ui/pagination";
 import { ListingsProps } from "@/types";
 import { formatError } from "@/utils";
-import { useClientFetch } from "@/hooks";
 
-const Listings = () => {
+const Listings = ({
+  listings,
+  isLoading,
+  error,
+}: {
+  listings: ListingsProps[];
+  isLoading: boolean;
+  error: string | null;
+}) => {
   const PAGINATION_STYLES = {
     content: "flex justify-center gap-3",
     button: "rounded-sm  border-[0.5px] border-[#7B7485]",
@@ -26,14 +31,6 @@ const Listings = () => {
     bg: "bg-white",
     pt: "section-container md:pt-[40px] xl:py-[64px]",
   };
-
-  const {
-    data: listings,
-    isLoading,
-    error,
-  } = useClientFetch<ListingsProps[]>(
-    "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
-  );
 
   if (isLoading)
     return (
