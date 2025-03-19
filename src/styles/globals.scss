@@ -86,57 +86,141 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
 @font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
+  font-family: "visbysemibold_italic";
   src:
-    url("../../public/fonts/NeueHaasDisplay-Black.woff2") format("woff2"),
-    url("../../public/fonts/NeueHaasDisplay-Black.woff") format("woff");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src:
-    url("../../public/fonts/NeueHaasDisplay-Bold.woff2") format("woff2"),
-    url("../../public/fonts/NeueHaasDisplay-Bold.woff") format("woff");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src:
-    url("../../public/fonts/NeueHaasDisplay-Light.woff2") format("woff2"),
-    url("../../public/fonts/NeueHaasDisplay-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src:
-    url("../../public/fonts/NeueHaasDisplay-Mediu.woff2") format("woff2"),
-    url("../../public/fonts/NeueHaasDisplay-Mediu.woff") format("woff");
+    url("../../public/fonts/visbysemibold_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbysemibold_italic-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
 }
 
 @font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
+  font-family: "visbysemibold";
   src:
-    url("../../public/fonts/NeueHaasDisplay-Roman.woff2") format("woff2"),
-    url("../../public/fonts/NeueHaasDisplay-Roman.woff") format("woff");
-  font-weight: 500;
+    url("../../public/fonts/visbysemibold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbysemibold-webfont.woff") format("woff");
+  font-weight: normal;
   font-style: normal;
-  font-display: swap;
 }
 
+@font-face {
+  font-family: "visbythin_italic";
+  src:
+    url("../../public/fonts/visbythin_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbythin_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbythin";
+  src:
+    url("../../public/fonts/visbythin-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbythin-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbybold";
+  src:
+    url("../../public/fonts/visbybold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbybold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyextrabold_italic";
+  src:
+    url("../../public/fonts/visbyextrabold_italic-webfont.woff2")
+      format("woff2"),
+    url("../../public/fonts/visbyextrabold_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyextrabold";
+  src:
+    url("../../public/fonts/visbyextrabold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyextrabold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyheavy_italic";
+  src:
+    url("../../public/fonts/visbyheavy_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyheavy_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyheavy";
+  src:
+    url("../../public/fonts/visbyheavy-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyheavy-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyitalic";
+  src:
+    url("../../public/fonts/visbyitalic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyitalic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbylight_italic";
+  src:
+    url("../../public/fonts/visbylight_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbylight_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbylight";
+  src:
+    url("../../public/fonts/visbylight-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbylight-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbymedium_italic";
+  src:
+    url("../../public/fonts/visbymedium_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbymedium_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbymedium";
+  src:
+    url("../../public/fonts/visbymedium-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbymedium-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyregular";
+  src:
+    url("../../public/fonts/visbyregular-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyregular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 html {
   scroll-behavior: smooth;
 }

@@ -44,7 +44,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-visbymedium antialiased">
       <NavBar />
       <div className="bg-white">
         <div className="section-container-dashboard grid gap-y-6">

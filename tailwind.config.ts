@@ -13,7 +13,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        Groteskbold: ["Neue Haas Grotesk Display Pro", "sans-serif"],
+        visbysemibold: ["visbysemibold", "sans-serif"],
+        visbythin: ["visbythin", "sans-serif"],
+        visbybold: ["visbybold", "sans-serif"],
+        visbyextrabold: ["visbyextrabold", "sans-serif"],
+        visbyheavy: ["visbyheavy", "sans-serif"],
+        visbylight: ["visbylight", "sans-serif"],
+        visbymedium: ["visbymedium", "sans-serif"],
+        visbyregular: ["visbyregular", "sans-serif"],
         serif: ["Merriweather", "serif"],
       },
       colors: {

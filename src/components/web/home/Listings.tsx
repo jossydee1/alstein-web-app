@@ -34,7 +34,7 @@ const Listings = ({ listings }: { listings: ListingsProps[] }) => {
           <div className="mt-[64px] flex justify-center">
             <Link
               href={webRoutes.listings || "#"}
-              className="h-auto rounded-md bg-brandColor px-[74px] py-4 font-Groteskbold text-lg font-normal text-white"
+              className="font-Groteskbold h-auto rounded-md bg-brandColor px-[74px] py-4 text-lg font-normal text-white"
             >
               View All
             </Link>

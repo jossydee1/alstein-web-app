@@ -3,7 +3,7 @@ import NavBar from "@/components/navigation/web/NavBar";
 
 export default function WebLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="font-visbymedium antialiased">
       <NavBar />
       {children}
       <Footer />
