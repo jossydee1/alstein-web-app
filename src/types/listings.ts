@@ -1,13 +1,41 @@
 import { StaticImageData } from "next/image";
 
 export interface ListingsProps {
-  name: string;
-  equipment: string;
   address: string;
-  count: number;
+  availability: string;
+  category_id: string;
+  city: string;
+  country: string;
+  created_at: string;
+  description: string;
+  equipment_file: [];
   id: string;
-  ratings: number;
+  latitude: string;
+  listing_status: string;
+  longitude: string;
+  name: string;
+  partner_id: string;
+  price: number;
+  service_type: string;
+  updated_at: string;
   images: StaticImageData[];
+}
+
+export interface ListingPartnerProps {
+  id: string;
+  logo: string;
+  name: string;
+}
+
+export interface ListingSpecificationProps {
+  id: string;
+  specification: string;
+}
+
+export interface ListingInfoProps extends ListingsProps {
+  category: CategoryProps;
+  partner: ListingPartnerProps;
+  specifications: ListingSpecificationProps[];
 }
 
 export interface SubcategoryProps {

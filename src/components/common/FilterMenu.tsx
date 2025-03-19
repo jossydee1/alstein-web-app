@@ -18,19 +18,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { CategoryProps } from "@/types";
+import { CategoryProps, ListingsProps } from "@/types";
+import { useClientFetch } from "@/hooks";
 
-// interface FilterOptions {
-//   availability: boolean;
-//   lease: boolean;
-//   onSite: boolean;
-//   categories: string[];
-//   distance: number | null;
-//   insuranceOptions: string[];
-//   ratings: number[];
-// }
-
-const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
+const FilterMenu = ({
+  categories,
+  setFilteredListings,
+  listings,
+}: {
+  categories: CategoryProps[];
+  setFilteredListings: (listings: ListingsProps[]) => void;
+  listings: ListingsProps[];
+}) => {
   const STYLES = {
     dropdownStyles:
       "flex items-center gap-2.5 rounded-xl border border-[#8B8B8B] px-3 pt-2 text-sm text-[#454545]",
@@ -40,7 +39,7 @@ const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
     accordionContent: "grid grid-cols-1 gap-2 rounded-sm bg-[#F6F6F6] p-2",
     optionWrapper: "flex items-center space-x-2",
     optionLabel:
-      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap",
   };
 
   const distances = [5, 10, 15, 20, 50, 100];
@@ -58,7 +57,7 @@ const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
   const [availability, setAvailability] = useState(false);
   const [lease, setLease] = useState(false);
   const [onSite, setOnSite] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
   const [selectedInsurance, setSelectedInsurance] = useState<string[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
@@ -99,13 +98,42 @@ const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
   const handleFiltering = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     console.log({
-      categories: selectedCategories,
+      categories: selectedCategory,
       distance: selectedDistance,
       insuranceOptions: selectedInsurance,
       ratings: selectedRatings,
     });
     setIsOpen(false);
   };
+
+  const resetFilter = () => {
+    setSelectedCategory("");
+    setSelectedDistance(null);
+    setSelectedInsurance([]);
+    setSelectedRatings([]);
+    setIsOpen(false);
+    setFilteredListings(listings);
+  };
+
+  // TODO: move filtering to parent component
+  // if category is selected, filter listings by category call the useClientFetch hook
+  const {
+    data: listingsByCategory,
+    isLoading: listingsByCategoryLoading,
+    // error: listingsByCategoryError,
+  } = useClientFetch<ListingsProps[]>(
+    `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
+    {},
+    !!selectedCategory,
+  );
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setFilteredListings(listingsByCategory || []);
+    }
+  }, [listingsByCategory, selectedCategory, setFilteredListings]);
+
+  const isDisabled = listingsByCategoryLoading;
 
   return (
     <>
@@ -158,27 +186,30 @@ const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
                     <AccordionTrigger className={STYLES.accordionTrigger}>
                       Category
                     </AccordionTrigger>
-                    <AccordionContent className={STYLES.accordionContentGrid}>
-                      {categories.map(category => (
-                        <div className={STYLES.optionWrapper} key={category.id}>
-                          <Checkbox
-                            id={category.id}
-                            checked={selectedCategories.includes(category.id)}
-                            onCheckedChange={() =>
-                              toggleSelection(
-                                category.title,
-                                setSelectedCategories,
-                              )
-                            }
-                          />
-                          <label
-                            htmlFor={category.id}
-                            className={STYLES.optionLabel}
+                    <AccordionContent>
+                      <RadioGroup
+                        className={STYLES.accordionContentGrid}
+                        onValueChange={value => setSelectedCategory(value)}
+                        value={selectedCategory || ""}
+                      >
+                        {categories.map(c => (
+                          <div
+                            className={STYLES.optionWrapper}
+                            key={c.title_slug}
                           >
-                            {category.title}
-                          </label>
-                        </div>
-                      ))}
+                            <RadioGroupItem
+                              value={c.title_slug}
+                              id={c.title_slug}
+                            />
+                            <Label
+                              htmlFor={c.title_slug}
+                              className={STYLES.optionLabel}
+                            >
+                              {c.title}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -277,19 +308,14 @@ const FilterMenu = ({ categories }: { categories: CategoryProps[] }) => {
                     className="px-0 py-0 text-sm text-[#454545] hover:bg-transparent hover:underline"
                     variant="ghost"
                     type="button"
-                    onClick={() => {
-                      setSelectedCategories([]);
-                      setSelectedDistance(null);
-                      setSelectedInsurance([]);
-                      setSelectedRatings([]);
-                      setIsOpen(false);
-                    }}
+                    onClick={resetFilter}
                   >
                     Clear All
                   </Button>
                   <Button
                     className="rounded-lg bg-[#454545] px-6 py-2 text-sm"
                     type="submit"
+                    disabled={isDisabled}
                   >
                     Apply
                   </Button>

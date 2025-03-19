@@ -7,8 +7,9 @@ import image from "@/public/images/blood-sugar-analyser.png";
 import Image from "next/image";
 import { ListingImageModal } from "@/components/common/modals";
 import { DefaultSlide } from "@/components/common";
+import { ListingInfoProps } from "@/types";
 
-const Header = () => {
+const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
   const images = [
     { url: image },
     { url: image },
@@ -28,9 +29,7 @@ const Header = () => {
     <div className="bg-white">
       <header className="section-container !pb-9 !pt-0">
         <div className="mb-[22px] flex flex-wrap items-center justify-between">
-          <h1 className="font-500 text-2xl">
-            High-Precision Blood Sugar Analyzer
-          </h1>
+          <h1 className="font-500 text-2xl">{listingInfo?.name}</h1>
           <Button
             type="button"
             variant="ghost"
