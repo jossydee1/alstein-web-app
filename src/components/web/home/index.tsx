@@ -8,9 +8,15 @@ import Listings from "./Listings";
 import Testimonials from "./Testimonials";
 import Partners from "./Partners";
 import { useClientFetch } from "@/hooks";
-import { CategoryProps, ListingsProps } from "@/types";
+import { CategoryProps, ListingsProps, ReviewProps } from "@/types";
 
-const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
+const HomeContent = ({
+  categories,
+  reviews,
+}: {
+  categories: CategoryProps[];
+  reviews: ReviewProps[];
+}) => {
   const { data: listings } = useClientFetch<ListingsProps[]>(
     "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   );
@@ -21,7 +27,7 @@ const HomeContent = ({ categories }: { categories: CategoryProps[] }) => {
       <WhyUs />
       <Categories categories={categories} />
       <Listings listings={listings || []} />
-      <Testimonials />
+      <Testimonials reviews={reviews} />
       <Partners />
     </main>
   );

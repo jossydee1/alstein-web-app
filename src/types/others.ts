@@ -11,3 +11,19 @@ export interface SampleProps {
   name: string;
   timestamp: string;
 }
+
+export interface ReviewProps {
+  id: string;
+  reviews: string;
+  title: string;
+  is_publish: boolean;
+  created_at: string;
+  updated_at: string;
+  profile_id: string;
+  user: {
+    first_name: string;
+    last_name: string;
+    user_avatar: string;
+  };
+  occupation: string;
+}

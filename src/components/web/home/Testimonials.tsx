@@ -1,69 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import image from "@/public/images/doctor.png";
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ReviewProps } from "@/types";
 
-const Testimonials = () => {
-  const testimonials = [
-    {
-      title: "Convenience & Efficiency",
-      description:
-        "I never thought booking a laboratory test could be so seamless. With just a few clicks, I booked a time that suited me, and got everything confirmed instantly. This platform saves me so much time and hassle!",
-      avatar: image,
-      name: "Jane Doe",
-      position: "CEO, Company Name",
-    },
-    {
-      title: "Great Service & Support",
-      description:
-        "I was impressed by the level of customer service and support I received from the team. They were always available to answer my questions and provide guidance throughout the process. Highly recommended!",
-      avatar: image,
-      name: "John Doe",
-      position: "CTO, Company Name",
-    },
-    {
-      title: "Excellent Experience",
-      description:
-        "I had a great experience using this platform to book my laboratory tests. The process was simple, the staff were friendly, and the results were delivered quickly. I will definitely be using this service again!",
-      avatar: image,
-      name: "Alice Doe",
-      position: "COO, Company Name",
-    },
-    {
-      title: "Convenience & Efficiency",
-      description:
-        "I never thought booking a laboratory test could be so seamless. With just a few clicks, I booked a time that suited me, and got everything confirmed instantly. This platform saves me so much time and hassle!",
-      avatar: image,
-      name: "Jane Doe",
-      position: "CEO, Company Name",
-    },
-    {
-      title: "Great Service & Support",
-      description:
-        "I was impressed by the level of customer service and support I received from the team. They were always available to answer my questions and provide guidance throughout the process. Highly recommended!",
-      avatar: image,
-      name: "John Doe",
-      position: "CTO, Company Name",
-    },
-    {
-      title: "Excellent Experience",
-      description:
-        "I had a great experience using this platform to book my laboratory tests. The process was simple, the staff were friendly, and the results were delivered quickly. I will definitely be using this service again!",
-      avatar: image,
-      name: "Alice Doe",
-      position: "COO, Company Name",
-    },
-  ];
-
-  const totalSlides = testimonials.length;
+const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
+  const totalSlides = reviews.length;
   const slidesPerView = 3;
   const slideWidth = 390;
   const gap = 16;
   const transitionTime = 500;
 
-  const extendedSlides = [...testimonials, ...testimonials, ...testimonials];
+  const extendedSlides = [...reviews, ...reviews, ...reviews];
 
   const [currentSlide, setCurrentSlide] = useState(totalSlides);
   const slideRef = useRef<HTMLDivElement>(null);
@@ -149,23 +98,33 @@ const Testimonials = () => {
                     &ldquo;{slide.title}&rdquo;
                   </h3>
                   <p className="mb-8 text-[15px] leading-[25px] text-[#D5D5D5]">
-                    {slide.description}
+                    {slide.reviews}
                   </p>
 
                   <div className="flex items-center gap-4">
-                    <Image
-                      src={slide.avatar}
-                      alt={slide.name}
-                      width={50}
-                      height={50}
-                      className="aspect-square min-h-[50px] min-w-[50px] max-w-[50px] rounded-full object-cover"
-                    />
+                    {slide.user.user_avatar ? (
+                      <Image
+                        src={slide.user.user_avatar}
+                        alt={slide.user.first_name}
+                        width={50}
+                        height={50}
+                        className="aspect-square min-h-[50px] min-w-[50px] max-w-[50px] rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex aspect-square min-h-[50px] min-w-[50px] max-w-[50px] items-center justify-center rounded-full bg-gray-400 text-center text-2xl font-semibold text-gray-800">
+                        {/* initials */}
+                        <span className="">
+                          {slide.user.first_name.charAt(0)}
+                          {slide.user.last_name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                     <div>
                       <h4 className="text-[15px] font-bold leading-[17px]">
-                        {slide.name}
+                        {slide.user.first_name} {slide.user.last_name}
                       </h4>
                       <p className="mt-2.5 text-[15px] leading-[17px] text-[#D5D5D5]">
-                        {slide.position}
+                        {slide.occupation}
                       </p>
                     </div>
                   </div>

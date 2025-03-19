@@ -8,7 +8,10 @@ const bundleAnalyzer = withBundleAnalyzer({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["picsum.photos"],
+    domains: [
+      "picsum.photos",
+      "alstein-dev-storage.s3.us-east-1.amazonaws.com",
+    ],
   },
 };
 
