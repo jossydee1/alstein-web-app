@@ -30,12 +30,22 @@ const ListingDetailsContent = () => {
     pt: "section-container !pb-9 !pt-0",
   };
 
+  // Get listing info
   const {
     data: listingInfo,
     isLoading,
     error,
   } = useClientFetch<ListingInfoProps>(
     `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+  );
+
+  // Get rating info
+  const { data: rating } = useClientFetch<{
+    _avg: {
+      score: number;
+    };
+  }>(
+    `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
   );
 
   const links = [
@@ -108,7 +118,10 @@ const ListingDetailsContent = () => {
 
         <Location listingInfo={listingInfo} />
 
-        <Reviews partnerId={listingInfo.partner_id} />
+        <Reviews
+          partnerId={listingInfo.partner_id}
+          averageRating={rating?._avg?.score || 0}
+        />
       </main>
     </div>
   );

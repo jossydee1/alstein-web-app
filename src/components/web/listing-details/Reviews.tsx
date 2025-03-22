@@ -26,7 +26,13 @@ const PAGINATION_STYLES = {
   isActive: "bg-[#2C2C2C] border-[#303030] text-white",
 };
 
-const Reviews = ({ partnerId }: { partnerId: string }) => {
+const Reviews = ({
+  partnerId,
+  averageRating,
+}: {
+  partnerId: string;
+  averageRating: number;
+}) => {
   const { userId, token } = useAuth();
 
   const reviews = [1, 1, 1, 1, 1];
@@ -104,7 +110,7 @@ const Reviews = ({ partnerId }: { partnerId: string }) => {
             className="text-5xl font-[500] text-[#5D5D5D]"
             aria-label="Average Rating"
           >
-            3.82
+            {averageRating}
           </p>
         </div>
       </div>
