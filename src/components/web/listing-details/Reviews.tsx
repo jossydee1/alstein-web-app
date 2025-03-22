@@ -15,11 +15,24 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { api, authRoutes } from "@/utils";
+import { redirect } from "next/navigation";
+import { useAuth } from "@/context";
+import { toast } from "react-toastify";
 
-const Reviews = () => {
+const PAGINATION_STYLES = {
+  content: "flex justify-center gap-3",
+  button: "rounded-sm  border-[0.5px] border-[#7B7485]",
+  isActive: "bg-[#2C2C2C] border-[#303030] text-white",
+};
+
+const Reviews = ({ partnerId }: { partnerId: string }) => {
+  const { userId, token } = useAuth();
+
   const reviews = [1, 1, 1, 1, 1];
 
   const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
   const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
 
   const handleShowAllReviews = () => {
@@ -30,10 +43,48 @@ const Reviews = () => {
     }
   };
 
-  const PAGINATION_STYLES = {
-    content: "flex justify-center gap-3",
-    button: "rounded-sm  border-[0.5px] border-[#7B7485]",
-    isActive: "bg-[#2C2C2C] border-[#303030] text-white",
+  const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!comment || !rating) {
+      toast.error("Please give a rating and write a review");
+      return;
+    }
+
+    if (!userId) {
+      localStorage.setItem(
+        "review",
+        JSON.stringify({
+          partner_id: partnerId,
+          comments: comment,
+          rating: rating,
+          profile_id: userId,
+        }),
+      );
+      redirect(authRoutes.login);
+    }
+
+    const response = await api.post(
+      `/partner/api/v1/comments/create-comment`,
+      {
+        partner_id: partnerId,
+        comments: comment,
+        // rating: rating,
+        profile_id: userId,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+
+    if (response.data.status === "successful") {
+      toast.success("Review submitted successfully");
+      setComment("");
+      setRating(0);
+      localStorage.removeItem("review");
+    } else {
+      toast.error("Failed to submit review");
+    }
   };
 
   return (
@@ -142,7 +193,7 @@ const Reviews = () => {
             Share your feedback
           </h3>
 
-          <form>
+          <form onSubmit={handleWriteReview}>
             <div className="mb-4">
               <label className="mb-16 text-sm text-[#354259]">
                 How was you experience?
@@ -170,11 +221,20 @@ const Reviews = () => {
             </div>
 
             <div>
-              <label className="text-sm text-[#354259]">
+              <label htmlFor="comment" className="text-sm text-[#354259]">
                 Can you tell us more?
               </label>
 
-              <textarea className="block h-[160px] w-full rounded-md border border-[#E6E7EA] p-3"></textarea>
+              <textarea
+                id="comment"
+                name="comment"
+                className="block h-[160px] w-full rounded-md border border-[#E6E7EA] p-3"
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                placeholder="Write your review here..."
+                minLength={10}
+                required
+              ></textarea>
             </div>
 
             <div className="mt-4 flex gap-4">
@@ -186,7 +246,7 @@ const Reviews = () => {
                 Cancel
               </Button>
               <Button
-                type="button"
+                type="submit"
                 variant="outline"
                 className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white"
               >

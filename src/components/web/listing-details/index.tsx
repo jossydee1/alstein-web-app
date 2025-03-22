@@ -93,7 +93,7 @@ const ListingDetailsContent = () => {
 
         <Location listingInfo={listingInfo} />
 
-        <Reviews />
+        <Reviews partnerId={listingInfo.partner_id} />
       </main>
     </div>
   );
