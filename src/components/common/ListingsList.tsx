@@ -9,6 +9,8 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 
 export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
+  if (listings.length === 0) return <p>No listings found</p>;
+
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {listings.map((l, index) => (

@@ -17,7 +17,7 @@ const HomeContent = ({
   categories: CategoryProps[];
   reviews: ReviewProps[];
 }) => {
-  const { data: listings } = useClientFetch<ListingsProps[]>(
+  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>(
     "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   );
 
@@ -26,7 +26,7 @@ const HomeContent = ({
       <Hero />
       <WhyUs />
       <Categories categories={categories} />
-      <Listings listings={listings || []} />
+      <Listings listings={listings || []} isLoading={isLoading} />
       <Testimonials reviews={reviews} />
       <Partners />
     </main>

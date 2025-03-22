@@ -50,15 +50,6 @@ const Listings = ({
       </div>
     );
 
-  if (!listings || listings?.length === 0)
-    return (
-      <div className={CONTAINER_STYLES.bg}>
-        <main className={CONTAINER_STYLES.pt}>
-          <p>No listings found</p>
-        </main>
-      </div>
-    );
-
   return (
     <div className={CONTAINER_STYLES.bg}>
       <section className={CONTAINER_STYLES.pt}>

@@ -3,10 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
-import { ListingsList } from "@/components/common";
+import { ListingSkeleton, ListingsList } from "@/components/common";
 import { ListingsProps } from "@/types";
 
-const Listings = ({ listings }: { listings: ListingsProps[] }) => {
+const Listings = ({
+  listings,
+  isLoading,
+}: {
+  listings: ListingsProps[];
+  isLoading: boolean;
+}) => {
   return (
     <div className="bg-white">
       <section className="section-container">
@@ -23,10 +29,10 @@ const Listings = ({ listings }: { listings: ListingsProps[] }) => {
             </h2>
           </div>
 
-          {listings.length > 0 ? (
-            <ListingsList listings={listings} />
+          {isLoading ? (
+            <ListingSkeleton />
           ) : (
-            <p>No listings found</p>
+            <ListingsList listings={listings} />
           )}
         </div>
 
