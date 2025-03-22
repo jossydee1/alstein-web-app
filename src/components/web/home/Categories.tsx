@@ -5,6 +5,58 @@ import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
 import { CategoryProps } from "@/types";
+import { useClientFetch } from "@/hooks";
+
+const CategoryItem = ({ category }: { category: CategoryProps }) => {
+  const { data, isLoading } = useClientFetch<
+    {
+      _count: { _all: number };
+      partner_id: string;
+    }[]
+  >(
+    `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category.title_slug}`,
+  );
+
+  console.log(data);
+
+  const partnerCount = data?.[0]?._count?._all || 0;
+
+  return (
+    <article
+      className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
+      style={{
+        backgroundImage: category.image_url || 'url("/images/doctor.png")',
+        backgroundColor: "#181818",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">{category.title}</h3>
+      <ul className="list-inside list-disc">
+        {category.subcategory.map(sub => (
+          <li key={sub.id}>{sub.description}</li>
+        ))}
+      </ul>
+
+      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
+        <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
+          <Image src={users} alt="arrow right" />
+          {isLoading
+            ? "Loading..."
+            : `${partnerCount} Partner${partnerCount !== 1 ? "s" : ""}`}
+        </span>
+
+        <Link
+          href={`${webRoutes.listings}?category=${category.title_slug}`}
+          className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
+        >
+          View & Book
+        </Link>
+      </div>
+    </article>
+  );
+};
 
 const Categories = ({ categories }: { categories: CategoryProps[] }) => {
   return (
@@ -31,40 +83,8 @@ const Categories = ({ categories }: { categories: CategoryProps[] }) => {
             </div>
           </article>
 
-          {categories.map(c => (
-            <article
-              key={c.title}
-              className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
-              style={{
-                backgroundImage: c.image_url || 'url("/images/doctor.png")',
-                backgroundColor: "#181818",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-                {c.title}
-              </h3>
-              <ul className="list-inside list-disc">
-                {c.subcategory.map(sub => (
-                  <li key={sub.id}>{sub.description}</li>
-                ))}
-              </ul>
-
-              <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
-                <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
-                  <Image src={users} alt="arrow right" />0 Partners
-                </span>
-
-                <Link
-                  href={`${webRoutes.listings}?category=${c.title_slug}`}
-                  className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
-                >
-                  View & Book
-                </Link>
-              </div>
-            </article>
+          {categories.map(category => (
+            <CategoryItem key={category.title} category={category} />
           ))}
         </div>
       </section>
