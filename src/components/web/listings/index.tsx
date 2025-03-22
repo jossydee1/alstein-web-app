@@ -6,8 +6,10 @@ import SearchForm from "./SearchForm";
 import { CategoryProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 import { formatError } from "@/utils";
+import { useSearchParams } from "next/navigation";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
+  const searchParams = useSearchParams();
   const [filteredListings, setFilteredListings] = useState<ListingsProps[]>([]);
 
   // Filters state
@@ -33,6 +35,14 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     "Insurance 4",
     "Insurance 5",
   ];
+
+  // Check for category in URL params on load
+  useEffect(() => {
+    const categoryFromURL = searchParams.get("category");
+    if (categoryFromURL) {
+      setSelectedCategory(categoryFromURL);
+    }
+  }, [searchParams]);
 
   const {
     data: listings,
