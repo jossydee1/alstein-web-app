@@ -25,26 +25,19 @@ export async function serverFetch(url: string) {
       },
     });
 
-    // Create user-friendly error messages for network-related issues
+    // Return empty data instead of throwing errors
     if (
       error.code === "ENOTFOUND" ||
       error.code === "ECONNREFUSED" ||
       error.message?.includes("Network Error") ||
-      !navigator.onLine
+      !navigator.onLine ||
+      error.code === "ETIMEDOUT" ||
+      error.code === "ECONNABORTED"
     ) {
-      throw new NetworkError(
-        "Unable to connect to the server. Please check your internet connection and try again.",
-      );
+      return null;
     }
 
-    // Handle timeout errors
-    if (error.code === "ETIMEDOUT" || error.code === "ECONNABORTED") {
-      throw new NetworkError(
-        "The server is taking too long to respond. Please try again later.",
-      );
-    }
-
-    // Re-throw other errors
-    throw error;
+    // Return null for other errors
+    return null;
   }
 }

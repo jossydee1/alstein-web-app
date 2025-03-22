@@ -1,26 +1,67 @@
 "use client";
 
-import React, { useState } from "react";
-import { SearchForm } from "@/components/common";
-import FilterMenu from "@/components/common/FilterMenu";
-import { CategoryProps, ListingsProps } from "@/types";
+import React from "react";
+import {
+  SearchForm as CommonSearchForm,
+  FilterMenu,
+} from "@/components/common";
+import { CategoryProps } from "@/types";
 
 const Header = ({
   categories,
-  setFilteredListings,
-  listings,
+  equipment,
+  setEquipment,
+  region,
+  setRegion,
+  handleSearch,
+  distances,
+  ratings,
+  insuranceOptions,
+  selectedCategory,
+  setSelectedCategory,
+  selectedDistance,
+  setSelectedDistance,
+  selectedInsurance,
+  setSelectedInsurance,
+  selectedRatings,
+  setSelectedRatings,
+  availability,
+  setAvailability,
+  lease,
+  setLease,
+  onSite,
+  setOnSite,
+  handleFiltering,
+  resetFilter,
+  isFiltering,
 }: {
   categories: CategoryProps[];
-  setFilteredListings: (listings: ListingsProps[]) => void;
-  listings: ListingsProps[];
+  equipment: string;
+  setEquipment: (value: string) => void;
+  region: string;
+  setRegion: (value: string) => void;
+  handleSearch: () => void;
+  distances: number[];
+  ratings: number[];
+  insuranceOptions: string[];
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+  selectedDistance: number | null;
+  setSelectedDistance: (distance: number | null) => void;
+  selectedInsurance: string[];
+  setSelectedInsurance: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedRatings: number[];
+  setSelectedRatings: React.Dispatch<React.SetStateAction<number[]>>;
+  availability: boolean;
+  setAvailability: (availability: boolean) => void;
+  lease: boolean;
+  setLease: (lease: boolean) => void;
+  onSite: boolean;
+  setOnSite: (onSite: boolean) => void;
+  handleFiltering: (e: { preventDefault: () => void }) => void;
+  resetFilter: () => void;
+  isFiltering: boolean;
 }) => {
-  const [equipment, setEquipment] = useState("");
-  const [region, setRegion] = useState("");
-
-  const handleSearch = () => {
-    console.log("searching...");
-  };
-
   return (
     <div className="bg-white">
       <header className="section-container !pb-0 !pt-3">
@@ -46,7 +87,7 @@ const Header = ({
           </div>
 
           <div className="w-full">
-            <SearchForm
+            <CommonSearchForm
               equipment={equipment}
               region={region}
               setEquipment={setEquipment}
@@ -55,11 +96,28 @@ const Header = ({
             />
           </div>
         </div>
-
         <FilterMenu
           categories={categories}
-          listings={listings}
-          setFilteredListings={setFilteredListings}
+          distances={distances}
+          ratings={ratings}
+          insuranceOptions={insuranceOptions}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          selectedDistance={selectedDistance}
+          setSelectedDistance={setSelectedDistance}
+          selectedInsurance={selectedInsurance}
+          setSelectedInsurance={setSelectedInsurance}
+          selectedRatings={selectedRatings}
+          setSelectedRatings={setSelectedRatings}
+          availability={availability}
+          setAvailability={setAvailability}
+          lease={lease}
+          setLease={setLease}
+          onSite={onSite}
+          setOnSite={setOnSite}
+          handleFiltering={handleFiltering}
+          resetFilter={resetFilter}
+          isFiltering={isFiltering}
         />
       </header>
     </div>

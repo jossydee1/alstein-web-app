@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -18,17 +18,52 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { CategoryProps, ListingsProps } from "@/types";
-import { useClientFetch } from "@/hooks";
+import { CategoryProps } from "@/types";
 
-const FilterMenu = ({
+export const FilterMenu = ({
   categories,
-  setFilteredListings,
-  listings,
+  distances,
+  ratings,
+  insuranceOptions,
+  selectedCategory,
+  setSelectedCategory,
+  selectedDistance,
+  setSelectedDistance,
+  selectedInsurance,
+  setSelectedInsurance,
+  selectedRatings,
+  setSelectedRatings,
+  availability,
+  setAvailability,
+  lease,
+  setLease,
+  onSite,
+  setOnSite,
+  handleFiltering,
+  resetFilter,
+  isFiltering,
 }: {
   categories: CategoryProps[];
-  setFilteredListings: (listings: ListingsProps[]) => void;
-  listings: ListingsProps[];
+  distances: number[];
+  ratings: number[];
+  insuranceOptions: string[];
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+  selectedDistance: number | null;
+  setSelectedDistance: (distance: number | null) => void;
+  selectedInsurance: string[];
+  setSelectedInsurance: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedRatings: number[];
+  setSelectedRatings: React.Dispatch<React.SetStateAction<number[]>>;
+  availability: boolean;
+  setAvailability: (availability: boolean) => void;
+  lease: boolean;
+  setLease: (lease: boolean) => void;
+  onSite: boolean;
+  setOnSite: (onSite: boolean) => void;
+  handleFiltering: (e: { preventDefault: () => void }) => void;
+  resetFilter: () => void;
+  isFiltering: boolean;
 }) => {
   const STYLES = {
     dropdownStyles:
@@ -42,32 +77,11 @@ const FilterMenu = ({
       "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap",
   };
 
-  const distances = [5, 10, 15, 20, 50, 100];
-  const ratings = [5, 4, 3, 2, 1];
-
-  const insuranceOptions = [
-    "Insurance 1",
-    "Insurance 2",
-    "Insurance 3",
-    "Insurance 4",
-    "Insurance 5",
-  ];
-
   const [isOpen, setIsOpen] = useState(false);
-  const [availability, setAvailability] = useState(false);
-  const [lease, setLease] = useState(false);
-  const [onSite, setOnSite] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
-  const [selectedInsurance, setSelectedInsurance] = useState<string[]>([]);
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
 
-  // toggle selection for categories and insurance
-  const toggleSelection = (
-    item: string,
-    setFunction: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    setFunction(prev =>
+  // toggle selection for insurance
+  const toggleSelection = (item: string) => {
+    setSelectedInsurance(prev =>
       prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item],
     );
   };
@@ -81,59 +95,15 @@ const FilterMenu = ({
     );
   };
 
-  // handle availability, lease, onSite
-  useEffect(() => {
-    console.log("availability: ", availability);
-  }, [availability]);
-
-  useEffect(() => {
-    console.log("lease: ", lease);
-  }, [lease]);
-
-  useEffect(() => {
-    console.log("onSite: ", onSite);
-  }, [onSite]);
-
-  // handle filtering
-  const handleFiltering = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    console.log({
-      categories: selectedCategory,
-      distance: selectedDistance,
-      insuranceOptions: selectedInsurance,
-      ratings: selectedRatings,
-    });
+  const handleFilterSubmit = (e: { preventDefault: () => void }) => {
+    handleFiltering(e);
     setIsOpen(false);
   };
 
-  const resetFilter = () => {
-    setSelectedCategory("");
-    setSelectedDistance(null);
-    setSelectedInsurance([]);
-    setSelectedRatings([]);
+  const handleResetFilter = () => {
+    resetFilter();
     setIsOpen(false);
-    setFilteredListings(listings);
   };
-
-  // TODO: move filtering to parent component
-  // if category is selected, filter listings by category call the useClientFetch hook
-  const {
-    data: listingsByCategory,
-    isLoading: listingsByCategoryLoading,
-    // error: listingsByCategoryError,
-  } = useClientFetch<ListingsProps[]>(
-    `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
-    {},
-    !!selectedCategory,
-  );
-
-  useEffect(() => {
-    if (selectedCategory) {
-      setFilteredListings(listingsByCategory || []);
-    }
-  }, [listingsByCategory, selectedCategory, setFilteredListings]);
-
-  const isDisabled = listingsByCategoryLoading;
 
   return (
     <>
@@ -156,7 +126,7 @@ const FilterMenu = ({
             >
               <form
                 className="w-full space-y-5 overflow-hidden rounded-2xl bg-white"
-                onSubmit={handleFiltering}
+                onSubmit={handleFilterSubmit}
               >
                 <X
                   size={16}
@@ -192,7 +162,7 @@ const FilterMenu = ({
                         onValueChange={value => setSelectedCategory(value)}
                         value={selectedCategory || ""}
                       >
-                        {categories.map(c => (
+                        {categories?.map(c => (
                           <div
                             className={STYLES.optionWrapper}
                             key={c.title_slug}
@@ -259,9 +229,7 @@ const FilterMenu = ({
                           <Checkbox
                             id={ins}
                             checked={selectedInsurance.includes(ins)}
-                            onCheckedChange={() =>
-                              toggleSelection(ins, setSelectedInsurance)
-                            }
+                            onCheckedChange={() => toggleSelection(ins)}
                           />
                           <label htmlFor={ins} className={STYLES.optionLabel}>
                             {ins}
@@ -308,14 +276,14 @@ const FilterMenu = ({
                     className="px-0 py-0 text-sm text-[#454545] hover:bg-transparent hover:underline"
                     variant="ghost"
                     type="button"
-                    onClick={resetFilter}
+                    onClick={handleResetFilter}
                   >
                     Clear All
                   </Button>
                   <Button
                     className="rounded-lg bg-[#454545] px-6 py-2 text-sm"
                     type="submit"
-                    disabled={isDisabled}
+                    disabled={isFiltering}
                   >
                     Apply
                   </Button>
@@ -349,5 +317,3 @@ const FilterMenu = ({
     </>
   );
 };
-
-export default FilterMenu;
