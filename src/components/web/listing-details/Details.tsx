@@ -6,16 +6,17 @@ import Link from "next/link";
 import { webRoutes } from "@/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { ListingInfoProps } from "@/types";
+import { DateRange } from "react-day-picker";
 
-const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
-  const [selected] = React.useState<Date[] | undefined>([
-    new Date("2025-03-20"),
-    new Date("2025-03-21"),
-    new Date("2025-03-22"),
-    new Date("2025-03-23"),
-    new Date("2025-03-24"),
-  ]);
-
+const Details = ({
+  listingInfo,
+  date,
+  setDate,
+}: {
+  listingInfo: ListingInfoProps;
+  date: DateRange | undefined;
+  setDate: (date: DateRange | undefined) => void;
+}) => {
   return (
     <article>
       <section className="description">
@@ -77,15 +78,24 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
       <hr className="my-[57px] border border-[#EBEBEB]" />
 
       <section className="mb-[57px]">
-        <h2 className="font-500 mb-4 text-2xl">Available Dates</h2>
-        <div className="mb-4 flex flex-col gap-2">
-          <div className="rounded-md border">
+        <h2 className="font-500 text-2xl">
+          {!date ? "Select Booking Date" : "Booking Date"}
+        </h2>
+        <div className="flex flex-col gap-2">
+          <p className="mb-4 text-sm text-[#343434]">
+            {date?.from?.toLocaleDateString()} -{" "}
+            {date?.to?.toLocaleDateString()}
+          </p>
+          <div className="w-fit rounded-md border">
             <Calendar
-              mode="multiple"
-              selected={selected}
-              classNames={{
-                day_selected: `bg-gray-50 border-gray-50 text-gray-400 rounded-none `,
-              }}
+              mode="range"
+              selected={date}
+              onSelect={setDate}
+              classNames={
+                {
+                  // day_selected: `bg-gray-50 border-gray-50 text-gray-400 rounded-none `,
+                }
+              }
               numberOfMonths={2}
             />
           </div>
