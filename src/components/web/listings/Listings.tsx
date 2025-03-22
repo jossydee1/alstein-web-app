@@ -1,5 +1,5 @@
 import React from "react";
-import { ListingsList } from "@/components/common";
+import { ListingsList, ListingSkeleton } from "@/components/common";
 import {
   Pagination,
   PaginationContent,
@@ -36,7 +36,7 @@ const Listings = ({
     return (
       <div className={CONTAINER_STYLES.bg}>
         <main className={CONTAINER_STYLES.pt}>
-          <p>Loading...</p>
+          <ListingSkeleton />
         </main>
       </div>
     );
@@ -45,7 +45,9 @@ const Listings = ({
     return (
       <div className={CONTAINER_STYLES.bg}>
         <main className={CONTAINER_STYLES.pt}>
-          <p>{formatError(error)}</p>
+          <div className="rounded-md bg-red-50 p-4 text-red-500">
+            <p>{formatError(error)}</p>
+          </div>
         </main>
       </div>
     );
