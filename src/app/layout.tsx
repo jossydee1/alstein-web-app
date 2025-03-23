@@ -6,6 +6,8 @@ import PrelineScript from "@/components/PrelineScript";
 import ReactQueryProvider from "./providers/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "@/context";
+import { Suspense } from "react";
+import { LoadingState } from "@/components/common";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,14 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <ReactQueryProvider>
-          <AuthProvider>
-            <ToastContainer />
-            {children}
-          </AuthProvider>
-          <PrelineScript />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ReactQueryProvider>
+        <Suspense fallback={<LoadingState />}>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <ToastContainer />
+              {children}
+            </AuthProvider>
+            <PrelineScript />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ReactQueryProvider>
+        </Suspense>
       </body>
     </html>
   );
