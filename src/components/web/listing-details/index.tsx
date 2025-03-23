@@ -13,6 +13,7 @@ import { ListingInfoProps } from "@/types";
 import { useParams } from "next/navigation";
 import { DateRange } from "react-day-picker";
 import { differenceInDays } from "date-fns";
+import ListingDetailsSkeleton from "./Skeleton";
 
 const ListingDetailsContent = () => {
   const { id } = useParams();
@@ -65,15 +66,7 @@ const ListingDetailsContent = () => {
     },
   ];
 
-  if (isLoading)
-    return (
-      <div className={CONTAINER_STYLES.bg}>
-        <Breadcrumbs links={links} />
-        <main className={CONTAINER_STYLES.pt}>
-          <p>Loading...</p>
-        </main>
-      </div>
-    );
+  if (isLoading) return <ListingDetailsSkeleton />;
 
   if (error)
     return (
