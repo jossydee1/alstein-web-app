@@ -44,47 +44,49 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
   };
 
   return (
-    <nav className={`relative w-full ${className}`}>
-      {showScrollButtons && (
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
-          aria-label="Scroll left"
-        >
-          <ChevronLeft size="24" />
-        </button>
-      )}
-
-      <div
-        ref={tabsRef}
-        className="scrollbar-hide flex justify-between gap-4 overflow-x-auto py-2"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
-        {tabs.map((tab, index) => (
-          <Link
-            key={index}
-            href={tab.link}
-            className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors ${
-              pathname === tab.link
-                ? "bg-[#EFF6FF] text-brandColor"
-                : "text-[#6B7280]"
-            }`}
+    <div className="w-full overflow-x-auto">
+      <nav className={`relative w-full ${className}`}>
+        {showScrollButtons && (
+          <button
+            onClick={() => scroll("left")}
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
+            aria-label="Scroll left"
           >
-            {tab.icon}
-            <h2>{tab.title}</h2>
-          </Link>
-        ))}
-      </div>
+            <ChevronLeft size="24" />
+          </button>
+        )}
 
-      {showScrollButtons && (
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
-          aria-label="Scroll right"
+        <div
+          ref={tabsRef}
+          className="scrollbar-hide flex justify-between gap-4 overflow-x-auto py-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <ChevronRight size="24" />
-        </button>
-      )}
-    </nav>
+          {tabs.map((tab, index) => (
+            <Link
+              key={index}
+              href={tab.link}
+              className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors ${
+                pathname === tab.link
+                  ? "bg-[#EFF6FF] text-brandColor"
+                  : "text-[#6B7280]"
+              }`}
+            >
+              {tab.icon}
+              <h2>{tab.title}</h2>
+            </Link>
+          ))}
+        </div>
+
+        {showScrollButtons && (
+          <button
+            onClick={() => scroll("right")}
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-1 shadow-md"
+            aria-label="Scroll right"
+          >
+            <ChevronRight size="24" />
+          </button>
+        )}
+      </nav>
+    </div>
   );
 };
