@@ -163,30 +163,22 @@ const NavBar = () => {
           className="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 lg:block"
           aria-labelledby="hs-header-base-collapse"
         >
-          <div className="max-h-[75vh] overflow-hidden overflow-y-auto [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
-            <div className="flex flex-col gap-0.5 py-2 lg:flex-row lg:items-center lg:gap-1 lg:py-0">
+          <div className="max-h-[75vh] overflow-visible lg:overflow-visible [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-2">
+            <div className="relative flex flex-col gap-0.5 py-2 lg:flex-row lg:items-center lg:gap-1 lg:py-0">
               <div className="flex grow flex-col gap-9 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                 <div className="m-2 flex flex-col gap-0.5 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   {NAV_ITEMS.map(renderNavItem)}
                 </div>
 
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="font-Groteskbold h-auto border border-[#7B7B7B] px-6 py-4 text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
-                  >
-                    <Link
-                      href={
-                        !userId
-                          ? webRoutes.partners
-                          : dashboardRoutes.client_order_history
-                      }
+                {!userId ? (
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="font-Groteskbold h-auto border border-[#7B7B7B] px-6 py-4 text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
                     >
-                      {!userId ? "Join as a Partner" : "Dashboard"}
-                    </Link>
-                  </Button>
-                  {!userId ? (
+                      <Link href={webRoutes.partners}>Join as a Partner</Link>
+                    </Button>
                     <Button
                       type="button"
                       className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal"
@@ -194,105 +186,101 @@ const NavBar = () => {
                     >
                       <Link href={authRoutes.register}>Register/Log in</Link>
                     </Button>
-                  ) : (
-                    <div className="flex gap-5 py-2">
-                      <Link
-                        href={dashboardRoutes.client_notifications}
-                        className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+                  </div>
+                ) : (
+                  <div className="flex gap-5 py-2">
+                    <Link
+                      href={dashboardRoutes.client_notifications}
+                      className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+                    >
+                      <BellDot size="24" strokeWidth={1.5} />
+                    </Link>
+
+                    <div className="static lg:relative" ref={dropdownRef}>
+                      <button
+                        type="button"
+                        className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
+                        onClick={() => setShowDropdown(!showDropdown)}
                       >
-                        <BellDot size="24" strokeWidth={1.5} />
-                      </Link>
+                        <Image
+                          alt="Avatar"
+                          src={
+                            !user?.profile_picture
+                              ? avatar
+                              : user?.profile_picture
+                          }
+                          width={50}
+                          height={50}
+                          className="rounded-md"
+                          objectFit="contain"
+                        />
+                      </button>
 
-                      <div className="relative" ref={dropdownRef}>
-                        <button
-                          type="button"
-                          className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
-                          onClick={() => setShowDropdown(!showDropdown)}
+                      {showDropdown && (
+                        <div
+                          className="fixed right-4 top-[70px] z-[9999] grid w-[250px] gap-6 rounded-[10px] bg-white p-5 shadow-lg sm:w-[300px] lg:fixed lg:right-[100px] xl:right-[150px]"
+                          style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
                         >
-                          <Image
-                            alt="Avatar"
-                            src={
-                              !user?.profile_picture
-                                ? avatar
-                                : user?.profile_picture
-                            }
-                            width={50}
-                            height={50}
-                            className="rounded-md"
-                            objectFit="contain"
-                          />
-                        </button>
-
-                        {showDropdown && (
-                          <div
-                            className="absolute right-0 mt-2 grid w-[250px] gap-6 rounded-[10px] bg-white p-5 sm:w-[300px]"
-                            style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
+                          <Link
+                            href={dashboardRoutes.client_order_history}
+                            className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
                           >
-                            <div className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700">
-                              <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
-                                <Image
-                                  alt="Avatar"
-                                  src="https://picsum.photos/200"
-                                  width={20}
-                                  height={20}
-                                  className="rounded-full"
-                                  objectFit="cover"
-                                />
-                              </span>
-                              <span className="text-lg font-medium leading-4 text-brandColor">
-                                Sarah Williams
-                              </span>
-                            </div>
+                            <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
+                              <Image
+                                alt="Avatar"
+                                src="https://picsum.photos/200"
+                                width={20}
+                                height={20}
+                                className="rounded-full"
+                                objectFit="cover"
+                              />
+                            </span>
+                            <span className="text-lg font-medium leading-4 text-brandColor">
+                              Sarah Williams
+                            </span>
+                          </Link>
 
-                            <Link
-                              href={webRoutes.partners}
-                              className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                            >
-                              <span className="mr-2 inline-block">
-                                <Handshake size={20} />
-                              </span>
-                              <span className="font-medium leading-6">
-                                Become a Partner
-                              </span>
-                            </Link>
+                          <Link
+                            href={webRoutes.partners}
+                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                          >
+                            <span className="mr-2 inline-block">
+                              <Handshake size={20} />
+                            </span>
+                            <span className="font-medium leading-6">
+                              Become a Partner
+                            </span>
+                          </Link>
 
-                            <Link
-                              href={dashboardRoutes.vendor_overview}
-                              className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                            >
-                              <span className="mr-2 inline-block">
-                                <ArrowRightLeft size={20} />
-                              </span>
-                              <span className="font-medium leading-6">
-                                Switch to Vendor account
-                              </span>
-                            </Link>
+                          <Link
+                            href={dashboardRoutes.vendor_overview}
+                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                          >
+                            <span className="mr-2 inline-block">
+                              <ArrowRightLeft size={20} />
+                            </span>
+                            <span className="font-medium leading-6">
+                              Switch to Vendor account
+                            </span>
+                          </Link>
 
-                            <button
-                              type="button"
-                              onClick={logout}
-                              className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                            >
-                              <span className="mr-2 inline-block">
-                                <LogOut size={20} />
-                              </span>
-                              <span className="font-medium leading-6">
-                                Logout
-                              </span>
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                          <button
+                            type="button"
+                            onClick={logout}
+                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                          >
+                            <span className="mr-2 inline-block">
+                              <LogOut size={20} />
+                            </span>
+                            <span className="font-medium leading-6">
+                              Logout
+                            </span>
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    // <Button
-                    //   type="button"
-                    //   className="h-auto bg-brandColor px-12 py-2 font-Groteskbold text-lg font-normal"
-                    //   onClick={logout}
-                    // >
-                    //   Logout
-                    // </Button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

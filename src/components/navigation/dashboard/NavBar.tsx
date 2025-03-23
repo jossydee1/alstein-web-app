@@ -62,7 +62,10 @@ const NavBar = () => {
                 className="absolute right-0 mt-2 grid w-[250px] gap-6 rounded-[10px] bg-white p-5 sm:w-[300px]"
                 style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
               >
-                <div className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700">
+                <Link
+                  href={dashboardRoutes.client_order_history}
+                  className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
+                >
                   <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                     <Image
                       alt="Avatar"
@@ -76,7 +79,7 @@ const NavBar = () => {
                   <span className="text-lg font-medium leading-4 text-brandColor">
                     Sarah Williams
                   </span>
-                </div>
+                </Link>
 
                 <Link
                   href={webRoutes.partners}
