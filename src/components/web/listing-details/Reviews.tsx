@@ -5,7 +5,7 @@ import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import photo from "@/public/images/business.png";
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
+import { Check, Loader2, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -15,7 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { api, authRoutes } from "@/utils";
+import { api, authRoutes, formatError } from "@/utils";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
@@ -40,6 +40,8 @@ const Reviews = ({
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
+  const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
+  const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
 
   const handleShowAllReviews = () => {
     if (filteredReviews.length === reviews.length) {
@@ -49,11 +51,41 @@ const Reviews = ({
     }
   };
 
+  const handleRatingSubmit = async (score: number) => {
+    try {
+      setIsRatingSubmitting(true);
+      setRating(score);
+
+      const response = await api.post(
+        "/partner/public/api/v1/ratings/submit-rating-score",
+        {
+          score: score,
+          partner_id: partnerId,
+        },
+      );
+
+      if (response.status === 200) {
+        toast.success("Rating submitted successfully");
+        setIsRatingSubmitted(true);
+      } else {
+        toast.error(
+          formatError(response.data.message) || "Failed to submit rating",
+        );
+        setIsRatingSubmitted(false);
+      }
+    } catch (error) {
+      toast.error(formatError(error));
+      setIsRatingSubmitted(false);
+    } finally {
+      setIsRatingSubmitting(false);
+    }
+  };
+
   const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!comment || !rating) {
-      toast.error("Please give a rating and write a review");
+    if (!comment) {
+      toast.error("Please write a review");
       return;
     }
 
@@ -63,7 +95,6 @@ const Reviews = ({
         JSON.stringify({
           partner_id: partnerId,
           comments: comment,
-          rating: rating,
           profile_id: userId,
         }),
       );
@@ -75,7 +106,6 @@ const Reviews = ({
       {
         partner_id: partnerId,
         comments: comment,
-        // rating: rating,
         profile_id: userId,
       },
       {
@@ -83,10 +113,9 @@ const Reviews = ({
       },
     );
 
-    if (response.data.status === "successful") {
+    if (response.status === 200) {
       toast.success("Review submitted successfully");
       setComment("");
-      setRating(0);
       localStorage.removeItem("review");
     } else {
       toast.error("Failed to submit review");
@@ -202,15 +231,20 @@ const Reviews = ({
           <form onSubmit={handleWriteReview}>
             <div className="mb-4">
               <label className="mb-16 text-sm text-[#354259]">
-                How was you experience?
+                How was your experience?
               </label>
-              <div className="mt-2 flex gap-1">
+              <div className="mt-2 flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
                     key={star}
                     type="button"
-                    onClick={() => setRating(star)}
+                    onClick={() =>
+                      !isRatingSubmitted &&
+                      !isRatingSubmitting &&
+                      handleRatingSubmit(star)
+                    }
                     className="p-1"
+                    disabled={isRatingSubmitting || isRatingSubmitted}
                     aria-label={`Rate ${star} stars`}
                   >
                     <Star
@@ -218,11 +252,21 @@ const Reviews = ({
                         star <= rating
                           ? "fill-[#FB9506] text-[#FB9506]"
                           : "fill-[#EBEDEF] text-[#354259]"
-                      } transition-colors`}
+                      } ${isRatingSubmitting || isRatingSubmitted ? "opacity-70" : ""} transition-colors`}
                       size={24}
                     />
                   </button>
                 ))}
+                {isRatingSubmitting && (
+                  <span className="ml-2 text-sm text-gray-500">
+                    <Loader2 className="animate-spin" />
+                  </span>
+                )}
+                {isRatingSubmitted && (
+                  <span className="ml-2 text-sm text-green-600">
+                    <Check />
+                  </span>
+                )}
               </div>
             </div>
 
@@ -244,13 +288,6 @@ const Reviews = ({
             </div>
 
             <div className="mt-4 flex gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                className="flex-1 px-6 py-2.5 font-medium text-[#031330]"
-              >
-                Cancel
-              </Button>
               <Button
                 type="submit"
                 variant="outline"
