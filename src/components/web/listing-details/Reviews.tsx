@@ -139,7 +139,7 @@ const Reviews = ({
             className="text-5xl font-[500] text-[#5D5D5D]"
             aria-label="Average Rating"
           >
-            {averageRating}
+            {averageRating.toFixed(1)}
           </p>
         </div>
       </div>
