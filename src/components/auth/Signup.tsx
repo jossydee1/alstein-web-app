@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
@@ -26,6 +26,24 @@ const SignupContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userId, setUserId] = useState("");
+  const [redirectErrorMessage, setRedirectErrorMessage] = useState("");
+
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const step = searchParams.get("step");
+
+  console.log("id", id);
+  console.log("step", step);
+
+  useEffect(() => {
+    if (id && step === "2") {
+      setCurrentStep(2);
+      setUserId(id);
+      setRedirectErrorMessage(
+        "Your account is not activated. An OTP has been sent to your email",
+      );
+    }
+  }, [id, step]);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -46,6 +64,7 @@ const SignupContent = () => {
             setUserId={setUserId}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            redirectErrorMessage={redirectErrorMessage}
           />
         );
       case 3:
@@ -331,12 +350,14 @@ const OTP = ({
   userId,
   isSubmitting,
   setIsSubmitting,
+  redirectErrorMessage,
 }: {
   nextStep: () => void;
   userId: string;
   setUserId: (userId: string) => void;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
+  redirectErrorMessage: string;
 }) => {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
@@ -386,6 +407,7 @@ const OTP = ({
   return (
     <FormLayout step={2} title="Verify OTP">
       <form onSubmit={handleSubmit}>
+        <ErrorMessage error={redirectErrorMessage} />
         <ErrorMessage error={error} />
 
         <div className={style.inputGroup}>

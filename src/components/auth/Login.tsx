@@ -56,7 +56,14 @@ const LoginContent = () => {
         setPassword("");
         router.push(dashboardRoutes.client_order_history);
       }
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error?.response?.status === 409) {
+        router.push(
+          `${authRoutes.signup}?step=2&id=${error?.response?.data?.id}`,
+        );
+        return;
+      }
       setError(formatError(error, "An error occurred during login"));
     } finally {
       setIsSubmitting(false);
