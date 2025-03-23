@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ListingDetailsSkeleton = () => {
   return (
-    <div>
+    <div className="section-container !pb-9 !pt-0">
       {/* Breadcrumbs Skeleton */}
       <div className="container mx-auto mb-4 flex items-center gap-2 py-4">
         <Skeleton className="h-4 w-20" />

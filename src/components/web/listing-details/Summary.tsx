@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/utils";
+import { formatPrice, webRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from "next/link";
 
 const Summary = ({
   listingInfo,
@@ -76,13 +77,16 @@ const Summary = ({
 
       <div>
         <Button
+          asChild
           type="button"
           className="h-auto w-full !p-3"
           style={{
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
         >
-          Proceed to Checkout
+          <Link href={`${webRoutes.checkout}?id=${listingInfo?.id}`}>
+            Proceed to Checkout
+          </Link>
         </Button>
         <p className="mt-3 text-center text-sm leading-[16px] text-[#73A90D]">
           No payment required yet
