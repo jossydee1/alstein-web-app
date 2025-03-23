@@ -239,7 +239,7 @@ html {
 }
 
 .dashboard-section-card {
-  @apply rounded-[25px] border-[0.2px] border-[#9CA3AF] px-8 py-6;
+  @apply rounded-[25px] border-[0.2px] border-gray-400 px-8 py-6;
 }
 
 .dashboard-section-card-header {
@@ -261,12 +261,12 @@ html {
     @apply block font-semibold text-[#696F79];
   }
   input {
-    @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79];
+    @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
   }
 }
 
 .inputGroupPhone {
-  @apply flex w-full items-center space-x-2.5 rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500;
+  @apply flex w-full items-center space-x-2.5 rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:text-[#9CA3AF];
   select,
   input {
     @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
