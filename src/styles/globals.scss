@@ -239,7 +239,7 @@ html {
 }
 
 .dashboard-section-card {
-  @apply rounded-[25px] border-[0.2px] border-[#9CA3AF] px-8 py-6;
+  @apply rounded-[25px] border-[0.2px] border-gray-400 px-8 py-6;
 }
 
 .dashboard-section-card-header {
@@ -252,4 +252,52 @@ html {
 
 .dashboard-section-card-description {
   @apply text-[#6B7280];
+}
+
+// to style the inputs, labels, and buttons in forms
+.inputGroup {
+  @apply w-full space-y-2.5;
+  label {
+    @apply block font-semibold text-[#696F79];
+  }
+  input {
+    @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
+  }
+}
+
+.inputGroupPhone {
+  @apply flex w-full items-center space-x-2.5 rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:text-[#9CA3AF];
+  select,
+  input {
+    @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
+  }
+  input {
+    @apply border-r-0;
+  }
+  select {
+    @apply inline-block w-[120px] !border-r border-[#BCC0C7];
+  }
+
+  .customSelect {
+    @apply relative h-full w-[100px];
+
+    select {
+      @apply absolute inset-0 z-10 w-full cursor-pointer appearance-none opacity-0;
+    }
+
+    .selectedFlag {
+      @apply inline-block w-full border-r border-[#BCC0C7] pr-2;
+    }
+  }
+}
+
+.inputGroupCheckbox {
+  @apply flex w-full items-center space-x-2.5;
+  label {
+    @apply text-[#696F79];
+  }
+}
+
+.submitButton {
+  @apply h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-[#454545];
 }

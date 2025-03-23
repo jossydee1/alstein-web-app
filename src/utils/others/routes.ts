@@ -4,6 +4,7 @@ export const webRoutes = {
   categories: "/#categories",
   listings: "/listings",
   partners: "/partners",
+  checkout: "/checkout",
   contact: "/contact",
   blog: "/blog",
   terms: "/terms",

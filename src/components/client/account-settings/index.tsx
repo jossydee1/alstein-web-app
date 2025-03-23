@@ -38,26 +38,19 @@ const AccountSettingsContent = () => {
           </div>
           <div className="flex-1">
             <h2 className="dashboard-section-card-title !text-lg">
-              Deactivate or Delete Account
+              Deactivate Account
             </h2>
             <p className="dashboard-section-card-description">
-              Take a break or permanently delete your account if needed
+              Take a break from your account if needed
             </p>
 
             <div className="mt-6 flex gap-2.5">
               <Button
                 variant="outline"
                 type="button"
-                className="border border-[#6B7280] text-[#6B7280] hover:bg-[#6B7280] hover:text-white"
+                className="border border-[#E5E7EB] bg-red-500 text-white hover:bg-red-600 hover:text-white"
               >
                 Deactivate
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="border border-[#E5E7EB] text-[#EF4444] hover:bg-[#EF4444] hover:text-white"
-              >
-                Delete
               </Button>
             </div>
           </div>

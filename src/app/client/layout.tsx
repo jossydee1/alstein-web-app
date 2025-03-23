@@ -50,7 +50,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         <div className="section-container-dashboard grid gap-y-6">
           <Greetings />
           <LinkTab tabs={tabItems} />
-          {children}
+          <div className="w-full overflow-x-auto">{children}</div>
         </div>
       </div>
     </div>
