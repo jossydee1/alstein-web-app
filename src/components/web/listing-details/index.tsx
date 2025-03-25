@@ -113,6 +113,7 @@ const ListingDetailsContent = () => {
 
         <Reviews
           partnerId={listingInfo.partner_id}
+          listingId={listingInfo.id}
           averageRating={rating?._avg?.score || 0}
         />
       </main>

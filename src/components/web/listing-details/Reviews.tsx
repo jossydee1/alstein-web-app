@@ -29,9 +29,11 @@ const PAGINATION_STYLES = {
 const Reviews = ({
   partnerId,
   averageRating,
+  listingId,
 }: {
   partnerId: string;
   averageRating: number;
+  listingId: string;
 }) => {
   const { userId, token } = useAuth();
 
@@ -41,6 +43,7 @@ const Reviews = ({
   const [comment, setComment] = useState("");
   const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
   const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
+  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
 
   const handleShowAllReviews = () => {
@@ -101,11 +104,14 @@ const Reviews = ({
       redirect(authRoutes.login);
     }
 
+    setIsCommentSubmitting(true);
+
     const response = await api.post(
       `/partner/api/v1/comments/create-comment`,
       {
-        partner_id: partnerId,
         comments: comment,
+        partner_id: partnerId,
+        equipment_id: listingId,
         profile_id: userId,
       },
       {
@@ -116,9 +122,11 @@ const Reviews = ({
     if (response.status === 200) {
       toast.success("Review submitted successfully");
       setComment("");
+      setIsCommentSubmitting(false);
       localStorage.removeItem("review");
     } else {
       toast.error("Failed to submit review");
+      setIsCommentSubmitting(false);
     }
   };
 
@@ -291,7 +299,8 @@ const Reviews = ({
               <Button
                 type="submit"
                 variant="outline"
-                className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white"
+                className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white disabled:opacity-50"
+                disabled={isCommentSubmitting}
               >
                 Submit
               </Button>
