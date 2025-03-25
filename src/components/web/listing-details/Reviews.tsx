@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import photo from "@/public/images/business.png";
 import { Button } from "@/components/ui/button";
-import { Check, Loader2, Star } from "lucide-react";
+import { Check, Loader, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -46,6 +46,16 @@ const Reviews = ({
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
 
+  useEffect(() => {
+    const storedComment = localStorage.getItem("comment");
+    const parsedComment = storedComment ? JSON.parse(storedComment) : null;
+
+    return () => {
+      setComment(parsedComment || "");
+      localStorage.removeItem("comment");
+    };
+  }, []);
+
   const handleShowAllReviews = () => {
     if (filteredReviews.length === reviews.length) {
       setFilteredReviews(reviews.slice(0, 2));
@@ -55,6 +65,10 @@ const Reviews = ({
   };
 
   const handleRatingSubmit = async (score: number) => {
+    if (!userId) {
+      redirect(authRoutes.login);
+    }
+
     try {
       setIsRatingSubmitting(true);
       setRating(score);
@@ -64,6 +78,8 @@ const Reviews = ({
         {
           score: score,
           partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
         },
       );
 
@@ -88,44 +104,41 @@ const Reviews = ({
     e.preventDefault();
 
     if (!comment) {
-      toast.error("Please write a review");
+      toast.error("Please write a comment");
       return;
     }
 
     if (!userId) {
-      localStorage.setItem(
-        "review",
-        JSON.stringify({
-          partner_id: partnerId,
-          comments: comment,
-          profile_id: userId,
-        }),
-      );
+      localStorage.setItem("comment", JSON.stringify(comment));
       redirect(authRoutes.login);
     }
 
-    setIsCommentSubmitting(true);
+    try {
+      setIsCommentSubmitting(true);
+      const response = await api.post(
+        `/partner/api/v1/comments/create-comment`,
+        {
+          comments: comment,
+          partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-    const response = await api.post(
-      `/partner/api/v1/comments/create-comment`,
-      {
-        comments: comment,
-        partner_id: partnerId,
-        equipment_id: listingId,
-        profile_id: userId,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    if (response.status === 200) {
-      toast.success("Review submitted successfully");
-      setComment("");
+      if (response.status === 200) {
+        toast.success("Comment submitted successfully");
+        setComment("");
+        setIsCommentSubmitting(false);
+        localStorage.removeItem("review");
+        return;
+      }
+    } catch (error) {
+      toast.error(formatError(error));
       setIsCommentSubmitting(false);
-      localStorage.removeItem("review");
-    } else {
-      toast.error("Failed to submit review");
+    } finally {
       setIsCommentSubmitting(false);
     }
   };
@@ -231,7 +244,10 @@ const Reviews = ({
           </Button>
         </div>
 
-        <div className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0">
+        <div
+          id="rating"
+          className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
+        >
           <h3 className="text-xl font-semibold text-[#010814]">
             Share your feedback
           </h3>
@@ -267,7 +283,7 @@ const Reviews = ({
                 ))}
                 {isRatingSubmitting && (
                   <span className="ml-2 text-sm text-gray-500">
-                    <Loader2 className="animate-spin" />
+                    <Loader className="animate-spin" />
                   </span>
                 )}
                 {isRatingSubmitted && (
