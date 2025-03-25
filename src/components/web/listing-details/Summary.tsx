@@ -46,7 +46,7 @@ const Summary = ({
                 Start Date
               </span>
               <span className="text-sm font-semibold uppercase">
-                {date?.from?.toLocaleDateString()}
+                {date?.from?.toLocaleDateString() || "-"}
               </span>
             </button>
           </PopoverTrigger>
@@ -68,7 +68,7 @@ const Summary = ({
                 End Date
               </span>
               <span className="text-sm font-semibold uppercase">
-                {date?.to?.toLocaleDateString()}
+                {date?.to?.toLocaleDateString() || "-"}
               </span>
             </button>
           </PopoverTrigger>
