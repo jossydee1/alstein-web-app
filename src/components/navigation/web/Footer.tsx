@@ -12,12 +12,14 @@ import {
   Mail,
   Earth,
   ArrowRight,
+  Loader,
 } from "lucide-react";
-import { webRoutes } from "@/utils";
+import { api, webRoutes } from "@/utils";
 import Link from "next/link";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import site from "@/site.metadata";
 import { Button } from "@/components/ui/button";
+import { toast } from "react-toastify";
 
 const quickLinks = [
   { name: "About Us", href: webRoutes.about },
@@ -37,9 +39,34 @@ export const Footer = () => {
     "cursor-pointer text-sm font-medium leading-[24px] transition-colors hover:text-white flex items-center gap-2";
   const iconStyle = "transition-colors hover:text-white";
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Submitted");
+
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const response = await api.post(
+      `/client/public/api/v1/meta/add-email-to-mailing-list`,
+      {
+        email,
+      },
+    );
+
+    if (response.status === 200) {
+      toast.success("You have successfully subscribed to our newsletter");
+      setEmail("");
+      setIsLoading(false);
+    } else {
+      toast.error("Failed to submit review");
+      setIsLoading(false);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -133,24 +160,31 @@ export const Footer = () => {
               onSubmit={e => handleSubmit(e)}
             >
               <label
-                htmlFor="region"
+                htmlFor="email"
                 className="w-full flex-1 rounded-sm border-none"
               >
                 <input
                   className="w-full border-none bg-transparent focus:outline-none focus:ring-0"
                   type="email"
-                  name="region"
-                  id="region"
+                  name="email"
+                  id="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   required
                   placeholder="email@example.com"
                 />
               </label>
 
               <Button
-                type="button"
+                type="submit"
+                disabled={isLoading}
                 className="flex min-h-[44px] max-w-[44px] items-center justify-center bg-brandColor px-6 py-4 hover:bg-white hover:text-[#454545] md:w-auto"
               >
-                <ArrowRight size="40" className="" />
+                {isLoading ? (
+                  <Loader className="animate-spin" size={20} />
+                ) : (
+                  <ArrowRight size="40" className="" />
+                )}
               </Button>
             </form>
           </div>
