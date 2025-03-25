@@ -15,10 +15,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { api, authRoutes, formatError } from "@/utils";
+import { api, authRoutes, formatError, webRoutes } from "@/utils";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 const PAGINATION_STYLES = {
   content: "flex justify-center gap-3",
@@ -36,6 +37,8 @@ const Reviews = ({
   listingId: string;
 }) => {
   const { userId, token } = useAuth();
+  const searchParams = useSearchParams();
+  const savedComment = searchParams.get("comment");
 
   const reviews = [1, 1, 1, 1, 1];
 
@@ -47,14 +50,12 @@ const Reviews = ({
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
 
   useEffect(() => {
-    const storedComment = localStorage.getItem("comment");
-    const parsedComment = storedComment ? JSON.parse(storedComment) : null;
+    if (savedComment) {
+      setComment(savedComment);
+    }
+  }, [savedComment]);
 
-    return () => {
-      setComment(parsedComment || "");
-      localStorage.removeItem("comment");
-    };
-  }, []);
+  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
   const handleShowAllReviews = () => {
     if (filteredReviews.length === reviews.length) {
@@ -66,7 +67,7 @@ const Reviews = ({
 
   const handleRatingSubmit = async (score: number) => {
     if (!userId) {
-      redirect(authRoutes.login);
+      redirect(redirectUrl);
     }
 
     try {
@@ -109,8 +110,7 @@ const Reviews = ({
     }
 
     if (!userId) {
-      localStorage.setItem("comment", JSON.stringify(comment));
-      redirect(authRoutes.login);
+      redirect(redirectUrl);
     }
 
     try {
@@ -132,7 +132,6 @@ const Reviews = ({
         toast.success("Comment submitted successfully");
         setComment("");
         setIsCommentSubmitting(false);
-        localStorage.removeItem("review");
         return;
       }
     } catch (error) {
@@ -245,7 +244,7 @@ const Reviews = ({
         </div>
 
         <div
-          id="rating"
+          id="review-form"
           className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
         >
           <h3 className="text-xl font-semibold text-[#010814]">
