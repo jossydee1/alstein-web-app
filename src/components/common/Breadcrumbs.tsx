@@ -21,9 +21,13 @@ export const Breadcrumbs = ({
             <React.Fragment key={index}>
               <BreadcrumbItem>
                 {index < links.length - 1 ? (
-                  <BreadcrumbLink href={link.link}>{link.title}</BreadcrumbLink>
+                  <BreadcrumbLink href={link.link} className="capitalize">
+                    {link.title || "..."}
+                  </BreadcrumbLink>
                 ) : (
-                  <BreadcrumbPage>{link.title}</BreadcrumbPage>
+                  <BreadcrumbPage className="capitalize">
+                    {link.title || "..."}
+                  </BreadcrumbPage>
                 )}
               </BreadcrumbItem>
               {index < links.length - 1 && <BreadcrumbSeparator />}
