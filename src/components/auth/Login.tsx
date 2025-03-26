@@ -12,7 +12,7 @@ import {
   webRoutes,
 } from "@/utils";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
@@ -21,6 +21,11 @@ import { useScrollToID } from "@/hooks";
 
 const LoginContent = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
+  const idParam = searchParams.get("id");
+  const comment = searchParams.get("comment");
+
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -54,7 +59,16 @@ const LoginContent = () => {
         login(response.data);
         setEmail("");
         setPassword("");
-        router.push(dashboardRoutes.client_order_history);
+
+        if (redirectUrl) {
+          const url = decodeURIComponent(redirectUrl);
+          const redirectWithParams = comment
+            ? `${url}?comment=${encodeURIComponent(comment)}#${idParam}`
+            : `${url}#${idParam}`;
+          router.push(redirectWithParams);
+        } else {
+          router.push(dashboardRoutes.client_order_history);
+        }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

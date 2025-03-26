@@ -6,3 +6,34 @@ export interface CertsProps {
   image: StaticImageData;
   download_url: string;
 }
+
+export interface PartnerProps {
+  id: string;
+  name: string;
+  logo: string;
+  bio: string;
+  website: string;
+  city: string;
+  state: string;
+  country: string;
+  address: string;
+  longitude: string;
+  latitude: string;
+  type: string;
+  specializations: string;
+  mission: string;
+  support_email: string;
+  support_number: string;
+  is_verified: boolean;
+  created_at: string;
+  updated_at: string;
+  status: string;
+  profile_id: string;
+  profile: {
+    first_name: string;
+    last_name: string;
+    user_avatar: string | null;
+    id: string;
+  };
+  partner_doc: CertsProps[];
+}

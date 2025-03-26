@@ -5,7 +5,13 @@ import React, { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SearchForm } from "@/components/common";
 
-const Hero = () => {
+const Hero = ({
+  partnersCount,
+  bookingsCount,
+}: {
+  partnersCount: number;
+  bookingsCount: number;
+}) => {
   const router = useRouter();
 
   const [equipment, setEquipment] = useState("");
@@ -67,7 +73,9 @@ const Hero = () => {
                 }}
               >
                 <div>
-                  <p className="text-[64px] font-light leading-none">27</p>
+                  <p className="text-[64px] font-light leading-none">
+                    {partnersCount}
+                  </p>
                   <h2 className="text-lg leading-none">Partner Labs</h2>
                 </div>
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#DEDEDE] text-[#494A4A]">
@@ -83,7 +91,9 @@ const Hero = () => {
                 }}
               >
                 <div>
-                  <p className="text-[64px] font-light leading-none">537</p>
+                  <p className="text-[64px] font-light leading-none">
+                    {bookingsCount}
+                  </p>
                   <h2 className="text-lg leading-none">Successful Bookings</h2>
                 </div>
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#DEDEDE] text-[#494A4A]">

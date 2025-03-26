@@ -7,9 +7,7 @@ import avatar from "@/public/icons/avatar.svg";
 import { Edit } from "lucide-react";
 
 const Greetings = () => {
-  const { user, userId, token } = useAuth();
-
-  console.log(user, userId, token);
+  const { user } = useAuth();
 
   return (
     <header className="grid gap-y-6">

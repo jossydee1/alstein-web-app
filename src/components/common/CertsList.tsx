@@ -8,7 +8,9 @@ import { CertsModal } from "./modals";
 export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  return (
+  return certs.length === 0 ? (
+    <p className="text-[#8B8B8B]">No certifications available.</p>
+  ) : (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {certs.map((p, index) => (
         <div key={index}>

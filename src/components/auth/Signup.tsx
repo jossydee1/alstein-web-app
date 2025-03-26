@@ -32,9 +32,6 @@ const SignupContent = () => {
   const id = searchParams.get("id");
   const step = searchParams.get("step");
 
-  console.log("id", id);
-  console.log("step", step);
-
   useEffect(() => {
     if (id && step === "2") {
       setCurrentStep(2);

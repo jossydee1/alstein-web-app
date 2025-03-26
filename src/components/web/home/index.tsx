@@ -21,9 +21,19 @@ const HomeContent = ({
     "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   );
 
+  const { data: partnersCount } = useClientFetch<{ count: number }>(
+    "/client/public/api/v1/meta/get-total-partner",
+  );
+  const { data: bookingsCount } = useClientFetch<{ count: number }>(
+    "/client/public/api/v1/booking/get-bookings-count",
+  );
+
   return (
     <main>
-      <Hero />
+      <Hero
+        partnersCount={partnersCount?.count ?? 0}
+        bookingsCount={bookingsCount?.count ?? 0}
+      />
       <WhyUs />
       <Categories categories={categories} />
       <Listings listings={listings || []} isLoading={isLoading} />

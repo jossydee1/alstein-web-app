@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
-import photo from "@/public/images/business.png";
+import avatar from "@/public/icons/avatar.svg";
 import { Button } from "@/components/ui/button";
-import { Check, Loader2, Star } from "lucide-react";
+import { Check, Loader, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -15,10 +15,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { api, authRoutes, formatError } from "@/utils";
+import {
+  api,
+  authRoutes,
+  formatDateToRelative,
+  formatError,
+  webRoutes,
+} from "@/utils";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
+import { CommentProps } from "@/types";
 
 const PAGINATION_STYLES = {
   content: "flex justify-center gap-3",
@@ -29,29 +37,59 @@ const PAGINATION_STYLES = {
 const Reviews = ({
   partnerId,
   averageRating,
+  listingId,
+  comments,
+  refetchRating,
+  refetchComments,
 }: {
   partnerId: string;
   averageRating: number;
+  listingId: string;
+  comments: CommentProps[];
+  refetchRating: () => void;
+  refetchComments: () => void;
 }) => {
   const { userId, token } = useAuth();
+  const searchParams = useSearchParams();
+  const savedComment = searchParams.get("comment");
 
-  const reviews = [1, 1, 1, 1, 1];
+  const sortedComments = useMemo(
+    () =>
+      [...comments].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    [comments],
+  );
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
   const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
+  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const filteredReviews = showAllReviews
+    ? sortedComments
+    : sortedComments.slice(0, 2);
+
+  useEffect(() => {
+    if (savedComment) {
+      setComment(savedComment);
+    }
+  }, [savedComment]);
+
+  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
   const handleShowAllReviews = () => {
-    if (filteredReviews.length === reviews.length) {
-      setFilteredReviews(reviews.slice(0, 2));
-    } else {
-      setFilteredReviews(reviews);
-    }
+    setShowAllReviews(prev => !prev);
   };
 
   const handleRatingSubmit = async (score: number) => {
+    if (!userId) {
+      redirect(redirectUrl);
+    }
+
     try {
       setIsRatingSubmitting(true);
       setRating(score);
@@ -61,12 +99,18 @@ const Reviews = ({
         {
           score: score,
           partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
       if (response.status === 200) {
         toast.success("Rating submitted successfully");
         setIsRatingSubmitted(true);
+        refetchRating();
       } else {
         toast.error(
           formatError(response.data.message) || "Failed to submit rating",
@@ -85,40 +129,41 @@ const Reviews = ({
     e.preventDefault();
 
     if (!comment) {
-      toast.error("Please write a review");
+      toast.error("Please write a comment");
       return;
     }
 
     if (!userId) {
-      localStorage.setItem(
-        "review",
-        JSON.stringify({
-          partner_id: partnerId,
-          comments: comment,
-          profile_id: userId,
-        }),
-      );
-      redirect(authRoutes.login);
+      redirect(redirectUrl);
     }
 
-    const response = await api.post(
-      `/partner/api/v1/comments/create-comment`,
-      {
-        partner_id: partnerId,
-        comments: comment,
-        profile_id: userId,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    try {
+      setIsCommentSubmitting(true);
+      const response = await api.post(
+        `/partner/api/v1/comments/create-comment`,
+        {
+          comments: comment,
+          partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-    if (response.status === 200) {
-      toast.success("Review submitted successfully");
-      setComment("");
-      localStorage.removeItem("review");
-    } else {
-      toast.error("Failed to submit review");
+      if (response.status === 200) {
+        toast.success("Comment submitted successfully");
+        setComment("");
+        setIsCommentSubmitting(false);
+        refetchComments();
+        return;
+      }
+    } catch (error) {
+      toast.error(formatError(error));
+      setIsCommentSubmitting(false);
+    } finally {
+      setIsCommentSubmitting(false);
     }
   };
 
@@ -146,30 +191,36 @@ const Reviews = ({
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
         <div>
-          <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
-            {filteredReviews.map((_, i) => (
-              <div key={i}>
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={photo}
-                    alt="Business"
-                    className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-[#404040]">
-                      Ikechukwu Jude
-                    </h3>
-                    <p className="font-medium text-[#404040]">1 month ago</p>
+          {sortedComments.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No reviews yet, be the first one!
+            </p>
+          ) : (
+            <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
+              {filteredReviews.map(r => (
+                <div key={r.id}>
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={r.profiles.user_avatar || avatar}
+                      alt={r.profiles.user_avatar || "User Avatar"}
+                      width={58}
+                      height={58}
+                      className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-[#404040]">
+                        {r.profiles.first_name} {r.profiles.last_name}
+                      </h3>
+                      <p className="font-medium text-[#404040]">
+                        {formatDateToRelative(r.created_at)}
+                      </p>
+                    </div>
                   </div>
+                  <p className="mt-3 text-[#4E4E4E]">{r.comments}</p>
                 </div>
-                <p className="mt-3 text-[#4E4E4E]">
-                  I recently booked an equipment through Alstein and was
-                  incredibly impressed with the experience. The process was
-                  seamless and efficient, saving me a lot of time.
-                </p>{" "}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {filteredReviews.length > 20 && (
             <Pagination className="mt-4 justify-start">
@@ -211,19 +262,22 @@ const Reviews = ({
             </Pagination>
           )}
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleShowAllReviews}
-            className="mt-8 w-fit px-6 py-2.5 font-medium text-[#031330]"
-          >
-            {filteredReviews.length === reviews.length
-              ? "Show less reviews"
-              : "Show all reviews"}
-          </Button>
+          {sortedComments.length > 2 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleShowAllReviews}
+              className="mt-8 w-fit px-6 py-2.5 font-medium text-[#031330]"
+            >
+              {showAllReviews ? "Show less reviews" : "Show all reviews"}
+            </Button>
+          )}
         </div>
 
-        <div className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0">
+        <div
+          id="review-form"
+          className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
+        >
           <h3 className="text-xl font-semibold text-[#010814]">
             Share your feedback
           </h3>
@@ -259,7 +313,7 @@ const Reviews = ({
                 ))}
                 {isRatingSubmitting && (
                   <span className="ml-2 text-sm text-gray-500">
-                    <Loader2 className="animate-spin" />
+                    <Loader className="animate-spin" />
                   </span>
                 )}
                 {isRatingSubmitted && (
@@ -291,7 +345,8 @@ const Reviews = ({
               <Button
                 type="submit"
                 variant="outline"
-                className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white"
+                className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white disabled:opacity-50"
+                disabled={isCommentSubmitting}
               >
                 Submit
               </Button>
