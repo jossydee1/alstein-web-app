@@ -19,18 +19,18 @@ export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
             onClick={() => setIsModalOpen(true)}
             className="block space-y-1.5 text-left"
           >
-            <h3 className="font-semibold text-[#343434]">{p.title}</h3>
-            <p>{p.description}</p>
+            <h3 className="font-semibold text-[#343434]">{p?.title}</h3>
+            <p>{p?.description}</p>
             <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-lg hover:shadow-lg">
               <Image
-                src={p.image}
-                alt={p.title}
+                src={p?.image}
+                alt={p?.title}
                 className="aspect-video h-[110px] w-auto rounded-lg object-cover transition-transform hover:scale-105"
               />
             </div>
           </button>
 
-          {isModalOpen && (
+          {p && isModalOpen && (
             <CertsModal cert={p} onClose={() => setIsModalOpen(false)} />
           )}
         </div>
