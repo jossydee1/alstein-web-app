@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Breadcrumbs } from "@/components/common";
-import { formatError, webRoutes } from "@/utils";
+import { formatError } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";
 import Certifications from "./Certifications";
@@ -41,11 +41,11 @@ const PartnerDetailsContent = () => {
   const links = [
     {
       title: "Partners",
-      link: webRoutes.partners,
+      link: "#",
     },
     {
       title: partnerData?.type.toLocaleLowerCase() || "...",
-      link: `${webRoutes.partners}?category=laboratory`,
+      link: "#",
     },
     {
       title: partnerData?.name || "...",
