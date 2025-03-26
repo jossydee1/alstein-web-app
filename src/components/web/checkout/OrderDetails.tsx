@@ -13,22 +13,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { PaystackButton } from "react-paystack";
+import { PaystackProps } from "react-paystack/dist/types";
 
 const OrderDetails = ({
   listingInfo,
   numberOfDays,
   date,
   setDate,
+  costPerDay,
+  serviceFee,
+  totalCost,
+  paystackProps,
+  isPaystackDisabled,
 }: {
   listingInfo: ListingsProps;
   numberOfDays: number;
   date: DateRange | undefined;
   setDate: (date: DateRange | undefined) => void;
+  costPerDay: number;
+  serviceFee: number;
+  totalCost: number;
+  paystackProps: PaystackProps;
+  isPaystackDisabled: boolean;
 }) => {
-  const costPerDay = listingInfo?.price / 100;
-  const serviceFee = 0;
-  const totalCost = costPerDay * numberOfDays + serviceFee;
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   return (
@@ -118,16 +126,21 @@ const OrderDetails = ({
         </p>
       </div>
 
-      <p className="rounded-[10px] bg-orange-50 p-4 font-medium text-orange-600">
-        N.B : Your card will be charged immediately your request is approved
-      </p>
-
-      <Button
-        type="submit"
-        className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 ring-2 ring-[#3B82F640]"
-      >
-        Complete Booking
-      </Button>
+      <div className="rounded-[10px] bg-orange-50 p-4 font-medium text-orange-600">
+        <p>
+          N.B : Please not that a refundable 50naira will be deducted from your
+          account to confim your card is working
+        </p>
+        <p>
+          The booking payment will not be deducted from your account until you
+          complete your booking
+        </p>
+      </div>
+      <PaystackButton
+        {...paystackProps}
+        className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
+        disabled={isPaystackDisabled}
+      />
     </div>
   );
 };

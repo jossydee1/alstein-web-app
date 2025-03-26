@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/common";
 import { formatError, webRoutes } from "@/utils";
-import { useClientFetch, useScrollToID } from "@/hooks";
+import { useClientFetch } from "@/hooks";
 import { ListingInfoProps } from "@/types";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import OrderDetails from "./OrderDetails";
@@ -21,29 +21,26 @@ const CONTAINER_STYLES = {
 export interface FormData {
   fullname: string;
   phone: string;
-  countryCode: string;
   email: string;
   address: string;
 }
 const CheckoutContent = () => {
   const { user } = useAuth();
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
-
   const [error] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
     phone: "",
-    countryCode: "",
     email: "",
     address: "",
   });
   const [date, setDate] = useState<DateRange | undefined>();
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
-
-  useScrollToID(error, "error");
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -60,7 +57,6 @@ const CheckoutContent = () => {
       setFormData({
         fullname: `${user.first_name} ${user.last_name}`,
         phone: user.phone_number,
-        countryCode: "",
         email: user.email,
         address: "",
       });
@@ -104,11 +100,52 @@ const CheckoutContent = () => {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // alert form data
-    alert(JSON.stringify(e.target));
+  const costPerDay = listingInfo?.price || 0;
+  const serviceFee = 0;
+  const totalCost = costPerDay * numberOfDays + serviceFee;
+
+  // paystack
+  const publicKey = "pk_test_b14df591038d0b42d030b17d377d8cb5fabce945";
+
+  const paystackProps = {
+    email: formData.email,
+    amount: totalCost,
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Name",
+          variable_name: "name",
+          value: formData.fullname,
+        },
+        {
+          display_name: "Phone",
+          variable_name: "phone",
+          value: formData.phone,
+        },
+      ],
+    },
+    publicKey,
+    text: "Complete Booking",
+    type: "button",
+    onSuccess: () =>
+      // alert("Thanks for doing business with us! Come back soon!!"),
+      router.push("/confirmation"),
+    onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
+
+  // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
+  const isPaystackDisabled =
+    !date?.from ||
+    !date?.to ||
+    Object.values(formData).some(value => value === "") ||
+    totalCost <= 0;
+
+  console.log({
+    date,
+    totalCost,
+    formData,
+    isPaystackDisabled,
+  });
 
   if (isLoading) return <ListingDetailsSkeleton />;
 
@@ -137,18 +174,20 @@ const CheckoutContent = () => {
       <Breadcrumbs links={links} />
 
       <main className={CONTAINER_STYLES.pt}>
-        <form
-          className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2"
-          onSubmit={handleSubmit}
-        >
+        <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
           <ShippingAddress formData={formData} setFormData={setFormData} />
           <OrderDetails
             listingInfo={listingInfo}
             numberOfDays={numberOfDays}
             setDate={setDate}
             date={date}
+            costPerDay={costPerDay}
+            serviceFee={serviceFee}
+            totalCost={totalCost}
+            paystackProps={paystackProps}
+            isPaystackDisabled={isPaystackDisabled}
           />
-        </form>
+        </div>
       </main>
     </div>
   );
