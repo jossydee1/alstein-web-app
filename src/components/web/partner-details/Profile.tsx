@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BadgeCheck, Building2, Globe, Mail, Phone, Star } from "lucide-react";
 import Link from "next/link";
 import { PartnerProps } from "@/types";
@@ -89,7 +90,7 @@ const Profile = ({
               {partnerData?.support_email}
             </Link>
           )}
-          {partnerData?.support_number && (
+          {/* {partnerData?.support_number && (
             <Link
               href="tel:1234567890"
               className="flex items-center gap-2 text-[#343434] hover:underline"
@@ -106,7 +107,7 @@ const Profile = ({
               <Globe size={24} />
               {partnerData?.website}
             </Link>
-          )}
+          )} */}
         </div>
       </section>
 
