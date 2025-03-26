@@ -8,8 +8,10 @@ import { ListingInfoProps } from "@/types";
 import { useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
-import PaymentMethod from "./PaymentMethod";
+import OrderDetails from "./OrderDetails";
 import { useAuth } from "@/context";
+import { DateRange } from "react-day-picker";
+import { differenceInDays } from "date-fns";
 
 const CONTAINER_STYLES = {
   bg: "relative mb-16",
@@ -27,6 +29,8 @@ const CheckoutContent = () => {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
 
   const [error] = useState("");
   const [formData, setFormData] = useState<FormData>({
@@ -36,8 +40,19 @@ const CheckoutContent = () => {
     email: "",
     address: "",
   });
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [numberOfDays, setNumberOfDays] = useState<number>(0);
 
   useScrollToID(error, "error");
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      setDate({
+        from: new Date(startDate),
+        to: new Date(endDate),
+      });
+    }
+  }, [startDate, endDate]);
 
   // set form data from user
   useEffect(() => {
@@ -51,6 +66,13 @@ const CheckoutContent = () => {
       });
     }
   }, [user]);
+
+  // set number of days
+  useEffect(() => {
+    if (date?.from && date?.to) {
+      setNumberOfDays(differenceInDays(date.to, date.from));
+    }
+  }, [date]);
 
   // Get listing info
   const {
@@ -120,7 +142,12 @@ const CheckoutContent = () => {
           onSubmit={handleSubmit}
         >
           <ShippingAddress formData={formData} setFormData={setFormData} />
-          <PaymentMethod />
+          <OrderDetails
+            listingInfo={listingInfo}
+            numberOfDays={numberOfDays}
+            setDate={setDate}
+            date={date}
+          />
         </form>
       </main>
     </div>

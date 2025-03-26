@@ -84,7 +84,9 @@ const Summary = ({
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
         >
-          <Link href={`${webRoutes.checkout}?id=${listingInfo?.id}`}>
+          <Link
+            href={`${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from}&endDate=${date?.to}`}
+          >
             Proceed to Checkout
           </Link>
         </Button>
