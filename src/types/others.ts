@@ -27,3 +27,23 @@ export interface ReviewProps {
   };
   occupation: string;
 }
+
+export interface CommentProps {
+  id: string;
+  comments: string;
+  created_at: string;
+  updated_at: string;
+  partner_id: string;
+  equipment_id: string;
+  profile_id: string;
+  partners: {
+    id: string;
+    name: string;
+    logo: string;
+  };
+  profiles: {
+    first_name: string;
+    last_name: string;
+    user_avatar: string;
+  };
+}

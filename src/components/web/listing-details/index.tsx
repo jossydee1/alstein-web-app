@@ -9,7 +9,7 @@ import Location from "./Location";
 import Reviews from "./Reviews";
 import { formatError, webRoutes } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { ListingInfoProps } from "@/types";
+import { ListingInfoProps, CommentProps } from "@/types";
 import { useParams } from "next/navigation";
 import { DateRange } from "react-day-picker";
 import { differenceInDays } from "date-fns";
@@ -41,12 +41,18 @@ const ListingDetailsContent = () => {
   );
 
   // Get rating info
-  const { data: rating } = useClientFetch<{
+  const { data: rating, refetch: refetchRating } = useClientFetch<{
     _avg: {
       score: number;
     };
   }>(
     `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+  );
+
+  const { data: comments, refetch: refetchComments } = useClientFetch<
+    CommentProps[]
+  >(
+    `partner/public/api/v1/comments/get-comments?skip=0&take=20&equipment_id=${listingInfo?.id}&partner_id=${listingInfo?.partner?.id}`,
   );
 
   const links = [
@@ -115,6 +121,9 @@ const ListingDetailsContent = () => {
           partnerId={listingInfo.partner_id}
           listingId={listingInfo.id}
           averageRating={rating?._avg?.score || 0}
+          comments={comments || []}
+          refetchRating={refetchRating}
+          refetchComments={refetchComments}
         />
       </main>
     </div>

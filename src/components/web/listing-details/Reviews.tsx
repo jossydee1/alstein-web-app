@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
-import photo from "@/public/images/business.png";
+import avatar from "@/public/icons/avatar.svg";
 import { Button } from "@/components/ui/button";
 import { Check, Loader, Star } from "lucide-react";
 import {
@@ -15,11 +15,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { api, authRoutes, formatError, webRoutes } from "@/utils";
+import {
+  api,
+  authRoutes,
+  formatDateToRelative,
+  formatError,
+  webRoutes,
+} from "@/utils";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
 import { useSearchParams } from "next/navigation";
+import { CommentProps } from "@/types";
 
 const PAGINATION_STYLES = {
   content: "flex justify-center gap-3",
@@ -31,23 +38,40 @@ const Reviews = ({
   partnerId,
   averageRating,
   listingId,
+  comments,
+  refetchRating,
+  refetchComments,
 }: {
   partnerId: string;
   averageRating: number;
   listingId: string;
+  comments: CommentProps[];
+  refetchRating: () => void;
+  refetchComments: () => void;
 }) => {
   const { userId, token } = useAuth();
   const searchParams = useSearchParams();
   const savedComment = searchParams.get("comment");
 
-  const reviews = [1, 1, 1, 1, 1];
+  const sortedComments = useMemo(
+    () =>
+      [...comments].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    [comments],
+  );
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [filteredReviews, setFilteredReviews] = useState(reviews.slice(0, 2));
   const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const filteredReviews = showAllReviews
+    ? sortedComments
+    : sortedComments.slice(0, 2);
 
   useEffect(() => {
     if (savedComment) {
@@ -58,11 +82,7 @@ const Reviews = ({
   const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
   const handleShowAllReviews = () => {
-    if (filteredReviews.length === reviews.length) {
-      setFilteredReviews(reviews.slice(0, 2));
-    } else {
-      setFilteredReviews(reviews);
-    }
+    setShowAllReviews(prev => !prev);
   };
 
   const handleRatingSubmit = async (score: number) => {
@@ -82,11 +102,15 @@ const Reviews = ({
           equipment_id: listingId,
           profile_id: userId,
         },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
 
       if (response.status === 200) {
         toast.success("Rating submitted successfully");
         setIsRatingSubmitted(true);
+        refetchRating();
       } else {
         toast.error(
           formatError(response.data.message) || "Failed to submit rating",
@@ -132,6 +156,7 @@ const Reviews = ({
         toast.success("Comment submitted successfully");
         setComment("");
         setIsCommentSubmitting(false);
+        refetchComments();
         return;
       }
     } catch (error) {
@@ -166,30 +191,36 @@ const Reviews = ({
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
         <div>
-          <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
-            {filteredReviews.map((_, i) => (
-              <div key={i}>
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={photo}
-                    alt="Business"
-                    className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-[#404040]">
-                      Ikechukwu Jude
-                    </h3>
-                    <p className="font-medium text-[#404040]">1 month ago</p>
+          {sortedComments.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No reviews yet, be the first one!
+            </p>
+          ) : (
+            <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
+              {filteredReviews.map(r => (
+                <div key={r.id}>
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={r.profiles.user_avatar || avatar}
+                      alt={r.profiles.user_avatar || "User Avatar"}
+                      width={58}
+                      height={58}
+                      className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-[#404040]">
+                        {r.profiles.first_name} {r.profiles.last_name}
+                      </h3>
+                      <p className="font-medium text-[#404040]">
+                        {formatDateToRelative(r.created_at)}
+                      </p>
+                    </div>
                   </div>
+                  <p className="mt-3 text-[#4E4E4E]">{r.comments}</p>
                 </div>
-                <p className="mt-3 text-[#4E4E4E]">
-                  I recently booked an equipment through Alstein and was
-                  incredibly impressed with the experience. The process was
-                  seamless and efficient, saving me a lot of time.
-                </p>{" "}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {filteredReviews.length > 20 && (
             <Pagination className="mt-4 justify-start">
@@ -231,16 +262,16 @@ const Reviews = ({
             </Pagination>
           )}
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleShowAllReviews}
-            className="mt-8 w-fit px-6 py-2.5 font-medium text-[#031330]"
-          >
-            {filteredReviews.length === reviews.length
-              ? "Show less reviews"
-              : "Show all reviews"}
-          </Button>
+          {sortedComments.length > 2 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleShowAllReviews}
+              className="mt-8 w-fit px-6 py-2.5 font-medium text-[#031330]"
+            >
+              {showAllReviews ? "Show less reviews" : "Show all reviews"}
+            </Button>
+          )}
         </div>
 
         <div
