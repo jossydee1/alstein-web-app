@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -17,6 +17,10 @@ import {
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/utils";
+import { useClientFetch } from "@/hooks";
+import { LoadingState } from "@/components/common";
+import { toast } from "react-toastify";
+import { useAuth } from "@/context";
 
 const tableHeads = [
   {
@@ -40,62 +44,98 @@ const tableHeads = [
   },
 ];
 
-const orderHistory = [
-  {
-    id: 1,
-    service: "MRI Scan",
-    orderId: "011245",
-    orderDate: "05/08/2025, 10:30 AM",
-    items: 1,
-    totalAmount: "$250.00",
-    status: "pending",
-  },
-  {
-    id: 2,
-    service: "MRI Scan",
-    orderId: "011245",
-    orderDate: "05/08/2025, 10:30 AM",
-    items: 1,
-    totalAmount: "$250.00",
-    status: "confirmed",
-  },
-  {
-    id: 3,
-    service: "MRI Scan",
-    orderId: "011245",
-    orderDate: "05/08/2025, 10:30 AM",
-    items: 1,
-    totalAmount: "$250.00",
-    status: "cancelled",
-  },
-];
-
 const OrderHistoryContent = () => {
-  const filterOptions = ["all", "pending", "confirmed", "cancelled"];
+  const { token } = useAuth();
+
+  const filterOptions = [
+    "all",
+    "initiated",
+    "approved",
+    "canceled",
+    "declined",
+  ];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
-  const [filteredOrders, setFilteredOrders] = useState(orderHistory);
-  const [currentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+  const [totalPages, setTotalPages] = useState(1);
+
+  const url =
+    activeFilter === "all"
+      ? `/client/api/v1/booking/get-bookings?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
+      : `/client/api/v1/booking/get-bookings-by-status?status=${activeFilter}`;
+
+  const {
+    data: orderHistory,
+    isLoading,
+    error: listingError,
+    refetch,
+  } = useClientFetch<[length: number, data: unknown[]]>({
+    endpoint: url,
+    token,
+  });
+
+  useEffect(() => {
+    if (listingError) {
+      toast.error(listingError.message);
+    }
+    if (orderHistory?.length) {
+      setTotalPages(Math.ceil(orderHistory.length / itemsPerPage));
+    }
+  }, [listingError, orderHistory]);
+
+  if (isLoading) return <LoadingState />;
 
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
-    if (filter === "all") {
-      setFilteredOrders(orderHistory);
-    } else {
-      setFilteredOrders(orderHistory.filter(order => order.status === filter));
+    setCurrentPage(1);
+    refetch();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    refetch();
+  };
+
+  const renderPaginationItems = () => {
+    const items = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
+      ) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageChange(i)}
+              className={cn(
+                currentPage === i &&
+                  "rounded-full bg-brandColor text-white hover:!bg-brandColor hover:!text-white",
+              )}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
     }
+    return items;
   };
 
   return (
     <main className="dashboard-section-card">
-      {/* <header className="mb-6 flex items-center justify-between border-b-[0.2px] border-[#9CA3AF] pb-2.5">
-        <h1 className="text-2xl font-bold">Order History</h1>
-        <button>View All</button>
-      </header> */}
       <h1 className="hidden">Order History</h1>
 
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          <nav className="gray-400 border-grey-400 flex items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
+          <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
             {filterOptions.map(option => (
               <button
                 key={option}
@@ -123,7 +163,15 @@ const OrderHistoryContent = () => {
             </TableHeader>
 
             <TableBody>
-              {filteredOrders.map(order => (
+              <TableRow className="py-10">
+                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                  No orders found
+                </TableCell>
+              </TableRow>
+            </TableBody>
+
+            {/* <TableBody>
+              {orderHistory?.map(order => (
                 <TableRow key={order.id} className="py-10">
                   <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
                     {order.service}
@@ -166,37 +214,28 @@ const OrderHistoryContent = () => {
                   </TableCell>
                 </TableRow>
               ))}
-            </TableBody>
+            </TableBody> */}
           </Table>
         </div>
 
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
-            <PaginationItem className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50">
+            <PaginationItem
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+            >
               <ChevronLeft size={20} />
               Previous
             </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                className={cn(
-                  currentPage === 1 &&
-                    "rounded-full bg-brandColor text-white hover:!bg-brandColor hover:!text-white",
-                )}
-              >
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50">
+            {renderPaginationItems()}
+            <PaginationItem
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+            >
               Next
               <ChevronRight size={20} />
             </PaginationItem>
