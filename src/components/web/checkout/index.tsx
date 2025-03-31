@@ -13,10 +13,15 @@ import { ListingInfoProps } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
-import OrderDetails from "./OrderDetails";
 import { useAuth } from "@/context";
 import { DateRange } from "react-day-picker";
 import { differenceInDays } from "date-fns";
+import dynamic from "next/dynamic";
+
+const OrderDetails = dynamic(
+  () => import("./OrderDetails"),
+  { ssr: false }, // Prevents SSR
+);
 
 const CONTAINER_STYLES = {
   bg: "relative mb-16",
