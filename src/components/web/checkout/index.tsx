@@ -224,7 +224,7 @@ const CheckoutContent = () => {
         <Breadcrumbs links={links} />
 
         <main className={CONTAINER_STYLES.pt}>
-          <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-2">
             <ShippingAddress formData={formData} setFormData={setFormData} />
             <OrderDetails
               listingInfo={listingInfo}

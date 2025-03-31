@@ -1,22 +1,22 @@
 .wrapper {
-  @apply grid h-screen grid-cols-1 overflow-hidden md:grid-cols-6 xl:grid-cols-5;
+  @apply grid h-screen grid-cols-1 overflow-hidden lg:grid-cols-6 xl:grid-cols-5;
 }
 
 .banner {
   background-image: url("/images/auth-image.png");
-  @apply relative col-span-3 hidden overflow-hidden bg-cover bg-center px-[36px] py-8 md:block lg:py-12 xl:col-span-2 xl:px-[72px];
+  @apply relative col-span-3 hidden overflow-hidden bg-cover bg-center px-[36px] py-8 lg:block lg:py-12 xl:col-span-2 xl:px-[72px];
 }
 
 .container {
-  @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-[36px] py-8 md:col-span-3 lg:py-12 xl:px-[72px];
+  @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-[36px] py-8 lg:col-span-3 lg:py-12 xl:px-[72px];
 
   .topBar {
-    @apply mb-6 flex flex-wrap items-center justify-between md:mb-0;
+    @apply mb-6 flex flex-wrap items-center justify-between lg:mb-0;
     .backButton {
       @apply mb-4 space-x-2.5 text-[#8692A6];
     }
     .logoLink {
-      @apply md:hidden;
+      @apply lg:hidden;
     }
   }
 

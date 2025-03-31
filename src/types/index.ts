@@ -1,5 +1,5 @@
 export * from "./others";
 export * from "./listings";
-export * from "./transactions";
+export * from "./orders";
 export * from "./partners";
 export * from "./user";

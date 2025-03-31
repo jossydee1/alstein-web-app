@@ -21,6 +21,7 @@ import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
+import { OrderHistoryProps } from "@/types";
 
 const tableHeads = [
   {
@@ -69,7 +70,7 @@ const OrderHistoryContent = () => {
     isLoading,
     error: listingError,
     refetch,
-  } = useClientFetch<[length: number, data: unknown[]]>({
+  } = useClientFetch<OrderHistoryProps>({
     endpoint: url,
     token,
   });
@@ -78,12 +79,10 @@ const OrderHistoryContent = () => {
     if (listingError) {
       toast.error(listingError.message);
     }
-    if (orderHistory?.length) {
-      setTotalPages(Math.ceil(orderHistory.length / itemsPerPage));
+    if (orderHistory?.total_count) {
+      setTotalPages(Math.ceil(orderHistory.total_count / itemsPerPage));
     }
   }, [listingError, orderHistory]);
-
-  if (isLoading) return <LoadingState />;
 
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
@@ -131,8 +130,9 @@ const OrderHistoryContent = () => {
 
   return (
     <main className="dashboard-section-card">
-      <h1 className="hidden">Order History</h1>
+      {isLoading && <LoadingState />}
 
+      <h1 className="hidden">Order History</h1>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
