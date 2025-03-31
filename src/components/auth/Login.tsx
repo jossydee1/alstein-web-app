@@ -63,8 +63,8 @@ const LoginContent = () => {
         if (redirectUrl) {
           const url = decodeURIComponent(redirectUrl);
           const redirectWithParams = comment
-            ? `${url}?comment=${encodeURIComponent(comment)}#${idParam}`
-            : `${url}#${idParam}`;
+            ? `${url}?comment=${encodeURIComponent(comment)}${idParam ? `#${idParam}` : ""}`
+            : `${url}${idParam ? `#${idParam}` : ""}`;
           router.push(redirectWithParams);
         } else {
           router.push(dashboardRoutes.client_order_history);
