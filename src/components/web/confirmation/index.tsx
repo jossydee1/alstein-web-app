@@ -41,6 +41,7 @@ const ConfirmationPageContent = () => {
 
         if (response.status !== 200 || !response.data) {
           setError(response.data.message || "Could not verify transaction");
+          return;
         }
 
         console.log("response", response);

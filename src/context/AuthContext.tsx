@@ -1,32 +1,26 @@
 "use client";
 
+import { UserDetailsProps } from "@/types/user";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
-interface UserProps {
+interface UserContextProps {
   id: string;
   token: string;
-  user: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number: string;
-    profile_picture: string | null;
-  };
+  user: UserDetailsProps;
 }
 
 interface AuthContextType {
-  user: UserProps["user"] | null;
+  user: UserDetailsProps | null;
   userId: string | null;
   token: string | null;
-  login: (user: UserProps) => void;
+  login: (user: UserContextProps) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserProps["user"] | null>(null);
+  const [user, setUser] = useState<UserContextProps["user"] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
@@ -45,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const login = (user: UserProps) => {
+  const login = (user: UserContextProps) => {
     setUserId(user.id);
     setUser(user.user);
     setToken(user.token);
