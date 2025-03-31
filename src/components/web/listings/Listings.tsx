@@ -10,16 +10,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { ListingsProps } from "@/types";
-import { formatError } from "@/utils";
 
 const Listings = ({
   listings,
   isLoading,
-  error,
 }: {
   listings: ListingsProps[];
   isLoading: boolean;
-  error: string | null;
 }) => {
   const PAGINATION_STYLES = {
     content: "flex justify-center gap-3",
@@ -37,17 +34,6 @@ const Listings = ({
       <div className={CONTAINER_STYLES.bg}>
         <main className={CONTAINER_STYLES.pt}>
           <ListingSkeleton />
-        </main>
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className={CONTAINER_STYLES.bg}>
-        <main className={CONTAINER_STYLES.pt}>
-          <div className="rounded-md bg-red-50 p-4 text-red-500">
-            <p>{formatError(error)}</p>
-          </div>
         </main>
       </div>
     );

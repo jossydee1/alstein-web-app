@@ -5,7 +5,6 @@ import Listings from "./Listings";
 import SearchForm from "./SearchForm";
 import { CategoryProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
-import { formatError } from "@/utils";
 import { useSearchParams } from "next/navigation";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
@@ -44,11 +43,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [searchParams]);
 
-  const {
-    data: listings,
-    isLoading,
-    error,
-  } = useClientFetch<ListingsProps[]>({
+  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
   });
 
@@ -194,9 +189,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
       />
 
       <Listings
-        listings={filteredListings}
+        listings={filteredListings || []}
         isLoading={isLoading || listingsByCategoryLoading}
-        error={error ? formatError(error) : null}
       />
     </main>
   );

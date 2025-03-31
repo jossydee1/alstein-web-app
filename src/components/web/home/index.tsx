@@ -36,9 +36,9 @@ const HomeContent = ({
         bookingsCount={bookingsCount?.count ?? 0}
       />
       <WhyUs />
-      <Categories categories={categories} />
+      <Categories categories={categories || []} />
       <Listings listings={listings || []} isLoading={isLoading} />
-      <Testimonials reviews={reviews} />
+      <Testimonials reviews={reviews || []} />
       <Partners />
     </main>
   );

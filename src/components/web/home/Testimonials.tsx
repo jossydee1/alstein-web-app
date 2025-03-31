@@ -78,10 +78,10 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
             ref={slideRef}
             className="flex gap-4 transition-transform"
             style={{
-              width: `${(extendedSlides.length / slidesPerView) * 100}%`,
+              width: `${(extendedSlides?.length / slidesPerView) * 100}%`,
             }}
           >
-            {extendedSlides.map((slide, index) => (
+            {extendedSlides?.map((slide, index) => (
               <div
                 key={index}
                 className="flex-shrink-0"
@@ -95,17 +95,17 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
                   }}
                 >
                   <h3 className="mb-7 text-lg font-bold leading-[24px]">
-                    &ldquo;{slide.title}&rdquo;
+                    &ldquo;{slide?.title}&rdquo;
                   </h3>
                   <p className="mb-8 text-[15px] leading-[25px] text-[#D5D5D5]">
-                    {slide.reviews}
+                    {slide?.reviews}
                   </p>
 
                   <div className="flex items-center gap-4">
-                    {slide.user.user_avatar ? (
+                    {slide?.user?.user_avatar ? (
                       <Image
                         src={image}
-                        alt={slide.user.first_name}
+                        alt={slide?.user?.first_name}
                         width={50}
                         height={50}
                         className="aspect-square min-h-[50px] min-w-[50px] max-w-[50px] rounded-full object-cover"
@@ -114,17 +114,17 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
                       <div className="flex aspect-square min-h-[50px] min-w-[50px] max-w-[50px] items-center justify-center rounded-full bg-gray-400 text-center text-2xl font-semibold text-gray-800">
                         {/* initials */}
                         <span className="">
-                          {slide.user.first_name.charAt(0)}
-                          {slide.user.last_name.charAt(0)}
+                          {slide?.user?.first_name?.charAt(0)}
+                          {slide?.user?.last_name?.charAt(0)}
                         </span>
                       </div>
                     )}
                     <div>
                       <h4 className="text-[15px] font-bold leading-[17px]">
-                        {slide.user.first_name} {slide.user.last_name}
+                        {slide?.user?.first_name} {slide?.user?.last_name}
                       </h4>
                       <p className="mt-2.5 text-[15px] leading-[17px] text-[#D5D5D5]">
-                        {slide.occupation}
+                        {slide?.occupation}
                       </p>
                     </div>
                   </div>

@@ -14,7 +14,7 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
       partner_id: string;
     }[]
   >({
-    endpoint: `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category.title_slug}`,
+    endpoint: `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category?.title_slug}`,
   });
 
   const partnerCount = data?.[0]?._count?._all || 0;
@@ -23,16 +23,18 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
     <article
       className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
       style={{
-        backgroundImage: category.image_url || 'url("/images/doctor.png")',
+        backgroundImage: category?.image_url || 'url("/images/doctor.png")',
         backgroundColor: "#181818",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">{category.title}</h3>
+      <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+        {category?.title}
+      </h3>
       <ul className="list-inside list-disc">
-        {category.subcategory.map(sub => (
+        {category?.subcategory?.map(sub => (
           <li key={sub.id}>{sub.description}</li>
         ))}
       </ul>
@@ -46,7 +48,7 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
         </span>
 
         <Link
-          href={`${webRoutes.listings}?category=${category.title_slug}`}
+          href={`${webRoutes.listings}?category=${category?.title_slug}`}
           className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
         >
           View & Book
@@ -81,9 +83,10 @@ const Categories = ({ categories }: { categories: CategoryProps[] }) => {
             </div>
           </article>
 
-          {categories.map(category => (
-            <CategoryItem key={category.title} category={category} />
-          ))}
+          {categories &&
+            categories?.map(category => (
+              <CategoryItem key={category?.title} category={category} />
+            ))}
         </div>
       </section>
     </div>
