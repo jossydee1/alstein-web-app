@@ -186,10 +186,8 @@ const CheckoutContent = () => {
     publicKey,
     text: "Complete Booking",
     type: "button",
-    onSuccess: (reference: { redirecturl: unknown }) => {
-      router.push(
-        `${redirectUrl}${reference.redirecturl}&listing_id=${listingInfo?.id}&cost_per_day=${costPerDay}&total_cost=${totalCost}&number_of_days=${numberOfDays}&start_date=${date?.from?.toLocaleDateString()}&end_date=${date?.to?.toLocaleDateString()}&fullname=${formData.fullname}&phone=${formData.phone}&email=${formData.email}&address=${formData.address}`,
-      );
+    onSuccess: () => {
+      router.push(redirectUrl);
     },
   };
 
