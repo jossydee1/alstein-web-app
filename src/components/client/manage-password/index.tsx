@@ -1,9 +1,69 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { api, formatError } from "@/utils";
+import { toast } from "react-toastify";
+import { useAuth } from "@/context";
 
 const ManagePasswordContent = () => {
+  const { token } = useAuth();
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}/;
+
+  // Form submission handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    if (!passwordPattern.test(password)) {
+      setError(
+        "Password must be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter",
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const params = {
+        password: password,
+      };
+
+      const response = await api.post(
+        "/client/api/v1/update-password",
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        toast.success("Password updated succesfully");
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Failed to update password"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="dashboard-section-card">
       <header className="dashboard-section-card-header mb-9 !gap-2">
@@ -16,19 +76,15 @@ const ManagePasswordContent = () => {
         </p>
       </header>
 
-      <form className="mt-[50px] grid max-w-[580px] gap-8">
-        <div className="">
-          <Label htmlFor="password" className="mb-2">
-            Current Password
-          </Label>
-          <Input
-            className="border border-[#E5E7EB] bg-[#F8FAFC] p-5"
-            type="password"
-            id="password"
-            placeholder="Enter current password"
-            required
-          />
-        </div>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-[50px] grid max-w-[580px] gap-8"
+      >
+        {error && (
+          <p className="w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+            {error}
+          </p>
+        )}
         <div className="">
           <Label htmlFor="new-password" className="mb-2">
             New Password
@@ -37,6 +93,8 @@ const ManagePasswordContent = () => {
             className="border border-[#E5E7EB] bg-[#F8FAFC] p-5"
             type="password"
             id="new-password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             placeholder="Enter new password"
             required
           />
@@ -49,13 +107,19 @@ const ManagePasswordContent = () => {
             className="border border-[#E5E7EB] bg-[#F8FAFC] p-5"
             type="password"
             id="confirm-password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
             placeholder="Re-enter new password"
             required
           />
         </div>
 
-        <Button type="submit" className="w-full bg-brandColor !p-5 text-white">
-          Save New Password
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-brandColor !p-5 text-white"
+        >
+          {isSubmitting ? "Updating..." : "Update Password"}
         </Button>
       </form>
     </main>
