@@ -98,9 +98,9 @@ const CheckoutContent = () => {
     data: listingInfo,
     isLoading,
     error: listingError,
-  } = useClientFetch<ListingInfoProps>(
-    `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
-  );
+  } = useClientFetch<ListingInfoProps>({
+    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+  });
 
   const links = [
     {

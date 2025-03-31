@@ -4,18 +4,30 @@ import { api, formatError } from "@/utils";
 import { QueryOptions, useQuery } from "@tanstack/react-query";
 import { ApiResponseProps } from "@/types";
 
-export function useClientFetch<T>(
-  endpoint: string,
-  params?: Record<string, string | number | boolean | null>,
-  enabled: boolean = true,
-  options?: Partial<QueryOptions<T>>,
-) {
+export function useClientFetch<T>({
+  endpoint,
+  params,
+  enabled = true,
+  options,
+  token,
+}: {
+  endpoint: string;
+  params?: Record<string, string | number | boolean | null>;
+  enabled?: boolean;
+  options?: Partial<QueryOptions<T>>;
+  token?: string | null;
+}) {
   return useQuery({
     queryKey: [endpoint, params],
     queryFn: async (): Promise<T> => {
       try {
         const response = await api.get<ApiResponseProps<T>>(endpoint, {
           params,
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
         });
 
         if (response.status !== 200 || !response.data) {

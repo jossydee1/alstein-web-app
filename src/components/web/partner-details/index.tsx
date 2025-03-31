@@ -18,30 +18,31 @@ const PartnerDetailsContent = () => {
     data: partnerData,
     isLoading: loadingPartner,
     error: errorPartner,
-  } = useClientFetch<PartnerProps>(
-    `/partner/public/api/v1/get-partner?id=${id}`,
-  );
+  } = useClientFetch<PartnerProps>({
+    endpoint: `/partner/public/api/v1/get-partner?id=${id}`,
+  });
 
   const {
     data: listingsData,
     isLoading: loadingListings,
     error: errorListings,
-  } = useClientFetch<ListingsProps[]>(
-    `/client/public/api/v1/equipments/get-equipments?skip=0&take=50?partner_id=${id}`,
-  );
+  } = useClientFetch<ListingsProps[]>({
+    endpoint: `/client/public/api/v1/equipments/get-equipments?skip=0&take=50?partner_id=${id}`,
+  });
 
   const { data: rating } = useClientFetch<{
     _avg: {
       score: number;
     };
-  }>(
-    `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
-  );
+  }>({
+    endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
+  });
+
   const { data: reviews } = useClientFetch<{
     count: number;
-  }>(
-    `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
-  );
+  }>({
+    endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
+  });
 
   const links = [
     {

@@ -13,9 +13,9 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
       _count: { _all: number };
       partner_id: string;
     }[]
-  >(
-    `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category.title_slug}`,
-  );
+  >({
+    endpoint: `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category.title_slug}`,
+  });
 
   const partnerCount = data?.[0]?._count?._all || 0;
 

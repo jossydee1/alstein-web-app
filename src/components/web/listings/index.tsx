@@ -48,20 +48,19 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     data: listings,
     isLoading,
     error,
-  } = useClientFetch<ListingsProps[]>(
-    "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
-  );
+  } = useClientFetch<ListingsProps[]>({
+    endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
+  });
 
   // Fetch listings by category if a category is selected
   const {
     data: listingsByCategory,
     isLoading: listingsByCategoryLoading,
     // error: listingsByCategoryError,
-  } = useClientFetch<ListingsProps[]>(
-    `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
-    {},
-    !!selectedCategory,
-  );
+  } = useClientFetch<ListingsProps[]>({
+    endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
+    enabled: !!selectedCategory,
+  });
 
   // Set initial listings
   useEffect(() => {

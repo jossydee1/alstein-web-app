@@ -17,16 +17,17 @@ const HomeContent = ({
   categories: CategoryProps[];
   reviews: ReviewProps[];
 }) => {
-  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>(
-    "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
-  );
+  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>({
+    endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
+  });
 
-  const { data: partnersCount } = useClientFetch<{ count: number }>(
-    "/client/public/api/v1/meta/get-total-partner",
-  );
-  const { data: bookingsCount } = useClientFetch<{ count: number }>(
-    "/client/public/api/v1/booking/get-bookings-count",
-  );
+  const { data: partnersCount } = useClientFetch<{ count: number }>({
+    endpoint: "/client/public/api/v1/meta/get-total-partner",
+  });
+
+  const { data: bookingsCount } = useClientFetch<{ count: number }>({
+    endpoint: "/client/public/api/v1/booking/get-bookings-count",
+  });
 
   return (
     <main>
