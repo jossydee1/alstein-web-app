@@ -182,7 +182,7 @@ const NavBar = () => {
                     </Button>
                     <Button
                       type="button"
-                      className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal"
+                      className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal md:px-6 md:py-4"
                       asChild
                     >
                       <Link href={authRoutes.register}>Register/Log in</Link>
