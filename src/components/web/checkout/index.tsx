@@ -2,21 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/common";
-import {
-  formatError,
-  getBaseURL,
-  PAYSTACK_PUBLIC_TEST_KEY,
-  webRoutes,
-} from "@/utils";
+import { formatError, PAYSTACK_PUBLIC_TEST_KEY, webRoutes } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { ListingInfoProps } from "@/types";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import { useAuth } from "@/context";
 import { DateRange } from "react-day-picker";
 import { differenceInDays, format } from "date-fns";
 import dynamic from "next/dynamic";
+import SuccessModal from "./SuccessModal";
 
 const OrderDetails = dynamic(
   () => import("./OrderDetails"),
@@ -35,15 +31,12 @@ export interface FormData {
   address: string;
 }
 const CheckoutContent = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const address = searchParams.get("address");
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
-
-  const baseUrl = getBaseURL();
-  const redirectUrl = `${baseUrl}${webRoutes.confirmation}`;
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { user } = useAuth();
   const [error] = useState("");
@@ -187,7 +180,7 @@ const CheckoutContent = () => {
     text: "Complete Booking",
     type: "button",
     onSuccess: () => {
-      router.push(redirectUrl);
+      setShowSuccessModal(true);
     },
   };
 
@@ -221,28 +214,35 @@ const CheckoutContent = () => {
     );
 
   return (
-    <div className={CONTAINER_STYLES.bg}>
-      <Breadcrumbs links={links} />
+    <>
+      <SuccessModal
+        showSuccessModal={showSuccessModal}
+        setShowSuccessModal={setShowSuccessModal}
+      />
 
-      <main className={CONTAINER_STYLES.pt}>
-        <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
-          <ShippingAddress formData={formData} setFormData={setFormData} />
-          <OrderDetails
-            listingInfo={listingInfo}
-            numberOfDays={numberOfDays}
-            setDate={setDate}
-            date={date}
-            costPerDay={costPerDay}
-            serviceFee={serviceFee}
-            totalCost={totalCost}
-            paystackProps={paystackProps}
-            isPaystackDisabled={isPaystackDisabled}
-            address={formData.address}
-            user={user === null ? false : true}
-          />
-        </div>
-      </main>
-    </div>
+      <div className={CONTAINER_STYLES.bg}>
+        <Breadcrumbs links={links} />
+
+        <main className={CONTAINER_STYLES.pt}>
+          <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
+            <ShippingAddress formData={formData} setFormData={setFormData} />
+            <OrderDetails
+              listingInfo={listingInfo}
+              numberOfDays={numberOfDays}
+              setDate={setDate}
+              date={date}
+              costPerDay={costPerDay}
+              serviceFee={serviceFee}
+              totalCost={totalCost}
+              paystackProps={paystackProps}
+              isPaystackDisabled={isPaystackDisabled}
+              address={formData.address}
+              user={user === null ? false : true}
+            />
+          </div>
+        </main>
+      </div>
+    </>
   );
 };
 
