@@ -4,7 +4,7 @@ import { ListingsProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import image from "@/public/images/doctor.png";
-import { formatPrice } from "@/utils";
+import { authRoutes, webRoutes, formatPrice } from "@/utils";
 import { Edit3 } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { PaystackButton } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
+import { useRouter } from "next/navigation";
 
 const OrderDetails = ({
   listingInfo,
@@ -26,6 +27,8 @@ const OrderDetails = ({
   totalCost,
   paystackProps,
   isPaystackDisabled,
+  user,
+  address,
 }: {
   listingInfo: ListingsProps;
   numberOfDays: number;
@@ -36,8 +39,13 @@ const OrderDetails = ({
   totalCost: number;
   paystackProps: PaystackProps;
   isPaystackDisabled: boolean;
+  address: string;
+  user: boolean;
 }) => {
+  const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.checkout}?id=${listingInfo.id}&address=${address}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`)}`;
 
   return (
     <div className="dashboard-section-card space-y-8">
@@ -132,11 +140,22 @@ const OrderDetails = ({
           only deducted upon booking completion.
         </p>
       </div>
-      <PaystackButton
-        {...paystackProps}
-        className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
-        disabled={isPaystackDisabled}
-      />
+      {user ? (
+        <PaystackButton
+          {...paystackProps}
+          className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
+          disabled={isPaystackDisabled}
+        />
+      ) : (
+        <button
+          className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
+          disabled={isPaystackDisabled}
+          onClick={() => router.push(redirectUrl)}
+          type="button"
+        >
+          Login to pay
+        </button>
+      )}
     </div>
   );
 };

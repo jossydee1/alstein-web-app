@@ -261,7 +261,7 @@ html {
     @apply block font-semibold text-[#696F79];
   }
   input {
-    @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
+    @apply w-full rounded-lg border border-[#BCC0C7] p-5 text-[#696F79] placeholder:text-[#9CA3AF] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
   }
 }
 

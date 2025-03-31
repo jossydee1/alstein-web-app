@@ -86,7 +86,7 @@ const Summary = ({
           disabled={!date?.from || !date?.to}
           onClick={() => {
             router.push(
-              `${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from}&endDate=${date?.to}`,
+              `${`${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`}`,
             );
           }}
         >

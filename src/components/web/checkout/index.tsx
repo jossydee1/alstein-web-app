@@ -15,7 +15,7 @@ import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import { useAuth } from "@/context";
 import { DateRange } from "react-day-picker";
-import { differenceInDays } from "date-fns";
+import { differenceInDays, format } from "date-fns";
 import dynamic from "next/dynamic";
 
 const OrderDetails = dynamic(
@@ -38,13 +38,14 @@ const CheckoutContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const address = searchParams.get("address");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
 
   const baseUrl = getBaseURL();
   const redirectUrl = `${baseUrl}${webRoutes.confirmation}`;
 
   const { user } = useAuth();
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
   const [error] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
@@ -58,8 +59,8 @@ const CheckoutContent = () => {
   useEffect(() => {
     if (startDate && endDate) {
       setDate({
-        from: new Date(startDate),
-        to: new Date(endDate),
+        from: new Date(format(startDate, "dd/MM/yyyy")),
+        to: new Date(format(endDate, "dd/MM/yyyy")),
       });
     }
   }, [startDate, endDate]);
@@ -75,6 +76,15 @@ const CheckoutContent = () => {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (address) {
+      setFormData(prev => ({
+        ...prev,
+        address: address,
+      }));
+    }
+  }, [address]);
 
   // set number of days
   useEffect(() => {
@@ -229,6 +239,8 @@ const CheckoutContent = () => {
             totalCost={totalCost}
             paystackProps={paystackProps}
             isPaystackDisabled={isPaystackDisabled}
+            address={formData.address}
+            user={user === null ? false : true}
           />
         </div>
       </main>
