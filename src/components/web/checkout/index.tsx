@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/common";
-import { formatError, webRoutes } from "@/utils";
+import { formatError, PAYSTACK_PUBLIC_TEST_KEY, webRoutes } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { ListingInfoProps } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -105,11 +105,12 @@ const CheckoutContent = () => {
   const totalCost = costPerDay * numberOfDays + serviceFee;
 
   // paystack
-  const publicKey = "pk_test_b14df591038d0b42d030b17d377d8cb5fabce945";
+  const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
 
   const paystackProps = {
     email: formData.email,
-    amount: totalCost,
+    amount: 5000,
+    channels: ["card"],
     metadata: {
       custom_fields: [
         {
@@ -122,15 +123,48 @@ const CheckoutContent = () => {
           variable_name: "phone",
           value: formData.phone,
         },
+        {
+          display_name: "Address",
+          variable_name: "address",
+          value: formData.address,
+        },
+        {
+          display_name: "Start Date",
+          variable_name: "start_date",
+          value: date?.from?.toLocaleDateString(),
+        },
+        {
+          display_name: "End Date",
+          variable_name: "end_date",
+          value: date?.to?.toLocaleDateString(),
+        },
+        {
+          display_name: "Listing ID",
+          variable_name: "listing_id",
+          value: listingInfo?.id,
+        },
+        {
+          display_name: "Cost per day",
+          variable_name: "cost_per_day",
+          value: costPerDay,
+        },
+        {
+          display_name: "Total Cost",
+          variable_name: "total_cost",
+          value: totalCost,
+        },
+        {
+          display_name: "Number of Days",
+          variable_name: "number_of_days",
+          value: numberOfDays,
+        },
       ],
     },
     publicKey,
     text: "Complete Booking",
     type: "button",
-    onSuccess: () =>
-      // alert("Thanks for doing business with us! Come back soon!!"),
-      router.push("/confirmation"),
-    onClose: () => alert("Wait! You need this oil, don't go!!!!"),
+    onSuccess: () => router.push("/confirmation"),
+    onClose: () => alert("You are about to close the payment modal"),
   };
 
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0

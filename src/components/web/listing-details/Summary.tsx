@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Summary = ({
   listingInfo,
@@ -24,7 +24,8 @@ const Summary = ({
   setDate: (date: DateRange | undefined) => void;
   numberOfDays: number;
 }) => {
-  const costPerDay = listingInfo?.price / 100;
+  const router = useRouter();
+  const costPerDay = listingInfo?.price;
   const serviceFee = 0;
   const totalCost = costPerDay * numberOfDays + serviceFee;
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -77,18 +78,19 @@ const Summary = ({
 
       <div>
         <Button
-          asChild
           type="button"
           className="h-auto w-full !p-3"
           style={{
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
+          disabled={!date?.from || !date?.to}
+          onClick={() => {
+            router.push(
+              `${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from}&endDate=${date?.to}`,
+            );
+          }}
         >
-          <Link
-            href={`${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from}&endDate=${date?.to}`}
-          >
-            Proceed to Checkout
-          </Link>
+          Proceed to Checkout
         </Button>
         <p className="mt-3 text-center text-sm leading-[16px] text-[#73A90D]">
           No payment required yet

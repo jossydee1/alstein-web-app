@@ -26,19 +26,24 @@ const formatUSD: CurrencyFormatFunction = money => {
 };
 
 export const formatPrice: FormatPriceFunction = (price, selectedCurrency) => {
+  // dividve price by 100 to get the actual price
+  // because the price is in kobo
+  const newPrice =
+    typeof price === "bigint" ? price / BigInt(100) : price / 100;
+
   // format price based on selected currency
   switch (selectedCurrency) {
     case "NGN":
-      return formatNGN(price);
+      return formatNGN(newPrice);
     case "USD":
-      return formatUSD(price);
+      return formatUSD(newPrice);
     default:
       return "Currency not supported";
   }
 };
 
 // example
-// const price = 1234.5;
+// const price = 123450; // in kobo
 // const selectedCurrency = "NGN";
 // const formattedPrice = formatPrice(price, selectedCurrency);
 // alert(formattedPrice);

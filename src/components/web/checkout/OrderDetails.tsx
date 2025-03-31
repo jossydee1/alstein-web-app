@@ -128,12 +128,8 @@ const OrderDetails = ({
 
       <div className="rounded-[10px] bg-orange-50 p-4 font-medium text-orange-600">
         <p>
-          N.B : Please not that a refundable 50naira will be deducted from your
-          account to confim your card is working
-        </p>
-        <p>
-          The booking payment will not be deducted from your account until you
-          complete your booking
+          Note: A refundable ₦50 will be charged to verify your card. Payment is
+          only deducted upon booking completion.
         </p>
       </div>
       <PaystackButton
