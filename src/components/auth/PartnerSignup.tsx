@@ -12,10 +12,42 @@ import { useRouter } from "next/navigation";
 // import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
+import { useState } from "react";
+import {
+  CheckCircle,
+  User,
+  BriefcaseMedical,
+  ShoppingCart,
+} from "lucide-react";
 // import { Checkbox } from "../ui/checkbox";
+
+const options = [
+  {
+    id: "vendor",
+    title: "I'm an Equipment Vendor",
+    description:
+      "Partner with Alstein as an equipment vendor and expand your reach.",
+    icon: <ShoppingCart className="h-6 w-6 text-blue-600" />,
+  },
+  {
+    id: "practitioner",
+    title: "I'm a Practitioner",
+    description:
+      "Join Alstein as a practitioner and connect with researchers, healthcare professionals.",
+    icon: <User className="h-6 w-6 text-gray-500" />,
+  },
+  {
+    id: "provider",
+    title: "I'm a Service Provider",
+    description:
+      "Register as a service provider on Alstein and offer your medical or scientific services.",
+    icon: <BriefcaseMedical className="h-6 w-6 text-gray-500" />,
+  },
+];
 
 const PartnerSignupContent = () => {
   const router = useRouter();
+  const [selected, setSelected] = useState("vendor");
 
   //   const [completedStepOne, setCompletedStepOne] = useState(false);
 
@@ -51,11 +83,46 @@ const PartnerSignupContent = () => {
         </div>
 
         <main className={style.formWrapper}>
-          <header className="">
+          <header className="w-full px-6">
             <h1 className="text-[30px] font-bold text-[#2D2D2D]">
-              Register Partner Account!
+              Partnership Type
             </h1>
+            <p className="mt-0.5 font-visbymedium text-gray-400 antialiased">
+              Kindly select how you will like to partner with us!
+            </p>
           </header>
+
+          <div className="w-full max-w-lg space-y-4 p-6">
+            {options.map(option => (
+              <div
+                key={option.id}
+                onClick={() => setSelected(option.id)}
+                className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all ${
+                  selected === option.id
+                    ? "border-red-500 bg-blue-50"
+                    : "border-gray-300 hover:border-gray-400"
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div>{option.icon}</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">
+                      {option.title}
+                    </h3>
+                    <p className="font-visbymedium text-sm text-gray-500 antialiased">
+                      {option.description}
+                    </p>
+                  </div>
+                </div>
+                {selected === option.id && (
+                  <CheckCircle className="h-6 w-6 text-blue-600" />
+                )}
+              </div>
+            ))}
+            <button className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700">
+              Continue
+            </button>
+          </div>
         </main>
       </div>
     </div>
