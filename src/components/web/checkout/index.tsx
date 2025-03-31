@@ -130,6 +130,11 @@ const CheckoutContent = () => {
     metadata: {
       custom_fields: [
         {
+          display_name: "S Id",
+          variable_name: "s_id",
+          value: user?.id,
+        },
+        {
           display_name: "Name",
           variable_name: "name",
           value: formData.fullname,
