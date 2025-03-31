@@ -1,14 +1,14 @@
 "use client";
 
 import { listingsData } from "@/database/listingsData";
-import { ListingsProps } from "@/types";
+import { ListingProps } from "@/types";
 import { formatPrice, webRoutes } from "@/utils";
 import { ChevronLeft, ChevronRight, Heart, MapPin } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 
-export const ListingsList = ({ listings }: { listings: ListingsProps[] }) => {
+export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
   if (listings?.length === 0) return <p>No listings found</p>;
 
   return (

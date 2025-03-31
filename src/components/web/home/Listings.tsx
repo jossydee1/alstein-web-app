@@ -4,13 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
 import { ListingSkeleton, ListingsList } from "@/components/common";
-import { ListingsProps } from "@/types";
+import { ListingProps } from "@/types";
 
 const Listings = ({
   listings,
   isLoading,
 }: {
-  listings: ListingsProps[];
+  listings: ListingProps[];
   isLoading: boolean;
 }) => {
   return (

@@ -47,3 +47,13 @@ export interface CommentProps {
     user_avatar: string;
   };
 }
+
+export interface CountProps {
+  count: number;
+}
+
+export interface AverageRatingProps {
+  _avg: {
+    score: number;
+  };
+}
