@@ -9,13 +9,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ListingsProps } from "@/types";
+import { ListingProps } from "@/types";
 
 const Listings = ({
   listings,
   isLoading,
 }: {
-  listings: ListingsProps[];
+  listings: ListingProps[];
   isLoading: boolean;
 }) => {
   const PAGINATION_STYLES = {
@@ -34,6 +34,20 @@ const Listings = ({
       <div className={CONTAINER_STYLES.bg}>
         <main className={CONTAINER_STYLES.pt}>
           <ListingSkeleton />
+        </main>
+      </div>
+    );
+
+  if (!listings || listings?.length === 0)
+    return (
+      <div className={CONTAINER_STYLES.bg}>
+        <main className={CONTAINER_STYLES.pt}>
+          <div className="rounded-md bg-red-50 p-4 text-red-500">
+            <p>
+              No listings found. Please check back later or try a different
+              search.
+            </p>
+          </div>
         </main>
       </div>
     );

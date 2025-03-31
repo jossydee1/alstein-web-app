@@ -6,7 +6,12 @@ import { formatError } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";
 import Certifications from "./Certifications";
-import { ListingsProps, PartnerProps } from "@/types";
+import {
+  AverageRatingProps,
+  CountProps,
+  ListingsProps,
+  PartnerProps,
+} from "@/types";
 import { useClientFetch } from "@/hooks";
 import { useParams } from "next/navigation";
 import ListingDetailsSkeleton from "../listing-details/Skeleton";
@@ -26,21 +31,15 @@ const PartnerDetailsContent = () => {
     data: listingsData,
     isLoading: loadingListings,
     error: errorListings,
-  } = useClientFetch<ListingsProps[]>({
+  } = useClientFetch<ListingsProps>({
     endpoint: `/client/public/api/v1/equipments/get-equipments?skip=0&take=50?partner_id=${id}`,
   });
 
-  const { data: rating } = useClientFetch<{
-    _avg: {
-      score: number;
-    };
-  }>({
+  const { data: rating } = useClientFetch<AverageRatingProps>({
     endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
   });
 
-  const { data: reviews } = useClientFetch<{
-    count: number;
-  }>({
+  const { data: reviews } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
   });
 
@@ -106,7 +105,7 @@ const PartnerDetailsContent = () => {
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
-        <PartnerListings listings={listingsData || []} />
+        <PartnerListings listings={listingsData?.data || []} />
       </main>
     </div>
   );

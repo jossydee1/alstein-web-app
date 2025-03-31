@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Listings from "./Listings";
 import SearchForm from "./SearchForm";
-import { CategoryProps, ListingsProps } from "@/types";
+import { CategoryProps, ListingProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const searchParams = useSearchParams();
-  const [filteredListings, setFilteredListings] = useState<ListingsProps[]>([]);
+  const [filteredListings, setFilteredListings] = useState<ListingProps[]>([]);
 
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -43,7 +43,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [searchParams]);
 
-  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>({
+  const { data: listings, isLoading } = useClientFetch<ListingsProps>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
   });
 
@@ -52,22 +52,22 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     data: listingsByCategory,
     isLoading: listingsByCategoryLoading,
     // error: listingsByCategoryError,
-  } = useClientFetch<ListingsProps[]>({
+  } = useClientFetch<ListingsProps>({
     endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
     enabled: !!selectedCategory,
   });
 
   // Set initial listings
   useEffect(() => {
-    if (listings && !selectedCategory) {
-      setFilteredListings(listings);
+    if (listings && listings.data && !selectedCategory) {
+      setFilteredListings(listings.data);
     }
   }, [listings, selectedCategory]);
 
   // Update listings when category changes
   useEffect(() => {
     if (selectedCategory && listingsByCategory) {
-      setFilteredListings(listingsByCategory);
+      setFilteredListings(listingsByCategory.data);
     }
   }, [selectedCategory, listingsByCategory]);
 
@@ -75,7 +75,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const handleSearch = () => {
     if (!listings) return;
 
-    let filtered = [...listings];
+    let filtered = [...listings.data];
 
     if (equipment) {
       filtered = filtered.filter(item =>
@@ -100,8 +100,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
 
     const filtered =
       selectedCategory && listingsByCategory
-        ? [...listingsByCategory]
-        : [...listings];
+        ? [...listingsByCategory.data]
+        : [...listings.data];
 
     // Filter by ratings
     // if (selectedRatings.length > 0) {
@@ -153,7 +153,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     setOnSite(false);
 
     if (listings) {
-      setFilteredListings(listings);
+      setFilteredListings(listings.data);
     }
   };
 

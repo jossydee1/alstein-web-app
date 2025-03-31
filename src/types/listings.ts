@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image";
 
-export interface ListingsProps {
+export interface ListingProps {
   address: string;
   availability: string;
   category_id: string;
@@ -21,6 +21,11 @@ export interface ListingsProps {
   images: StaticImageData[];
 }
 
+export interface ListingsProps {
+  data: ListingProps[];
+  total_count: number;
+}
+
 export interface ListingPartnerProps {
   id: string;
   logo: string;
@@ -33,7 +38,7 @@ export interface ListingSpecificationProps {
   specification: string;
 }
 
-export interface ListingInfoProps extends ListingsProps {
+export interface ListingInfoProps extends ListingProps {
   category: CategoryProps;
   partner: ListingPartnerProps;
   specifications: ListingSpecificationProps[];

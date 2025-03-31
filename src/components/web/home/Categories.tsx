@@ -4,20 +4,15 @@ import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
 import { webRoutes } from "@/utils";
-import { CategoryProps } from "@/types";
+import { CategoryProps, CountProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 
 const CategoryItem = ({ category }: { category: CategoryProps }) => {
-  const { data, isLoading } = useClientFetch<
-    {
-      _count: { _all: number };
-      partner_id: string;
-    }[]
-  >({
+  const { data, isLoading } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category?.title_slug}`,
   });
 
-  const partnerCount = data?.[0]?._count?._all || 0;
+  const partnerCount = data?.count || 0;
 
   return (
     <article

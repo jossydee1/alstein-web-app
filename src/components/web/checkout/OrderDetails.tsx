@@ -1,6 +1,6 @@
 "use client";
 
-import { ListingsProps } from "@/types";
+import { ListingProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import image from "@/public/images/doctor.png";
@@ -30,7 +30,7 @@ const OrderDetails = ({
   user,
   address,
 }: {
-  listingInfo: ListingsProps;
+  listingInfo: ListingProps;
   numberOfDays: number;
   date: DateRange | undefined;
   setDate: (date: DateRange | undefined) => void;

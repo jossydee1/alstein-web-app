@@ -8,7 +8,7 @@ import Listings from "./Listings";
 import Testimonials from "./Testimonials";
 import Partners from "./Partners";
 import { useClientFetch } from "@/hooks";
-import { CategoryProps, ListingsProps, ReviewProps } from "@/types";
+import { CategoryProps, CountProps, ListingsProps, ReviewProps } from "@/types";
 
 const HomeContent = ({
   categories,
@@ -17,15 +17,15 @@ const HomeContent = ({
   categories: CategoryProps[];
   reviews: ReviewProps[];
 }) => {
-  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>({
+  const { data: listings, isLoading } = useClientFetch<ListingsProps>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   });
 
-  const { data: partnersCount } = useClientFetch<{ count: number }>({
+  const { data: partnersCount } = useClientFetch<CountProps>({
     endpoint: "/client/public/api/v1/meta/get-total-partner",
   });
 
-  const { data: bookingsCount } = useClientFetch<{ count: number }>({
+  const { data: bookingsCount } = useClientFetch<CountProps>({
     endpoint: "/client/public/api/v1/booking/get-bookings-count",
   });
 
@@ -37,7 +37,7 @@ const HomeContent = ({
       />
       <WhyUs />
       <Categories categories={categories || []} />
-      <Listings listings={listings || []} isLoading={isLoading} />
+      <Listings listings={listings?.data || []} isLoading={isLoading} />
       <Testimonials reviews={reviews || []} />
       <Partners />
     </main>
