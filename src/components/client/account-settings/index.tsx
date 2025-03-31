@@ -15,7 +15,7 @@ const AccountSettingsContent = () => {
   const { user, token } = useAuth();
 
   const [showForm, setShowForm] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [formData, setFormData] = useState<UserDetailsProps>({
     first_name: "",
@@ -47,10 +47,8 @@ const AccountSettingsContent = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
 
-    setIsVerifying(true);
+    setIsProcessing(true);
 
     try {
       const response = await api.post<ApiResponseProps<unknown>>(
@@ -68,11 +66,36 @@ const AccountSettingsContent = () => {
         return;
       }
 
+      toast.success(response.data.message);
       return response.data.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to update user info"));
     } finally {
-      setIsVerifying(false);
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsProcessing(true);
+
+    try {
+      const response = await api.delete("/client/api/v1/deactivate-account", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(response.data.message || "Failed to deactivate account");
+        return;
+      }
+
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      toast.error(formatError(error, "Failed to deactivate account"));
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -187,10 +210,10 @@ const AccountSettingsContent = () => {
             <Button
               variant="outline"
               type="submit"
-              disabled={isVerifying}
+              disabled={isProcessing}
               className="border border-[#E5E7EB] bg-brandColor text-white hover:bg-brandColor/70 hover:text-white"
             >
-              {isVerifying ? "Updating..." : "Update Profile"}
+              {isProcessing ? "Updating..." : "Update Profile"}
             </Button>
           </form>
         )}
@@ -211,9 +234,11 @@ const AccountSettingsContent = () => {
               <Button
                 variant="outline"
                 type="button"
+                onClick={handleDelete}
+                disabled={isProcessing}
                 className="border border-[#E5E7EB] bg-red-500 text-white hover:bg-red-500/70 hover:text-white"
               >
-                Deactivate
+                {isProcessing ? "Deactivating" : "Deactivate"}
               </Button>
             </div>
           </div>
