@@ -2,7 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/common";
-import { formatError, PAYSTACK_PUBLIC_TEST_KEY, webRoutes } from "@/utils";
+import {
+  formatError,
+  getBaseURL,
+  PAYSTACK_PUBLIC_TEST_KEY,
+  webRoutes,
+} from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { ListingInfoProps } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -25,11 +30,14 @@ export interface FormData {
   address: string;
 }
 const CheckoutContent = () => {
-  const { user } = useAuth();
   const router = useRouter();
-
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+
+  const baseUrl = getBaseURL();
+  const redirectUrl = `${baseUrl}${webRoutes.confirmation}`;
+
+  const { user } = useAuth();
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
   const [error] = useState("");
@@ -163,8 +171,11 @@ const CheckoutContent = () => {
     publicKey,
     text: "Complete Booking",
     type: "button",
-    onSuccess: () => router.push("/confirmation"),
-    onClose: () => alert("You are about to close the payment modal"),
+    onSuccess: (reference: { redirecturl: unknown }) => {
+      router.push(
+        `${redirectUrl}${reference.redirecturl}&listing_id=${listingInfo?.id}&cost_per_day=${costPerDay}&total_cost=${totalCost}&number_of_days=${numberOfDays}&start_date=${date?.from?.toLocaleDateString()}&end_date=${date?.to?.toLocaleDateString()}&fullname=${formData.fullname}&phone=${formData.phone}&email=${formData.email}&address=${formData.address}`,
+      );
+    },
   };
 
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
@@ -173,13 +184,6 @@ const CheckoutContent = () => {
     !date?.to ||
     Object.values(formData).some(value => value === "") ||
     totalCost <= 0;
-
-  console.log({
-    date,
-    totalCost,
-    formData,
-    isPaystackDisabled,
-  });
 
   if (isLoading) return <ListingDetailsSkeleton />;
 

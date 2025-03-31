@@ -1,4 +1,17 @@
 export const getBaseURL = () => {
+  if (typeof window === "undefined") return "https://alstein.com/"; // Default for SSR
+
+  const hostname = window.location.hostname;
+
+  if (hostname.includes("alstein.com")) {
+    return "https://alstein.com/";
+  } else if (hostname.includes("localhost")) {
+    return "http://localhost:3000/";
+  }
+  return "http://localhost:3000/";
+};
+
+export const getAPIBaseURL = () => {
   if (typeof window === "undefined") return "https://alstein.com/dev"; // Default for SSR
 
   const hostname = window.location.hostname;

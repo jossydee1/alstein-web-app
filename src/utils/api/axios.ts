@@ -1,9 +1,9 @@
 import axios from "axios";
-import { getBaseURL } from "../others";
+import { getAPIBaseURL } from "../others";
 
 // Create an Axios instance with default settings
 const api = axios.create({
-  baseURL: getBaseURL(),
+  baseURL: getAPIBaseURL(),
   timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
