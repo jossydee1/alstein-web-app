@@ -5,7 +5,6 @@ import Listings from "./Listings";
 import SearchForm from "./SearchForm";
 import { CategoryProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
-import { formatError } from "@/utils";
 import { useSearchParams } from "next/navigation";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
@@ -44,24 +43,19 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [searchParams]);
 
-  const {
-    data: listings,
-    isLoading,
-    error,
-  } = useClientFetch<ListingsProps[]>(
-    "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
-  );
+  const { data: listings, isLoading } = useClientFetch<ListingsProps[]>({
+    endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
+  });
 
   // Fetch listings by category if a category is selected
   const {
     data: listingsByCategory,
     isLoading: listingsByCategoryLoading,
     // error: listingsByCategoryError,
-  } = useClientFetch<ListingsProps[]>(
-    `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
-    {},
-    !!selectedCategory,
-  );
+  } = useClientFetch<ListingsProps[]>({
+    endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
+    enabled: !!selectedCategory,
+  });
 
   // Set initial listings
   useEffect(() => {
@@ -195,9 +189,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
       />
 
       <Listings
-        listings={filteredListings}
+        listings={filteredListings || []}
         isLoading={isLoading || listingsByCategoryLoading}
-        error={error ? formatError(error) : null}
       />
     </main>
   );

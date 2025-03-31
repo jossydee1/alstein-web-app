@@ -5,6 +5,7 @@ import {
   BellDot,
   ChevronDown,
   Handshake,
+  LayoutDashboard,
   LogOut,
   Menu,
   X,
@@ -181,7 +182,7 @@ const NavBar = () => {
                     </Button>
                     <Button
                       type="button"
-                      className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal"
+                      className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal md:px-6 md:py-4"
                       asChild
                     >
                       <Link href={authRoutes.register}>Register/Log in</Link>
@@ -228,7 +229,7 @@ const NavBar = () => {
                             <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                               <Image
                                 alt="Avatar"
-                                src="https://picsum.photos/200"
+                                src={user?.profile_picture || avatar}
                                 width={20}
                                 height={20}
                                 className="rounded-full"
@@ -236,7 +237,19 @@ const NavBar = () => {
                               />
                             </span>
                             <span className="text-lg font-medium leading-4 text-brandColor">
-                              Sarah Williams
+                              {user?.first_name} {user?.last_name}
+                            </span>
+                          </Link>
+
+                          <Link
+                            href={dashboardRoutes.client_order_history}
+                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                          >
+                            <span className="mr-2 inline-block">
+                              <LayoutDashboard size={20} />
+                            </span>
+                            <span className="font-medium leading-6">
+                              Dashboard
                             </span>
                           </Link>
 

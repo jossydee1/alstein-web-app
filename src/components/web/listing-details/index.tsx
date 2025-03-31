@@ -36,24 +36,24 @@ const ListingDetailsContent = () => {
     data: listingInfo,
     isLoading,
     error,
-  } = useClientFetch<ListingInfoProps>(
-    `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
-  );
+  } = useClientFetch<ListingInfoProps>({
+    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+  });
 
   // Get rating info
   const { data: rating, refetch: refetchRating } = useClientFetch<{
     _avg: {
       score: number;
     };
-  }>(
-    `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
-  );
+  }>({
+    endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+  });
 
   const { data: comments, refetch: refetchComments } = useClientFetch<
     CommentProps[]
-  >(
-    `partner/public/api/v1/comments/get-comments?skip=0&take=20&equipment_id=${listingInfo?.id}&partner_id=${listingInfo?.partner?.id}`,
-  );
+  >({
+    endpoint: `partner/public/api/v1/comments/get-comments?skip=0&take=20&equipment_id=${listingInfo?.id}&partner_id=${listingInfo?.partner?.id}`,
+  });
 
   const links = [
     {

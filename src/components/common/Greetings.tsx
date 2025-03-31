@@ -4,7 +4,7 @@ import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
-import { Edit } from "lucide-react";
+// import { Edit } from "lucide-react";
 
 const Greetings = () => {
   const { user } = useAuth();
@@ -32,9 +32,9 @@ const Greetings = () => {
             className="rounded-md"
             objectFit="contain"
           />
-          <button type="button">
+          {/* <button type="button">
             <Edit className="text-white" size={17} />
-          </button>
+          </button> */}
         </div>
 
         <p className="mt-3 grid gap-y-1.5">
