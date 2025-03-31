@@ -1,8 +1,5 @@
 import React from "react";
 import { Bell, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import avatar from "@/public/icons/avatar.svg";
-import Image from "next/image";
 
 const NotificationsContent = () => {
   return (
@@ -40,43 +37,6 @@ const NotificationsContent = () => {
             <p className="dashboard-section-card-description">
               3 min ago • You&apos;ve successfully paid for your booking
             </p>
-          </div>
-        </li>
-
-        <li className="flex items-start gap-5 py-4">
-          <Image
-            alt="Vendor"
-            src={avatar}
-            width={38}
-            height={38}
-            className="rounded-full"
-            objectFit="contain"
-          />
-
-          <div className="flex-1">
-            <p className="dashboard-section-card-title !text-lg">
-              Vendor request to accept quote.
-            </p>
-            <p className="dashboard-section-card-description">
-              3 min ago •Booking
-            </p>
-
-            <div className="mt-6 flex gap-2.5">
-              <Button
-                variant="outline"
-                type="button"
-                className="border bg-brandColor text-white hover:bg-brandColor/80 hover:text-white"
-              >
-                Accept
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="border border-[#E5E7EB] text-[#1F2937] hover:bg-[#1F2937] hover:text-white"
-              >
-                Decline
-              </Button>
-            </div>
           </div>
         </li>
       </ul>
