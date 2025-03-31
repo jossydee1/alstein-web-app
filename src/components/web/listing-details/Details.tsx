@@ -31,7 +31,7 @@ const Details = ({
         </div>
       </section>
 
-      <section className="business mt-16 flex items-center justify-between gap-4 rounded-md border p-4">
+      <section className="business mt-16 flex items-end justify-between gap-4 rounded-md border p-4">
         <div className="flex items-center gap-3">
           {listingInfo?.partner?.logo ? (
             <Image
@@ -53,13 +53,15 @@ const Details = ({
         </div>
 
         <div className="flex flex-col items-end justify-between gap-2">
-          <p className="flex items-center gap-1 text-sm font-medium text-[#8B8B8B]">
-            <BadgeCheck className="fill-brandColor text-white" />
-            Verified Partner
-          </p>
+          {!listingInfo?.partner?.is_verified && (
+            <p className="flex items-center gap-1 text-sm font-medium text-[#8B8B8B]">
+              <BadgeCheck className="fill-brandColor text-white" />
+              Verified Partner
+            </p>
+          )}
           <Link
             href={`${webRoutes.partners}/${listingInfo?.partner?.id}`}
-            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] transition-all hover:bg-transparent hover:text-neutral-800 hover:underline"
+            className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] underline transition-all hover:bg-transparent hover:text-neutral-800"
           >
             View Profile
           </Link>

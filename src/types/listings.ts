@@ -25,6 +25,7 @@ export interface ListingPartnerProps {
   id: string;
   logo: string;
   name: string;
+  is_verified: boolean;
 }
 
 export interface ListingSpecificationProps {
