@@ -37,6 +37,11 @@ const PartnerDetailsContent = () => {
   }>(
     `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
   );
+  const { data: reviews } = useClientFetch<{
+    count: number;
+  }>(
+    `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
+  );
 
   const links = [
     {
@@ -88,7 +93,11 @@ const PartnerDetailsContent = () => {
       <Breadcrumbs links={links} />
 
       <main className={CONTAINER_STYLES.pt}>
-        <Profile partnerData={partnerData} rating={rating?._avg?.score || 0} />
+        <Profile
+          partnerData={partnerData}
+          rating={rating?._avg?.score || 0}
+          reviews={reviews?.count || 0}
+        />
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 

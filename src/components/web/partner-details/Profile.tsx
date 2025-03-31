@@ -9,9 +9,11 @@ import { formatDateToRelativeWithTime } from "@/utils";
 const Profile = ({
   partnerData,
   rating,
+  reviews,
 }: {
   partnerData: PartnerProps;
   rating: number;
+  reviews: number;
 }) => {
   return (
     <article className="mt-2 flex flex-col items-start justify-between gap-7 lg:flex-row">
@@ -71,7 +73,7 @@ const Profile = ({
 
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
-                2
+                {reviews}
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
                 Reviews
