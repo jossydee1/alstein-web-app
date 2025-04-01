@@ -57,6 +57,10 @@ const PartnerSignupContent = () => {
   //     <Security />
   //   );
 
+  const handleCreatePartnerType = () => {
+    router.push(`/partner-setup/${selected}`);
+  };
+
   return (
     <div className={style.wrapper}>
       <Banner />
@@ -119,7 +123,10 @@ const PartnerSignupContent = () => {
                 )}
               </div>
             ))}
-            <button className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700">
+            <button
+              onClick={handleCreatePartnerType}
+              className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
+            >
               Continue
             </button>
           </div>
