@@ -72,7 +72,7 @@ const PartnerSignupContent = () => {
   //   );
 
   const handleSaveAndContinue = () => {
-    router.push(`/partner-setup`);
+    router.push(`/partner-setup/vendor/address`);
   };
 
   return (

@@ -58,7 +58,7 @@ const PartnerSignupContent = () => {
   //   );
 
   const handleCreatePartnerType = () => {
-    router.push(`/partner-setup/${selected}`);
+    router.push(`/partner-setup/${selected}/information`);
   };
 
   return (
