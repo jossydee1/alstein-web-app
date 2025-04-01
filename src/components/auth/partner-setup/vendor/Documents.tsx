@@ -12,17 +12,27 @@ import { useRouter } from "next/navigation";
 // import google from "@/public/images/logos/google.svg";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
-// import { useState } from "react";
-import { CustomSelect } from "@/components/global/CustomSelect";
+import { useState, ChangeEvent } from "react";
+import { Upload } from "lucide-react";
 
 // import { Checkbox } from "../ui/checkbox";
 
 const steps = [
   { id: 1, label: "Business Info", ischecked: true },
   { id: 2, label: "Address", ischecked: true },
-  { id: 3, label: "Certificate", ischecked: false },
+  { id: 3, label: "Certificate", ischecked: true },
 ];
 
+const documents = [
+  "Business registration certificate",
+  "Medical laboratory science license",
+  "Nigerian institute of science laboratory license",
+  "Name of Resident medical laboratory scientist with current practicing license",
+];
+
+type FileState = {
+  [key: string]: File;
+};
 export function Stepper() {
   // setCurrentStep
   //   const [currentStep] = useState(1);
@@ -59,8 +69,15 @@ const PartnerSignupContent = () => {
   //     <Security />
   //   );
 
-  const handleSaveAndContinue = () => {
-    router.push(`/partner-setup/vendor/documents`);
+  //   const handleSaveAndContinue = () => {
+  //     router.push(`/partner-setup/vendor/documents`);
+  //   };
+  const [files, setFiles] = useState<FileState>({});
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, doc: string) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFiles({ ...files, [doc]: e.target.files[0] });
+    }
   };
 
   return (
@@ -95,77 +112,32 @@ const PartnerSignupContent = () => {
 
           <header className="mb-4 mt-6 w-full">
             <h1 className="text-[20px] font-bold text-[#2D2D2D]">
-              Buisness Address
+              Upload Documents
             </h1>
             <p className="mt-0.5 font-visbymedium text-sm text-gray-400 antialiased">
-              Kindly provide your business Information
+              To ensure trust and compliance, please upload the necessary
+              business verification documents
             </p>
           </header>
-
-          <form>
-            <div className="w-full">
-              <CustomSelect />
-            </div>
-
-            <div className="w-full">
+          <div className="space-y-3">
+            {documents.map((doc, index) => (
               <label
-                htmlFor="contact_email"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
+                key={index}
+                className="flex min-h-16 cursor-pointer items-center space-x-3 rounded-lg border bg-gray-50 p-3"
               >
-                Country
+                <Upload className="text-gray-400" />
+                <span className="flex-1 text-sm text-gray-600">{doc}</span>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={e => handleFileChange(e, doc)}
+                />
               </label>
-              <input
-                type="text"
-                id="contact_email"
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
-                name="business_name"
-                placeholder="E.x, Ghana"
-                required
-              />
-            </div>
-            <div className="flex w-full justify-between space-x-2">
-              <div className="w-full">
-                <label
-                  htmlFor="specialization"
-                  className="mb-1 font-visbysemibold text-sm text-gray-800"
-                >
-                  City
-                </label>
-                <input
-                  type="text"
-                  id="specialization"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
-                  name="specialization"
-                  placeholder="E.x, Ibadan"
-                  required
-                />
-              </div>
-
-              <div className="w-full">
-                <label
-                  htmlFor="specialization"
-                  className="mb-1 font-visbysemibold text-sm text-gray-800"
-                >
-                  Postal code
-                </label>
-                <input
-                  type="text"
-                  id="specialization"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
-                  name="specialization"
-                  placeholder="E.x, 110181"
-                  required
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={handleSaveAndContinue}
-              className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
-            >
-              Save & Continue
-            </button>
-          </form>
+            ))}
+          </div>
+          <button className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+            Submit for Review
+          </button>
         </main>
       </div>
     </div>
