@@ -57,3 +57,9 @@ export interface AverageRatingProps {
     score: number;
   };
 }
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  current?: boolean;
+}
