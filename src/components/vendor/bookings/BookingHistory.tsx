@@ -218,7 +218,7 @@ const BookingHistory = () => {
             {/* <TableBody>
               <TableRow className="py-10">
                 <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No orders found
+                  No bookings found
                 </TableCell>
               </TableRow>
             </TableBody> */}
