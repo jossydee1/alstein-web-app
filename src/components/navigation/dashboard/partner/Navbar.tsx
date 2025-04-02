@@ -102,7 +102,7 @@ export const Navbar = () => {
                       <ArrowRightLeft size={20} />
                     </span>
                     <span className="font-medium leading-6">
-                      Switch to CLient account
+                      Switch to Client account
                     </span>
                   </Link>
 
