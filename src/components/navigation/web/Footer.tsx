@@ -82,7 +82,7 @@ export const Footer = () => {
               aria-label="Brand"
             >
               <Image
-                alt="Company Logo"
+                alt="Alstein Logo"
                 src={logoLight}
                 width={130}
                 height={48}

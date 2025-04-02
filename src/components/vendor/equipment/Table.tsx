@@ -15,37 +15,39 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/utils";
+import { ChevronLeft, ChevronRight, Edit, Eye, Trash } from "lucide-react";
+import { cn, dashboardRoutes, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const tableHeads = [
   {
     label: "SERVICE/EQUIPMENT",
   },
   {
-    label: "ORDER ID",
+    label: "ID",
   },
   {
-    label: "ORDER DATE",
+    label: "LISTED DATE",
   },
   {
-    label: "ITEMS",
-  },
-  {
-    label: "TOTAL AMOUNT",
+    label: "PRICE",
     className: "text-right",
   },
   {
     label: "STATUS",
   },
+  {
+    label: "ACTIONS",
+  },
 ];
 
-const OrderHistoryContent = () => {
+const EquipmentListings = () => {
   const { token } = useAuth();
 
   const filterOptions = [
@@ -84,6 +86,7 @@ const OrderHistoryContent = () => {
     }
   }, [listingError, orderHistory]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -128,14 +131,21 @@ const OrderHistoryContent = () => {
     return items;
   };
 
+  const status = "approved";
+
   return (
     <main className="dashboard-section-card">
       {isLoading && <LoadingState />}
 
-      <h1 className="hidden">Order History</h1>
+      <header className="mb-6 flex items-center justify-between pb-2.5">
+        <h1 className="text-2xl font-bold">Listed Equipments</h1>
+
+        <Button className="bg-brandColor">List an equipment</Button>
+      </header>
+
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
-        <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
+        <div className="rounded-[6px] border-[0.2px] border-gray-300 bg-white">
+          {/* <nav className="gray-400 border-grey-300 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
             {filterOptions.map(option => (
               <button
                 key={option}
@@ -146,7 +156,7 @@ const OrderHistoryContent = () => {
                 {option}
               </button>
             ))}
-          </nav>
+          </nav> */}
 
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
@@ -165,13 +175,80 @@ const OrderHistoryContent = () => {
             <TableBody>
               <TableRow className="py-10">
                 <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No orders found
+                  MRI Scan
+                </TableCell>
+                <TableCell className="px-5 py-3 text-[#6B7280]">
+                  0112455
+                </TableCell>
+                <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                  05/08/2025, 10:30 AM
+                </TableCell>
+                <TableCell className="px-5 py-3 text-right">
+                  {formatPrice(2000000, "NGN")}
+                </TableCell>
+                <TableCell className="px-5 py-3">
+                  <div
+                    className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
+                      status === "approved"
+                        ? "bg-orange-50"
+                        : status === "confirmed"
+                          ? "bg-green-50"
+                          : "bg-red-50"
+                    }`}
+                  >
+                    <span
+                      className={`size-2 rounded-full ${
+                        status === "approved"
+                          ? "bg-orange-600"
+                          : status === "confirmed"
+                            ? "bg-green-600"
+                            : "bg-red-600"
+                      }`}
+                    />
+                    <span>{status}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="px-5 py-3">
+                  <div className="flex items-center gap-2.5">
+                    <Button asChild variant="ghost" className="!p-0">
+                      <Link
+                        href={`${dashboardRoutes.vendor_equipment}/view?equipment=0112455`}
+                      >
+                        <Eye className="size-4 text-[#6B7280]" />
+                        View
+                      </Link>
+                    </Button>
+                    <Button asChild variant="ghost" className="!p-0">
+                      <Link
+                        href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
+                      >
+                        <Edit className="size-4 text-[#6B7280]" />
+                        Edit
+                      </Link>
+                    </Button>
+                    <Button asChild variant="ghost" className="!p-0">
+                      <Link
+                        href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
+                      >
+                        <Trash className="size-4 text-[#6B7280]" />
+                        Delete
+                      </Link>
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             </TableBody>
 
             {/* <TableBody>
-              {orderHistory?.map(order => (
+              <TableRow className="py-10">
+                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                  No equipment listed
+                </TableCell>
+              </TableRow>
+            </TableBody> */}
+
+            {/* <TableBody>
+              {orderHistory?.data.map(order => (
                 <TableRow key={order.id} className="py-10">
                   <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
                     {order.service}
@@ -182,17 +259,12 @@ const OrderHistoryContent = () => {
                   <TableCell className="px-5 py-3 text-[#6B7280]">
                     {order.orderDate}
                   </TableCell>
-                  <TableCell className="px-5 py-3 text-[#172554]">
-                    <span className="inline-flex aspect-square w-9 items-center justify-center rounded-full bg-[#F6F6F8]">
-                      1
-                    </span>
-                  </TableCell>
                   <TableCell className="px-5 py-3 text-right">
                     {order.totalAmount}
                   </TableCell>
                   <TableCell className="px-5 py-3">
                     <div
-                      className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
+                      className={`inline-flex items-center gap-2.5 rounded-3xl border px-6 py-1.5 capitalize ${
                         order.status === "pending"
                           ? "bg-orange-50"
                           : order.status === "confirmed"
@@ -221,7 +293,7 @@ const OrderHistoryContent = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -231,7 +303,7 @@ const OrderHistoryContent = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }
@@ -246,4 +318,4 @@ const OrderHistoryContent = () => {
   );
 };
 
-export default OrderHistoryContent;
+export default EquipmentListings;

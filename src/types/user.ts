@@ -11,3 +11,12 @@ export interface UserDetailsProps {
   occupation?: string;
   gender?: string;
 }
+
+export interface BusinessProps {
+  name: string;
+  address: string;
+  email: string;
+  phone_number: string;
+  documents: Array<{ name: string; file?: File }>;
+  logo: string;
+}

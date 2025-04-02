@@ -141,7 +141,7 @@ const NavBar = () => {
             href={webRoutes.home}
             aria-label="Brand"
           >
-            <Image alt="Company Logo" src={logoLight} width={130} height={48} />
+            <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
           </Link>
 
           <button

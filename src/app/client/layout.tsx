@@ -2,9 +2,8 @@
 
 import Greetings from "@/components/common/Greetings";
 import { LinkTab } from "@/components/common/LinkTab";
-import NavBar from "@/components/navigation/dashboard/NavBar";
+import NavBar from "@/components/navigation/dashboard/client/NavBar";
 import { dashboardRoutes } from "@/utils";
-import { withAuth } from "@/utils/auth/withAuth";
 import {
   BellDot,
   Receipt,
@@ -57,4 +56,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(DashboardLayout);
+export default DashboardLayout;

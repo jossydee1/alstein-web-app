@@ -5,6 +5,7 @@ export * from "./Ratings";
 export * from "./modals";
 export * from "./slides";
 export * from "./LinkTab";
+export * from "./Tab";
 export * from "./ListingSkeleton";
 export * from "./FilterMenu";
 export * from "./CertsList";

@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       "picsum.photos",
+      "randomuser.me",
       "alstein-dev-storage.s3.us-east-1.amazonaws.com",
     ],
   },
