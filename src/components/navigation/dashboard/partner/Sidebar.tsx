@@ -93,7 +93,7 @@ export const Sidebar = () => {
       label: "Dashboard",
       icon: <LayoutDashboard className={commonStyles.iconSize} />,
       href: dashboardRoutes.vendor_overview,
-      isActive: pathname?.includes(dashboardRoutes.vendor_overview),
+      isActive: pathname === dashboardRoutes.vendor_overview,
     },
   ];
 

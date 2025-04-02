@@ -20,7 +20,7 @@ type Props = {
 
 const SimpleCard = ({ title, value }: Props) => {
   return (
-    <div className="flex flex-col rounded-xl border bg-white shadow-sm sm:min-w-[200px]">
+    <div className="flex flex-col rounded-xl border-[0.2px] border-gray-300 bg-white shadow-sm sm:min-w-[200px]">
       <div className="p-4 md:p-5">
         <div className="flex items-center gap-x-2">
           <p className="capitalize tracking-wide text-[#172554]">{title}</p>

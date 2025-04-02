@@ -134,8 +134,8 @@ const BookingHistory = () => {
 
       <h1 className="hidden">Order History</h1>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
-        <div className="rounded-[6px] border bg-white">
-          <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
+        <div className="rounded-[6px] border-[0.2px] border-gray-300 bg-white">
+          <nav className="gray-400 border-grey-300 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
             {filterOptions.map(option => (
               <button
                 key={option}

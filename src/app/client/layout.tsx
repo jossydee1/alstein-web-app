@@ -2,7 +2,7 @@
 
 import Greetings from "@/components/common/Greetings";
 import { LinkTab } from "@/components/common/LinkTab";
-import NavBar from "@/components/navigation/dashboard/cllient/NavBar";
+import NavBar from "@/components/navigation/dashboard/client/NavBar";
 import { dashboardRoutes } from "@/utils";
 import { withAuth } from "@/utils/auth/withAuth";
 import {
