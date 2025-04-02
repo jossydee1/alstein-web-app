@@ -8,7 +8,7 @@ export interface BreadcrumbItem {
 }
 
 interface MobileNavigationProps {
-  breadcrumbs: BreadcrumbItem[];
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 export const MobileNavigation = ({

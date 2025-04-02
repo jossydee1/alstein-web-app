@@ -29,7 +29,7 @@ export const Navbar = () => {
         </div>
 
         <div className="ms-2 flex flex-1 items-center gap-4 lg:justify-between">
-          <p className="lg;block hidden">
+          <p className="hidden lg:block">
             Welcome back,{" "}
             <strong>
               {user?.first_name} {user?.last_name}

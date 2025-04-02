@@ -2,7 +2,7 @@ import React from "react";
 import {
   ChevronDown,
   ChevronUp,
-  Copy,
+  Files,
   LayoutDashboard,
   KeyRound,
   LogOut,
@@ -108,7 +108,7 @@ export const Sidebar = () => {
     {
       id: "bookings",
       label: "Bookings",
-      icon: <Copy className={commonStyles.iconSize} />,
+      icon: <Files className={commonStyles.iconSize} />,
       href: dashboardRoutes.vendor_bookings,
       isActive: pathname?.includes(dashboardRoutes.vendor_bookings),
     },

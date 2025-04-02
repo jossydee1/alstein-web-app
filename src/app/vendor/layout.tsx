@@ -1,8 +1,6 @@
 "use client";
 
 import React, { ReactElement, JSXElementConstructor } from "react";
-import { BreadcrumbItem } from "@/types";
-import { withAuth } from "@/utils";
 import {
   MobileNavigation,
   Navbar,
@@ -10,21 +8,19 @@ import {
 } from "@/components/navigation/dashboard/partner";
 
 interface DashboardLayoutProps {
-  title: string;
   children: ReactElement<
     unknown,
     string | JSXElementConstructor<React.ReactNode>
   >;
-
-  breadcrumbs: BreadcrumbItem[];
 }
 
-const DashboardLayout = ({ children, breadcrumbs }: DashboardLayoutProps) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <>
       <div className="min-h-svh bg-[#fff]">
         <Navbar />
-        <MobileNavigation breadcrumbs={breadcrumbs} />
+        {/* <MobileNavigation breadcrumbs={breadcrumbs} /> */}
+        <MobileNavigation />
         <Sidebar />
 
         {/* This is the main content area */}
@@ -36,4 +32,4 @@ const DashboardLayout = ({ children, breadcrumbs }: DashboardLayoutProps) => {
   );
 };
 
-export default withAuth(DashboardLayout);
+export default DashboardLayout;
