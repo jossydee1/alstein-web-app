@@ -17,7 +17,7 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <>
-      <div className="min-h-svh bg-[#fff]">
+      <div className="min-h-svh bg-[#fff] font-visbymedium antialiased">
         <Navbar />
         {/* <MobileNavigation breadcrumbs={breadcrumbs} /> */}
         <MobileNavigation />

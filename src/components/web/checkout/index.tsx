@@ -10,7 +10,7 @@ import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import { useAuth } from "@/context";
 import { DateRange } from "react-day-picker";
-import { differenceInDays, format } from "date-fns";
+import { differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
 import SuccessModal from "./SuccessModal";
 
@@ -51,10 +51,10 @@ const CheckoutContent = () => {
 
   useEffect(() => {
     if (startDate && endDate) {
-      setDate({
-        from: new Date(format(startDate, "dd/MM/yyyy")),
-        to: new Date(format(endDate, "dd/MM/yyyy")),
-      });
+      // setDate({
+      //   from: new Date(format(startDate, "dd/MM/yyyy")),
+      //   to: new Date(format(decodeURI(endDate), "dd/MM/yyyy")),
+      // });
     }
   }, [startDate, endDate]);
 

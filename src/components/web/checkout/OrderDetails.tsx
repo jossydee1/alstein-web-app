@@ -144,7 +144,7 @@ const OrderDetails = ({
         <PaystackButton
           {...paystackProps}
           className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
-          disabled={isPaystackDisabled}
+          disabled={!isPaystackDisabled}
         />
       ) : (
         <button
