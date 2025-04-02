@@ -57,7 +57,7 @@ export const Tab = ({ tabs, className = "", queryParam }: TabProps) => {
   };
 
   return (
-    <div className="w-full space-y-9 overflow-x-auto">
+    <div className="w-full space-y-6 overflow-x-auto">
       <nav className={`relative w-full ${className}`}>
         {showScrollButtons && (
           <button

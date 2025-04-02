@@ -31,7 +31,7 @@ export const dashboardRoutes = {
   vendor_overview: "/vendor",
   vendor_equipment: "/vendor/equipment",
   vendor_bookings: "/vendor/bookings",
-  vendor_transactions: "/vendor/transactions",
+  vendor_finances: "/vendor/finances",
   vendor_notifications: "/vendor/notifications",
   vendor_settings: "/vendor/settings",
 };

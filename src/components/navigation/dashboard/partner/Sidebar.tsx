@@ -113,11 +113,11 @@ export const Sidebar = () => {
       isActive: pathname?.includes(dashboardRoutes.vendor_bookings),
     },
     {
-      id: "tansactions",
-      label: "Transactions",
+      id: "finances",
+      label: "Finances",
       icon: <Receipt className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_transactions,
-      isActive: pathname?.includes(dashboardRoutes.vendor_transactions),
+      href: dashboardRoutes.vendor_finances,
+      isActive: pathname?.includes(dashboardRoutes.vendor_finances),
     },
     {
       id: "notifications",
