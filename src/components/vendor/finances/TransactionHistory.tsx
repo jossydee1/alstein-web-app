@@ -15,7 +15,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight, Edit, Eye, Trash } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
@@ -23,40 +23,35 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+// import { Button } from "@/components/ui/button";
+// import Link from "next/link";
 
 const tableHeads = [
   {
-    label: "SERVICE/EQUIPMENT",
+    label: "TRANSACTION ID",
   },
   {
-    label: "ID",
+    label: "DATE",
   },
   {
-    label: "LISTED DATE",
+    label: "TYPE",
   },
   {
-    label: "PRICE",
+    label: "TOTAL AMOUNT",
     className: "text-right",
   },
   {
     label: "STATUS",
   },
-  {
-    label: "ACTIONS",
-  },
+  // {
+  //   label: "ACTIONS",
+  // },
 ];
 
-const EquipmentListings = () => {
+const TransactionHistory = () => {
   const { token } = useAuth();
 
-  const filterOptions = [
-    "all",
-    "initiated",
-    "approved",
-    "canceled",
-    "declined",
-  ];
+  const filterOptions = ["all"];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
@@ -131,21 +126,22 @@ const EquipmentListings = () => {
     return items;
   };
 
-  const status = "approved";
+  const status = "failed";
 
   return (
     <main className="dashboard-section-card">
       {isLoading && <LoadingState />}
 
       <header className="mb-6 flex items-center justify-between pb-2.5">
-        <h1 className="text-2xl font-bold">Listed Equipments</h1>
-
-        <Button className="bg-brandColor">List an equipment</Button>
+        <h1 className="text-2xl font-bold">Booked Equipments</h1>
+        <Button type="button" className="bg-brandColor">
+          Withdraw Fund
+        </Button>
       </header>
 
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
-        <div className="rounded-[6px] border-[0.2px] border-gray-300 bg-white">
-          {/* <nav className="gray-400 border-grey-300 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
+        <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
+          {/* <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
             {filterOptions.map(option => (
               <button
                 key={option}
@@ -174,14 +170,14 @@ const EquipmentListings = () => {
 
             <TableBody>
               <TableRow className="py-10">
-                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  MRI Scan
-                </TableCell>
                 <TableCell className="px-5 py-3 text-[#6B7280]">
                   0112455
                 </TableCell>
+                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                  05/08/2025
+                </TableCell>
                 <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                  05/08/2025, 10:30 AM
+                  Payment received
                 </TableCell>
                 <TableCell className="px-5 py-3 text-right">
                   {formatPrice(2000000, "NGN")}
@@ -189,7 +185,7 @@ const EquipmentListings = () => {
                 <TableCell className="px-5 py-3">
                   <div
                     className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                      status === "approved"
+                      status === "failed"
                         ? "bg-orange-50"
                         : status === "confirmed"
                           ? "bg-green-50"
@@ -198,7 +194,7 @@ const EquipmentListings = () => {
                   >
                     <span
                       className={`size-2 rounded-full ${
-                        status === "approved"
+                        status === "failed"
                           ? "bg-orange-600"
                           : status === "confirmed"
                             ? "bg-green-600"
@@ -208,50 +204,31 @@ const EquipmentListings = () => {
                     <span>{status}</span>
                   </div>
                 </TableCell>
-                <TableCell className="px-5 py-3">
-                  <div className="flex items-center gap-4">
-                    <Button asChild variant="ghost" className="!p-0">
+                {/* <TableCell className="px-5 py-3">
+                  <div className="flex items-center gap-2.5">
+                    <Button asChild variant="ghost">
                       <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/view?equipment=0112455`}
-                        href="#"
+                        href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
                       >
                         <Eye className="size-4 text-[#6B7280]" />
                         View
                       </Link>
                     </Button>
-                    <Button asChild variant="ghost" className="!p-0">
-                      <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
-                        href="#"
-                      >
-                        <Edit className="size-4 text-[#6B7280]" />
-                        Edit
-                      </Link>
-                    </Button>
-                    <Button asChild variant="ghost" className="!p-0">
-                      <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
-                        href="#"
-                      >
-                        <Trash className="size-4 text-[#6B7280]" />
-                        Delete
-                      </Link>
-                    </Button>
                   </div>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableBody>
 
             {/* <TableBody>
               <TableRow className="py-10">
                 <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No equipment listed
+                  No bookings found
                 </TableCell>
               </TableRow>
             </TableBody> */}
 
             {/* <TableBody>
-              {orderHistory?.data.map(order => (
+              {orderHistory?.map(order => (
                 <TableRow key={order.id} className="py-10">
                   <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
                     {order.service}
@@ -262,13 +239,18 @@ const EquipmentListings = () => {
                   <TableCell className="px-5 py-3 text-[#6B7280]">
                     {order.orderDate}
                   </TableCell>
+                  <TableCell className="px-5 py-3 text-[#172554]">
+                    <span className="inline-flex aspect-square w-9 items-center justify-center rounded-full bg-[#F6F6F8]">
+                      1
+                    </span>
+                  </TableCell>
                   <TableCell className="px-5 py-3 text-right">
                     {order.totalAmount}
                   </TableCell>
                   <TableCell className="px-5 py-3">
                     <div
-                      className={`inline-flex items-center gap-2.5 rounded-3xl border px-6 py-1.5 capitalize ${
-                        order.status === "pending"
+                      className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
+                        order.status === "failed"
                           ? "bg-orange-50"
                           : order.status === "confirmed"
                             ? "bg-green-50"
@@ -277,7 +259,7 @@ const EquipmentListings = () => {
                     >
                       <span
                         className={`size-2 rounded-full ${
-                          order.status === "pending"
+                          order.status === "failed"
                             ? "bg-orange-600"
                             : order.status === "confirmed"
                               ? "bg-green-600"
@@ -296,7 +278,7 @@ const EquipmentListings = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -306,7 +288,7 @@ const EquipmentListings = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }
@@ -321,4 +303,4 @@ const EquipmentListings = () => {
   );
 };
 
-export default EquipmentListings;
+export default TransactionHistory;

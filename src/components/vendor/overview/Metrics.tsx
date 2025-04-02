@@ -3,7 +3,7 @@ import React from "react";
 
 const Metrics = () => {
   return (
-    <section className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+    <section className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
       <SimpleCard title="Total Orders" value={formatPrice(1200, "NGN")} />
       <SimpleCard title="Upcoming Bookings" value={(14).toString()} />
       <SimpleCard title="Pending Approvals" value={(34).toString()} />
