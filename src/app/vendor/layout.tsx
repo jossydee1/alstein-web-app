@@ -22,7 +22,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children, breadcrumbs }: DashboardLayoutProps) => {
   return (
     <>
-      <div className="min-h-svh bg-[#F8F9FC] dark:bg-neutral-900/80">
+      <div className="min-h-svh bg-[#fff]">
         <Navbar />
         <MobileNavigation breadcrumbs={breadcrumbs} />
         <Sidebar />

@@ -26,13 +26,13 @@ interface NavItem {
 }
 
 const commonStyles = {
-  link: "flex items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-800 dark:text-neutral-200 transition-colors dark:hover:bg-black/40 dark:focus:bg-black/40",
+  link: "flex items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none  transition-colors",
   accordionButton:
-    "hs-accordion-toggle flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:bg-black/40 dark:focus:bg-black/40",
+    "hs-accordion-toggle flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
   accordionContent:
     "hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300",
   iconSize: "size-4 shrink-0",
-  hrStyle: "my-3 border-t border-gray-300 dark:border-neutral-700",
+  hrStyle: "my-3 border-t border-gray-300",
 };
 
 const AccordionItem = ({ item }: { item: NavItem }) => {
@@ -138,7 +138,7 @@ export const Sidebar = () => {
   return (
     <div
       id="hs-application-sidebar"
-      className="hs-overlay fixed inset-y-0 start-0 z-[60] hidden h-full w-[260px] -translate-x-full transform border-e border-gray-300 bg-white transition-all duration-300 [--auto-close:lg] hs-overlay-open:translate-x-0 dark:border-neutral-700 dark:bg-neutral-800 lg:bottom-0 lg:end-auto lg:block lg:translate-x-0"
+      className="hs-overlay fixed inset-y-0 start-0 z-[60] hidden h-full w-[260px] -translate-x-full transform rounded-[6px] border border-e border-[#E5E7EB] bg-white transition-all duration-300 [--auto-close:lg] hs-overlay-open:translate-x-0 lg:bottom-0 lg:end-auto lg:block lg:translate-x-0"
       role="dialog"
       tabIndex={-1}
     >
@@ -177,7 +177,7 @@ export const Sidebar = () => {
         </div>
 
         {/* Fixed Footer */}
-        <div className="border-t border-gray-300 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="border-t border-gray-300 bg-white p-4">
           <button className={`w-full ${commonStyles.link}`} type="button">
             <LogOut className={commonStyles.iconSize} />
             Logout

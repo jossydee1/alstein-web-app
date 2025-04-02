@@ -27,11 +27,11 @@ export const MobileNavigation = ({
 
   return (
     <div className="-mt-px">
-      <div className="sticky inset-x-0 top-0 z-20 border-y bg-white px-4 dark:border-neutral-700 dark:bg-neutral-800 sm:px-6 lg:hidden lg:px-8">
+      <div className="sticky inset-x-0 top-0 z-20 border-y bg-white px-4 sm:px-6 lg:hidden lg:px-8">
         <div className="flex items-center py-2">
           <button
             type="button"
-            className="flex size-8 min-h-8 min-w-8 items-center justify-center gap-x-2 rounded-lg border border-gray-300 text-gray-800 hover:text-gray-500 focus:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+            className="flex size-8 min-h-8 min-w-8 items-center justify-center gap-x-2 rounded-lg border border-gray-300 text-gray-800 hover:text-gray-500 focus:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             aria-haspopup="dialog"
             aria-expanded="false"
             aria-controls="hs-application-sidebar"
@@ -50,7 +50,7 @@ export const MobileNavigation = ({
                 return (
                   <li
                     key={item.label}
-                    className="truncate text-sm font-semibold text-gray-800 dark:text-neutral-400"
+                    className="truncate text-sm font-semibold text-gray-800"
                     aria-current="page"
                   >
                     {item.label}
@@ -61,7 +61,7 @@ export const MobileNavigation = ({
               return (
                 <li
                   key={item.label}
-                  className="flex items-center text-sm text-gray-800 dark:text-neutral-400"
+                  className="flex items-center text-sm text-gray-800"
                 >
                   {item.href && item.label !== "..." ? (
                     <Link href={item.href} className="hover:text-gray-500">
@@ -70,7 +70,7 @@ export const MobileNavigation = ({
                   ) : (
                     item.label
                   )}
-                  <ChevronRight className="mx-3 size-2.5 shrink-0 overflow-visible text-gray-400 dark:text-neutral-500" />
+                  <ChevronRight className="mx-3 size-2.5 shrink-0 overflow-visible text-gray-400" />
                 </li>
               );
             })}

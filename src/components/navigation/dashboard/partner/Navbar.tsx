@@ -14,7 +14,7 @@ export const Navbar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   return (
-    <header className="sticky inset-x-0 top-0 z-[48] flex w-full flex-wrap border-b bg-white py-2.5 text-sm dark:border-neutral-700 dark:bg-neutral-800 md:flex-nowrap md:justify-start lg:ps-[260px]">
+    <header className="text-sm0 sticky inset-x-0 top-0 z-[48] flex w-full flex-wrap border-b bg-white py-2.5 md:flex-nowrap md:justify-start lg:ps-[260px]">
       <nav className="mx-auto flex w-full basis-full items-center px-4 sm:px-6">
         <div className="me-1 lg:me-0 lg:hidden">
           <Link
