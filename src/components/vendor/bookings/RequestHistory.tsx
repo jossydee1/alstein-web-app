@@ -16,12 +16,14 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/utils";
+import { cn, dashboardRoutes, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const tableHeads = [
   {
@@ -122,6 +124,8 @@ const RequestHistory = () => {
     return items;
   };
 
+  const status = "pending";
+
   return (
     <main className="dashboard-section-card">
       {isLoading && <LoadingState />}
@@ -162,10 +166,58 @@ const RequestHistory = () => {
             <TableBody>
               <TableRow className="py-10">
                 <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No orders found
+                  MRI Scan
+                </TableCell>
+                <TableCell className="px-5 py-3 text-[#6B7280]">
+                  0112455
+                </TableCell>
+                <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                  05/08/2025, 10:30 AM
+                </TableCell>
+                <TableCell className="px-5 py-3 text-right">
+                  {formatPrice(2000000, "NGN")}
+                </TableCell>
+                <TableCell className="px-5 py-3">
+                  <div
+                    className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
+                      status === "pending"
+                        ? "bg-orange-50"
+                        : status === "confirmed"
+                          ? "bg-green-50"
+                          : "bg-red-50"
+                    }`}
+                  >
+                    <span
+                      className={`size-2 rounded-full ${
+                        status === "pending"
+                          ? "bg-orange-600"
+                          : status === "confirmed"
+                            ? "bg-green-600"
+                            : "bg-red-600"
+                      }`}
+                    />
+                    <span>{status}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="px-5 py-3">
+                  <Button asChild variant="outline">
+                    <Link
+                      href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
+                    >
+                      Process Booking
+                    </Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             </TableBody>
+
+            {/* <TableBody>
+              <TableRow className="py-10">
+                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                  No orders found
+                </TableCell>
+              </TableRow>
+            </TableBody> */}
 
             {/* <TableBody>
               {orderHistory?.map(order => (
