@@ -23,12 +23,11 @@ import { toast } from "react-toastify";
 
 const quickLinks = [
   { name: "About Us", href: webRoutes.about },
-  { name: "Categories", href: webRoutes.categories },
   {
     name: "Listings",
     href: webRoutes.listings,
   },
-  { name: "Blog Grid", href: webRoutes.blog },
+  { name: "Blog", href: webRoutes.blog },
 ];
 
 export const Footer = () => {
