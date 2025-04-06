@@ -299,5 +299,9 @@ html {
 }
 
 .submitButton {
-  @apply h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-[#454545];
+  @apply h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-brandColor/80;
+}
+
+.buttonBlue {
+  @apply border border-[#E5E7EB] bg-brandColor text-white hover:!bg-brandColor/80 hover:text-white;
 }

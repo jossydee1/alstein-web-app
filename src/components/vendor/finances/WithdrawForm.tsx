@@ -137,7 +137,7 @@ const WithdrawForm = ({
             variant="outline"
             type="submit"
             disabled={isProcessing}
-            className="border border-[#E5E7EB] bg-brandColor text-white hover:bg-brandColor/70 hover:text-white"
+            className="buttonBlue"
           >
             Withdraw
           </Button>

@@ -16,7 +16,7 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight, Edit, Eye, Trash } from "lucide-react";
-import { cn, formatPrice } from "@/utils";
+import { cn, dashboardRoutes, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
@@ -140,7 +140,11 @@ const EquipmentListings = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Listed Equipments</h1>
 
-        <Button className="bg-brandColor">List an equipment</Button>
+        <Button className="buttonBlue" asChild>
+          <Link href={dashboardRoutes.vendor_new_equipment}>
+            List an equipment
+          </Link>
+        </Button>
       </header>
 
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
