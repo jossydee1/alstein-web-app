@@ -219,7 +219,7 @@ const NavBar = () => {
 
                       {showDropdown && (
                         <div
-                          className="fixed right-4 top-[70px] z-[9999] grid w-[250px] gap-6 rounded-[10px] bg-white p-5 shadow-lg sm:w-[300px] lg:fixed lg:right-[100px] xl:right-[150px]"
+                          className="fixed right-4 top-[70px] z-[9999] grid w-[250px] gap-6 rounded-md bg-white p-5 shadow-lg sm:w-[300px] lg:fixed lg:right-[100px] xl:right-[150px]"
                           style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
                         >
                           <Link

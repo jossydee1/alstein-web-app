@@ -140,7 +140,7 @@ const EquipmentListings = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Listed Equipments</h1>
 
-        <Button className="buttonBlue" asChild>
+        <Button className="buttonBlue2" asChild>
           <Link href={dashboardRoutes.vendor_new_equipment}>
             List an equipment
           </Link>

@@ -211,7 +211,7 @@ const AccountSettingsContent = () => {
               variant="outline"
               type="submit"
               disabled={isProcessing}
-              className="buttonBlue"
+              className="buttonBlue2"
             >
               {isProcessing ? "Saving..." : "Save Changes"}
             </Button>

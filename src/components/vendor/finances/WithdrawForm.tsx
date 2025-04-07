@@ -137,7 +137,7 @@ const WithdrawForm = ({
             variant="outline"
             type="submit"
             disabled={isProcessing}
-            className="buttonBlue"
+            className="buttonBlue2"
           >
             Withdraw
           </Button>

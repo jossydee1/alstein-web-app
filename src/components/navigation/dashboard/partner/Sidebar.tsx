@@ -8,7 +8,7 @@ import {
   LogOut,
   MessagesSquare,
   Receipt,
-  ShoppingBasket,
+  FlaskConical,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -101,7 +101,7 @@ export const Sidebar = () => {
     {
       id: "manage-equipment",
       label: "Manage Equipment",
-      icon: <ShoppingBasket className={commonStyles.iconSize} />,
+      icon: <FlaskConical className={commonStyles.iconSize} />,
       href: dashboardRoutes.vendor_equipment,
       isActive: pathname?.includes(dashboardRoutes.vendor_equipment),
     },

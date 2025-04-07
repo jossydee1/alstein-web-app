@@ -134,7 +134,7 @@ const OrderDetails = ({
         </p>
       </div>
 
-      <div className="rounded-[10px] bg-orange-50 p-4 font-medium text-orange-600">
+      <div className="rounded-md bg-orange-50 p-4 font-medium text-orange-600">
         <p>
           Note: A refundable ₦50 will be charged to verify your card. Payment is
           only deducted upon booking completion.
