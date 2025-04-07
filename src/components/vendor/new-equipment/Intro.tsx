@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import React from "react";
 
-const Intro = () => {
+const Intro = ({ onNext }: { onNext: () => void }) => {
   const STYLES = {
     card: "flex flex-row items-center gap-4 rounded-lg border border-[#E5E7EB] p-5",
     icon: "text-[#757575]",
     top: "mb-1.5 text-lg font-medium text-[#172554]",
     bottom: "text-[#6B7280]",
   };
+
   return (
     <div className="space-y-9">
       <header className="dashboard-section-card-header">
@@ -87,7 +88,12 @@ const Intro = () => {
               </p>
             </div>
           </div>
-          <Button className="buttonBlue">Get Started</Button>
+
+          <div className="flex justify-end">
+            <Button className="buttonBlue" onClick={onNext}>
+              Get Started
+            </Button>
+          </div>
         </section>
       </main>
     </div>

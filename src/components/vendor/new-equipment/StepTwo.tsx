@@ -2,10 +2,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import React from "react";
+import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { useEquipmentForm } from "@/context";
 
-const StepTwo = () => {
+const StepTwo = ({
+  onNext,
+  onBack,
+}: {
+  onNext: () => void;
+  onBack: () => void;
+}) => {
+  const { formData, updateFormData } = useEquipmentForm();
+  const [name, setName] = useState(formData.name || "");
+  const [description, setDescription] = useState(formData.description || "");
+  const [error, setError] = useState("");
+
+  const handleNext = () => {
+    if (!name || !description) {
+      setError("Please enter a name and description option.");
+      return;
+    }
+    setError("");
+
+    updateFormData({ name, description });
+    onNext();
+  };
+
   return (
     <div className="space-y-9">
       <main className="dashboard-section-card">
@@ -32,6 +55,8 @@ const StepTwo = () => {
                 type="text"
                 id="equipment-name"
                 name="equipment-name"
+                value={name}
+                onChange={e => setName(e.target.value)}
                 placeholder="e.g High-Precision PCR Machine"
                 required
               />
@@ -45,15 +70,24 @@ const StepTwo = () => {
                 name="equipment-description"
                 placeholder="e.g This PCR machine offers high precision and accuracy for all your laboratory needs. It is equipped with advanced features to ensure reliable results."
                 className="h-[300px]"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                required
               />
             </div>
           </form>
 
+          {error && (
+            <p className="w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+              {error}
+            </p>
+          )}
+
           <div className="flex flex-wrap justify-between gap-4">
-            <Button variant="outline" type="button">
+            <Button variant="outline" type="button" onClick={onBack}>
               Back
             </Button>
-            <Button className="buttonBlue2" type="button">
+            <Button className="buttonBlue2" type="button" onClick={handleNext}>
               Save and Continue
             </Button>
           </div>

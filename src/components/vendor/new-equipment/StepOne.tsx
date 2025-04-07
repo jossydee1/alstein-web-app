@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,10 +9,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useEquipmentForm } from "@/context";
 
-import React from "react";
+const StepOne = ({
+  onNext,
+  onBack,
+}: {
+  onNext: () => void;
+  onBack: () => void;
+}) => {
+  const { formData, updateFormData } = useEquipmentForm();
+  const [category, setCategory] = useState(formData.category || "");
+  const [availability, setAvailability] = useState(formData.availability || "");
+  const [error, setError] = useState("");
 
-const StepOne = () => {
+  const handleNext = () => {
+    if (!category || !availability) {
+      setError("Please select a category and availability option.");
+      return;
+    }
+    setError("");
+
+    updateFormData({ category, availability });
+    onNext();
+  };
+
   const categories = [
     {
       label: "Laboratory Instruments",
@@ -52,7 +74,7 @@ const StepOne = () => {
               <Label htmlFor="category" className="mb-2">
                 Category
               </Label>
-              <Select>
+              <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-full" id="category" name="category">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
@@ -70,20 +92,21 @@ const StepOne = () => {
                 Availability
               </Label>
               <RadioGroup
-                defaultValue="rent"
+                value={availability}
+                onValueChange={setAvailability}
                 className="flex flex-wrap gap-3"
                 id="availability"
                 name="availability"
               >
-                <div className="flex w-full max-w-[300px] flex-col-reverse items-start gap-2.5 rounded-md border border-[#E5E7EB] p-4">
+                <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                   <RadioGroupItem value="rent" id="rent" />
                   <Label htmlFor="rent">Rent</Label>
                 </div>
-                <div className="flex w-full max-w-[300px] flex-col-reverse items-start gap-2.5 rounded-md border border-[#E5E7EB] p-4">
+                <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                   <RadioGroupItem value="onsite" id="onsite" />
                   <Label htmlFor="onsite">Onsite</Label>
                 </div>
-                <div className="flex w-full max-w-[300px] flex-col-reverse items-start gap-2.5 rounded-md border border-[#E5E7EB] p-4">
+                <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                   <RadioGroupItem value="lease" id="lease" />
                   <Label htmlFor="lease">Lease</Label>
                 </div>
@@ -91,11 +114,17 @@ const StepOne = () => {
             </div>
           </form>
 
+          {error && (
+            <p className="w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+              {error}
+            </p>
+          )}
+
           <div className="flex flex-wrap justify-between gap-4">
-            <Button variant="outline" type="button">
+            <Button variant="outline" type="button" onClick={onBack}>
               Back
             </Button>
-            <Button className="buttonBlue2" type="button">
+            <Button className="buttonBlue2" type="button" onClick={handleNext}>
               Save and Continue
             </Button>
           </div>

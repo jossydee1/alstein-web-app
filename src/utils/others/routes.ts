@@ -29,7 +29,7 @@ export const dashboardRoutes = {
   client_notifications: "/client/notifications",
   client_payment_methods: "/client/payment-method",
   vendor_overview: "/vendor",
-  vendor_equipment: "/vendor/equipment",
+  vendor_equipments: "/vendor/equipment",
   vendor_new_equipment: "/vendor/equipment/new",
   vendor_bookings: "/vendor/bookings",
   vendor_finances: "/vendor/finances",

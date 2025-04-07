@@ -216,7 +216,7 @@ const EquipmentListings = () => {
                   <div className="flex items-center gap-4">
                     <Button asChild variant="ghost" className="!p-0">
                       <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/view?equipment=0112455`}
+                        // href={`${dashboardRoutes.vendor_equipments}/view?equipment=0112455`}
                         href="#"
                       >
                         <Eye className="size-4 text-[#6B7280]" />
@@ -225,7 +225,7 @@ const EquipmentListings = () => {
                     </Button>
                     <Button asChild variant="ghost" className="!p-0">
                       <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
+                        // href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
                         href="#"
                       >
                         <Edit className="size-4 text-[#6B7280]" />
@@ -234,7 +234,7 @@ const EquipmentListings = () => {
                     </Button>
                     <Button asChild variant="ghost" className="!p-0">
                       <Link
-                        // href={`${dashboardRoutes.vendor_equipment}/edit?equipment=0112455`}
+                        // href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
                         href="#"
                       >
                         <Trash className="size-4 text-[#6B7280]" />

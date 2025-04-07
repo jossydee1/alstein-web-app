@@ -102,8 +102,8 @@ export const Sidebar = () => {
       id: "manage-equipment",
       label: "Manage Equipment",
       icon: <FlaskConical className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_equipment,
-      isActive: pathname?.includes(dashboardRoutes.vendor_equipment),
+      href: dashboardRoutes.vendor_equipments,
+      isActive: pathname?.includes(dashboardRoutes.vendor_equipments),
     },
     {
       id: "bookings",

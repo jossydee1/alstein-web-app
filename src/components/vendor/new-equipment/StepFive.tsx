@@ -4,18 +4,38 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import { Images, X } from "lucide-react";
+import { useEquipmentForm } from "@/context";
 
-const StepFive = () => {
-  const [images, setImages] = useState<File[]>([]);
+const StepFive = ({
+  onSubmit,
+  onBack,
+}: {
+  onSubmit: () => void;
+  onBack: () => void;
+}) => {
+  const { formData, updateFormData } = useEquipmentForm();
+  const [documents, setDocuments] = useState<File[]>(formData.documents || []);
+  const [error, setError] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImages([...images, ...Array.from(e.target.files)]);
+      setDocuments([...documents, ...Array.from(e.target.files)]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+    setDocuments(prevdocuments => prevdocuments.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = () => {
+    if (documents.length < 1) {
+      setError("Please upload at least one document.");
+      return;
+    }
+    setError("");
+
+    updateFormData({ documents });
+    onSubmit();
   };
 
   return (
@@ -31,17 +51,18 @@ const StepFive = () => {
               compliance and reliability
             </p>
           </div>
+          <p className="text-3xl font-semibold text-[#172554]">Step 5</p>
         </header>
 
         <section className="mt-7 space-y-7">
           <form className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4">
             <div className="w-full">
-              <label htmlFor="images" className="mb-2">
-                Upload Images
+              <label htmlFor="documents" className="mb-2">
+                Upload documents
                 <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
                   <Images className="h-10 w-10 text-[#2563EB]" />
                   <p className="mt-4 text-sm text-[#1F2937]">
-                    Drop your images here or{" "}
+                    Drop your documents here or{" "}
                     <span className="text-blue-600 underline">browse</span>
                   </p>
                   <p className="mt-2 text-xs text-[#9CA3AF]">
@@ -50,8 +71,8 @@ const StepFive = () => {
                   <input
                     className="hidden"
                     type="file"
-                    id="images"
-                    name="images"
+                    id="documents"
+                    name="documents"
                     multiple
                     accept="image/*"
                     onChange={handleImageChange}
@@ -62,7 +83,7 @@ const StepFive = () => {
           </form>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {images.map((image, index) => (
+            {documents.map((image, index) => (
               <div
                 key={index}
                 className={`relative overflow-hidden rounded-lg border border-[#E5E7EB] ${
@@ -85,12 +106,18 @@ const StepFive = () => {
           </div>
         </section>
 
-        <div className="flex flex-wrap justify-between gap-4">
-          <Button variant="outline" type="button">
+        {error && (
+          <p className="mb-7 w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+            {error}
+          </p>
+        )}
+
+        <div className="mt-7 flex flex-wrap justify-between gap-4">
+          <Button variant="outline" type="button" onClick={onBack}>
             Back
           </Button>
-          <Button className="buttonBlue2" type="button">
-            Save and Continue
+          <Button className="buttonBlue2" type="button" onClick={handleSubmit}>
+            Submit for Review
           </Button>
         </div>
       </div>

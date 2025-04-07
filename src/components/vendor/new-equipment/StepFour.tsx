@@ -1,11 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useState } from "react";
 import map from "@/public/images/google-map.png";
 import Image from "next/image";
+import { useEquipmentForm } from "@/context";
 
-const StepFour = () => {
+const StepFour = ({
+  onNext,
+  onBack,
+}: {
+  onNext: () => void;
+  onBack: () => void;
+}) => {
+  const { formData, updateFormData } = useEquipmentForm();
+  const [address, setAddress] = useState(formData.address || "");
+  const [error, setError] = useState("");
+
+  const handleNext = () => {
+    if (!address) {
+      setError("Please enter a valid address.");
+      return;
+    }
+    setError("");
+
+    updateFormData({ address });
+    onNext();
+  };
+
   return (
     <div className="space-y-9">
       <main className="dashboard-section-card">
@@ -32,6 +54,8 @@ const StepFour = () => {
                 type="text"
                 id="address"
                 name="address"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
                 placeholder="e.g 123 Main St, City, Country"
                 required
               />
@@ -44,11 +68,17 @@ const StepFour = () => {
             />
           </form>
 
+          {error && (
+            <p className="w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+              {error}
+            </p>
+          )}
+
           <div className="flex flex-wrap justify-between gap-4">
-            <Button variant="outline" type="button">
+            <Button variant="outline" type="button" onClick={onBack}>
               Back
             </Button>
-            <Button className="buttonBlue2" type="button">
+            <Button className="buttonBlue2" type="button" onClick={handleNext}>
               Save and Continue
             </Button>
           </div>
