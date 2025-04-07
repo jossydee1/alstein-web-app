@@ -1,7 +1,21 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import WithdrawalMethod from "./AddWithdrawalMethod";
+import WithdrawForm from "./WithdrawForm";
 
 const WithdrawEarnings = () => {
-  return <div>WithdrawEarnings</div>;
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <div>
+      {showForm ? (
+        <WithdrawalMethod setShowForm={setShowForm} />
+      ) : (
+        <WithdrawForm setShowForm={setShowForm} />
+      )}
+    </div>
+  );
 };
 
 export default WithdrawEarnings;

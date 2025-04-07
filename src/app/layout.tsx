@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import PrelineScript from "@/components/PrelineScript";
 import ReactQueryProvider from "./providers/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AuthProvider } from "@/context";
+import { AppProviders } from "@/context";
 import { Suspense } from "react";
 import { LoadingState } from "@/components/common";
 
@@ -24,10 +24,10 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <Suspense fallback={<LoadingState />}>
           <ReactQueryProvider>
-            <AuthProvider>
+            <AppProviders>
               <ToastContainer />
               {children}
-            </AuthProvider>
+            </AppProviders>
             <PrelineScript />
             <ReactQueryDevtools initialIsOpen={false} />
           </ReactQueryProvider>

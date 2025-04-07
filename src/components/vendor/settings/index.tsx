@@ -322,7 +322,7 @@ const VendorSettingsContent = () => {
             variant="outline"
             type="submit"
             disabled={isProcessing}
-            className="border border-[#E5E7EB] bg-brandColor text-white hover:bg-brandColor/70 hover:text-white"
+            className="buttonBlue2"
           >
             {isProcessing ? "Saving..." : "Save Changes"}
           </Button>
@@ -371,7 +371,7 @@ const VendorSettingsContent = () => {
             }}
             className="mt-6"
           >
-            <div className="mb-4">
+            <div className="mb-2">
               <Label htmlFor="supportMessage" className="mb-2">
                 Your Message
               </Label>
@@ -384,10 +384,7 @@ const VendorSettingsContent = () => {
                 required
               ></textarea>
             </div>
-            <Button
-              type="submit"
-              className="border border-[#E5E7EB] bg-brandColor text-white hover:bg-brandColor/70 hover:text-white"
-            >
+            <Button type="submit" className="buttonBlue2">
               Send Message
             </Button>
           </form>
