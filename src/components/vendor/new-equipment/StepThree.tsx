@@ -79,12 +79,12 @@ const StepThree = ({
 
         <section className="mt-7 space-y-7">
           <form className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4">
-            <div className="w-full max-w-[420px]">
+            <div className="w-full">
               <Label htmlFor="feature" className="mb-4">
                 Key Features
               </Label>
               <Input
-                className="border border-[#E5E7EB] p-5"
+                className="max-w-[420px] border border-[#E5E7EB] p-5"
                 type="text"
                 id="feature"
                 name="feature"

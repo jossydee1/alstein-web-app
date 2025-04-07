@@ -9,8 +9,7 @@ import StepThree from "./StepThree";
 import StepFour from "./StepFour";
 import StepFive from "./StepFive";
 import { EquipmentFormDataProvider, useEquipmentForm } from "@/context";
-import { useRouter } from "next/navigation";
-import { dashboardRoutes } from "@/utils";
+import ConfirmationModal from "./ConfirmationModal";
 
 const NewEquipmentContent = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -32,8 +31,10 @@ const FormStepsWithContext = ({
   currentStep: number;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }) => {
-  const router = useRouter();
   const { formData, updateFormData } = useEquipmentForm();
+
+  const [status, setStatus] = useState("success");
+  const [open, setOpen] = useState(false);
 
   const steps = [
     <Intro onNext={() => setCurrentStep(1)} />,
@@ -56,6 +57,8 @@ const FormStepsWithContext = ({
     <StepFive
       onSubmit={() => {
         console.log("Form Data:", formData);
+        setOpen(true);
+        setStatus("success");
         updateFormData({
           category: "",
           availability: "",
@@ -66,13 +69,17 @@ const FormStepsWithContext = ({
           address: "",
           documents: [],
         });
-        router.push(dashboardRoutes.vendor_equipments);
       }}
       onBack={() => setCurrentStep(4)}
     />,
   ];
 
-  return <div className="space-y-9">{steps[currentStep]}</div>;
+  return (
+    <div className="space-y-9">
+      <ConfirmationModal status={status} open={open} setOpen={setOpen} />
+      {steps[currentStep]}
+    </div>
+  );
 };
 
 export default NewEquipmentContent;
