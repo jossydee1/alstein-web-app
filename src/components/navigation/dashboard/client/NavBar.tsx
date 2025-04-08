@@ -3,13 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import {
-  ArrowRightLeft,
-  BellDot,
-  Handshake,
-  LayoutDashboard,
-  LogOut,
-} from "lucide-react";
+import { BellDot, LogOut, Building2, UserRound } from "lucide-react";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
@@ -92,21 +86,9 @@ const NavBar = () => {
                   className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                 >
                   <span className="mr-2 inline-block">
-                    <LayoutDashboard size={20} />
+                    <UserRound size={20} />
                   </span>
-                  <span className="font-medium leading-6">Dashboard</span>
-                </Link>
-
-                <Link
-                  href={webRoutes.partners}
-                  className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                >
-                  <span className="mr-2 inline-block">
-                    <Handshake size={20} />
-                  </span>
-                  <span className="font-medium leading-6">
-                    Become a Partner
-                  </span>
+                  <span className="font-medium leading-6">My Account</span>
                 </Link>
 
                 <Link
@@ -114,10 +96,10 @@ const NavBar = () => {
                   className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                 >
                   <span className="mr-2 inline-block">
-                    <ArrowRightLeft size={20} />
+                    <Building2 size={20} />
                   </span>
                   <span className="font-medium leading-6">
-                    Switch to Vendor account
+                    Business Profile
                   </span>
                 </Link>
 

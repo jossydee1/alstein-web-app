@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import { ArrowRightLeft, BellDot, LayoutDashboard, LogOut } from "lucide-react";
+import { BellDot, LogOut, UserRound } from "lucide-react";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 
@@ -89,21 +89,9 @@ export const Navbar = () => {
                     className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                   >
                     <span className="mr-2 inline-block">
-                      <LayoutDashboard size={20} />
+                      <UserRound size={20} />
                     </span>
-                    <span className="font-medium leading-6">Dashboard</span>
-                  </Link>
-
-                  <Link
-                    href={dashboardRoutes.client_order_history}
-                    className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                  >
-                    <span className="mr-2 inline-block">
-                      <ArrowRightLeft size={20} />
-                    </span>
-                    <span className="font-medium leading-6">
-                      Switch to Client account
-                    </span>
+                    <span className="font-medium leading-6">My Account</span>
                   </Link>
 
                   <button

@@ -1,13 +1,12 @@
 "use client";
 
 import {
-  ArrowRightLeft,
   BellDot,
+  Building2,
   ChevronDown,
-  Handshake,
-  LayoutDashboard,
   LogOut,
   Menu,
+  UserRound,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -246,34 +245,22 @@ const NavBar = () => {
                             className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
-                              <LayoutDashboard size={20} />
+                              <UserRound size={20} />
                             </span>
                             <span className="font-medium leading-6">
-                              Dashboard
-                            </span>
-                          </Link>
-
-                          <Link
-                            href={webRoutes.partners}
-                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
-                          >
-                            <span className="mr-2 inline-block">
-                              <Handshake size={20} />
-                            </span>
-                            <span className="font-medium leading-6">
-                              Become a Partner
+                              My Account
                             </span>
                           </Link>
 
                           <Link
                             href={dashboardRoutes.vendor_overview}
-                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
+                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
-                              <ArrowRightLeft size={20} />
+                              <Building2 size={20} />
                             </span>
                             <span className="font-medium leading-6">
-                              Switch to Vendor account
+                              Business Profile
                             </span>
                           </Link>
 

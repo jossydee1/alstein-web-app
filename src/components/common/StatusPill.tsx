@@ -45,7 +45,9 @@ export const GetPaymentStatusPill = (
     >
       <span className={`!size-2 rounded-full ${style.replace("50", "600")}`} />
       <span>
-        {status === "awaiting_payment_confirmation" ? "awaiting" : status}
+        {status === "awaiting_payment_confirmation"
+          ? "awaiting confirmation"
+          : status}
       </span>
     </div>
   );
