@@ -29,15 +29,17 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [date, setDate] = useState<DateRange | undefined>();
   const [fromTime, setFromTime] = useState<Time>({
-    hours: "09",
-    minutes: "00",
+    hours: "",
+    minutes: "",
   });
-  const [toTime, setToTime] = useState<Time>({ hours: "17", minutes: "00" });
+  const [toTime, setToTime] = useState<Time>({ hours: "", minutes: "" });
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
 
   useEffect(() => {
     if (date?.from && date?.to) {
       setNumberOfDays(differenceInDays(date.to, date.from));
+    } else if (date?.from && !date?.to) {
+      setNumberOfDays(1);
     } else {
       setNumberOfDays(0);
     }
@@ -45,8 +47,8 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resetDateTime = () => {
     setDate(undefined);
-    setFromTime({ hours: "09", minutes: "00" });
-    setToTime({ hours: "17", minutes: "00" });
+    setFromTime({ hours: "", minutes: "" });
+    setToTime({ hours: "", minutes: "" });
   };
 
   return (

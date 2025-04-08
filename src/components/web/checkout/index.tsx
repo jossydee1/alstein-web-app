@@ -1,10 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Breadcrumbs } from "@/components/common";
-import { formatError, PAYSTACK_PUBLIC_TEST_KEY, webRoutes } from "@/utils";
+import { Breadcrumbs, LoadingState } from "@/components/common";
+import {
+  api,
+  formatError,
+  formatIOSToDate,
+  PAYSTACK_PUBLIC_TEST_KEY,
+  webRoutes,
+} from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { ListingInfoProps } from "@/types";
+import { ApiResponseProps, ListingInfoProps } from "@/types";
 import { useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
@@ -12,6 +18,7 @@ import { useAuth } from "@/context";
 import dynamic from "next/dynamic";
 import SuccessModal from "./SuccessModal";
 import { useDateTime } from "@/context/DateTimeContext";
+import { toast } from "react-toastify";
 
 const OrderDetails = dynamic(
   () => import("./OrderDetails"),
@@ -32,12 +39,12 @@ export interface FormData {
 const CheckoutContent = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const address = searchParams.get("address");
+  const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { date, numberOfDays, resetDateTime } = useDateTime();
+  const { date, numberOfDays, resetDateTime, fromTime } = useDateTime();
 
-  const { user } = useAuth();
+  const { user, token, userId } = useAuth();
   const [error] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
@@ -57,15 +64,6 @@ const CheckoutContent = () => {
       });
     }
   }, [user]);
-
-  useEffect(() => {
-    if (address) {
-      setFormData(prev => ({
-        ...prev,
-        address: address,
-      }));
-    }
-  }, [address]);
 
   // Get listing info
   const {
@@ -104,9 +102,46 @@ const CheckoutContent = () => {
   // paystack
   const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
 
-  const handlePaymentSuccess = () => {
-    resetDateTime();
-    setShowSuccessModal(true);
+  const handlePaymentSuccess = async () => {
+    setIsBooking(true);
+    try {
+      const response = await api.post<ApiResponseProps<unknown>>(
+        "/client/api/v1/booking/initiate-booking",
+        {
+          equipment_id: id,
+          partner_id: listingInfo?.partner?.id,
+          start_date: formatIOSToDate(
+            date?.from ? date.from.toISOString() : "",
+          ),
+          end_date: formatIOSToDate(date?.to ? date.to.toISOString() : ""),
+          // start_time: date?.from?.toISOString(),
+          // end_time: date?.to?.toISOString(),
+          client_id: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(response.data.message || "Failed to initiate booking");
+        return;
+      }
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        resetDateTime();
+        setShowSuccessModal(true);
+        return;
+      }
+
+      return response.data.data;
+    } catch (error) {
+      toast.error(formatError(error, "Failed to initiate booking"));
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   const paystackProps = {
@@ -116,9 +151,19 @@ const CheckoutContent = () => {
     metadata: {
       custom_fields: [
         {
-          display_name: "S Id",
-          variable_name: "s_id",
+          display_name: "Client Id",
+          variable_name: "client_id",
           value: user?.id,
+        },
+        {
+          display_name: "Listing Id",
+          variable_name: "listing_id",
+          value: listingInfo?.id,
+        },
+        {
+          display_name: "Partner Id",
+          variable_name: "partner_id",
+          value: listingInfo?.partner?.id,
         },
         {
           display_name: "Name",
@@ -141,14 +186,19 @@ const CheckoutContent = () => {
           value: date?.from?.toLocaleDateString(),
         },
         {
+          display_name: "Start Time",
+          variable_name: "start_time",
+          value: date?.from?.toLocaleTimeString(),
+        },
+        {
           display_name: "End Date",
           variable_name: "end_date",
           value: date?.to?.toLocaleDateString(),
         },
         {
-          display_name: "Listing ID",
-          variable_name: "listing_id",
-          value: listingInfo?.id,
+          display_name: "End Time",
+          variable_name: "end_time",
+          value: date?.to?.toLocaleTimeString(),
         },
         {
           display_name: "Cost per day",
@@ -176,7 +226,7 @@ const CheckoutContent = () => {
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
   const isPaystackDisabled =
     !date?.from ||
-    !date?.to ||
+    !fromTime ||
     Object.values(formData).some(value => value === "") ||
     totalCost <= 0;
 
@@ -208,6 +258,8 @@ const CheckoutContent = () => {
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
       />
+
+      {isBooking && <LoadingState />}
 
       <div className={CONTAINER_STYLES.bg}>
         <Breadcrumbs links={links} />
