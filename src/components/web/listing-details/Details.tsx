@@ -42,7 +42,7 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             <h3 className="mb-2 text-xl font-semibold text-[#161616]">
               {listingInfo?.partner?.name}
             </h3>
-            <p className="font-medium text-[#8B8B8B]">3 Listings</p>
+            <p className="font-medium text-[#8B8B8B]">0 Listings</p>
           </div>
         </div>
 
