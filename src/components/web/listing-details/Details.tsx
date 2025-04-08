@@ -5,31 +5,12 @@ import { BadgeCheck, Building2 } from "lucide-react";
 import Link from "next/link";
 import { formatDateTime, webRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
-import { DateRange } from "react-day-picker";
 import DateTimePicker from "@/components/common/DateTimePicker";
+import { useDateTime } from "@/context/DateTimeContext";
 
-type Time = {
-  hours: string;
-  minutes: string;
-};
-
-const Details = ({
-  listingInfo,
-  date,
-  setDate,
-  fromTime,
-  setFromTime,
-  toTime,
-  setToTime,
-}: {
-  listingInfo: ListingInfoProps;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-  fromTime: Time;
-  setFromTime: React.Dispatch<React.SetStateAction<Time>>;
-  toTime: Time;
-  setToTime: React.Dispatch<React.SetStateAction<Time>>;
-}) => {
+const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+  const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
+    useDateTime();
   return (
     <article>
       <section className="description">

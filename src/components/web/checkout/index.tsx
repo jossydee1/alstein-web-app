@@ -9,10 +9,9 @@ import { useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import { useAuth } from "@/context";
-import { DateRange } from "react-day-picker";
-import { differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
 import SuccessModal from "./SuccessModal";
+import { useDateTime } from "@/context/DateTimeContext";
 
 const OrderDetails = dynamic(
   () => import("./OrderDetails"),
@@ -34,9 +33,9 @@ const CheckoutContent = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const address = searchParams.get("address");
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const { date, numberOfDays } = useDateTime();
 
   const { user } = useAuth();
   const [error] = useState("");
@@ -46,22 +45,6 @@ const CheckoutContent = () => {
     email: "",
     address: "",
   });
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [fromTime, setFromTime] = useState({
-    hours: "09",
-    minutes: "00",
-  });
-  const [toTime, setToTime] = useState({ hours: "17", minutes: "00" });
-  const [numberOfDays, setNumberOfDays] = useState<number>(0);
-
-  useEffect(() => {
-    if (startDate && endDate) {
-      // setDate({
-      //   from: new Date(format(startDate, "dd/MM/yyyy")),
-      //   to: new Date(format(decodeURI(endDate), "dd/MM/yyyy")),
-      // });
-    }
-  }, [startDate, endDate]);
 
   // set form data from user
   useEffect(() => {
@@ -83,13 +66,6 @@ const CheckoutContent = () => {
       }));
     }
   }, [address]);
-
-  // set number of days
-  useEffect(() => {
-    if (date?.from && date?.to) {
-      setNumberOfDays(differenceInDays(date.to, date.from));
-    }
-  }, [date]);
 
   // Get listing info
   const {
@@ -238,19 +214,11 @@ const CheckoutContent = () => {
             <ShippingAddress formData={formData} setFormData={setFormData} />
             <OrderDetails
               listingInfo={listingInfo}
-              numberOfDays={numberOfDays}
-              setDate={setDate}
-              date={date}
-              fromTime={fromTime}
-              setFromTime={setFromTime}
-              toTime={toTime}
-              setToTime={setToTime}
               costPerDay={costPerDay}
               serviceFee={serviceFee}
               totalCost={totalCost}
               paystackProps={paystackProps}
               isPaystackDisabled={isPaystackDisabled}
-              address={formData.address}
               user={user === null ? false : true}
             />
           </div>

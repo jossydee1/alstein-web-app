@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatDateTime, formatPrice, webRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
-import { DateRange } from "react-day-picker";
 import {
   Popover,
   PopoverContent,
@@ -12,31 +11,18 @@ import {
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 import DateTimePicker from "@/components/common/DateTimePicker";
+import { useDateTime } from "@/context/DateTimeContext";
 
-type Time = {
-  hours: string;
-  minutes: string;
-};
-
-const Summary = ({
-  listingInfo,
-  date,
-  setDate,
-  fromTime,
-  setFromTime,
-  toTime,
-  setToTime,
-  numberOfDays,
-}: {
-  listingInfo: ListingInfoProps;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-  fromTime: Time;
-  setFromTime: React.Dispatch<React.SetStateAction<Time>>;
-  toTime: Time;
-  setToTime: React.Dispatch<React.SetStateAction<Time>>;
-  numberOfDays: number;
-}) => {
+const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+  const {
+    date,
+    setDate,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    numberOfDays,
+  } = useDateTime();
   const router = useRouter();
   const costPerDay = listingInfo?.price;
   const serviceFee = 0;

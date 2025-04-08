@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import image from "@/public/images/doctor.png";
 import { authRoutes, webRoutes, formatPrice, formatDateTime } from "@/utils";
 import { Edit3 } from "lucide-react";
-import { DateRange } from "react-day-picker";
 import {
   Popover,
   PopoverContent,
@@ -16,49 +15,38 @@ import { PaystackButton } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/navigation";
 import DateTimePicker from "@/components/common/DateTimePicker";
-
-type Time = {
-  hours: string;
-  minutes: string;
-};
+import { useDateTime } from "@/context/DateTimeContext";
 
 const OrderDetails = ({
   listingInfo,
-  numberOfDays,
-  date,
-  fromTime,
-  setFromTime,
-  toTime,
-  setToTime,
-  setDate,
   costPerDay,
   serviceFee,
   totalCost,
   paystackProps,
   isPaystackDisabled,
   user,
-  address,
 }: {
   listingInfo: ListingProps;
-  numberOfDays: number;
-  date: DateRange | undefined;
-  fromTime: Time;
-  setFromTime: React.Dispatch<React.SetStateAction<Time>>;
-  toTime: Time;
-  setToTime: React.Dispatch<React.SetStateAction<Time>>;
-  setDate: (date: DateRange | undefined) => void;
   costPerDay: number;
   serviceFee: number;
   totalCost: number;
   paystackProps: PaystackProps;
   isPaystackDisabled: boolean;
-  address: string;
   user: boolean;
 }) => {
   const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const {
+    date,
+    setDate,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    numberOfDays,
+  } = useDateTime();
 
-  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.checkout}?id=${listingInfo.id}&address=${address}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`)}`;
+  const redirectUrl = `${authRoutes.login}?redirect=${webRoutes.checkout}?id=${listingInfo.id}`;
 
   return (
     <div className="dashboard-section-card space-y-8">

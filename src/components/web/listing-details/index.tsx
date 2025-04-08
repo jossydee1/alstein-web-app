@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Breadcrumbs } from "@/components/common";
 import Header from "./Header";
 import Details from "./Details";
@@ -11,25 +11,10 @@ import { formatError, webRoutes } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { ListingInfoProps, CommentProps, AverageRatingProps } from "@/types";
 import { useParams } from "next/navigation";
-import { DateRange } from "react-day-picker";
-import { differenceInDays } from "date-fns";
 import ListingDetailsSkeleton from "./Skeleton";
 
 const ListingDetailsContent = () => {
   const { id } = useParams();
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [fromTime, setFromTime] = useState({
-    hours: "09",
-    minutes: "00",
-  });
-  const [toTime, setToTime] = useState({ hours: "17", minutes: "00" });
-  const [numberOfDays, setNumberOfDays] = useState<number>(0);
-
-  useEffect(() => {
-    if (date?.from && date?.to) {
-      setNumberOfDays(differenceInDays(date.to, date.from));
-    }
-  }, [date]);
 
   const CONTAINER_STYLES = {
     bg: "relative mb-16",
@@ -104,28 +89,11 @@ const ListingDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <div className="flex flex-col justify-between gap-7 lg:flex-row">
           <div className="w-full flex-1 lg:max-w-[540px]">
-            <Details
-              listingInfo={listingInfo}
-              date={date}
-              setDate={setDate}
-              fromTime={fromTime}
-              setFromTime={setFromTime}
-              toTime={toTime}
-              setToTime={setToTime}
-            />
+            <Details listingInfo={listingInfo} />
           </div>
 
           <div className="min-w-[340px] max-w-[340px]">
-            <Summary
-              listingInfo={listingInfo}
-              date={date}
-              setDate={setDate}
-              numberOfDays={numberOfDays}
-              fromTime={fromTime}
-              setFromTime={setFromTime}
-              toTime={toTime}
-              setToTime={setToTime}
-            />
+            <Summary listingInfo={listingInfo} />
           </div>
         </div>
 
