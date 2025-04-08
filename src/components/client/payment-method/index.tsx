@@ -1,8 +1,8 @@
 import React from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Input } from "@/components/ui/input";
 
 const PaymentMethodContent = () => {
   return (
@@ -13,13 +13,13 @@ const PaymentMethodContent = () => {
           <p className="dashboard-section-card-description">
             Manage your payment options for smooth and hassle-free transactions.
           </p>
-          <Button type="button" className="w-fit bg-brandColor !p-5 text-white">
+          <Button type="button" className="w-fit">
             <Plus className="" size={17} />
             Add new card
           </Button>
         </section>
 
-        <section className="dashboard-section-card-header mt-7">
+        {/* <section className="dashboard-section-card-header mt-7">
           <h2 className="dashboard-section-card-title">Billing Contact</h2>
           <p className="dashboard-section-card-description">
             You can add a second billing contact email
@@ -39,7 +39,7 @@ const PaymentMethodContent = () => {
               />
             </div>
           </form>
-        </section>
+        </section> */}
       </div>
 
       <div className="gap-6 rounded-[25px] border-[0.2px] border-[#9CA3AF] p-8">
