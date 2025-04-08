@@ -12,3 +12,4 @@ export * from "./CertsList";
 export * from "./Greetings";
 export * from "./LoadingState";
 export * from "./DateTimePicker";
+export * from "./StatusPill";
