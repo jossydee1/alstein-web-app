@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { BadgeCheck, Building2, Clock } from "lucide-react";
+import { BadgeCheck, Building2 } from "lucide-react";
 import Link from "next/link";
-import { webRoutes } from "@/utils";
-import { Calendar } from "@/components/ui/calendar";
+import { formatDateTime, webRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
 import { DateRange } from "react-day-picker";
+import DateTimePicker from "@/components/common/DateTimePicker";
 
 type Time = {
   hours: string;
@@ -30,22 +30,6 @@ const Details = ({
   toTime: Time;
   setToTime: React.Dispatch<React.SetStateAction<Time>>;
 }) => {
-  // Create time options
-  const hours = Array.from({ length: 24 }, (_, i) =>
-    i.toString().padStart(2, "0"),
-  );
-  const minutes = Array.from({ length: 60 }, (_, i) =>
-    i.toString().padStart(2, "0"),
-  );
-
-  const formatDateTime = (
-    date: Date | undefined,
-    time: { hours: string; minutes: string },
-  ) => {
-    if (!date) return "";
-    return `${date.toLocaleDateString()} at ${time.hours}:${time.minutes}`;
-  };
-
   return (
     <article>
       <section className="description">
@@ -119,91 +103,13 @@ const Details = ({
           </p>
 
           <div className="rounded-md border">
-            <div className="mx-4 mt-2 flex flex-wrap gap-x-4 gap-y-2 border-b py-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[#676767]">
-                  From:
-                </span>
-                <div className="flex items-center gap-1 p-1">
-                  <Clock size={16} className="text-[#676767]" />
-                  <select
-                    value={fromTime.hours}
-                    onChange={e =>
-                      setFromTime(prev => ({ ...prev, hours: e.target.value }))
-                    }
-                    className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
-                  >
-                    {hours.map(h => (
-                      <option key={`from-h-${h}`} value={h}>
-                        {h}
-                      </option>
-                    ))}
-                  </select>
-                  <span>:</span>
-                  <select
-                    value={fromTime.minutes}
-                    onChange={e =>
-                      setFromTime(prev => ({
-                        ...prev,
-                        minutes: e.target.value,
-                      }))
-                    }
-                    className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
-                  >
-                    {minutes.map(m => (
-                      <option key={`from-m-${m}`} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[#676767]">To:</span>
-                <div className="flex items-center gap-1 p-1">
-                  <Clock size={16} className="text-[#676767]" />
-                  <select
-                    value={toTime.hours}
-                    onChange={e =>
-                      setToTime(prev => ({ ...prev, hours: e.target.value }))
-                    }
-                    className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
-                  >
-                    {hours.map(h => (
-                      <option key={`to-h-${h}`} value={h}>
-                        {h}
-                      </option>
-                    ))}
-                  </select>
-                  <span>:</span>
-                  <select
-                    value={toTime.minutes}
-                    onChange={e =>
-                      setToTime(prev => ({ ...prev, minutes: e.target.value }))
-                    }
-                    className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
-                  >
-                    {minutes.map(m => (
-                      <option key={`to-m-${m}`} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <Calendar
-              mode="range"
-              selected={date}
-              onSelect={setDate}
-              classNames={
-                {
-                  // day_selected: `bg-gray-50 border-gray-50 text-gray-400 rounded-none `,
-                }
-              }
-              numberOfMonths={2}
+            <DateTimePicker
+              date={date}
+              setDate={setDate}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
             />
           </div>
         </div>
