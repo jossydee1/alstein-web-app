@@ -31,7 +31,7 @@ export const MobileNavigation = ({
         <div className="flex items-center py-2">
           <button
             type="button"
-            className="flex size-8 min-h-8 min-w-8 items-center justify-center gap-x-2 rounded-lg border border-gray-300 text-gray-800 hover:text-gray-500 focus:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+            className="flex size-8 min-h-8 min-w-8 items-center justify-center gap-x-2 rounded-md border border-gray-300 text-gray-800 hover:text-gray-500 focus:text-gray-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             aria-haspopup="dialog"
             aria-expanded="false"
             aria-controls="hs-application-sidebar"

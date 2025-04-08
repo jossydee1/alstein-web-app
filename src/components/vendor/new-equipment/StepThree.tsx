@@ -140,7 +140,7 @@ const StepThree = ({
             <div className="w-full">
               <label htmlFor="images" className="mb-2">
                 Upload Images
-                <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
+                <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-md border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
                   <Images className="h-10 w-10 text-[#2563EB]" />
                   <p className="mt-4 text-sm text-[#1F2937]">
                     Drop your images here or{" "}
@@ -167,7 +167,7 @@ const StepThree = ({
             {images.map((image, index) => (
               <div
                 key={index}
-                className={`relative overflow-hidden rounded-lg border border-[#E5E7EB] ${
+                className={`relative overflow-hidden rounded-md border border-[#E5E7EB] ${
                   index === 0 ? "lg:col-span-2" : ""
                 }`}
               >
@@ -188,7 +188,7 @@ const StepThree = ({
         </section>
 
         {error && (
-          <p className="my-7 w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+          <p className="my-7 w-full rounded-md bg-red-100 p-4 text-center text-red-700">
             {error}
           </p>
         )}

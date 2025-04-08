@@ -101,7 +101,7 @@ const PartnerSignupContent = () => {
               <div
                 key={option.id}
                 onClick={() => setSelected(option.id)}
-                className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all ${
+                className={`flex cursor-pointer items-center justify-between rounded-md border p-4 transition-all ${
                   selected === option.id
                     ? "border-red-500 bg-blue-50"
                     : "border-gray-300 hover:border-gray-400"
@@ -125,7 +125,7 @@ const PartnerSignupContent = () => {
             ))}
             <button
               onClick={handleCreatePartnerType}
-              className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
+              className="w-full rounded-md bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
             >
               Continue
             </button>

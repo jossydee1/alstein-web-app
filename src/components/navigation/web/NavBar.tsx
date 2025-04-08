@@ -24,9 +24,9 @@ import avatar from "@/public/icons/avatar.svg";
 // CSS Classes
 const STYLES = {
   icon: "me-3 block size-4 shrink-0 md:me-2 md:hidden",
-  link: "flex items-center rounded-lg p-2 text-[#7F7F7F] hover:text-[#2F2F2F] focus:text-[#2F2F2F]",
+  link: "flex items-center rounded-md p-2 text-[#7F7F7F] hover:text-[#2F2F2F] focus:text-[#2F2F2F]",
   subLink:
-    "flex items-center rounded-lg p-2 hover:text-[#2F2F2F] focus:text-[#2F2F2F] md:px-3",
+    "flex items-center rounded-md p-2 hover:text-[#2F2F2F] focus:text-[#2F2F2F] md:px-3",
   activeLink: "text-[#2F2F2F] font-semibold text-black",
   activeSubLink: "font-semibold text-black1",
 } as const;
@@ -93,7 +93,7 @@ const NavBar = () => {
           <button
             id="hs-header-base-dropdown"
             type="button"
-            className={`hs-dropdown-toggle flex w-full items-center rounded-lg p-2 text-sm hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 ${item.isActive(path) ? STYLES.activeLink : ""}`}
+            className={`hs-dropdown-toggle flex w-full items-center rounded-md p-2 text-sm hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 ${item.isActive(path) ? STYLES.activeLink : ""}`}
             aria-haspopup="menu"
             aria-expanded="false"
             aria-label="Dropdown"
@@ -102,7 +102,7 @@ const NavBar = () => {
             <ChevronDown className="ms-auto size-4 shrink-0 duration-300 hs-dropdown-open:-rotate-180 md:ms-1 md:hs-dropdown-open:rotate-0" />
           </button>
 
-          <div className="hs-dropdown-menu duration-[0.1ms] md:duration-[150ms] relative top-full z-10 hidden w-full ps-7 opacity-0 transition-[opacity,margin] before:absolute before:-top-4 before:start-0 before:h-5 before:w-full after:absolute after:start-[18px] after:top-1 after:h-[calc(100%-0.25rem)] after:w-0.5 after:bg-gray-100 hs-dropdown-open:opacity-100 dark:after:bg-neutral-700 md:w-52 md:rounded-lg md:bg-white md:ps-0 md:shadow-md md:after:hidden dark:md:bg-neutral-800">
+          <div className="hs-dropdown-menu duration-[0.1ms] md:duration-[150ms] relative top-full z-10 hidden w-full ps-7 opacity-0 transition-[opacity,margin] before:absolute before:-top-4 before:start-0 before:h-5 before:w-full after:absolute after:start-[18px] after:top-1 after:h-[calc(100%-0.25rem)] after:w-0.5 after:bg-gray-100 hs-dropdown-open:opacity-100 dark:after:bg-neutral-700 md:w-52 md:rounded-md md:bg-white md:ps-0 md:shadow-md md:after:hidden dark:md:bg-neutral-800">
             <div className="space-y-0.5 py-1 md:px-1">
               {item.dropdownItems?.map(dropdownItem => (
                 <React.Fragment key={dropdownItem.name}>
@@ -146,7 +146,7 @@ const NavBar = () => {
 
           <button
             type="button"
-            className="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-lg border border-gray-200 text-[12px] font-medium hover:bg-gray-100 focus:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 lg:hidden"
+            className="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-md border border-gray-200 text-[12px] font-medium hover:bg-gray-100 focus:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 lg:hidden"
             id="hs-header-base-collapse"
             aria-expanded="false"
             aria-controls="hs-header-base"
@@ -176,13 +176,13 @@ const NavBar = () => {
                     <Button
                       type="button"
                       variant="ghost"
-                      className="font-Groteskbold h-auto border border-[#7B7B7B] px-6 py-4 text-lg font-normal hover:bg-transparent hover:underline lg:mr-7 lg:border-transparent lg:p-0"
+                      className="font-Groteskbold h-auto border border-[#7B7B7B] text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0 lg:hover:bg-transparent lg:hover:underline"
                     >
                       <Link href={webRoutes.partners}>Join as a Partner</Link>
                     </Button>
                     <Button
                       type="button"
-                      className="font-Groteskbold h-auto bg-brandColor px-12 py-2 text-lg font-normal md:px-6 md:py-4"
+                      className="font-Groteskbold px-12 text-lg font-normal"
                       asChild
                     >
                       <Link href={authRoutes.register}>Register/Log in</Link>
@@ -192,7 +192,7 @@ const NavBar = () => {
                   <div className="flex gap-5 py-2">
                     <Link
                       href={dashboardRoutes.client_notifications}
-                      className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+                      className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
                     >
                       <BellDot size="24" strokeWidth={1.5} />
                     </Link>
@@ -200,7 +200,7 @@ const NavBar = () => {
                     <div className="static lg:relative" ref={dropdownRef}>
                       <button
                         type="button"
-                        className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
+                        className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-md border-[0.2px] border-transparent transition-all hover:border-gray-400"
                         onClick={() => setShowDropdown(!showDropdown)}
                       >
                         <Image
@@ -224,7 +224,7 @@ const NavBar = () => {
                         >
                           <Link
                             href={dashboardRoutes.client_order_history}
-                            className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
+                            className="inline-flex w-fit items-center rounded-md border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
                           >
                             <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                               <Image
@@ -243,7 +243,7 @@ const NavBar = () => {
 
                           <Link
                             href={dashboardRoutes.client_order_history}
-                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
                               <LayoutDashboard size={20} />
@@ -255,7 +255,7 @@ const NavBar = () => {
 
                           <Link
                             href={webRoutes.partners}
-                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
                               <Handshake size={20} />
@@ -267,7 +267,7 @@ const NavBar = () => {
 
                           <Link
                             href={dashboardRoutes.vendor_overview}
-                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
                               <ArrowRightLeft size={20} />
@@ -280,7 +280,7 @@ const NavBar = () => {
                           <button
                             type="button"
                             onClick={logout}
-                            className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                            className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                           >
                             <span className="mr-2 inline-block">
                               <LogOut size={20} />

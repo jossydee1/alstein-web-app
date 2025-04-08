@@ -123,7 +123,7 @@ const PartnerSignupContent = () => {
             {documents.map((doc, index) => (
               <label
                 key={index}
-                className="flex min-h-16 cursor-pointer items-center space-x-3 rounded-lg border bg-gray-50 p-3"
+                className="flex min-h-16 cursor-pointer items-center space-x-3 rounded-md border bg-gray-50 p-3"
               >
                 <Upload className="text-gray-400" />
                 <span className="flex-1 text-sm text-gray-600">{doc}</span>
@@ -135,7 +135,7 @@ const PartnerSignupContent = () => {
               </label>
             ))}
           </div>
-          <button className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+          <button className="mt-4 w-full rounded-md bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700">
             Submit for Review
           </button>
         </main>

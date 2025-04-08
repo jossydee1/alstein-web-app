@@ -22,7 +22,7 @@ export const SearchForm = ({
   return (
     <form
       onSubmit={handleSearch}
-      className="flex w-full flex-col items-center justify-between gap-1 rounded-lg bg-white p-1 text-[#454545] lg:flex-row lg:gap-0"
+      className="flex w-full flex-col items-center justify-between gap-1 rounded-md bg-white p-1 text-[#454545] lg:flex-row lg:gap-0"
     >
       <label
         htmlFor="equipment"

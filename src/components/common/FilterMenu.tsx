@@ -19,28 +19,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Switch } from "@/components/ui/switch";
 import { CategoryProps } from "@/types";
+// import { Switch } from "@/components/ui/switch";
 
 export const FilterMenu = ({
   categories,
   distances,
   ratings,
-  insuranceOptions,
   selectedCategory,
+  // insuranceOptions,
   setSelectedCategory,
   selectedDistance,
   setSelectedDistance,
-  selectedInsurance,
-  setSelectedInsurance,
+  // selectedInsurance,
+  // setSelectedInsurance,
   selectedRatings,
   setSelectedRatings,
-  availability,
-  setAvailability,
-  lease,
-  setLease,
-  onSite,
-  setOnSite,
+  // availability,
+  // setAvailability,
+  // lease,
+  // setLease,
+  // onSite,
+  // setOnSite,
   handleFiltering,
   resetFilter,
   isFiltering,
@@ -71,7 +71,7 @@ export const FilterMenu = ({
     dropdownStyles:
       "flex items-center gap-2.5 rounded-xl border border-[#8B8B8B] px-3 pt-2 text-sm text-[#454545]",
     accordionItem: "px-4",
-    accordionTrigger: "text-sm",
+    accordionTrigger: "text-sm hover:!no-underline",
     accordionContentGrid: "grid grid-cols-2 gap-2 rounded-sm bg-[#F6F6F6] p-2",
     accordionContent: "grid grid-cols-1 gap-2 rounded-sm bg-[#F6F6F6] p-2",
     optionWrapper: "flex items-center space-x-2",
@@ -82,11 +82,11 @@ export const FilterMenu = ({
   const [isOpen, setIsOpen] = useState(false);
 
   // toggle selection for insurance
-  const toggleSelection = (item: string) => {
-    setSelectedInsurance(prev =>
-      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item],
-    );
-  };
+  // const toggleSelection = (item: string) => {
+  //   setSelectedInsurance(prev =>
+  //     prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item],
+  //   );
+  // };
 
   // toggle rating
   const toggleRating = (rating: number) => {
@@ -123,6 +123,7 @@ export const FilterMenu = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent
+              data-side="bottom"
               align="start"
               className="w-[100vw] max-w-[300px] overflow-hidden rounded-2xl p-0 sm:w-[429px] sm:max-w-[429px]"
             >
@@ -135,22 +136,18 @@ export const FilterMenu = ({
                   onClick={() => setIsOpen(false)}
                   className="absolute left-4 top-3 cursor-pointer text-[#1C1B1F]"
                 />
-                <header
+                <div
                   className="!m-0 border-b border-[#E4E4E4] px-4 py-2.5"
                   style={{
                     boxShadow: "0px 1px 4px 0px #00000014",
                   }}
                 >
-                  <h2 className="text-center text-sm font-medium text-[#454545]">
+                  <p className="text-center text-sm font-medium text-[#454545]">
                     Filter
-                  </h2>
-                </header>
+                  </p>
+                </div>
 
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="border-b border-b-[#F6F6F6]"
-                >
+                <Accordion type="single" collapsible>
                   <AccordionItem
                     value="category"
                     className={STYLES.accordionItem}
@@ -218,7 +215,7 @@ export const FilterMenu = ({
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem
+                  {/* <AccordionItem
                     value="insurance"
                     className={STYLES.accordionItem}
                   >
@@ -239,11 +236,11 @@ export const FilterMenu = ({
                         </div>
                       ))}
                     </AccordionContent>
-                  </AccordionItem>
+                  </AccordionItem> */}
 
                   <AccordionItem
                     value="ratings"
-                    className={STYLES.accordionItem}
+                    className={`${STYLES.accordionItem} !border-none`}
                   >
                     <AccordionTrigger className={STYLES.accordionTrigger}>
                       Ratings
@@ -283,7 +280,8 @@ export const FilterMenu = ({
                     Clear All
                   </Button>
                   <Button
-                    className="rounded-lg bg-[#454545] px-6 py-2 text-sm"
+                    variant="secondary"
+                    className="rounded-md px-6 py-2 text-sm"
                     type="submit"
                     disabled={isFiltering}
                   >
@@ -295,7 +293,7 @@ export const FilterMenu = ({
           </Popover>
         </div>
 
-        <div className="flex flex-wrap items-start gap-2">
+        {/* <div className="flex flex-wrap items-start gap-2">
           <div className="flex items-center gap-2 text-[#8B8B8B]">
             <Switch
               checked={availability}
@@ -314,7 +312,7 @@ export const FilterMenu = ({
             />
             Available On-Site Only
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

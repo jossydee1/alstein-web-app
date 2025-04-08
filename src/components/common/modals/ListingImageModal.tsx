@@ -63,7 +63,7 @@ export const ListingImageModal = ({
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="rounded-lg p-2 hover:bg-[#F5F5F5]"
+            className="rounded-md p-2 hover:bg-[#F5F5F5]"
           >
             <X size={24} />
           </button>

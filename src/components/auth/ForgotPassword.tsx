@@ -86,8 +86,7 @@ const ForgotPasswordContent = () => {
             <h1 className={style.title}>Forgot Your Password?</h1>
             <hr className={style.hr} />
             <p className={style.subtitle}>
-              Enter your registered email or phone number to reset your
-              password.
+              Enter your registered email to reset your password.
             </p>
           </header>
 

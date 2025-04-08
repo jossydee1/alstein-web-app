@@ -125,7 +125,7 @@ const PartnerSignupContent = () => {
               <input
                 type="text"
                 id="business_name"
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 name="business_name"
                 placeholder="E.x, Alstein Equipment"
                 required
@@ -141,7 +141,7 @@ const PartnerSignupContent = () => {
               <input
                 type="text"
                 id="contact_email"
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 name="business_name"
                 placeholder="E.x, contact@medtechsolutions.com"
                 required
@@ -158,7 +158,7 @@ const PartnerSignupContent = () => {
               <input
                 type="text"
                 id="specialization"
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 name="specialization"
                 placeholder="E.x, We offer specialize equipment for Dentist, and Optician"
                 required
@@ -173,7 +173,7 @@ const PartnerSignupContent = () => {
               </label>
               <textarea
                 name=""
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 placeholder="Ex. To empower healthcare professionals with innovative and reliable medical equipment, ensuring better healthcare delivery worldwide."
                 id="mission"
               ></textarea>
@@ -241,7 +241,7 @@ const PartnerSignupContent = () => {
                 <input
                   type="text"
                   id="specialization"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                  className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                   name="specialization"
                   placeholder="E.x, We offer specialize equipment for Dentist, and Optician"
                   required
@@ -251,7 +251,7 @@ const PartnerSignupContent = () => {
 
             <button
               onClick={handleSaveAndContinue}
-              className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
+              className="w-full rounded-md bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
             >
               Save & Continue
             </button>

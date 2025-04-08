@@ -1,6 +1,7 @@
 "use client";
 
 import { UserDetailsProps } from "@/types/user";
+import { useRouter } from "next/navigation";
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 interface UserContextProps {
@@ -20,6 +21,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const [user, setUser] = useState<UserContextProps["user"] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("userId");
     localStorage.removeItem("userToken");
     localStorage.removeItem("user");
-    window.location.reload();
+    router.push("/");
   };
 
   return (

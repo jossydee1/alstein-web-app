@@ -117,7 +117,7 @@ const PartnerSignupContent = () => {
               <input
                 type="text"
                 id="contact_email"
-                className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 name="business_name"
                 placeholder="E.x, Ghana"
                 required
@@ -134,7 +134,7 @@ const PartnerSignupContent = () => {
                 <input
                   type="text"
                   id="specialization"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                  className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                   name="specialization"
                   placeholder="E.x, Ibadan"
                   required
@@ -151,7 +151,7 @@ const PartnerSignupContent = () => {
                 <input
                   type="text"
                   id="specialization"
-                  className="block w-full rounded-lg border border-gray-300 p-2.5 outline-none placeholder:text-xs"
+                  className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                   name="specialization"
                   placeholder="E.x, 110181"
                   required
@@ -161,7 +161,7 @@ const PartnerSignupContent = () => {
 
             <button
               onClick={handleSaveAndContinue}
-              className="w-full rounded-lg bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
+              className="w-full rounded-md bg-blue-600 py-2 text-center font-semibold text-white antialiased transition-all hover:bg-blue-700"
             >
               Save & Continue
             </button>

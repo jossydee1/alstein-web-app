@@ -88,7 +88,7 @@ const SuccessModal = ({
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="shadow-2xs focus:outline-hidden inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50 focus:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
+                  className="shadow-2xs focus:outline-hidden inline-flex items-center gap-x-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50 focus:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
                 >
                   Close
                 </button>

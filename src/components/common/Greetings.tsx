@@ -17,7 +17,7 @@ const Greetings = () => {
       </p>
 
       <section
-        className="rounded-lg px-10 py-7 text-white"
+        className="rounded-md px-10 py-7 text-white"
         style={{
           background:
             "radial-gradient(75.44% 75.44% at 15.32% 13.69%, #3352BA 11.52%, #172554 68.02%), radial-gradient(85.18% 85.18% at 14.82% 50%, #3352BA 0%, #172554 68.02%)",

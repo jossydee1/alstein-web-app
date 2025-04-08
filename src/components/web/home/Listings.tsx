@@ -40,7 +40,7 @@ const Listings = ({
           <div className="mt-[64px] flex justify-center">
             <Link
               href={webRoutes.listings || "#"}
-              className="font-Groteskbold h-auto rounded-md bg-brandColor px-[74px] py-4 text-lg font-normal text-white"
+              className="font-Groteskbold rounded-md bg-brandColor px-[74px] py-2.5 text-lg font-normal text-white hover:bg-brandColor/80"
             >
               View All
             </Link>

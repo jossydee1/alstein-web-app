@@ -66,7 +66,7 @@ const Hero = ({
 
             <div className="flex flex-wrap gap-5 md:gap-11">
               <div
-                className="inline-flex items-center justify-between gap-4 rounded-lg px-6 py-4"
+                className="inline-flex items-center justify-between gap-4 rounded-md px-6 py-4"
                 style={{
                   backdropFilter: "blur(24px)",
                   background: "#FFFFFF29",
@@ -84,7 +84,7 @@ const Hero = ({
               </div>
 
               <div
-                className="inline-flex items-center justify-between gap-4 rounded-lg px-6 py-4"
+                className="inline-flex items-center justify-between gap-4 rounded-md px-6 py-4"
                 style={{
                   backdropFilter: "blur(24px)",
                   background: "#FFFFFF29",

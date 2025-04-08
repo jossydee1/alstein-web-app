@@ -115,7 +115,7 @@ const StepOne = ({
           </form>
 
           {error && (
-            <p className="w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+            <p className="w-full rounded-md bg-red-100 p-4 text-center text-red-700">
               {error}
             </p>
           )}
