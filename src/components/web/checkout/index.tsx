@@ -35,7 +35,7 @@ const CheckoutContent = () => {
   const address = searchParams.get("address");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { date, numberOfDays } = useDateTime();
+  const { date, numberOfDays, resetDateTime } = useDateTime();
 
   const { user } = useAuth();
   const [error] = useState("");
@@ -104,6 +104,11 @@ const CheckoutContent = () => {
   // paystack
   const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
 
+  const handlePaymentSuccess = () => {
+    resetDateTime();
+    setShowSuccessModal(true);
+  };
+
   const paystackProps = {
     email: formData.email,
     amount: 5000,
@@ -165,9 +170,7 @@ const CheckoutContent = () => {
     publicKey,
     text: "Complete Booking",
     type: "button",
-    onSuccess: () => {
-      setShowSuccessModal(true);
-    },
+    onSuccess: handlePaymentSuccess,
   };
 
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0

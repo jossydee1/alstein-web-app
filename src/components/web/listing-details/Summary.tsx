@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { formatDateTime, formatPrice, webRoutes } from "@/utils";
+import { formatDateTime, formatPrice, webRoutes, authRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
 import {
   Popover,
@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import DateTimePicker from "@/components/common/DateTimePicker";
 import { useDateTime } from "@/context/DateTimeContext";
+import { useAuth } from "@/context";
 
 const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
   const {
@@ -23,11 +24,25 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
     setToTime,
     numberOfDays,
   } = useDateTime();
+  const { user } = useAuth();
   const router = useRouter();
   const costPerDay = listingInfo?.price;
   const serviceFee = 0;
   const totalCost = costPerDay * numberOfDays + serviceFee;
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const handleCheckout = () => {
+    if (!user) {
+      // Redirect to login with a redirect URL back to the listing page
+      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      router.push(
+        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+      );
+    } else {
+      // Redirect to checkout page
+      router.push(`${webRoutes.checkout}?id=${listingInfo?.id}`);
+    }
+  };
 
   return (
     <section className="sticky top-40 grid gap-6 rounded-md border border-[#DEDEDE] bg-[#F9F9F9] p-6">
@@ -83,11 +98,7 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
           disabled={!date?.from || !date?.to}
-          onClick={() => {
-            router.push(
-              `${`${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`}`,
-            );
-          }}
+          onClick={handleCheckout}
         >
           Proceed to Checkout
         </Button>

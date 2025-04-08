@@ -17,6 +17,7 @@ interface DateTimeContextProps {
   toTime: Time;
   setToTime: React.Dispatch<React.SetStateAction<Time>>;
   numberOfDays: number;
+  resetDateTime: () => void;
 }
 
 const DateTimeContext = createContext<DateTimeContextProps | undefined>(
@@ -42,6 +43,12 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [date]);
 
+  const resetDateTime = () => {
+    setDate(undefined);
+    setFromTime({ hours: "09", minutes: "00" });
+    setToTime({ hours: "17", minutes: "00" });
+  };
+
   return (
     <DateTimeContext.Provider
       value={{
@@ -52,6 +59,7 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
         toTime,
         setToTime,
         numberOfDays,
+        resetDateTime,
       }}
     >
       {children}

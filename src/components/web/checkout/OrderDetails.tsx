@@ -46,7 +46,15 @@ const OrderDetails = ({
     numberOfDays,
   } = useDateTime();
 
-  const redirectUrl = `${authRoutes.login}?redirect=${webRoutes.checkout}?id=${listingInfo.id}`;
+  const handleCheckoutRedirect = () => {
+    if (!user) {
+      // Redirect to login with a redirect URL back to the listing page
+      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      router.push(
+        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+      );
+    }
+  };
 
   return (
     <div className="dashboard-section-card space-y-8">
@@ -151,7 +159,7 @@ const OrderDetails = ({
         <button
           className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
           disabled={isPaystackDisabled}
-          onClick={() => router.push(redirectUrl)}
+          onClick={handleCheckoutRedirect}
           type="button"
         >
           Login to pay
