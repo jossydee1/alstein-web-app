@@ -47,6 +47,11 @@ const CheckoutContent = () => {
     address: "",
   });
   const [date, setDate] = useState<DateRange | undefined>();
+  const [fromTime, setFromTime] = useState({
+    hours: "09",
+    minutes: "00",
+  });
+  const [toTime, setToTime] = useState({ hours: "17", minutes: "00" });
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
 
   useEffect(() => {
@@ -236,6 +241,10 @@ const CheckoutContent = () => {
               numberOfDays={numberOfDays}
               setDate={setDate}
               date={date}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
               costPerDay={costPerDay}
               serviceFee={serviceFee}
               totalCost={totalCost}

@@ -18,6 +18,11 @@ import ListingDetailsSkeleton from "./Skeleton";
 const ListingDetailsContent = () => {
   const { id } = useParams();
   const [date, setDate] = useState<DateRange | undefined>();
+  const [fromTime, setFromTime] = useState({
+    hours: "09",
+    minutes: "00",
+  });
+  const [toTime, setToTime] = useState({ hours: "17", minutes: "00" });
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
 
   useEffect(() => {
@@ -99,7 +104,15 @@ const ListingDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <div className="flex flex-col justify-between gap-7 lg:flex-row">
           <div className="w-full flex-1 lg:max-w-[540px]">
-            <Details listingInfo={listingInfo} date={date} setDate={setDate} />
+            <Details
+              listingInfo={listingInfo}
+              date={date}
+              setDate={setDate}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
+            />
           </div>
 
           <div className="min-w-[340px] max-w-[340px]">
@@ -108,6 +121,10 @@ const ListingDetailsContent = () => {
               date={date}
               setDate={setDate}
               numberOfDays={numberOfDays}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
             />
           </div>
         </div>
