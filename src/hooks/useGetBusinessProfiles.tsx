@@ -6,7 +6,7 @@ import { ApiResponseProps, PartnerProps } from "@/types";
 import { api } from "@/utils";
 
 export const useGetBusinessProfiles = () => {
-  const { token } = useAuth();
+  const { token, setBusinessProfile } = useAuth();
 
   const { data, isLoading, error, refetch } = useQuery<PartnerProps[]>({
     queryKey: ["getBusinessProfiles"],
@@ -26,6 +26,7 @@ export const useGetBusinessProfiles = () => {
         );
       }
 
+      setBusinessProfile(response.data.data[0]);
       return response.data.data;
     },
     enabled: false, // Disable automatic fetching

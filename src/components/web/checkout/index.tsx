@@ -130,7 +130,6 @@ const CheckoutContent = () => {
         return;
       }
       if (response.status === 200) {
-        toast.success(response.data.message);
         resetDateTime();
         setShowSuccessModal(true);
         return;
