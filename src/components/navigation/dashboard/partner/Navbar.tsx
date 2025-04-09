@@ -6,6 +6,7 @@ import logoLight from "@/public/logo-rectangle-light.svg";
 import { BellDot, LogOut, UserRound } from "lucide-react";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
+import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
   const { logout, user } = useAuth();
@@ -94,16 +95,17 @@ export const Navbar = () => {
                     <span className="font-medium leading-6">My Account</span>
                   </Link>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
                     onClick={logout}
-                    className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                    className="inline-flex items-center justify-start rounded-sm p-0 text-sm text-[#6B7280] hover:text-[#2F2F2F]"
                   >
                     <span className="mr-2 inline-block">
                       <LogOut size={20} />
                     </span>
                     <span className="font-medium leading-6">Logout</span>
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

@@ -47,7 +47,7 @@ const options = [
 
 const PartnerSetupContent = () => {
   const router = useRouter();
-  const [selected, setSelected] = useState("vendor");
+  const [selected, setSelected] = useState("");
   const [selectedSubOption, setSelectedSubOption] = useState("");
 
   const handleCreatePartnerType = () => {

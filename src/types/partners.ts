@@ -23,7 +23,10 @@ export interface PartnerProps {
   specializations: string;
   mission: string;
   support_email: string;
-  support_number: string;
+  institutional_email: string;
+  institution: string;
+  department: string;
+  department_head_email: string;
   is_verified: boolean;
   created_at: string;
   updated_at: string;
