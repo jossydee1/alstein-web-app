@@ -62,7 +62,7 @@ const Profile = ({
 
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
-                {formatDateToRelativeWithTime(partnerData.created_at)}
+                {formatDateToRelativeWithTime(partnerData.created_at || "")}
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
                 Years of service

@@ -23,8 +23,8 @@ export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
             <p>{p?.description}</p>
             <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-md hover:shadow-lg">
               <Image
-                src={p?.image}
-                alt={p?.title}
+                src={p?.image || ""}
+                alt={p?.title || ""}
                 className="aspect-video h-[110px] w-auto rounded-md object-cover transition-transform hover:scale-105"
               />
             </div>

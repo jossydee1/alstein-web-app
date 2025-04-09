@@ -5,13 +5,16 @@ import Banner from "../../Banner";
 import style from "../../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { webRoutes, countriesList } from "@/utils";
+import { webRoutes, formatError, api } from "@/utils";
 import { Button } from "../../../ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { Upload } from "lucide-react";
-import { CustomSelect } from "@/components/common";
+import { CustomSelect, LoadingState } from "@/components/common";
+import { toast } from "react-toastify";
+import { ApiResponseProps, PartnerProps } from "@/types";
+import { useAuth } from "@/context";
 
 const steps = [
   {
@@ -53,20 +56,34 @@ export function Stepper({ currentStep }: { currentStep: number }) {
 }
 
 const LaboratoryPageContent = () => {
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
   const router = useRouter();
+  const { token } = useAuth();
+
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    businessName: "",
-    contactEmail: "",
-    specialization: "",
-    mission: "",
-    phone: "",
-    countryCode: "",
-    country: "",
+  const [formData, setFormData] = useState<PartnerProps>({
+    name: "",
+    logo: "",
+    bio: "",
+    website: "",
     city: "",
-    postalCode: "",
+    state: "",
+    country: "",
+    address: "",
+    longitude: "",
+    latitude: "",
+    type: type || "",
+    specializations: "",
+    mission: "",
+    support_email: "",
+    institutional_email: "",
+    department: "",
+    department_head_email: "",
+    institution: "",
     documents: {},
   });
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -83,21 +100,79 @@ const LaboratoryPageContent = () => {
     doc: string,
   ) => {
     if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
       setFormData(prev => ({
         ...prev,
-        documents: { ...prev.documents, [doc]: e.target.files?.[0] || null },
+        documents: {
+          ...prev.documents,
+          [doc]: { title: doc, image: file.name }, // Update the document with the file name
+        },
       }));
     }
   };
 
-  const handleNext = () => {
-    if (currentStep < steps.length) setCurrentStep(prev => prev + 1);
-  };
+  const handleSaveAndContinue = async () => {
+    setIsProcessing(true);
 
-  // const handleSubmit = () => {
-  //   console.log("Form submitted:", formData);
-  //   router.push(webRoutes.home);
-  // };
+    // Prepare data for the current step
+    let stepData = {};
+    switch (currentStep) {
+      case 1:
+        stepData = {
+          name: formData.name,
+          support_email: formData.support_email,
+          bio: formData.bio,
+          specializations: formData.specializations,
+          mission: formData.mission,
+        };
+        break;
+      case 2:
+        stepData = {
+          country: formData.country,
+          city: formData.city,
+          state: formData.state,
+          address: formData.address,
+        };
+        break;
+      case 3:
+        stepData = {
+          documents: formData.documents,
+        };
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const response = await api.post<ApiResponseProps<PartnerProps>>(
+        "/partner/api/v1/update-partner",
+        stepData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(response.data.message || "Failed to update partner data");
+        return;
+      }
+
+      toast.success("Step data saved successfully!");
+
+      // Move to the next step if not the last step
+      if (currentStep < steps.length) {
+        setCurrentStep(prev => prev + 1);
+      } else {
+        toast.success("All steps completed!");
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Failed to update partner data"));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -109,31 +184,41 @@ const LaboratoryPageContent = () => {
               <input
                 type="text"
                 id="business_name"
-                value={formData.businessName}
-                onChange={e => handleChange(e, "businessName")}
+                value={formData.name}
+                onChange={e => handleChange(e, "name")}
                 placeholder="Acme Labs"
                 required
               />
             </div>
             <div className={style.inputGroup}>
-              <label htmlFor="contact_email">Contact Email</label>
+              <label htmlFor="support_email">Contact Email</label>
               <input
                 type="email"
-                id="contact_email"
-                value={formData.contactEmail}
-                onChange={e => handleChange(e, "contactEmail")}
+                id="support_email"
+                value={formData.support_email}
+                onChange={e => handleChange(e, "support_email")}
                 placeholder="acme@example.com"
                 required
               />
             </div>
             <div className={style.inputGroup}>
-              <label htmlFor="specialization">Specialization</label>
+              <label htmlFor="business_description">Business Description</label>
+              <textarea
+                id="business_description"
+                value={formData.bio}
+                onChange={e => handleChange(e, "bio")}
+                placeholder="We are a medical laboratory that specializes in..."
+                rows={4}
+              ></textarea>
+            </div>
+            <div className={style.inputGroup}>
+              <label htmlFor="specializations">Specialization</label>
               <input
                 type="text"
-                id="specialization"
-                value={formData.specialization}
-                onChange={e => handleChange(e, "specialization")}
-                placeholder="We offer specialized equipment for Dentist and Optician"
+                id="specializations"
+                value={formData.specializations}
+                onChange={e => handleChange(e, "specializations")}
+                placeholder="We offer specialized equipment for Dentist, Optician..."
                 required
               />
             </div>
@@ -143,60 +228,9 @@ const LaboratoryPageContent = () => {
                 id="mission"
                 value={formData.mission}
                 onChange={e => handleChange(e, "mission")}
-                placeholder="To empower healthcare professionals with innovative and reliable medical equipment, ensuring better healthcare delivery worldwide."
+                placeholder="To empower healthcare professionals with innovative and reliable medical equipment..."
                 rows={4}
               ></textarea>
-            </div>
-            <div className={style.inputGroup}>
-              <label htmlFor="phone">Phone Number*</label>
-              <div className={style.inputGroupPhone}>
-                <div className={style.customSelect}>
-                  <select
-                    name="countryCode"
-                    id="countryCode"
-                    required
-                    value={formData.countryCode}
-                    onChange={e => handleChange(e, "countryCode")}
-                    data-display-type="flag-code"
-                  >
-                    <option value="" disabled>
-                      Select country
-                    </option>
-                    {countriesList.map(country => (
-                      <option
-                        key={country.code}
-                        value={country.dial_code}
-                        data-flag={country.flag}
-                      >
-                        {country.name} {country.flag} {country.dial_code}
-                      </option>
-                    ))}
-                  </select>
-                  <div className={style.selectedFlag}>
-                    {formData.countryCode ? (
-                      <>
-                        {
-                          countriesList.find(
-                            c => c.dial_code === formData.countryCode,
-                          )?.flag
-                        }{" "}
-                        {formData.countryCode}
-                      </>
-                    ) : (
-                      <>🌐 Select</>
-                    )}
-                  </div>
-                </div>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  placeholder="123-456-7890"
-                  value={formData.phone}
-                  onChange={e => handleChange(e, "phone")}
-                />
-              </div>
             </div>
           </>
         );
@@ -229,14 +263,16 @@ const LaboratoryPageContent = () => {
                   required
                 />
               </div>
+            </div>
+            <div className="flex w-full justify-between space-x-2">
               <div className={style.inputGroup}>
-                <label htmlFor="postal_code">Postal Code</label>
+                <label htmlFor="state">State</label>
                 <input
                   type="text"
-                  id="postal_code"
-                  value={formData.postalCode}
-                  onChange={e => handleChange(e, "postalCode")}
-                  placeholder="110181"
+                  id="state"
+                  value={formData.state}
+                  onChange={e => handleChange(e, "state")}
+                  placeholder="Ibadan"
                   required
                 />
               </div>
@@ -258,7 +294,11 @@ const LaboratoryPageContent = () => {
                 className="flex min-h-16 cursor-pointer items-center space-x-3 rounded-md border bg-gray-50 p-3"
               >
                 <Upload className="text-gray-400" />
-                <span className="flex-1 text-sm text-gray-600">{doc}</span>
+                <span className="flex-1 text-sm text-gray-600">
+                  {formData.documents[doc]?.image
+                    ? `Selected: ${formData.documents[doc]?.image}`
+                    : doc}
+                </span>
                 <input
                   type="file"
                   className="hidden"
@@ -274,54 +314,62 @@ const LaboratoryPageContent = () => {
   };
 
   return (
-    <div className={style.wrapper}>
-      <Banner />
-      <div className={style.container}>
-        <div className={style.topBar}>
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={() => router.back()}
-            className={style.backButton}
-          >
-            <ChevronLeft />
-            Back
-          </Button>
-          <Link
-            className={style.logoLink}
-            href={webRoutes.home}
-            aria-label="Brand"
-          >
-            <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
-          </Link>
-        </div>
-        <main className={style.formWrapper}>
-          <div className={style.inputGroup}>
-            <Stepper currentStep={currentStep} />
-          </div>
-          <header className="mb-4 mt-6 w-full">
-            <h1 className="text-[20px] font-bold text-[#2D2D2D]">
-              {steps[currentStep - 1].label}
-            </h1>
-            <p className="mt-0.5 font-visbymedium text-sm text-gray-400 antialiased">
-              {steps[currentStep - 1].body}
-            </p>
-          </header>
-          <form>
-            {renderStepContent()}
+    <>
+      {isProcessing && <LoadingState />}
+      <div className={style.wrapper}>
+        <Banner />
+        <div className={style.container}>
+          <div className={style.topBar}>
             <Button
+              variant="ghost"
               type="button"
-              onClick={handleNext}
-              className={style.inputGroup}
+              onClick={() => router.back()}
+              className={style.backButton}
             >
-              {currentStep === steps.length
-                ? "Submit for Review"
-                : " Save & Continue"}
+              <ChevronLeft />
+              Back
             </Button>
-          </form>
-        </main>
+            <Link
+              className={style.logoLink}
+              href={webRoutes.home}
+              aria-label="Brand"
+            >
+              <Image
+                alt="Alstein Logo"
+                src={logoLight}
+                width={130}
+                height={48}
+              />
+            </Link>
+          </div>
+          <main className={style.formWrapper}>
+            <div className={style.inputGroup}>
+              <Stepper currentStep={currentStep} />
+            </div>
+            <header className="mb-4 mt-6 w-full">
+              <h1 className="text-[20px] font-bold text-[#2D2D2D]">
+                {steps[currentStep - 1].label}
+              </h1>
+              <p className="mt-0.5 font-visbymedium text-sm text-gray-400 antialiased">
+                {steps[currentStep - 1].body}
+              </p>
+            </header>
+            <form>
+              {renderStepContent()}
+              <Button
+                type="button"
+                onClick={handleSaveAndContinue}
+                className={style.inputGroup}
+              >
+                {currentStep === steps.length
+                  ? "Submit for Review"
+                  : " Save & Continue"}
+              </Button>
+            </form>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

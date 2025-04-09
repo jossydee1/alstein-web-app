@@ -6,28 +6,28 @@ export const certsData: CertsProps[] = [
     title: "Laboratory License",
     description:
       "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image,
+    image: image as unknown as string,
     download_url: "#",
   },
   {
     title: "Laboratory License",
     description:
       "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image,
+    image: image as unknown as string,
     download_url: "#",
   },
   {
     title: "Laboratory License",
     description:
       "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image,
+    image: image as unknown as string,
     download_url: "#",
   },
   {
     title: "Laboratory License",
     description:
       "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image,
+    image: image as unknown as string,
     download_url: "#",
   },
 ];
