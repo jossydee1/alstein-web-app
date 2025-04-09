@@ -1,4 +1,4 @@
-import PartnerSetupContent from "@/components/auth/PartnerSetup";
+import PartnerSetupContent from "@/components/auth/partner-setup";
 import React from "react";
 
 const Page = () => {

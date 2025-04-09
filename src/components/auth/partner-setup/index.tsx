@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Banner from "./Banner";
-import style from "./style.module.scss";
+import Banner from "../Banner";
+import style from "../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { webRoutes } from "@/utils";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
@@ -51,9 +51,7 @@ const PartnerSetupContent = () => {
   const [selectedSubOption, setSelectedSubOption] = useState("");
 
   const handleCreatePartnerType = () => {
-    router.push(
-      `/partner-setup/${selected}/information?type=${selectedSubOption}`,
-    );
+    router.push(`/partner-setup/${selected}?type=${selectedSubOption}`);
   };
 
   return (
