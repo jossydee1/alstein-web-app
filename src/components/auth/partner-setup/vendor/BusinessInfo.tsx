@@ -46,7 +46,7 @@ export function Stepper() {
   );
 }
 
-const PartnerSignupContent = () => {
+const PartnerSetupContent = () => {
   const router = useRouter();
   //   const [selected, setSelected] = useState("vendor");
   const [formData, setFormData] = useState({
@@ -262,4 +262,4 @@ const PartnerSignupContent = () => {
   );
 };
 
-export default PartnerSignupContent;
+export default PartnerSetupContent;

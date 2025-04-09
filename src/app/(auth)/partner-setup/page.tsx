@@ -1,8 +1,8 @@
-import PartnerSignupContent from "@/components/auth/PartnerSignup";
+import PartnerSetupContent from "@/components/auth/PartnerSetup";
 import React from "react";
 
 const Page = () => {
-  return <PartnerSignupContent />;
+  return <PartnerSetupContent />;
 };
 
 export default Page;
