@@ -13,3 +13,4 @@ export * from "./Greetings";
 export * from "./LoadingState";
 export * from "./DateTimePicker";
 export * from "./StatusPill";
+export * from "./CustomSelect";

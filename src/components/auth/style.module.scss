@@ -54,11 +54,13 @@
       @apply flex w-full flex-col items-center justify-center gap-4;
 
       .inputGroup {
-        @apply w-full space-y-2.5;
+        @apply w-full space-y-1;
         label {
-          @apply block font-semibold text-[#696F79];
+          @apply block font-visbysemibold text-sm text-gray-800;
         }
-        input {
+        input,
+        textarea,
+        select {
           @apply w-full rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79];
         }
       }

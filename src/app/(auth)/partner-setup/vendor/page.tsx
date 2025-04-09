@@ -8,7 +8,7 @@ const Page = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
-  return type === "laboratory" ? (
+  return !type || type === "laboratory" ? (
     <LaboratoryPageContent />
   ) : (
     "Professional Page Content"

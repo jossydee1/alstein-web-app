@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { Upload } from "lucide-react";
-import { CustomSelect } from "@/components/global/CustomSelect";
+import { CustomSelect } from "@/components/common";
 
 const steps = [
   {
@@ -104,79 +104,51 @@ const LaboratoryPageContent = () => {
       case 1:
         return (
           <>
-            <div className="w-full">
-              <label
-                htmlFor="business_name"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Business Name
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="business_name">Business Name</label>
               <input
                 type="text"
                 id="business_name"
-                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 value={formData.businessName}
                 onChange={e => handleChange(e, "businessName")}
-                placeholder="E.x, Alstein Equipment"
+                placeholder="Acme Labs"
                 required
               />
             </div>
-            <div className="w-full">
-              <label
-                htmlFor="contact_email"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Contact Email
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="contact_email">Contact Email</label>
               <input
                 type="email"
                 id="contact_email"
-                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 value={formData.contactEmail}
                 onChange={e => handleChange(e, "contactEmail")}
-                placeholder="E.x, contact@medtechsolutions.com"
+                placeholder="acme@example.com"
                 required
               />
             </div>
-            <div className="w-full">
-              <label
-                htmlFor="specialization"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Specialization
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="specialization">Specialization</label>
               <input
                 type="text"
                 id="specialization"
-                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 value={formData.specialization}
                 onChange={e => handleChange(e, "specialization")}
-                placeholder="E.x, We offer specialize equipment for Dentist, and Optician"
+                placeholder="We offer specialized equipment for Dentist and Optician"
                 required
               />
             </div>
-            <div className="w-full">
-              <label
-                htmlFor="mission"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Mission
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="mission">Mission</label>
               <textarea
                 id="mission"
-                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 value={formData.mission}
                 onChange={e => handleChange(e, "mission")}
-                placeholder="Ex. To empower healthcare professionals with innovative and reliable medical equipment, ensuring better healthcare delivery worldwide."
+                placeholder="To empower healthcare professionals with innovative and reliable medical equipment, ensuring better healthcare delivery worldwide."
+                rows={4}
               ></textarea>
             </div>
-            <div className="w-full">
-              <label
-                htmlFor="phone"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Phone Number*
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="phone">Phone Number*</label>
               <div className={style.inputGroupPhone}>
                 <div className={style.customSelect}>
                   <select
@@ -231,58 +203,40 @@ const LaboratoryPageContent = () => {
       case 2:
         return (
           <>
-            <div className="w-full">
+            <div className={style.inputGroup}>
               <CustomSelect />
             </div>
-            <div className="w-full">
-              <label
-                htmlFor="country"
-                className="mb-1 font-visbysemibold text-sm text-gray-800"
-              >
-                Country
-              </label>
+            <div className={style.inputGroup}>
+              <label htmlFor="country">Country</label>
               <input
                 type="text"
                 id="country"
-                className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                 value={formData.country}
                 onChange={e => handleChange(e, "country")}
-                placeholder="E.x, Ghana"
+                placeholder="Ghana"
                 required
               />
             </div>
             <div className="flex w-full justify-between space-x-2">
-              <div className="w-full">
-                <label
-                  htmlFor="city"
-                  className="mb-1 font-visbysemibold text-sm text-gray-800"
-                >
-                  City
-                </label>
+              <div className={style.inputGroup}>
+                <label htmlFor="city">City</label>
                 <input
                   type="text"
                   id="city"
-                  className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                   value={formData.city}
                   onChange={e => handleChange(e, "city")}
-                  placeholder="E.x, Ibadan"
+                  placeholder="Ibadan"
                   required
                 />
               </div>
-              <div className="w-full">
-                <label
-                  htmlFor="postal_code"
-                  className="mb-1 font-visbysemibold text-sm text-gray-800"
-                >
-                  Postal Code
-                </label>
+              <div className={style.inputGroup}>
+                <label htmlFor="postal_code">Postal Code</label>
                 <input
                   type="text"
                   id="postal_code"
-                  className="block w-full rounded-md border border-gray-300 p-2.5 outline-none placeholder:text-xs"
                   value={formData.postalCode}
                   onChange={e => handleChange(e, "postalCode")}
-                  placeholder="E.x, 110181"
+                  placeholder="110181"
                   required
                 />
               </div>
@@ -342,7 +296,7 @@ const LaboratoryPageContent = () => {
           </Link>
         </div>
         <main className={style.formWrapper}>
-          <div className="w-full">
+          <div className={style.inputGroup}>
             <Stepper currentStep={currentStep} />
           </div>
           <header className="mb-4 mt-6 w-full">
@@ -355,7 +309,11 @@ const LaboratoryPageContent = () => {
           </header>
           <form>
             {renderStepContent()}
-            <Button type="button" onClick={handleNext} className="w-full">
+            <Button
+              type="button"
+              onClick={handleNext}
+              className={style.inputGroup}
+            >
               {currentStep === steps.length
                 ? "Submit for Review"
                 : " Save & Continue"}
