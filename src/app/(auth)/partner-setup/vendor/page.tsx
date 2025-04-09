@@ -1,6 +1,7 @@
 "use client";
 
 import LaboratoryPageContent from "@/components/auth/partner-setup/vendor/Laboratory";
+import ProfessionalPageContent from "@/components/auth/partner-setup/vendor/Professional";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -11,7 +12,7 @@ const Page = () => {
   return !type || type === "laboratory" ? (
     <LaboratoryPageContent />
   ) : (
-    "Professional Page Content"
+    <ProfessionalPageContent />
   );
 };
 

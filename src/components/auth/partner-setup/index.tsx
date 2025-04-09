@@ -20,6 +20,7 @@ import {
 const options = [
   {
     id: "vendor",
+    type: "LAB",
     title: "I'm a Vendor",
     description:
       "Partner with Alstein as an equipment vendor and expand your reach.",
@@ -31,6 +32,7 @@ const options = [
   },
   // {
   //   id: "practitioner",
+  //   type: "PRACTITIONERS",
   //   title: "I'm a Practitioner",
   //   description:
   //     "Join Alstein as a practitioner and connect with researchers, healthcare professionals.",
@@ -38,6 +40,7 @@ const options = [
   // },
   // {
   //   id: "provider",
+  //   type: "PROVIDER",
   //   title: "I'm a Service Provider",
   //   description:
   //     "Register as a service provider on Alstein and offer your medical or scientific services.",
