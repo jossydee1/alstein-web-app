@@ -59,7 +59,7 @@ const StepFive = ({
             <div className="w-full">
               <label htmlFor="documents" className="mb-2">
                 Upload documents
-                <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
+                <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-md border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
                   <Images className="h-10 w-10 text-[#2563EB]" />
                   <p className="mt-4 text-sm text-[#1F2937]">
                     Drop your documents here or{" "}
@@ -86,7 +86,7 @@ const StepFive = ({
             {documents.map((image, index) => (
               <div
                 key={index}
-                className={`relative overflow-hidden rounded-lg border border-[#E5E7EB] ${
+                className={`relative overflow-hidden rounded-md border border-[#E5E7EB] ${
                   index === 0 ? "lg:col-span-2" : ""
                 }`}
               >
@@ -107,7 +107,7 @@ const StepFive = ({
         </section>
 
         {error && (
-          <p className="mb-7 w-full rounded-lg bg-red-100 p-4 text-center text-red-700">
+          <p className="mb-7 w-full rounded-md bg-red-100 p-4 text-center text-red-700">
             {error}
           </p>
         )}

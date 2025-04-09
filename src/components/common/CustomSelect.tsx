@@ -53,7 +53,7 @@ export function CustomSelect() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between px-2.5 py-[1.3rem]"
+          className="w-full justify-between rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79]"
         >
           {value
             ? frameworks.find(framework => framework.value === value)?.label
@@ -68,12 +68,12 @@ export function CustomSelect() {
       >
         <Command>
           <CommandInput
-            placeholder="Search framework..."
+            placeholder="Search address..."
             className="h-9 w-full border-none outline-none ring-0 focus:outline-none focus:ring-0"
           />
           <CommandList className="font-visbymedium text-gray-500 antialiased">
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup className="">
+            <CommandEmpty>No address found.</CommandEmpty>
+            <CommandGroup>
               {frameworks.map(framework => (
                 <CommandItem
                   className="text-gray-500"

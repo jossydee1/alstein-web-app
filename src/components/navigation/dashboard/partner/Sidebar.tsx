@@ -26,9 +26,9 @@ interface NavItem {
 }
 
 const commonStyles = {
-  link: "flex items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none  transition-colors",
+  link: "flex items-center gap-x-3.5 rounded-md px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none  transition-colors",
   accordionButton:
-    "hs-accordion-toggle flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
+    "hs-accordion-toggle flex w-full items-center gap-x-3.5 rounded-md px-2.5 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
   accordionContent:
     "hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300",
   iconSize: "size-4 shrink-0",

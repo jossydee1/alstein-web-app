@@ -1,12 +1,39 @@
-import { formatPrice } from "@/utils";
+"use client";
+import { useAuth } from "@/context";
+import { useClientFetch } from "@/hooks";
 import React from "react";
 
 const Metrics = () => {
+  const { token, businessProfile } = useAuth();
+
+  const { data } = useClientFetch<{
+    approved_booking: number;
+    pending_booking: number;
+    declined_booking: number;
+    all_booking: number;
+  }>({
+    endpoint: `/partner/api/v1/booking/get-partner-booking-statistics?partner_id=${businessProfile?.profile_id}`,
+    token,
+  });
+
   return (
     <section className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-      <SimpleCard title="Total Orders" value={formatPrice(1200, "NGN")} />
-      <SimpleCard title="Upcoming Bookings" value={(14).toString()} />
-      <SimpleCard title="Pending Approvals" value={(34).toString()} />
+      <SimpleCard
+        title="Approved Bookings"
+        value={(data?.approved_booking ?? 0).toString()}
+      />
+      <SimpleCard
+        title="Pending Bookings"
+        value={(data?.pending_booking ?? 0).toString()}
+      />
+      <SimpleCard
+        title="Declined Bookings"
+        value={(data?.declined_booking ?? 0).toString()}
+      />
+      <SimpleCard
+        title="All Bookings"
+        value={(data?.all_booking ?? 0).toString()}
+      />
     </section>
   );
 };

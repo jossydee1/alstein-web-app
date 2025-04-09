@@ -88,7 +88,7 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
                 style={{ width: `${slideWidth}px` }}
               >
                 <article
-                  className="max-w-[390px] rounded-lg p-8 text-white"
+                  className="max-w-[390px] rounded-md p-8 text-white"
                   style={{
                     background:
                       "linear-gradient(236.19deg, rgba(0, 0, 0, 0.2) 1.47%, rgba(0, 0, 0, 0.2) 97.28%)",

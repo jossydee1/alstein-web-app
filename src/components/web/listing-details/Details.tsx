@@ -3,20 +3,14 @@ import React from "react";
 import Image from "next/image";
 import { BadgeCheck, Building2 } from "lucide-react";
 import Link from "next/link";
-import { webRoutes } from "@/utils";
-import { Calendar } from "@/components/ui/calendar";
+import { formatDateTime, webRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
-import { DateRange } from "react-day-picker";
+import DateTimePicker from "@/components/common/DateTimePicker";
+import { useDateTime } from "@/context/DateTimeContext";
 
-const Details = ({
-  listingInfo,
-  date,
-  setDate,
-}: {
-  listingInfo: ListingInfoProps;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-}) => {
+const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+  const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
+    useDateTime();
   return (
     <article>
       <section className="description">
@@ -48,7 +42,7 @@ const Details = ({
             <h3 className="mb-2 text-xl font-semibold text-[#161616]">
               {listingInfo?.partner?.name}
             </h3>
-            <p className="font-medium text-[#8B8B8B]">3 Listings</p>
+            <p className="font-medium text-[#8B8B8B]">0 Listings</p>
           </div>
         </div>
 
@@ -84,21 +78,19 @@ const Details = ({
           {!date ? "Select Booking Date" : "Booking Date"}
         </h2>
         <div className="flex flex-col gap-2">
-          <p className="mb-4 text-sm text-[#343434]">
-            {date?.from?.toLocaleDateString()} -{" "}
-            {date?.to?.toLocaleDateString()}
+          <p className="text-[#343434]">
+            From: {formatDateTime(date?.from, fromTime)} - To:{" "}
+            {formatDateTime(date?.to, toTime)}
           </p>
-          <div className="w-fit rounded-md border">
-            <Calendar
-              mode="range"
-              selected={date}
-              onSelect={setDate}
-              classNames={
-                {
-                  // day_selected: `bg-gray-50 border-gray-50 text-gray-400 rounded-none `,
-                }
-              }
-              numberOfMonths={2}
+
+          <div className="rounded-md border">
+            <DateTimePicker
+              date={date}
+              setDate={setDate}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
             />
           </div>
         </div>

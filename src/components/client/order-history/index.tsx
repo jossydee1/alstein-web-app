@@ -16,16 +16,23 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/utils";
+import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
+import {
+  GetOrderStatusPill,
+  GetPaymentStatusPill,
+  LoadingState,
+} from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
 
 const tableHeads = [
   {
-    label: "SERVICE/EQUIPMENT",
+    label: "EQUIPMENT name",
+  },
+  {
+    label: "SERVICE TYPE",
   },
   {
     label: "ORDER ID",
@@ -34,14 +41,14 @@ const tableHeads = [
     label: "ORDER DATE",
   },
   {
-    label: "ITEMS",
-  },
-  {
     label: "TOTAL AMOUNT",
     className: "text-right",
   },
   {
-    label: "STATUS",
+    label: "Booking STATUS",
+  },
+  {
+    label: "Payment STATUS",
   },
 ];
 
@@ -154,7 +161,7 @@ const OrderHistoryContent = () => {
                 {tableHeads.map(head => (
                   <TableHead
                     key={head.label}
-                    className={`rounded-[6px] px-5 ${head.className}`}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
                   >
                     {head.label}
                   </TableHead>
@@ -163,58 +170,45 @@ const OrderHistoryContent = () => {
             </TableHeader>
 
             <TableBody>
-              <TableRow className="py-10">
-                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No orders found
-                </TableCell>
-              </TableRow>
-            </TableBody>
-
-            {/* <TableBody>
-              {orderHistory?.map(order => (
-                <TableRow key={order.id} className="py-10">
-                  <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                    {order.service}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#6B7280]">
-                    {order.orderId}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#6B7280]">
-                    {order.orderDate}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#172554]">
-                    <span className="inline-flex aspect-square w-9 items-center justify-center rounded-full bg-[#F6F6F8]">
-                      1
-                    </span>
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-right">
-                    {order.totalAmount}
-                  </TableCell>
-                  <TableCell className="px-5 py-3">
-                    <div
-                      className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                        order.status === "pending"
-                          ? "bg-orange-50"
-                          : order.status === "confirmed"
-                            ? "bg-green-50"
-                            : "bg-red-50"
-                      }`}
-                    >
-                      <span
-                        className={`size-2 rounded-full ${
-                          order.status === "pending"
-                            ? "bg-orange-600"
-                            : order.status === "confirmed"
-                              ? "bg-green-600"
-                              : "bg-red-600"
-                        }`}
-                      />
-                      <span>{order.status}</span>
-                    </div>
+              {orderHistory?.data ? (
+                orderHistory?.data?.map(order => (
+                  <TableRow key={order.id} className="py-10">
+                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
+                      {order.equipment.name}
+                    </TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                      {order.equipment.service_type}
+                    </TableCell>
+                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
+                      {order.id}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                      {formatIOSToDate(order.created_at)}
+                    </TableCell>
+                    <TableCell className="px-5 py-3 text-right">
+                      {formatPrice(order.booking_amount, "NGN")}
+                    </TableCell>
+                    <TableCell className="px-5 py-3">
+                      {GetOrderStatusPill(order.status)}
+                    </TableCell>
+                    <TableCell className="px-5 py-3">
+                      {GetPaymentStatusPill(
+                        order.payment_status as
+                          | "awaiting_payment_confirmation"
+                          | "confirmed"
+                          | "default",
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center">
+                    No bookings found.
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody> */}
+              )}
+            </TableBody>
           </Table>
         </div>
 

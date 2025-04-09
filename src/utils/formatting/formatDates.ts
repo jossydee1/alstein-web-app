@@ -93,3 +93,13 @@ export const formatDateToRelativeWithTime = (date: string): string => {
 
   return `${years}`;
 };
+
+// takes in date and time and returns a formatted string
+// e.g. 2023-08-21T09:00:00.322Z and { hours: "09", minutes: "00" } returns 21st Aug, 2023 at 09:00 AM
+export const formatDateTime = (
+  date: Date | undefined,
+  time: { hours: string; minutes: string },
+) => {
+  if (!date) return "";
+  return `${date.toLocaleDateString()} at ${time.hours}:${time.minutes}`;
+};

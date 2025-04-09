@@ -47,8 +47,8 @@ const RegisterContent = () => {
 
           <div className="grid w-full gap-y-3">
             <Link
-              href={authRoutes.signup}
-              className="group flex w-full items-center justify-between rounded-lg border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
+              href={`${authRoutes.signup}?type=client`}
+              className="group flex w-full items-center justify-between rounded-md border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
             >
               <div className="flex items-center gap-x-4">
                 <div className="rounded-full bg-[#8692A6] p-3 text-white transition-all group-hover:bg-brandColor">
@@ -70,8 +70,8 @@ const RegisterContent = () => {
             </Link>
 
             <Link
-              href={authRoutes.partner_signup}
-              className="group flex w-full items-center justify-between rounded-lg border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
+              href={`${authRoutes.signup}?type=partner`}
+              className="group flex w-full items-center justify-between rounded-md border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
             >
               <div className="flex items-center gap-x-4">
                 <div className="rounded-full bg-[#8692A6] p-3 text-white transition-all group-hover:bg-brandColor">

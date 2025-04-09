@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -24,6 +25,7 @@ const LoginContent = () => {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect");
   const idParam = searchParams.get("id");
+  const type = searchParams.get("type");
   const comment = searchParams.get("comment");
 
   const { login } = useAuth();
@@ -47,41 +49,58 @@ const LoginContent = () => {
       return;
     }
 
-    try {
-      const params = {
-        email: email.trim().toLowerCase(),
-        password: password,
-      };
+    const params = {
+      email: email.trim().toLowerCase(),
+      password,
+    };
 
+    try {
       const response = await api.post("/client/public/api/v1/login", params);
 
       if (response.status === 200) {
-        login(response.data);
-        setEmail("");
-        setPassword("");
-
-        if (redirectUrl) {
-          const url = decodeURIComponent(redirectUrl);
-          const redirectWithParams = comment
-            ? `${url}?comment=${encodeURIComponent(comment)}${idParam ? `#${idParam}` : ""}`
-            : `${url}${idParam ? `#${idParam}` : ""}`;
-          router.push(redirectWithParams);
-        } else {
-          router.push(dashboardRoutes.client_order_history);
-        }
+        handleSuccessfulLogin(response.data);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error?.response?.status === 409) {
-        router.push(
-          `${authRoutes.signup}?step=2&id=${error?.response?.data?.id}`,
-        );
-        return;
-      }
-      setError(formatError(error, "An error occurred during login"));
+    } catch (error) {
+      handleLoginError(error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSuccessfulLogin = (data: any) => {
+    login(data);
+    setEmail("");
+    setPassword("");
+
+    if (type === "client") {
+      router.push(dashboardRoutes.client_order_history);
+      return;
+    }
+
+    if (type === "partner") {
+      router.push(authRoutes.partner_setup);
+      return;
+    }
+
+    if (redirectUrl) {
+      const url = decodeURIComponent(redirectUrl);
+      const redirectWithParams = comment
+        ? `${url}?comment=${encodeURIComponent(comment)}${idParam ? `#${idParam}` : ""}`
+        : `${url}${idParam ? `#${idParam}` : ""}`;
+      router.push(redirectWithParams);
+    } else {
+      router.push(dashboardRoutes.client_order_history);
+    }
+  };
+
+  const handleLoginError = (error: any) => {
+    if (error?.response?.status === 409) {
+      router.push(
+        `${authRoutes.signup}?step=2&id=${error?.response?.data?.id}`,
+      );
+      return;
+    }
+    setError(formatError(error, "An error occurred during login"));
   };
 
   return (

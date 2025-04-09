@@ -4,10 +4,8 @@ import { ListingProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import image from "@/public/images/doctor.png";
-import { authRoutes, webRoutes, formatPrice } from "@/utils";
+import { authRoutes, webRoutes, formatPrice, formatDateTime } from "@/utils";
 import { Edit3 } from "lucide-react";
-import { DateRange } from "react-day-picker";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
@@ -16,36 +14,47 @@ import {
 import { PaystackButton } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/navigation";
+import DateTimePicker from "@/components/common/DateTimePicker";
+import { useDateTime } from "@/context/DateTimeContext";
 
 const OrderDetails = ({
   listingInfo,
-  numberOfDays,
-  date,
-  setDate,
   costPerDay,
   serviceFee,
   totalCost,
   paystackProps,
   isPaystackDisabled,
   user,
-  address,
 }: {
   listingInfo: ListingProps;
-  numberOfDays: number;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
   costPerDay: number;
   serviceFee: number;
   totalCost: number;
   paystackProps: PaystackProps;
   isPaystackDisabled: boolean;
-  address: string;
   user: boolean;
 }) => {
   const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const {
+    date,
+    setDate,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    numberOfDays,
+  } = useDateTime();
 
-  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.checkout}?id=${listingInfo.id}&address=${address}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`)}`;
+  const handleCheckoutRedirect = () => {
+    if (!user) {
+      // Redirect to login with a redirect URL back to the listing page
+      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      router.push(
+        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+      );
+    }
+  };
 
   return (
     <div className="dashboard-section-card space-y-8">
@@ -90,20 +99,20 @@ const OrderDetails = ({
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger className="inline-flex items-center gap-1">
               <span className="font-medium text-[#172554]">
-                {date?.from?.toLocaleDateString() || "-"} -{" "}
-                {date?.to?.toLocaleDateString() || "-"}
+                {formatDateTime(date?.from, fromTime)} -{" "}
+                {formatDateTime(date?.to, toTime)}
               </span>
 
               <Edit3 size={16} color="#172554" />
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="range"
-                selected={date}
-                onSelect={newDate => {
-                  setDate(newDate);
-                }}
-                numberOfMonths={2}
+              <DateTimePicker
+                date={date}
+                setDate={setDate}
+                fromTime={fromTime}
+                setFromTime={setFromTime}
+                toTime={toTime}
+                setToTime={setToTime}
               />
             </PopoverContent>
           </Popover>
@@ -144,13 +153,13 @@ const OrderDetails = ({
         <PaystackButton
           {...paystackProps}
           className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
-          disabled={!isPaystackDisabled}
+          disabled={isPaystackDisabled}
         />
       ) : (
         <button
           className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
           disabled={isPaystackDisabled}
-          onClick={() => router.push(redirectUrl)}
+          onClick={handleCheckoutRedirect}
           type="button"
         >
           Login to pay

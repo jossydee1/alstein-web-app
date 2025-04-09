@@ -21,11 +21,11 @@ export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
           >
             <h3 className="font-semibold text-[#343434]">{p?.title}</h3>
             <p>{p?.description}</p>
-            <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-lg hover:shadow-lg">
+            <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-md hover:shadow-lg">
               <Image
-                src={p?.image}
-                alt={p?.title}
-                className="aspect-video h-[110px] w-auto rounded-lg object-cover transition-transform hover:scale-105"
+                src={p?.image || ""}
+                alt={p?.title || ""}
+                className="aspect-video h-[110px] w-auto rounded-md object-cover transition-transform hover:scale-105"
               />
             </div>
           </button>

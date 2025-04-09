@@ -1,14 +1,12 @@
-import { StaticImageData } from "next/image";
-
 export interface CertsProps {
-  title: string;
-  description: string;
-  image: StaticImageData;
-  download_url: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  download_url?: string;
 }
 
 export interface PartnerProps {
-  id: string;
+  id?: string;
   name: string;
   logo: string;
   bio: string;
@@ -22,18 +20,22 @@ export interface PartnerProps {
   type: string;
   specializations: string;
   mission: string;
+  incorporation_date?: string;
   support_email: string;
-  support_number: string;
-  is_verified: boolean;
-  created_at: string;
-  updated_at: string;
-  status: string;
-  profile_id: string;
-  profile: {
+  institutional_email?: string;
+  institution?: string;
+  department?: string;
+  department_head_email?: string;
+  is_verified?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  status?: string;
+  profile_id?: string;
+  profile?: {
     first_name: string;
     last_name: string;
     user_avatar: string | null;
     id: string;
   };
-  partner_doc: CertsProps[];
+  documents: { [key: string]: CertsProps };
 }

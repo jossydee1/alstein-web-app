@@ -261,12 +261,12 @@ html {
     @apply block font-semibold text-[#696F79];
   }
   input {
-    @apply w-full rounded-lg border border-[#BCC0C7] p-2.5 text-[#696F79] placeholder:text-[#9CA3AF] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
+    @apply w-full rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79] placeholder:text-[#9CA3AF] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
   }
 }
 
 .inputGroupPhone {
-  @apply flex w-full items-center space-x-2.5 rounded-lg border border-[#BCC0C7] p-2.5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:text-[#9CA3AF];
+  @apply flex w-full items-center space-x-2.5 rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:text-[#9CA3AF];
   select,
   input {
     @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
@@ -299,12 +299,12 @@ html {
 }
 
 .submitButton {
-  @apply h-auto w-full rounded-lg bg-brandColor p-5 text-center text-base font-semibold text-white hover:bg-brandColor/80;
+  @apply h-auto w-full rounded-md bg-brandColor p-3 text-center text-base font-semibold text-white hover:bg-brandColor/80;
 }
 
 .buttonBlue {
-  @apply bg-brandColor text-white hover:!bg-brandColor/80 hover:text-white;
+  @apply h-auto bg-brandColor p-3 text-white hover:!bg-brandColor/80 hover:text-white;
 }
 .buttonBlue2 {
-  @apply border border-[#E5E7EB] bg-brandColor text-white hover:!bg-brandColor/80 hover:text-white;
+  @apply h-auto border border-[#E5E7EB] bg-brandColor p-3 text-white hover:!bg-brandColor/80 hover:text-white;
 }

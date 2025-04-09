@@ -121,7 +121,7 @@ const WithdrawForm = ({
           <div className="w-full">
             <Label htmlFor="amount" className="mb-2">
               <Input
-                className="w-full rounded-lg border border-[#E5E7EB] bg-white p-5"
+                className="w-full rounded-md border border-[#E5E7EB] bg-white p-5"
                 type="number"
                 id="amount"
                 name="amount"

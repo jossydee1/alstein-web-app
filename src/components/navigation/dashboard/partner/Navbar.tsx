@@ -3,9 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import { ArrowRightLeft, BellDot, LayoutDashboard, LogOut } from "lucide-react";
+import { BellDot, LogOut, UserRound } from "lucide-react";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
+import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
   const { logout, user } = useAuth();
@@ -39,7 +40,7 @@ export const Navbar = () => {
           <div className="ml-auto flex gap-5 py-2">
             <Link
               href={dashboardRoutes.client_notifications}
-              className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-lg border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+              className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
             >
               <BellDot size="24" strokeWidth={1.5} />
             </Link>
@@ -47,7 +48,7 @@ export const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
-                className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-lg border-[0.2px] border-transparent transition-all hover:border-gray-400"
+                className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-md border-[0.2px] border-transparent transition-all hover:border-gray-400"
                 onClick={() => setShowDropdown(!showDropdown)}
               >
                 <Image
@@ -89,33 +90,22 @@ export const Navbar = () => {
                     className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                   >
                     <span className="mr-2 inline-block">
-                      <LayoutDashboard size={20} />
+                      <UserRound size={20} />
                     </span>
-                    <span className="font-medium leading-6">Dashboard</span>
+                    <span className="font-medium leading-6">My Account</span>
                   </Link>
 
-                  <Link
-                    href={dashboardRoutes.client_order_history}
-                    className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
-                  >
-                    <span className="mr-2 inline-block">
-                      <ArrowRightLeft size={20} />
-                    </span>
-                    <span className="font-medium leading-6">
-                      Switch to Client account
-                    </span>
-                  </Link>
-
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
                     onClick={logout}
-                    className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
+                    className="inline-flex items-center justify-start rounded-sm p-0 text-sm text-[#6B7280] hover:text-[#2F2F2F]"
                   >
                     <span className="mr-2 inline-block">
                       <LogOut size={20} />
                     </span>
                     <span className="font-medium leading-6">Logout</span>
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

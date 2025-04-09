@@ -30,6 +30,7 @@ const SignupContent = () => {
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const type = searchParams.get("type");
   const step = searchParams.get("step");
 
   useEffect(() => {
@@ -70,6 +71,7 @@ const SignupContent = () => {
             userId={userId}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            type={type}
           />
         );
       default:
@@ -440,10 +442,12 @@ const Security = ({
   userId,
   isSubmitting,
   setIsSubmitting,
+  type,
 }: {
   userId: string;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
+  type: string | null;
 }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -511,7 +515,7 @@ const Security = ({
       );
 
       if (response.status === 200) {
-        router.push(authRoutes.login);
+        router.push(authRoutes.login + `?type=${type}`);
       }
     } catch (error) {
       setError(formatError(error, "An error occurred while setting password"));

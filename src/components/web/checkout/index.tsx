@@ -1,18 +1,24 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Breadcrumbs } from "@/components/common";
-import { formatError, PAYSTACK_PUBLIC_TEST_KEY, webRoutes } from "@/utils";
+import { Breadcrumbs, LoadingState } from "@/components/common";
+import {
+  api,
+  formatError,
+  formatIOSToDate,
+  PAYSTACK_PUBLIC_TEST_KEY,
+  webRoutes,
+} from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { ListingInfoProps } from "@/types";
+import { ApiResponseProps, ListingInfoProps } from "@/types";
 import { useSearchParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 import ShippingAddress from "./ShippingAddress";
 import { useAuth } from "@/context";
-import { DateRange } from "react-day-picker";
-import { differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
 import SuccessModal from "./SuccessModal";
+import { useDateTime } from "@/context/DateTimeContext";
+import { toast } from "react-toastify";
 
 const OrderDetails = dynamic(
   () => import("./OrderDetails"),
@@ -33,12 +39,12 @@ export interface FormData {
 const CheckoutContent = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const address = searchParams.get("address");
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
+  const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { user } = useAuth();
+  const { date, numberOfDays, resetDateTime, fromTime } = useDateTime();
+
+  const { user, token, userId } = useAuth();
   const [error] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
@@ -46,17 +52,6 @@ const CheckoutContent = () => {
     email: "",
     address: "",
   });
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [numberOfDays, setNumberOfDays] = useState<number>(0);
-
-  useEffect(() => {
-    if (startDate && endDate) {
-      // setDate({
-      //   from: new Date(format(startDate, "dd/MM/yyyy")),
-      //   to: new Date(format(decodeURI(endDate), "dd/MM/yyyy")),
-      // });
-    }
-  }, [startDate, endDate]);
 
   // set form data from user
   useEffect(() => {
@@ -69,22 +64,6 @@ const CheckoutContent = () => {
       });
     }
   }, [user]);
-
-  useEffect(() => {
-    if (address) {
-      setFormData(prev => ({
-        ...prev,
-        address: address,
-      }));
-    }
-  }, [address]);
-
-  // set number of days
-  useEffect(() => {
-    if (date?.from && date?.to) {
-      setNumberOfDays(differenceInDays(date.to, date.from));
-    }
-  }, [date]);
 
   // Get listing info
   const {
@@ -123,6 +102,47 @@ const CheckoutContent = () => {
   // paystack
   const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
 
+  const handlePaymentSuccess = async () => {
+    setIsBooking(true);
+    try {
+      const response = await api.post<ApiResponseProps<unknown>>(
+        "/client/api/v1/booking/initiate-booking",
+        {
+          equipment_id: id,
+          partner_id: listingInfo?.partner?.id,
+          start_date: formatIOSToDate(
+            date?.from ? date.from.toISOString() : "",
+          ),
+          end_date: formatIOSToDate(date?.to ? date.to.toISOString() : ""),
+          // start_time: date?.from?.toISOString(),
+          // end_time: date?.to?.toISOString(),
+          client_id: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(response.data.message || "Failed to initiate booking");
+        return;
+      }
+      if (response.status === 200) {
+        resetDateTime();
+        setShowSuccessModal(true);
+        return;
+      }
+
+      return response.data.data;
+    } catch (error) {
+      toast.error(formatError(error, "Failed to initiate booking"));
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
   const paystackProps = {
     email: formData.email,
     amount: 5000,
@@ -130,9 +150,19 @@ const CheckoutContent = () => {
     metadata: {
       custom_fields: [
         {
-          display_name: "S Id",
-          variable_name: "s_id",
+          display_name: "Client Id",
+          variable_name: "client_id",
           value: user?.id,
+        },
+        {
+          display_name: "Listing Id",
+          variable_name: "listing_id",
+          value: listingInfo?.id,
+        },
+        {
+          display_name: "Partner Id",
+          variable_name: "partner_id",
+          value: listingInfo?.partner?.id,
         },
         {
           display_name: "Name",
@@ -155,14 +185,19 @@ const CheckoutContent = () => {
           value: date?.from?.toLocaleDateString(),
         },
         {
+          display_name: "Start Time",
+          variable_name: "start_time",
+          value: date?.from?.toLocaleTimeString(),
+        },
+        {
           display_name: "End Date",
           variable_name: "end_date",
           value: date?.to?.toLocaleDateString(),
         },
         {
-          display_name: "Listing ID",
-          variable_name: "listing_id",
-          value: listingInfo?.id,
+          display_name: "End Time",
+          variable_name: "end_time",
+          value: date?.to?.toLocaleTimeString(),
         },
         {
           display_name: "Cost per day",
@@ -184,15 +219,13 @@ const CheckoutContent = () => {
     publicKey,
     text: "Complete Booking",
     type: "button",
-    onSuccess: () => {
-      setShowSuccessModal(true);
-    },
+    onSuccess: handlePaymentSuccess,
   };
 
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
   const isPaystackDisabled =
     !date?.from ||
-    !date?.to ||
+    !fromTime ||
     Object.values(formData).some(value => value === "") ||
     totalCost <= 0;
 
@@ -225,6 +258,8 @@ const CheckoutContent = () => {
         setShowSuccessModal={setShowSuccessModal}
       />
 
+      {isBooking && <LoadingState />}
+
       <div className={CONTAINER_STYLES.bg}>
         <Breadcrumbs links={links} />
 
@@ -233,15 +268,11 @@ const CheckoutContent = () => {
             <ShippingAddress formData={formData} setFormData={setFormData} />
             <OrderDetails
               listingInfo={listingInfo}
-              numberOfDays={numberOfDays}
-              setDate={setDate}
-              date={date}
               costPerDay={costPerDay}
               serviceFee={serviceFee}
               totalCost={totalCost}
               paystackProps={paystackProps}
               isPaystackDisabled={isPaystackDisabled}
-              address={formData.address}
               user={user === null ? false : true}
             />
           </div>

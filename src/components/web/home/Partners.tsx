@@ -39,7 +39,7 @@ const Partners = () => {
   return (
     <div className="bg-white">
       <section className="section-container">
-        <div className="mx-auto w-full max-w-[1098px] rounded-lg bg-[#F9F9F9] pb-12 pt-8 xl:px-[125px]">
+        <div className="mx-auto w-full max-w-[1098px] rounded-md bg-[#F9F9F9] pb-12 pt-8 xl:px-[125px]">
           <h2 className="mb-6 text-center text-lg font-medium uppercase leading-[20px] text-[#949494]">
             Our Partners
           </h2>

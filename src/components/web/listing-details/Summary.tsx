@@ -2,33 +2,47 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { formatPrice, webRoutes } from "@/utils";
+import { formatDateTime, formatPrice, webRoutes, authRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
-import { DateRange } from "react-day-picker";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
+import DateTimePicker from "@/components/common/DateTimePicker";
+import { useDateTime } from "@/context/DateTimeContext";
+import { useAuth } from "@/context";
 
-const Summary = ({
-  listingInfo,
-  date,
-  setDate,
-  numberOfDays,
-}: {
-  listingInfo: ListingInfoProps;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-  numberOfDays: number;
-}) => {
+const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+  const {
+    date,
+    setDate,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    numberOfDays,
+  } = useDateTime();
+  const { user } = useAuth();
   const router = useRouter();
   const costPerDay = listingInfo?.price;
   const serviceFee = 0;
   const totalCost = costPerDay * numberOfDays + serviceFee;
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const handleCheckout = () => {
+    if (!user) {
+      // Redirect to login with a redirect URL back to the listing page
+      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      router.push(
+        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+      );
+    } else {
+      // Redirect to checkout page
+      router.push(`${webRoutes.checkout}?id=${listingInfo?.id}`);
+    }
+  };
 
   return (
     <section className="sticky top-40 grid gap-6 rounded-md border border-[#DEDEDE] bg-[#F9F9F9] p-6">
@@ -47,18 +61,18 @@ const Summary = ({
                 Start Date
               </span>
               <span className="text-sm font-semibold uppercase">
-                {date?.from?.toLocaleDateString() || "-"}
+                {formatDateTime(date?.from, fromTime)}
               </span>
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="range"
-              selected={date}
-              onSelect={newDate => {
-                setDate(newDate);
-              }}
-              numberOfMonths={2}
+            <DateTimePicker
+              date={date}
+              setDate={setDate}
+              fromTime={fromTime}
+              setFromTime={setFromTime}
+              toTime={toTime}
+              setToTime={setToTime}
             />
           </PopoverContent>
         </Popover>
@@ -69,7 +83,7 @@ const Summary = ({
                 End Date
               </span>
               <span className="text-sm font-semibold uppercase">
-                {date?.to?.toLocaleDateString() || "-"}
+                {formatDateTime(date?.to, toTime)}
               </span>
             </button>
           </PopoverTrigger>
@@ -84,11 +98,7 @@ const Summary = ({
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
           disabled={!date?.from || !date?.to}
-          onClick={() => {
-            router.push(
-              `${`${webRoutes.checkout}?id=${listingInfo?.id}&startDate=${date?.from?.toLocaleDateString()}&endDate=${date?.to?.toLocaleDateString()}`}`,
-            );
-          }}
+          onClick={handleCheckout}
         >
           Proceed to Checkout
         </Button>

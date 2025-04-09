@@ -95,7 +95,7 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
 
   return (
     <div className="relative overflow-hidden rounded-md">
-      <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-lg p-1 text-white">
+      <div className="absolute right-1.5 top-2.5 z-10 flex items-center rounded-md p-1 text-white">
         <Heart fill="" size={24} />
       </div>
 
