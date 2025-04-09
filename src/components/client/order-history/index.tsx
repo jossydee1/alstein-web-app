@@ -170,7 +170,7 @@ const OrderHistoryContent = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory?.data ? (
+              {orderHistory && orderHistory?.data.length < 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
@@ -203,7 +203,7 @@ const OrderHistoryContent = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center">
+                  <TableCell colSpan={7} className="px-5 text-left">
                     No bookings found.
                   </TableCell>
                 </TableRow>

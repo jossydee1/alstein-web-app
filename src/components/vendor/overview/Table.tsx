@@ -20,6 +20,7 @@ import { OrderHistoryProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
+import { Eye } from "lucide-react";
 
 const tableHeads = [
   {
@@ -43,6 +44,9 @@ const tableHeads = [
   },
   {
     label: "Payment STATUS",
+  },
+  {
+    label: "Actions",
   },
 ];
 
@@ -95,7 +99,7 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory?.data ? (
+              {orderHistory && orderHistory?.data.length < 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
@@ -123,12 +127,24 @@ const BookingHistory = () => {
                           | "confirmed"
                           | "default",
                       )}
+                    </TableCell>{" "}
+                    <TableCell className="px-5 py-3">
+                      <div className="flex items-center gap-2.5">
+                        <Button asChild variant="ghost">
+                          <Link
+                            href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
+                          >
+                            <Eye className="size-4 text-[#6B7280]" />
+                            View
+                          </Link>
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center">
+                  <TableCell colSpan={7} className="px-5 text-left">
                     No bookings found.
                   </TableCell>
                 </TableRow>
