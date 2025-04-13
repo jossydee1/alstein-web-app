@@ -135,12 +135,15 @@ const DocumentUpload = ({
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_url) {
+      if (!uploadLinkResponse.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadUrl = uploadLinkResponse.data.data.upload_url;
-      const fileUrl = uploadLinkResponse.data.data.file_url;
+      const uploadUrl = uploadLinkResponse.data.data.upload_link;
+      // If there's a file_url in the response use it, otherwise construct a URL based on the document name
+      const fileUrl =
+        uploadLinkResponse.data.data.file_url ||
+        `https://alstein-dev-storage.s3.us-east-1.amazonaws.com/${partnerId}/utility/${formattedDocName}.pdf`;
 
       // 2. Upload the file to the provided URL
       const response = await fetch(uploadUrl, {
