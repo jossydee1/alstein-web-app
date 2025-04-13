@@ -1,11 +1,11 @@
 "use client";
 
-import { CertsProps } from "@/types";
+import { DocumentProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import { CertsModal } from "./modals";
 
-export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
+export const CertsList = ({ certs }: { certs: DocumentProps[] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return certs.length === 0 ? (
@@ -19,12 +19,12 @@ export const CertsList = ({ certs }: { certs: CertsProps[] }) => {
             onClick={() => setIsModalOpen(true)}
             className="block space-y-1.5 text-left"
           >
-            <h3 className="font-semibold text-[#343434]">{p?.title}</h3>
-            <p>{p?.description}</p>
+            <h3 className="font-semibold text-[#343434]">{p?.name}</h3>
+            <p>{p?.name}</p>
             <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-md hover:shadow-lg">
               <Image
-                src={p?.image || ""}
-                alt={p?.title || ""}
+                src={p?.path || ""}
+                alt={p?.path || ""}
                 className="aspect-video h-[110px] w-auto rounded-md object-cover transition-transform hover:scale-105"
               />
             </div>

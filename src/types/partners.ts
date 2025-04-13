@@ -1,8 +1,6 @@
-export interface CertsProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  download_url?: string;
+export interface DocumentProps {
+  path: string;
+  name: string;
 }
 
 export interface PartnerProps {
@@ -37,8 +35,9 @@ export interface PartnerProps {
     user_avatar: string | null;
     id: string;
   };
-  documents: { [key: string]: CertsProps };
+  partner_doc: DocumentProps[] | DocumentProps[];
 }
+
 export interface UpdatePartnerProps {
   id: string;
   name?: string;

@@ -293,11 +293,10 @@ const LaboratoryPageContent = () => {
     }
   }, [id, router, subType, type]);
 
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<UpdatePartnerProps>({
     id: id || "",
     name: "",
-    logo: "",
     bio: "",
     website: "",
     city: "",
@@ -306,14 +305,9 @@ const LaboratoryPageContent = () => {
     address: "",
     longitude: "",
     latitude: "",
-    type: type || "",
     specializations: "",
     mission: "",
     support_email: "",
-    institutional_email: "",
-    department: "",
-    department_head_email: "",
-    institution: "",
   });
 
   // Separate state for tracking document uploads
@@ -414,6 +408,7 @@ const LaboratoryPageContent = () => {
           id: formData.id,
           name: formData.name,
           support_email: formData.support_email,
+          website: formData.website,
           bio: formData.bio,
           specializations: formData.specializations,
           mission: formData.mission,
@@ -422,10 +417,12 @@ const LaboratoryPageContent = () => {
       case 2:
         stepData = {
           id: formData.id,
-          country: formData.country,
           city: formData.city,
           state: formData.state,
+          country: formData.country,
           address: formData.address,
+          longitude: formData.longitude,
+          latitude: formData.latitude,
         };
         break;
       case 3:
@@ -492,6 +489,17 @@ const LaboratoryPageContent = () => {
                 value={formData.support_email}
                 onChange={e => handleChange(e, "support_email")}
                 placeholder="acme@example.com"
+                required
+              />
+            </div>
+            <div className={style.inputGroup}>
+              <label htmlFor="website">Website</label>
+              <input
+                type="url"
+                id="website"
+                value={formData.website}
+                onChange={e => handleChange(e, "website")}
+                placeholder="https://acme-labs.com"
                 required
               />
             </div>

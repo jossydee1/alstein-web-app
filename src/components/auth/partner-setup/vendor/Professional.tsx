@@ -291,7 +291,6 @@ const ProfessionalPageContent = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<UpdatePartnerProps>({
     id: id || "",
-    type: type || "",
     name: "",
     institution: "",
     institutional_email: "",

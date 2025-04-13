@@ -101,7 +101,7 @@ const PartnerDetailsContent = () => {
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
-        <Certifications certs={Object.values(partnerData?.documents || {})} />
+        <Certifications certs={Object.values(partnerData?.partner_doc || [])} />
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
