@@ -39,3 +39,26 @@ export interface PartnerProps {
   };
   documents: { [key: string]: CertsProps };
 }
+export interface UpdatePartnerProps {
+  id: string;
+  name?: string;
+  logo?: string;
+  bio?: string;
+  website?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  address?: string;
+  longitude?: string;
+  latitude?: string;
+  type?: string;
+  specializations?: string;
+  incorporation_date?: string;
+  mission: string;
+  support_email?: string;
+  institutional_email?: string;
+  institution?: string;
+  department?: string;
+  department_head_email?: string;
+  is_verified?: boolean;
+}

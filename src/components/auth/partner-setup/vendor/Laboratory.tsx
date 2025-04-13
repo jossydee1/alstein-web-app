@@ -12,8 +12,9 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { CustomSelect, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
-import { ApiResponseProps, PartnerProps } from "@/types";
+import { ApiResponseProps, UpdatePartnerProps } from "@/types";
 import { useAuth } from "@/context";
+import axios from "axios";
 
 const steps = [
   {
@@ -54,6 +55,13 @@ export function Stepper({ currentStep }: { currentStep: number }) {
   );
 }
 
+// Type for document status tracking
+type DocumentStatus = {
+  url?: string;
+  isUploaded: boolean;
+  isUploading: boolean;
+};
+
 // Document upload component
 const DocumentUpload = ({
   document,
@@ -62,6 +70,7 @@ const DocumentUpload = ({
   onUploadComplete,
   onUploadStart,
   onUploadFail,
+  isUploaded,
 }: {
   document: string;
   partnerId: string;
@@ -69,9 +78,9 @@ const DocumentUpload = ({
   onUploadComplete: (docName: string, url: string) => void;
   onUploadStart: (docName: string) => void;
   onUploadFail: (docName: string) => void;
+  isUploaded: boolean;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
-  const [isUploaded, setIsUploaded] = useState(false);
   const [uploadFailed, setUploadFailed] = useState(false);
   const [fileName, setFileName] = useState("");
 
@@ -85,6 +94,31 @@ const DocumentUpload = ({
     return bytes / (1024 * 1024);
   };
 
+  // Function to directly upload to S3 using pre-signed URL with axios
+  const uploadFileToS3 = async (file: File, uploadLink: string) => {
+    try {
+      // Create an axios PUT request to the pre-signed URL with the file
+      const response = await axios.put(uploadLink, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (response.status !== 200) {
+        console.error("S3 upload error:", response.status, response.data);
+        throw new Error(
+          `S3 upload failed: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      // If we get here, the upload was successful
+      return true;
+    } catch (error) {
+      console.error("Upload error details:", error);
+      throw error;
+    }
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
@@ -92,7 +126,6 @@ const DocumentUpload = ({
 
     // Reset state before new upload
     setUploadFailed(false);
-    setIsUploaded(false);
 
     // Check if file is PDF
     if (file.type !== "application/pdf") {
@@ -118,7 +151,7 @@ const DocumentUpload = ({
     onUploadStart(document);
 
     try {
-      // 1. Get the upload link
+      // 1. Get the upload link from your API
       const formattedDocName = formatDocName(document);
       const uploadLinkResponse = await api.post(
         "/partner/api/v1/docs/create-upload-link",
@@ -139,28 +172,17 @@ const DocumentUpload = ({
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadUrl = uploadLinkResponse.data.data.upload_link;
-      // If there's a file_url in the response use it, otherwise construct a URL based on the document name
+      const uploadLink = uploadLinkResponse.data.data.upload_link;
+
+      // 2. Upload the file directly to S3 using our helper function
+      await uploadFileToS3(file, uploadLink);
+
+      // 3. Construct the final URL for the file
       const fileUrl =
-        uploadLinkResponse.data.data.file_url ||
-        `https://alstein-dev-storage.s3.us-east-1.amazonaws.com/${partnerId}/utility/${formattedDocName}.pdf`;
+        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0]; // Remove the query parameters to get the base URL
 
-      // 2. Upload the file to the provided URL
-      const response = await fetch(uploadUrl, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": "application/pdf",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`);
-      }
-
-      // 3. Notify parent component of successful upload
+      // Success handling
       onUploadComplete(document, fileUrl);
-      setIsUploaded(true);
       toast.success(`${document} uploaded successfully`);
     } catch (error) {
       console.error("Upload error:", error);
@@ -268,7 +290,7 @@ const LaboratoryPageContent = () => {
   }, [id, router, subType, type]);
 
   const [currentStep, setCurrentStep] = useState(3);
-  const [formData, setFormData] = useState<PartnerProps>({
+  const [formData, setFormData] = useState<UpdatePartnerProps>({
     id: id || "",
     name: "",
     logo: "",
@@ -288,10 +310,14 @@ const LaboratoryPageContent = () => {
     department: "",
     department_head_email: "",
     institution: "",
-    documents: {},
   });
-  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Separate state for tracking document uploads
+  const [documentStatus, setDocumentStatus] = useState<
+    Record<string, DocumentStatus>
+  >({});
   const [uploadingDocuments, setUploadingDocuments] = useState<string[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -305,41 +331,65 @@ const LaboratoryPageContent = () => {
 
   const handleDocumentUploadStart = (docName: string) => {
     setUploadingDocuments(prev => [...prev, docName]);
+    setDocumentStatus(prev => ({
+      ...prev,
+      [docName]: {
+        ...prev[docName],
+        isUploading: true,
+        isUploaded: false,
+      },
+    }));
   };
 
   const handleDocumentUploadComplete = (docName: string, url: string) => {
     setUploadingDocuments(prev => prev.filter(doc => doc !== docName));
-
-    // Update formData with the document URL
-    setFormData(prev => ({
+    setDocumentStatus(prev => ({
       ...prev,
-      documents: {
-        ...prev.documents,
-        [docName]: { title: docName, url },
+      [docName]: {
+        url,
+        isUploaded: true,
+        isUploading: false,
       },
     }));
   };
 
   const handleDocumentUploadFail = (docName: string) => {
     setUploadingDocuments(prev => prev.filter(doc => doc !== docName));
+    setDocumentStatus(prev => ({
+      ...prev,
+      [docName]: {
+        isUploaded: false,
+        isUploading: false,
+      },
+    }));
+  };
 
-    // Remove the document from formData if it exists and failed
-    setFormData(prev => {
-      const newDocuments = { ...prev.documents };
-      if (newDocuments[docName]) {
-        delete newDocuments[docName];
-      }
-      return {
-        ...prev,
-        documents: newDocuments,
-      };
-    });
+  const requiredDocuments = [
+    "Business Registration Certificate", // CAC Certificate
+    "Medical Laboratory Science License", // MLSCN License
+    "Nigerian Institute of Science Laboratory Technology License", // NISLT License
+    "Current Practicing License with Resident Medical Laboratory Scientist's Name", // Practicing license
+  ];
+
+  // Check if all required documents are uploaded
+  const areAllDocumentsUploaded = () => {
+    // If we're not on step 3 (documents), return true as it's not relevant
+    if (currentStep !== 3) return true;
+
+    // For step 3, check if all required documents have been uploaded
+    return requiredDocuments.every(doc => documentStatus[doc]?.isUploaded);
   };
 
   const handleSaveAndContinue = async () => {
     // Don't proceed if documents are still uploading in step 3
     if (currentStep === 3 && uploadingDocuments.length > 0) {
       toast.info("Please wait for all documents to finish uploading");
+      return;
+    }
+
+    // If on last step, check if all documents are uploaded
+    if (currentStep === 3 && !areAllDocumentsUploaded()) {
+      toast.error("Please upload all required documents before submitting");
       return;
     }
 
@@ -352,7 +402,7 @@ const LaboratoryPageContent = () => {
       return;
     }
 
-    // Prepare data for the current step
+    // Prepare data for the current step - no documents included
     let stepData = {};
     switch (currentStep) {
       case 1:
@@ -375,14 +425,15 @@ const LaboratoryPageContent = () => {
         };
         break;
       case 3:
-        stepData = { id: formData.id, documents: formData.documents };
+        // Just send the partner ID for documents step
+        stepData = { id: formData.id };
         break;
       default:
         break;
     }
 
     try {
-      const response = await api.post<ApiResponseProps<PartnerProps>>(
+      const response = await api.post<ApiResponseProps<UpdatePartnerProps>>(
         "/partner/api/v1/update-partner",
         stepData,
         {
@@ -519,15 +570,9 @@ const LaboratoryPageContent = () => {
           </>
         );
       case 3:
-        const documents = [
-          "Business Registration Certificate", // CAC Certificate
-          "Medical Laboratory Science License", // MLSCN License
-          "Nigerian Institute of Science Laboratory Technology License", // NISLT License
-          "Current Practicing License with Resident Medical Laboratory Scientist's Name", // Practicing license
-        ];
         return (
           <div className="space-y-3">
-            {documents.map((doc, index) => (
+            {requiredDocuments.map((doc, index) => (
               <DocumentUpload
                 key={index}
                 document={doc}
@@ -536,6 +581,7 @@ const LaboratoryPageContent = () => {
                 onUploadComplete={handleDocumentUploadComplete}
                 onUploadStart={handleDocumentUploadStart}
                 onUploadFail={handleDocumentUploadFail}
+                isUploaded={!!documentStatus[doc]?.isUploaded}
               />
             ))}
             <div className="mt-2 text-sm text-gray-500">
@@ -601,7 +647,10 @@ const LaboratoryPageContent = () => {
                 type="button"
                 onClick={handleSaveAndContinue}
                 className={style.inputGroup}
-                disabled={currentStep === 3 && uploadingDocuments.length > 0}
+                disabled={
+                  currentStep === 3 &&
+                  (uploadingDocuments.length > 0 || !areAllDocumentsUploaded())
+                }
               >
                 {currentStep === steps.length
                   ? "Submit for Review"
