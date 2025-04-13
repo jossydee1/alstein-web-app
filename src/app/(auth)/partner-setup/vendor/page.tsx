@@ -7,7 +7,7 @@ import React from "react";
 
 const Page = () => {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = searchParams.get("sub_type");
 
   return !type || type === "laboratory" ? (
     <LaboratoryPageContent />

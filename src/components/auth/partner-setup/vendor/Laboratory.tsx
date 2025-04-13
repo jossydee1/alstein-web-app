@@ -20,12 +20,16 @@ const steps = [
   {
     id: 1,
     label: "Business Information",
-    body: "Kindly provide your business Information",
+    body: "Kindly provide your business information",
   },
-  { id: 2, label: "Address", body: "Kindly provide your business address" },
+  {
+    id: 2,
+    label: "Business Address",
+    body: "Kindly provide your business address",
+  },
   {
     id: 3,
-    label: "Certificate",
+    label: "Documents",
     body: "To ensure trust and compliance, please upload the necessary business verification documents",
   },
 ];

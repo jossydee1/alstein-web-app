@@ -54,11 +54,10 @@ export interface UpdatePartnerProps {
   type?: string;
   specializations?: string;
   incorporation_date?: string;
-  mission: string;
+  mission?: string;
   support_email?: string;
   institutional_email?: string;
   institution?: string;
   department?: string;
   department_head_email?: string;
-  is_verified?: boolean;
 }
