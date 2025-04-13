@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect } from "react";
 import {
   Table,
@@ -45,15 +46,13 @@ const tableHeads = [
   {
     label: "Payment STATUS",
   },
-  {
-    label: "Actions",
-  },
+  { label: "ACTIONS" },
 ];
 
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
 
-  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.profile_id}&skip=0&take=10`;
+  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=0&take=10`;
 
   const {
     data: orderHistory,
@@ -81,9 +80,8 @@ const BookingHistory = () => {
           <Link href={dashboardRoutes.vendor_bookings}>View all</Link>
         </Button>
       </header>
-
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
-        <div className="rounded-[6px] border-[0.2px] border-gray-300 bg-white">
+        <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
               <TableRow>
@@ -99,7 +97,7 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length < 0 ? (
+              {orderHistory && orderHistory?.data.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
@@ -127,7 +125,7 @@ const BookingHistory = () => {
                           | "confirmed"
                           | "default",
                       )}
-                    </TableCell>{" "}
+                    </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button asChild variant="ghost">

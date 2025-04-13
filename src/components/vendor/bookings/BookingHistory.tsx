@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -52,25 +53,17 @@ const tableHeads = [
   {
     label: "Payment STATUS",
   },
-  {
-    label: "ACTIONS",
-  },
+  { label: "ACTIONS" },
 ];
 
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
 
-  const filterOptions = ["all"];
-  const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
 
-  const url =
-    activeFilter === "all"
-      ? `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.profile_id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
-      : `/client/api/v1/booking/get-bookings-by-status?status=${activeFilter}`;
-
+  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
   const {
     data: orderHistory,
     isLoading,
@@ -89,13 +82,6 @@ const BookingHistory = () => {
       setTotalPages(Math.ceil(orderHistory.total_count / itemsPerPage));
     }
   }, [listingError, orderHistory]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter);
-    setCurrentPage(1);
-    refetch();
-  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -142,22 +128,8 @@ const BookingHistory = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Booked Equipments</h1>
       </header>
-
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          {/* <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
-            {filterOptions.map(option => (
-              <button
-                key={option}
-                type="button"
-                className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
-                onClick={() => handleFilterChange(option)}
-              >
-                {option}
-              </button>
-            ))}
-          </nav> */}
-
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
               <TableRow>
@@ -173,7 +145,7 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length < 0 ? (
+              {orderHistory && orderHistory?.data.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
@@ -201,7 +173,7 @@ const BookingHistory = () => {
                           | "confirmed"
                           | "default",
                       )}
-                    </TableCell>{" "}
+                    </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button asChild variant="ghost">
