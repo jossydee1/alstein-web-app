@@ -26,7 +26,9 @@ export const useGetBusinessProfiles = () => {
         );
       }
 
-      setBusinessProfile(response.data.data[0]);
+      const firstProfile = response.data.data[0];
+      setBusinessProfile(firstProfile);
+
       return response.data.data;
     },
     enabled: false, // Disable automatic fetching
