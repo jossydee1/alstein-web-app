@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "../../Banner";
 import style from "../../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { webRoutes, formatError, api } from "@/utils";
+import { webRoutes, formatError, api, dashboardRoutes } from "@/utils";
 import { Button } from "../../../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -57,12 +57,23 @@ export function Stepper({ currentStep }: { currentStep: number }) {
 
 const LaboratoryPageContent = () => {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = searchParams.get("partner_type");
+  const subType = searchParams.get("sub_type");
+  const id = searchParams.get("partner_id");
+
   const router = useRouter();
   const { token } = useAuth();
 
+  useEffect(() => {
+    if (!type || !subType || !id) {
+      router.push("/partner-setup");
+      return;
+    }
+  }, [id, router, subType, type]);
+
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PartnerProps>({
+    id: id || "",
     name: "",
     logo: "",
     bio: "",
@@ -85,6 +96,8 @@ const LaboratoryPageContent = () => {
   });
   const [isProcessing, setIsProcessing] = useState(false);
 
+  console.log(formData);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -105,7 +118,7 @@ const LaboratoryPageContent = () => {
         ...prev,
         documents: {
           ...prev.documents,
-          [doc]: { title: doc, image: file.name }, // Update the document with the file name
+          [doc]: { title: doc, image: file.name },
         },
       }));
     }
@@ -114,11 +127,19 @@ const LaboratoryPageContent = () => {
   const handleSaveAndContinue = async () => {
     setIsProcessing(true);
 
+    // Ensure the `id` exists
+    if (!formData.id) {
+      toast.error("Partner ID is missing. Please try again.");
+      setIsProcessing(false);
+      return;
+    }
+
     // Prepare data for the current step
     let stepData = {};
     switch (currentStep) {
       case 1:
         stepData = {
+          id: formData.id,
           name: formData.name,
           support_email: formData.support_email,
           bio: formData.bio,
@@ -128,6 +149,7 @@ const LaboratoryPageContent = () => {
         break;
       case 2:
         stepData = {
+          id: formData.id,
           country: formData.country,
           city: formData.city,
           state: formData.state,
@@ -135,9 +157,7 @@ const LaboratoryPageContent = () => {
         };
         break;
       case 3:
-        stepData = {
-          documents: formData.documents,
-        };
+        stepData = { id: formData.id, documents: formData.documents };
         break;
       default:
         break;
@@ -166,6 +186,7 @@ const LaboratoryPageContent = () => {
         setCurrentStep(prev => prev + 1);
       } else {
         toast.success("All steps completed!");
+        router.push(dashboardRoutes.vendor_overview);
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to update partner data"));
@@ -281,10 +302,10 @@ const LaboratoryPageContent = () => {
         );
       case 3:
         const documents = [
-          "Business registration certificate",
-          "Medical laboratory science license",
-          "Nigerian institute of science laboratory license",
-          "Name of Resident medical laboratory scientist with current practicing license",
+          "Business Registration Certificate", // CAC Certificate
+          "Medical Laboratory Science License", // MLSCN License
+          "Nigerian Institute of Science Laboratory Technology License", // NISLT License
+          "Current Practicing License with Resident Medical Laboratory Scientist's Name", // Practicing license
         ];
         return (
           <div className="space-y-3">

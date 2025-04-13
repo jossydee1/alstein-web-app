@@ -24,7 +24,7 @@ const options = [
   {
     id: "vendor",
     type: "LAB",
-    title: "I'm a Vendor",
+    title: "I'm a Laboratory/Professional",
     description:
       "Partner with Alstein as an equipment vendor and expand your reach.",
     icon: <ShoppingCart className="h-6 w-6 text-blue-600" />,
@@ -54,6 +54,7 @@ const options = [
 const PartnerSetupContent = () => {
   const { token } = useAuth();
   const router = useRouter();
+
   const [selected, setSelected] = useState("");
   const [selectedSubOption, setSelectedSubOption] = useState("");
   const [showMessage, setShowMessage] = useState(false);
@@ -61,6 +62,7 @@ const PartnerSetupContent = () => {
 
   const handleCreatePartnerType = async () => {
     setShowMessage(false);
+    setIsProcessing(false);
 
     if (!selected) return;
 
@@ -68,6 +70,8 @@ const PartnerSetupContent = () => {
       return setShowMessage(true);
     }
 
+    setShowMessage(false);
+    setIsProcessing(true);
     try {
       const response = await api.post(
         "/partner/api/v1/create-partner",
@@ -84,7 +88,9 @@ const PartnerSetupContent = () => {
         return;
       }
 
-      router.push(`/partner-setup/${selected}?type=${selectedSubOption}`);
+      router.push(
+        `/partner-setup/vendor?partner_type=${selected}&sub_type=${selectedSubOption}&partner_id=${response.data.id}`,
+      );
     } catch (error) {
       toast.error(formatError(error, "Failed to create partner type"));
     } finally {
@@ -140,7 +146,7 @@ const PartnerSetupContent = () => {
                   key={option.type}
                   onClick={() => {
                     setSelected(option.type);
-                    setSelectedSubOption(""); // Reset sub-option when a new option is selected
+                    setSelectedSubOption("");
                   }}
                   className={`block cursor-pointer rounded-md border p-4 text-left transition-all ${
                     selected === option.type
