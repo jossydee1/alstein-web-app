@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useRef } from "react";
 import {
   Table,
   TableBody,
@@ -54,6 +55,7 @@ const tableHeads = [
 
 const OrderHistoryContent = () => {
   const { token } = useAuth();
+  const navRef = useRef(null);
 
   const filterOptions = [
     "all",
@@ -142,18 +144,26 @@ const OrderHistoryContent = () => {
       <h1 className="hidden">Order History</h1>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
-            {filterOptions.map(option => (
-              <button
-                key={option}
-                type="button"
-                className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
-                onClick={() => handleFilterChange(option)}
-              >
-                {option}
-              </button>
-            ))}
-          </nav>
+          <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
+            <nav
+              ref={navRef}
+              className="gray-400 flex items-center overflow-x-auto px-4 py-4 text-sm"
+              style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+            >
+              <div className="flex min-w-max space-x-6">
+                {filterOptions.map(option => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
+                    onClick={() => handleFilterChange(option)}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </nav>
+          </div>
 
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
@@ -170,7 +180,7 @@ const OrderHistoryContent = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length < 0 ? (
+              {orderHistory && orderHistory?.data.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
