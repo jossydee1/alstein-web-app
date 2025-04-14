@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -59,11 +59,19 @@ const tableHeads = [
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
 
+  const navRef = useRef(null);
+
+  const filterOptions = ["all", "approved", "canceled", "declined"];
+  const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
 
-  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
+  const url =
+    activeFilter === "all"
+      ? `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
+      : `/partner/api/v1/booking/filter-partner-bookings-by-status?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&status=${activeFilter}`;
+
   const {
     data: orderHistory,
     isLoading,
@@ -78,10 +86,16 @@ const BookingHistory = () => {
     if (listingError) {
       toast.error(listingError.message);
     }
-    if (orderHistory?.total_count) {
-      setTotalPages(Math.ceil(orderHistory.total_count / itemsPerPage));
+    if (orderHistory?.total_item) {
+      setTotalPages(Math.ceil(orderHistory.total_item / itemsPerPage));
     }
   }, [listingError, orderHistory]);
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    setCurrentPage(1);
+    refetch();
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -130,6 +144,27 @@ const BookingHistory = () => {
       </header>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
+          <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
+            <nav
+              ref={navRef}
+              className="gray-400 flex items-center overflow-x-auto px-4 py-4 text-sm"
+              style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+            >
+              <div className="flex min-w-max space-x-6">
+                {filterOptions.map(option => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
+                    onClick={() => handleFilterChange(option)}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </nav>
+          </div>
+
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
               <TableRow>

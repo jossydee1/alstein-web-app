@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -60,18 +60,21 @@ const tableHeads = [
 
 const RequestHistory = () => {
   const { token, businessProfile } = useAuth();
-  const navRef = useRef(null);
+  // const navRef = useRef(null);
 
-  const filterOptions = ["all", "canceled", "declined"];
-  const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
+  // const filterOptions = [
+  //   "all",
+  //   "initiated",
+  //   "approved",
+  //   "canceled",
+  //   "declined",
+  // ];
+  // const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
 
-  const url =
-    activeFilter === "all"
-      ? `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
-      : `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&status=${activeFilter}`;
+  const url = `/partner/api/v1/booking/filter-partner-bookings-by-status?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&status=initiated`;
 
   const {
     data: orderHistory,
@@ -92,11 +95,11 @@ const RequestHistory = () => {
     }
   }, [listingError, orderHistory]);
 
-  const handleFilterChange = (filter: string) => {
-    setActiveFilter(filter);
-    setCurrentPage(1);
-    refetch();
-  };
+  // const handleFilterChange = (filter: string) => {
+  //   setActiveFilter(filter);
+  //   setCurrentPage(1);
+  //   refetch();
+  // };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -144,7 +147,7 @@ const RequestHistory = () => {
       </header>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
+          {/* <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
             <nav
               ref={navRef}
               className="gray-400 flex items-center overflow-x-auto px-4 py-4 text-sm"
@@ -163,7 +166,7 @@ const RequestHistory = () => {
                 ))}
               </div>
             </nav>
-          </div>
+          </div> */}
 
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
