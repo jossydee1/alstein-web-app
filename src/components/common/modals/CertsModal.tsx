@@ -40,6 +40,9 @@ export const CertsModal = ({
           <Image
             src={DOCUMENT_URL + cert.path || ""}
             alt={cert.name || ""}
+            width={500}
+            height={500}
+            priority
             className="h-full w-auto flex-1"
           />
 
