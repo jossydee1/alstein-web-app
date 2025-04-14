@@ -38,7 +38,7 @@ export const CertsModal = ({
 
         <div className="mx-8 my-6 flex flex-col-reverse gap-6 lg:flex-row">
           <Image
-            src={DOCUMENT_URL + "/" + cert.path || ""}
+            src={DOCUMENT_URL + cert.path || ""}
             alt={cert.name || ""}
             className="h-full w-auto flex-1"
           />
@@ -47,7 +47,7 @@ export const CertsModal = ({
             <h3 className="font-semibold text-[#343434]">{cert.name}</h3>
             <p>{cert.name}</p>
             <Link
-              href={DOCUMENT_URL + "/" + cert.path || ""}
+              href={DOCUMENT_URL + cert.path || ""}
               className="text-[#3784FF]"
             >
               [ download Link ]

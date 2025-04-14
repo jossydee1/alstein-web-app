@@ -63,3 +63,8 @@ export interface BreadcrumbItem {
   href?: string;
   current?: boolean;
 }
+
+export interface DocumentProps {
+  path: string;
+  name?: string;
+}

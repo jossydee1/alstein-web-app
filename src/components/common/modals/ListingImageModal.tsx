@@ -1,14 +1,16 @@
 "use client";
 
+import { DocumentProps } from "@/types";
+import { DOCUMENT_URL } from "@/utils";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 export const ListingImageModal = ({
   images,
   onClose,
 }: {
-  images: { url: StaticImageData }[];
+  images: DocumentProps[];
   onClose: () => void;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,9 +75,11 @@ export const ListingImageModal = ({
           {/* Full-Screen Image View */}
           <div className="relative h-auto w-full">
             <Image
-              src={images[currentIndex].url}
-              alt={`Photo ${currentIndex + 1}`}
-              className="m-auto h-auto w-full flex-1"
+              src={DOCUMENT_URL + images[currentIndex].path}
+              alt={DOCUMENT_URL + images[currentIndex].path}
+              className="m-auto h-auto max-h-[500px] w-auto flex-1"
+              width={1000}
+              height={1000}
             />
 
             {/* PREV & NEXT BUTTONS */}
@@ -108,16 +112,18 @@ export const ListingImageModal = ({
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`h-15 relative w-16 flex-shrink-0 rounded-md border ${
+                className={`relative h-16 w-16 flex-shrink-0 rounded-md border ${
                   index === currentIndex
                     ? "border-2 border-brandColor"
                     : "border-transparent"
                 }`}
               >
                 <Image
-                  src={img.url}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="h-full w-full rounded-md object-cover"
+                  src={DOCUMENT_URL + img.path}
+                  alt={DOCUMENT_URL + img.path}
+                  className="aspect-square max-h-16 max-w-16 rounded-md object-cover"
+                  width={64}
+                  height={64}
                 />
               </button>
             ))}

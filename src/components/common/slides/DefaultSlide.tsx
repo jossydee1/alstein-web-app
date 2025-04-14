@@ -1,14 +1,14 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 export const DefaultSlide = ({
   images,
   onClick,
 }: {
-  images: StaticImageData[];
+  images: string[];
   onClick: () => void;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,6 +51,8 @@ export const DefaultSlide = ({
               src={img}
               alt=""
               className="aspect-video h-auto w-full rounded-md object-cover"
+              width={1000}
+              height={1000}
               onClick={onClick}
             />
           </div>

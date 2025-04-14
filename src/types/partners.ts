@@ -1,7 +1,4 @@
-export interface DocumentProps {
-  path: string;
-  name: string;
-}
+import { DocumentProps } from "./others";
 
 export interface PartnerProps {
   id?: string;
@@ -35,7 +32,7 @@ export interface PartnerProps {
     user_avatar: string | null;
     id: string;
   };
-  partner_doc: DocumentProps[] | DocumentProps[];
+  partner_doc: DocumentProps[];
 }
 
 export interface UpdatePartnerProps {
