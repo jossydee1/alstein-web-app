@@ -60,11 +60,11 @@ export const GetListingStatusPill = (status: string) => {
     | "listing_denied",
     string
   > = {
-    listing_in_process: "bg-orange-50",
-    listing_completed: "bg-green-50",
-    listing_closed: "bg-gray-50",
-    listing_approved: "bg-gray-100",
-    listing_denied: "bg-red-50",
+    listing_in_process: "bg-orange-100",
+    listing_approved: "bg-green-100",
+    listing_completed: "bg-blue-100",
+    listing_closed: "bg-neutral-100",
+    listing_denied: "bg-red-100",
   };
 
   const style =
@@ -75,7 +75,7 @@ export const GetListingStatusPill = (status: string) => {
     <div
       className={`inline-flex items-center gap-2.5 whitespace-nowrap rounded-3xl border px-6 py-1.5 lowercase ${style}`}
     >
-      <span className={`size-2 rounded-full ${style.replace("50", "600")}`} />
+      <span className={`size-2 rounded-full ${style.replace("100", "600")}`} />
       <span>{status.replace("listing_", "").replace(/_/g, " ")}</span>
     </div>
   );
