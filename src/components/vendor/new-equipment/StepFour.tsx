@@ -7,10 +7,10 @@ import Image from "next/image";
 import { useEquipmentForm } from "@/context";
 
 const StepFour = ({
-  onNext,
+  onSubmit,
   onBack,
 }: {
-  onNext: () => void;
+  onSubmit: () => void;
   onBack: () => void;
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
@@ -25,7 +25,7 @@ const StepFour = ({
     setError("");
 
     updateFormData({ address });
-    onNext();
+    onSubmit();
   };
 
   return (

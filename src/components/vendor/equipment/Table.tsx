@@ -146,7 +146,7 @@ const EquipmentListings = () => {
             </TableHeader>
 
             <TableBody>
-              {equipments && equipments?.data.length > 0 ? (
+              {equipments && equipments?.data?.length > 0 ? (
                 equipments?.data?.map(order => (
                   <TableRow key={order?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">

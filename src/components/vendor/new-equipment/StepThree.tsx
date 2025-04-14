@@ -2,11 +2,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { Images, X } from "lucide-react";
-import { useEquipmentForm } from "@/context";
 
 const StepThree = ({
   onNext,
@@ -15,25 +12,8 @@ const StepThree = ({
   onNext: () => void;
   onBack: () => void;
 }) => {
-  const { formData, updateFormData } = useEquipmentForm();
-  const [features, setFeatures] = useState<string[]>(formData.features || []);
-  const [featureInput, setFeatureInput] = useState(
-    formData.features?.[0] || "",
-  );
-  const [images, setImages] = useState<File[]>(formData.images || []);
+  const [images, setImages] = useState<File[]>([]);
   const [error, setError] = useState("");
-
-  const handleFeatureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFeatureInput(e.target.value);
-  };
-
-  const handleFeatureKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && featureInput.trim()) {
-      e.preventDefault();
-      setFeatures(prevFeatures => [...prevFeatures, featureInput.trim()]);
-      setFeatureInput("");
-    }
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -46,10 +26,6 @@ const StepThree = ({
   };
 
   const handleNext = () => {
-    if (features.length < 5) {
-      setError("Please add at least 5 features.");
-      return;
-    }
     if (images.length < 5) {
       setError("Please upload at least 5 images.");
       return;
@@ -57,71 +33,11 @@ const StepThree = ({
 
     setError("");
 
-    updateFormData({ features, images });
     onNext();
   };
 
   return (
     <main className="space-y-9">
-      <div className="dashboard-section-card">
-        <header className="flex flex-row flex-wrap items-start justify-between gap-4">
-          <div className="dashboard-section-card-header">
-            <h1 className="dashboard-section-card-title text-[#172554]">
-              Equipment Specification
-            </h1>
-            <p className="dashboard-section-card-description">
-              Provide key technical details to help customers make informed
-              decisions.
-            </p>
-          </div>
-          <p className="text-3xl font-semibold text-[#172554]">Step 3</p>
-        </header>
-
-        <section className="mt-7 space-y-7">
-          <form className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4">
-            <div className="w-full">
-              <Label htmlFor="feature" className="mb-4">
-                Key Features
-              </Label>
-              <Input
-                className="max-w-[420px] border border-[#E5E7EB] p-5"
-                type="text"
-                id="feature"
-                name="feature"
-                placeholder="e.g Durable"
-                value={featureInput}
-                onChange={handleFeatureInputChange}
-                onKeyPress={handleFeatureKeyPress}
-                required
-              />
-              <sup className="mt-4 block">Min of 5 Features</sup>
-
-              <div className="mt-4 flex flex-wrap gap-4">
-                {features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center rounded-[10px] border border-[#E5E7EB] bg-[#F8FAFC] px-4 py-2 text-sm font-medium text-[#6B7280]"
-                  >
-                    <span>{feature}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFeatures(prevFeatures =>
-                          prevFeatures.filter((_, i) => i !== index),
-                        )
-                      }
-                      className="ml-2 text-red-500 hover:text-red-700"
-                    >
-                      <X size={15} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </form>
-        </section>
-      </div>
-
       <div className="dashboard-section-card">
         <header className="flex flex-row flex-wrap items-start justify-between gap-4">
           <div className="dashboard-section-card-header">
@@ -133,6 +49,7 @@ const StepThree = ({
               condition. Minimum of 5 images required.
             </p>
           </div>
+          <p className="text-3xl font-semibold text-[#172554]">Step 3</p>
         </header>
 
         <section className="mt-7 space-y-7">
