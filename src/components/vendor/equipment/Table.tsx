@@ -16,13 +16,13 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight, Edit, Eye, Trash } from "lucide-react";
-import { cn, dashboardRoutes, formatPrice } from "@/utils";
+import { ChevronLeft, ChevronRight, Edit, Eye } from "lucide-react";
+import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
+import { GetListingStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { OrderHistoryProps } from "@/types";
+import { ListingProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -51,11 +51,9 @@ const tableHeads = [
 const EquipmentListings = () => {
   const { token, businessProfile } = useAuth();
 
-  // accepted value "listing_in_process", "listing_completed","listing_closed","listing_approved","listing_denied"
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages] = useState(1);
 
   const url = `/partner/api/v1/equipments/get-equipments?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
@@ -64,18 +62,20 @@ const EquipmentListings = () => {
     isLoading,
     error: listingError,
     refetch,
-  } = useClientFetch<OrderHistoryProps>({
+  } = useClientFetch<ListingProps[]>({
     endpoint: url,
     token,
   });
+
+  console.log(equipments);
 
   useEffect(() => {
     if (listingError) {
       toast.error(listingError.message);
     }
-    if (equipments?.total_count) {
-      setTotalPages(Math.ceil(equipments.total_count / itemsPerPage));
-    }
+    // if (equipments?.total_count) {
+    //   setTotalPages(Math.ceil(equipments.total_count / itemsPerPage));
+    // }
   }, [listingError, equipments]);
 
   const handlePageChange = (page: number) => {
@@ -146,47 +146,23 @@ const EquipmentListings = () => {
             </TableHeader>
 
             <TableBody>
-              {equipments && equipments?.data?.length > 0 ? (
-                equipments?.data?.map(order => (
-                  <TableRow key={order?.id} className="py-10">
+              {equipments && equipments?.length > 0 ? (
+                equipments?.map(e => (
+                  <TableRow key={e?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
-                      {/* {order?.equipment?.name} */}
-                      MRI Scan
+                      {e?.name}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {/* {order?.id} */}
-                      0112455
+                      {e?.id}
                     </TableCell>
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {/* {formatIOSToDate(order?.created_at)} */}
-                      05/08/2025, 10:30 AM
+                      {formatIOSToDate(e?.created_at)}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
-                      {/* {formatPrice(order?.booking_amount, "NGN")} */}
-                      {formatPrice(2000000, "NGN")}
+                      {formatPrice(e?.price, "NGN")}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      {/* {GetOrderStatusPill(order?.status)} */}
-                      <div
-                        className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                          status === "approved"
-                            ? "bg-orange-50"
-                            : status === "confirmed"
-                              ? "bg-green-50"
-                              : "bg-red-50"
-                        }`}
-                      >
-                        <span
-                          className={`size-2 rounded-full ${
-                            status === "approved"
-                              ? "bg-orange-600"
-                              : status === "confirmed"
-                                ? "bg-green-600"
-                                : "bg-red-600"
-                          }`}
-                        />
-                        <span>{status}</span>
-                      </div>
+                      {GetListingStatusPill(e?.listing_status)}
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-4">
@@ -208,15 +184,14 @@ const EquipmentListings = () => {
                             Edit
                           </Link>
                         </Button>
-                        <Button asChild variant="ghost" className="!p-0">
+                        {/* <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
-                            href="#"
+                            href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
                           >
                             <Trash className="size-4 text-[#6B7280]" />
                             Delete
                           </Link>
-                        </Button>
+                        </Button> */}
                       </div>
                     </TableCell>
                   </TableRow>
