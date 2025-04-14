@@ -17,7 +17,7 @@ import {
 } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { OrderHistoryProps } from "@/types";
+import { OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
@@ -52,13 +52,13 @@ const tableHeads = [
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
 
-  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=0&take=10`;
+  const url = `/partner/api/v1/booking/recently-initiated-booking?partner_id=${businessProfile?.id}`;
 
   const {
     data: orderHistory,
     isLoading,
     error: listingError,
-  } = useClientFetch<OrderHistoryProps>({
+  } = useClientFetch<OrderProps[]>({
     endpoint: url,
     token,
   });
@@ -97,8 +97,8 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length > 0 ? (
-                orderHistory?.data?.map(order => (
+              {orderHistory && orderHistory.length > 0 ? (
+                orderHistory?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order.equipment.name}
@@ -130,7 +130,7 @@ const BookingHistory = () => {
                       <div className="flex items-center gap-2.5">
                         <Button asChild variant="ghost">
                           <Link
-                            href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
+                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
                           >
                             <Eye className="size-4 text-[#6B7280]" />
                             View

@@ -213,7 +213,7 @@ const BookingHistory = () => {
                       <div className="flex items-center gap-2.5">
                         <Button asChild variant="ghost">
                           <Link
-                            href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
+                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
                           >
                             <Eye className="size-4 text-[#6B7280]" />
                             View
