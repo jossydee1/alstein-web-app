@@ -1,21 +1,38 @@
-import { formatPrice } from "@/utils";
+"use client";
+import { useAuth } from "@/context";
+import { useClientFetch } from "@/hooks";
 import React from "react";
 
 const Metrics = () => {
+  const { token, businessProfile } = useAuth();
+
+  const { data } = useClientFetch<{
+    approved_booking: number;
+    pending_booking: number;
+    declined_booking: number;
+    all_booking: number;
+  }>({
+    endpoint: `/partner/api/v1/booking/get-partner-booking-statistics?partner_id=${businessProfile?.id}`,
+    token,
+  });
+
   return (
     <section className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
       <SimpleCard
-        title="Total Revenue"
-        value={formatPrice(500000000, "NGN")}
-        subText={205 + " Orders"}
+        title="Approved Bookings"
+        value={(data?.approved_booking ?? 0).toString()}
       />
       <SimpleCard
-        title="Pending Requests"
-        value={(14).toString() + " New Requests"}
+        title="Pending Bookings"
+        value={(data?.pending_booking ?? 0).toString()}
       />
       <SimpleCard
-        title="Active Bookings"
-        value={(4).toString() + " Active Bookings"}
+        title="Declined Bookings"
+        value={(data?.declined_booking ?? 0).toString()}
+      />
+      <SimpleCard
+        title="All Bookings"
+        value={(data?.all_booking ?? 0).toString()}
       />
     </section>
   );
@@ -26,10 +43,9 @@ export default Metrics;
 type Props = {
   title: string;
   value: string;
-  subText?: string;
 };
 
-const SimpleCard = ({ title, value, subText }: Props) => {
+const SimpleCard = ({ title, value }: Props) => {
   return (
     <div className="flex flex-col rounded-xl border-[0.2px] border-gray-300 bg-white shadow-sm sm:min-w-[200px]">
       <div className="p-4 md:p-5">
@@ -41,11 +57,6 @@ const SimpleCard = ({ title, value, subText }: Props) => {
           <h3 className="text-xl font-medium text-[#172554] sm:text-2xl">
             {value}
           </h3>
-          {subText && (
-            <p className="mt-0.5 text-sm font-medium text-gray-500">
-              {subText}
-            </p>
-          )}
         </div>
       </div>
     </div>
