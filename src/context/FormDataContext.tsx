@@ -14,7 +14,6 @@ interface FormData {
   price: number;
   partner_id: string;
   category_id: string;
-  // features: string[];
 }
 
 interface EquipmentFormContextProps {
@@ -43,7 +42,6 @@ export const EquipmentFormDataProvider = ({
     price: 0,
     partner_id: "",
     category_id: "",
-    // features: [],
   });
 
   const updateFormData = (data: Partial<FormData>) => {

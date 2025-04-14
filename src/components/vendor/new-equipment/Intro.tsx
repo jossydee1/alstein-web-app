@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   ChartBarStacked,
   FlaskConical,
+  GalleryThumbnails,
   LocateFixed,
   // RefreshCcw,
 } from "lucide-react";
@@ -53,8 +54,8 @@ const Intro = ({ onNext }: { onNext: () => void }) => {
             <div>
               <p className={STYLES.top}>Equipment Details</p>
               <p className={STYLES.bottom}>
-                Add the name, description, key features, and price to help
-                customers understand your equipment better.
+                Add the name, description, and price to help customers
+                understand your equipment better.
               </p>
             </div>
           </div>
@@ -68,16 +69,17 @@ const Intro = ({ onNext }: { onNext: () => void }) => {
               </p>
             </div>
           </div>
-          {/* <div className={STYLES.card}>
-            <RefreshCcw size="24" className={STYLES.icon} />
+          <div className={STYLES.card}>
+            <GalleryThumbnails size="24" className={STYLES.icon} />
 
             <div>
-              <p className={STYLES.top}> Review & Submit</p>
+              <p className={STYLES.top}>Images & Specifications</p>
               <p className={STYLES.bottom}>
-                Double-check your details and submit for approval
+                Showcase your equipment with high-quality images and highlight
+                its specifications.
               </p>
             </div>
-          </div> */}
+          </div>
 
           <div className="flex justify-end">
             <Button className="buttonBlue" onClick={onNext}>

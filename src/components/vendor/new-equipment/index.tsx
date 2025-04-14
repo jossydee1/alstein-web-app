@@ -12,7 +12,6 @@ import {
   useAuth,
   useEquipmentForm,
 } from "@/context";
-import ConfirmationModal from "./ConfirmationModal";
 import { toast } from "react-toastify";
 import { api, formatError } from "@/utils";
 import { LoadingState } from "@/components/common";
@@ -38,12 +37,10 @@ const FormStepsWithContext = ({
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }) => {
   const { token, businessProfile } = useAuth();
+  const { formData } = useEquipmentForm();
 
-  const { formData, updateFormData } = useEquipmentForm();
-
-  const [status, setStatus] = useState("success");
-  const [open, setOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [equipmentId, setEquipmentId] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     console.log("Form Data:", formData);
@@ -51,7 +48,7 @@ const FormStepsWithContext = ({
     if (!businessProfile?.id) {
       toast.error("Business Profile ID is missing. Please try again.");
       setIsProcessing(false);
-      return;
+      return null;
     }
 
     const updatedFormData = {
@@ -72,27 +69,14 @@ const FormStepsWithContext = ({
       );
 
       if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to update partner data");
-        return;
+        toast.error(response.data.message || "Failed to create equipment");
+        return null;
       }
 
-      setOpen(true);
-      setStatus("success");
-      updateFormData({
-        name: "",
-        description: "",
-        address: "",
-        longitude: "",
-        latitude: "",
-        city: "",
-        country: "",
-        service_type: "",
-        price: 0,
-        category_id: "",
-        // features: [],
-      });
+      return response.data.data.id; // Return the created equipment ID
     } catch (error) {
-      toast.error(formatError(error, "Failed to update partner data"));
+      toast.error(formatError(error, "Failed to create equipment"));
+      return null;
     } finally {
       setIsProcessing(false);
     }
@@ -109,19 +93,22 @@ const FormStepsWithContext = ({
       onBack={() => setCurrentStep(1)}
     />,
     <StepThree
-      onNext={() => setCurrentStep(4)}
+      onNext={async () => {
+        const id = await handleSubmit();
+        if (id) {
+          setEquipmentId(id);
+          setCurrentStep(4);
+        }
+      }}
       onBack={() => setCurrentStep(2)}
     />,
-    <StepFour onSubmit={handleSubmit} onBack={() => setCurrentStep(3)} />,
+    <StepFour equipmentId={equipmentId} onBack={() => setCurrentStep(3)} />,
   ];
 
   return (
     <>
       {isProcessing && <LoadingState />}
-      <div className="space-y-9">
-        <ConfirmationModal status={status} open={open} setOpen={setOpen} />
-        {steps[currentStep]}
-      </div>
+      <div className="space-y-9">{steps[currentStep]}</div>
     </>
   );
 };
