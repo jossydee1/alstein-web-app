@@ -1,8 +1,8 @@
 import React from "react";
-import { CertsProps } from "@/types";
+import { DocumentProps } from "@/types";
 import { CertsList } from "@/components/common/CertsList";
 
-const Certifications = ({ certs }: { certs: CertsProps[] }) => {
+const Certifications = ({ certs }: { certs: DocumentProps[] }) => {
   return (
     <section>
       <div className="mb-10 md:mb-20">

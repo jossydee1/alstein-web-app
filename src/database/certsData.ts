@@ -1,33 +1,20 @@
-import image from "@/public/images/cert.png";
-import { CertsProps } from "@/types";
+import { DocumentProps } from "@/types";
 
-export const certsData: CertsProps[] = [
+export const certsData: DocumentProps[] = [
   {
-    title: "Laboratory License",
-    description:
-      "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image as unknown as string,
-    download_url: "#",
+    name: "Laboratory License",
+    path: "#",
   },
   {
-    title: "Laboratory License",
-    description:
-      "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image as unknown as string,
-    download_url: "#",
+    name: "Laboratory License",
+    path: "#",
   },
   {
-    title: "Laboratory License",
-    description:
-      "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image as unknown as string,
-    download_url: "#",
+    name: "Laboratory License",
+    path: "#",
   },
   {
-    title: "Laboratory License",
-    description:
-      "Our lab is fully certified and licensed to provide high-quality diagnostic and research services.",
-    image: image as unknown as string,
-    download_url: "#",
+    name: "Laboratory License",
+    path: "#",
   },
 ];

@@ -1,20 +1,28 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { dashboardRoutes, formatPrice } from "@/utils";
+import { dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { X } from "lucide-react";
 import Link from "next/link";
 import ConfirmationModal from "./ConfirmationModal";
+import { useAuth } from "@/context";
+import { useClientFetch } from "@/hooks";
+import { useSearchParams } from "next/navigation";
+import { OrderProps } from "@/types";
+
+const STYLES = {
+  section: "dashboard-section-card relative grid gap-6 !p-6 max-w-screen-sm",
+  sectionTitle: "text-lg font-semibold text-[#172554]",
+  item: "flex sm:items-center sm:justify-between leading-none flex-col sm:flex-row gap-2",
+  itemLabel: "font-medium text-[#6B7280]",
+  itemValue: "font-medium text-[#172554]",
+};
 
 const BookingDetails = () => {
-  const STYLES = {
-    section: "dashboard-section-card relative grid gap-6 !p-6 max-w-screen-sm",
-    sectionTitle: "text-lg font-semibold text-[#172554]",
-    item: "flex sm:items-center sm:justify-between leading-none flex-col sm:flex-row gap-2",
-    itemLabel: "font-medium text-[#6B7280]",
-    itemValue: "font-medium text-[#172554]",
-  };
+  const searchParams = useSearchParams();
+  const bookingId = searchParams.get("booking");
 
+  const { token } = useAuth();
   const [status, setStatus] = useState("accept");
   const [open, setOpen] = useState(false);
 
@@ -27,6 +35,11 @@ const BookingDetails = () => {
     setStatus("decline");
     setOpen(true);
   };
+
+  const { data } = useClientFetch<OrderProps>({
+    endpoint: `/partner/api/v1/booking/booking-details?booking_id=${bookingId}`,
+    token,
+  });
 
   return (
     <>
@@ -48,7 +61,9 @@ const BookingDetails = () => {
 
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Full Name</span>
-            <span className={STYLES.itemValue}>John Doe</span>
+            <span className={STYLES.itemValue}>
+              {data?.client?.first_name} {data?.client?.last_name}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Address</span>
@@ -71,10 +86,6 @@ const BookingDetails = () => {
             <span className={STYLES.itemValue}>Johndoe@.com</span>
           </p>
           <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>Phone Number</span>
-            <span className={STYLES.itemValue}>234-70-450-690</span>
-          </p>
-          <p className={STYLES.item}>
             <span className={STYLES.itemLabel}></span>
             <span className={STYLES.itemValue}></span>
           </p>
@@ -85,19 +96,25 @@ const BookingDetails = () => {
 
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Equipment Name</span>
-            <span className={STYLES.itemValue}>Portable X-Ray Machine</span>
+            <span className={STYLES.itemValue}>{data?.equipment?.name}</span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Rental Type</span>
-            <span className={STYLES.itemValue}>Daily Rental</span>
+            <span className={STYLES.itemValue}>
+              {data?.equipment?.service_type}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Booking Start Date</span>
-            <span className={STYLES.itemValue}>March 20, 2025</span>
+            <span className={STYLES.itemValue}>
+              {formatIOSToDate(data?.start_date || "")}, {data?.start_time}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Due Date</span>
-            <span className={STYLES.itemValue}>March 22, 2025</span>
+            <span className={STYLES.itemValue}>
+              {formatIOSToDate(data?.end_date || "")} {data?.end_time}
+            </span>
           </p>
         </section>
 
@@ -107,7 +124,7 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Sub Total</span>
             <span className={STYLES.itemValue}>
-              {formatPrice(400000, "NGN")}
+              {formatPrice(data?.booking_amount ?? 0, "NGN")}
             </span>
           </p>
           <p className={STYLES.item}>
@@ -117,7 +134,7 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Grand Total</span>
             <span className={STYLES.itemValue}>
-              {formatPrice(400000, "NGN")}
+              {formatPrice(data?.booking_amount ?? 0, "NGN")}
             </span>
           </p>
         </section>

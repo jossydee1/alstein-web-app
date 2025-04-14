@@ -73,6 +73,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push("/");
   };
 
+  const setBusinessProfileHandler = (profile: PartnerProps) => {
+    setBusinessProfile(profile);
+    localStorage.setItem("businessProfile", JSON.stringify(profile));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -82,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         businessProfile,
         login,
         logout,
-        setBusinessProfile,
+        setBusinessProfile: setBusinessProfileHandler,
       }}
     >
       {children}

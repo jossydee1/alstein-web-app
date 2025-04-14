@@ -1,9 +1,4 @@
-export interface CertsProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  download_url?: string;
-}
+import { DocumentProps } from "./others";
 
 export interface PartnerProps {
   id?: string;
@@ -37,5 +32,28 @@ export interface PartnerProps {
     user_avatar: string | null;
     id: string;
   };
-  documents: { [key: string]: CertsProps };
+  partner_doc: DocumentProps[];
+}
+
+export interface UpdatePartnerProps {
+  id: string;
+  name?: string;
+  logo?: string;
+  bio?: string;
+  website?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  address?: string;
+  longitude?: string;
+  latitude?: string;
+  type?: string;
+  specializations?: string;
+  incorporation_date?: string;
+  mission?: string;
+  support_email?: string;
+  institutional_email?: string;
+  institution?: string;
+  department?: string;
+  department_head_email?: string;
 }

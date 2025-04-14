@@ -75,7 +75,7 @@ const AccountSettingsContent = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeactivate = async () => {
     setIsProcessing(true);
 
     try {
@@ -234,7 +234,7 @@ const AccountSettingsContent = () => {
               <Button
                 variant="outline"
                 type="button"
-                onClick={handleDelete}
+                onClick={handleDeactivate}
                 disabled={isProcessing}
                 className="border border-[#E5E7EB] bg-red-500 text-white hover:bg-red-500/70 hover:text-white"
               >

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect } from "react";
 import {
   Table,
@@ -16,10 +17,11 @@ import {
 } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { OrderHistoryProps } from "@/types";
+import { OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
+import { Eye } from "lucide-react";
 
 const tableHeads = [
   {
@@ -44,18 +46,19 @@ const tableHeads = [
   {
     label: "Payment STATUS",
   },
+  { label: "ACTIONS" },
 ];
 
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
 
-  const url = `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.profile_id}&skip=0&take=10`;
+  const url = `/partner/api/v1/booking/recently-initiated-booking?partner_id=${businessProfile?.id}`;
 
   const {
     data: orderHistory,
     isLoading,
     error: listingError,
-  } = useClientFetch<OrderHistoryProps>({
+  } = useClientFetch<OrderProps[]>({
     endpoint: url,
     token,
   });
@@ -77,9 +80,8 @@ const BookingHistory = () => {
           <Link href={dashboardRoutes.vendor_bookings}>View all</Link>
         </Button>
       </header>
-
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
-        <div className="rounded-[6px] border-[0.2px] border-gray-300 bg-white">
+        <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
               <TableRow>
@@ -95,8 +97,8 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              {orderHistory?.data ? (
-                orderHistory?.data?.map(order => (
+              {orderHistory && orderHistory.length > 0 ? (
+                orderHistory?.map(order => (
                   <TableRow key={order.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order.equipment.name}
@@ -124,11 +126,23 @@ const BookingHistory = () => {
                           | "default",
                       )}
                     </TableCell>
+                    <TableCell className="px-5 py-3">
+                      <div className="flex items-center gap-2.5">
+                        <Button asChild variant="ghost">
+                          <Link
+                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
+                          >
+                            <Eye className="size-4 text-[#6B7280]" />
+                            View
+                          </Link>
+                        </Button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center">
+                  <TableCell colSpan={7} className="px-5 text-left">
                     No bookings found.
                   </TableCell>
                 </TableRow>

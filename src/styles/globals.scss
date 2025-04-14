@@ -308,3 +308,12 @@ html {
 .buttonBlue2 {
   @apply h-auto border border-[#E5E7EB] bg-brandColor p-3 text-white hover:!bg-brandColor/80 hover:text-white;
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

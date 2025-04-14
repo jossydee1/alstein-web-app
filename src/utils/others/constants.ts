@@ -4,3 +4,5 @@ export const PAYSTACK_PUBLIC_TEST_KEY =
   "pk_test_b14df591038d0b42d030b17d377d8cb5fabce945";
 export const PAYSTACK_TEST_KEY =
   "pk_test_b14df591038d0b42d030b17d377d8cb5fabce945";
+export const DOCUMENT_URL =
+  "https://alstein-dev-storage.s3.us-east-1.amazonaws.com/";

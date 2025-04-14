@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import { DocumentProps } from "./others";
 
 export interface ListingProps {
   address: string;
@@ -8,7 +8,6 @@ export interface ListingProps {
   country: string;
   created_at: string;
   description: string;
-  equipment_file: [];
   id: string;
   latitude: string;
   listing_status: string;
@@ -18,7 +17,7 @@ export interface ListingProps {
   price: number;
   service_type: string;
   updated_at: string;
-  images: StaticImageData[];
+  equipment_file: DocumentProps[];
 }
 
 export interface ListingsProps {

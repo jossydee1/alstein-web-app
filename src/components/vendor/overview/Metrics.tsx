@@ -12,7 +12,7 @@ const Metrics = () => {
     declined_booking: number;
     all_booking: number;
   }>({
-    endpoint: `/partner/api/v1/booking/get-partner-booking-statistics?partner_id=${businessProfile?.profile_id}`,
+    endpoint: `/partner/api/v1/booking/get-partner-booking-statistics?partner_id=${businessProfile?.id}`,
     token,
   });
 

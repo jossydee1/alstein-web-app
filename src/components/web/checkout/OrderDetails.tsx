@@ -3,8 +3,13 @@
 import { ListingProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import image from "@/public/images/doctor.png";
-import { authRoutes, webRoutes, formatPrice, formatDateTime } from "@/utils";
+import {
+  authRoutes,
+  webRoutes,
+  formatPrice,
+  formatDateTime,
+  DOCUMENT_URL,
+} from "@/utils";
 import { Edit3 } from "lucide-react";
 import {
   Popover,
@@ -75,7 +80,7 @@ const OrderDetails = ({
 
         <div className="flex gap-5">
           <Image
-            src={image}
+            src={DOCUMENT_URL + listingInfo.equipment_file[0]?.path}
             alt={listingInfo?.name}
             width={100}
             height={100}

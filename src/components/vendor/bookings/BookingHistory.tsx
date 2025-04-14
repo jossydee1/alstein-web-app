@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,9 +17,13 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
-import { cn, dashboardRoutes, formatPrice } from "@/utils";
+import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
+import {
+  GetOrderStatusPill,
+  GetPaymentStatusPill,
+  LoadingState,
+} from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
@@ -27,7 +32,10 @@ import Link from "next/link";
 
 const tableHeads = [
   {
-    label: "SERVICE/EQUIPMENT",
+    label: "EQUIPMENT name",
+  },
+  {
+    label: "SERVICE TYPE",
   },
   {
     label: "ORDER ID",
@@ -40,17 +48,20 @@ const tableHeads = [
     className: "text-right",
   },
   {
-    label: "STATUS",
+    label: "Booking STATUS",
   },
   {
-    label: "ACTIONS",
+    label: "Payment STATUS",
   },
+  { label: "ACTIONS" },
 ];
 
 const BookingHistory = () => {
-  const { token } = useAuth();
+  const { token, businessProfile } = useAuth();
 
-  const filterOptions = ["all"];
+  const navRef = useRef(null);
+
+  const filterOptions = ["all", "approved", "canceled", "declined"];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
@@ -58,8 +69,8 @@ const BookingHistory = () => {
 
   const url =
     activeFilter === "all"
-      ? `/client/api/v1/booking/get-bookings?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
-      : `/client/api/v1/booking/get-bookings-by-status?status=${activeFilter}`;
+      ? `/partner/api/v1/booking/get-partner-bookings?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
+      : `/partner/api/v1/booking/filter-partner-bookings-by-status?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&status=${activeFilter}`;
 
   const {
     data: orderHistory,
@@ -75,12 +86,11 @@ const BookingHistory = () => {
     if (listingError) {
       toast.error(listingError.message);
     }
-    if (orderHistory?.total_count) {
-      setTotalPages(Math.ceil(orderHistory.total_count / itemsPerPage));
+    if (orderHistory?.total_item) {
+      setTotalPages(Math.ceil(orderHistory.total_item / itemsPerPage));
     }
   }, [listingError, orderHistory]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -125,8 +135,6 @@ const BookingHistory = () => {
     return items;
   };
 
-  const status = "pending";
-
   return (
     <main className="dashboard-section-card">
       {isLoading && <LoadingState />}
@@ -134,21 +142,28 @@ const BookingHistory = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Booked Equipments</h1>
       </header>
-
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
-          {/* <nav className="gray-400 border-grey-400 flex flex-wrap items-center justify-start gap-6 border-b-[0.2px] px-4 py-4 text-sm">
-            {filterOptions.map(option => (
-              <button
-                key={option}
-                type="button"
-                className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
-                onClick={() => handleFilterChange(option)}
-              >
-                {option}
-              </button>
-            ))}
-          </nav> */}
+          <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
+            <nav
+              ref={navRef}
+              className="gray-400 flex items-center overflow-x-auto px-4 py-4 text-sm"
+              style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
+            >
+              <div className="flex min-w-max space-x-6">
+                {filterOptions.map(option => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={`px-6 py-2.5 font-medium capitalize ${activeFilter === option ? "rounded-md bg-brandColor text-white" : "text-gray-400"}`}
+                    onClick={() => handleFilterChange(option)}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </nav>
+          </div>
 
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">
@@ -156,7 +171,7 @@ const BookingHistory = () => {
                 {tableHeads.map(head => (
                   <TableHead
                     key={head.label}
-                    className={`rounded-[6px] px-5 ${head.className}`}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
                   >
                     {head.label}
                   </TableHead>
@@ -165,109 +180,57 @@ const BookingHistory = () => {
             </TableHeader>
 
             <TableBody>
-              <TableRow className="py-10">
-                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  MRI Scan
-                </TableCell>
-                <TableCell className="px-5 py-3 text-[#6B7280]">
-                  0112455
-                </TableCell>
-                <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                  05/08/2025, 10:30 AM
-                </TableCell>
-                <TableCell className="px-5 py-3 text-right">
-                  {formatPrice(2000000, "NGN")}
-                </TableCell>
-                <TableCell className="px-5 py-3">
-                  <div
-                    className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                      status === "pending"
-                        ? "bg-orange-50"
-                        : status === "confirmed"
-                          ? "bg-green-50"
-                          : "bg-red-50"
-                    }`}
-                  >
-                    <span
-                      className={`size-2 rounded-full ${
-                        status === "pending"
-                          ? "bg-orange-600"
-                          : status === "confirmed"
-                            ? "bg-green-600"
-                            : "bg-red-600"
-                      }`}
-                    />
-                    <span>{status}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="px-5 py-3">
-                  <div className="flex items-center gap-2.5">
-                    <Button asChild variant="ghost">
-                      <Link
-                        href={`${dashboardRoutes.vendor_bookings}/process?booking=0112455`}
-                      >
-                        <Eye className="size-4 text-[#6B7280]" />
-                        View
-                      </Link>
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-
-            {/* <TableBody>
-              <TableRow className="py-10">
-                <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                  No bookings found
-                </TableCell>
-              </TableRow>
-            </TableBody> */}
-
-            {/* <TableBody>
-              {orderHistory?.map(order => (
-                <TableRow key={order.id} className="py-10">
-                  <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                    {order.service}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#6B7280]">
-                    {order.orderId}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#6B7280]">
-                    {order.orderDate}
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-[#172554]">
-                    <span className="inline-flex aspect-square w-9 items-center justify-center rounded-full bg-[#F6F6F8]">
-                      1
-                    </span>
-                  </TableCell>
-                  <TableCell className="px-5 py-3 text-right">
-                    {order.totalAmount}
-                  </TableCell>
-                  <TableCell className="px-5 py-3">
-                    <div
-                      className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                        order.status === "pending"
-                          ? "bg-orange-50"
-                          : order.status === "confirmed"
-                            ? "bg-green-50"
-                            : "bg-red-50"
-                      }`}
-                    >
-                      <span
-                        className={`size-2 rounded-full ${
-                          order.status === "pending"
-                            ? "bg-orange-600"
-                            : order.status === "confirmed"
-                              ? "bg-green-600"
-                              : "bg-red-600"
-                        }`}
-                      />
-                      <span>{order.status}</span>
-                    </div>
+              {orderHistory && orderHistory?.data.length > 0 ? (
+                orderHistory?.data?.map(order => (
+                  <TableRow key={order.id} className="py-10">
+                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
+                      {order.equipment.name}
+                    </TableCell>
+                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
+                      {order.equipment.service_type}
+                    </TableCell>
+                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
+                      {order.id}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                      {formatIOSToDate(order.created_at)}
+                    </TableCell>
+                    <TableCell className="px-5 py-3 text-right">
+                      {formatPrice(order.booking_amount, "NGN")}
+                    </TableCell>
+                    <TableCell className="px-5 py-3">
+                      {GetOrderStatusPill(order.status)}
+                    </TableCell>
+                    <TableCell className="px-5 py-3">
+                      {GetPaymentStatusPill(
+                        order.payment_status as
+                          | "awaiting_payment_confirmation"
+                          | "confirmed"
+                          | "default",
+                      )}
+                    </TableCell>
+                    <TableCell className="px-5 py-3">
+                      <div className="flex items-center gap-2.5">
+                        <Button asChild variant="ghost">
+                          <Link
+                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
+                          >
+                            <Eye className="size-4 text-[#6B7280]" />
+                            View
+                          </Link>
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="px-5 text-left">
+                    No bookings found.
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody> */}
+              )}
+            </TableBody>
           </Table>
         </div>
 

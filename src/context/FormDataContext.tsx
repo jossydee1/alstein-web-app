@@ -3,14 +3,17 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface FormData {
-  category: string;
-  availability: string;
   name: string;
   description: string;
-  features: string[];
-  images: File[];
-  address: string;
-  documents: File[];
+  address?: string;
+  longitude?: string;
+  latitude?: string;
+  city?: string;
+  country?: string;
+  service_type: string;
+  price: number;
+  partner_id: string;
+  category_id: string;
 }
 
 interface EquipmentFormContextProps {
@@ -28,14 +31,17 @@ export const EquipmentFormDataProvider = ({
   children: React.ReactNode;
 }) => {
   const [formData, setFormData] = useState<FormData>({
-    category: "",
-    availability: "",
     name: "",
     description: "",
-    features: [],
-    images: [],
     address: "",
-    documents: [],
+    longitude: "",
+    latitude: "",
+    city: "",
+    country: "",
+    service_type: "",
+    price: 0,
+    partner_id: "",
+    category_id: "",
   });
 
   const updateFormData = (data: Partial<FormData>) => {

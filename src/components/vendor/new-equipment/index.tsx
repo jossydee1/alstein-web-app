@@ -7,9 +7,14 @@ import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import StepFour from "./StepFour";
-import StepFive from "./StepFive";
-import { EquipmentFormDataProvider, useEquipmentForm } from "@/context";
-import ConfirmationModal from "./ConfirmationModal";
+import {
+  EquipmentFormDataProvider,
+  useAuth,
+  useEquipmentForm,
+} from "@/context";
+import { toast } from "react-toastify";
+import { api, formatError } from "@/utils";
+import { LoadingState } from "@/components/common";
 
 const NewEquipmentContent = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -31,10 +36,51 @@ const FormStepsWithContext = ({
   currentStep: number;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }) => {
-  const { formData, updateFormData } = useEquipmentForm();
+  const { token, businessProfile } = useAuth();
+  const { formData } = useEquipmentForm();
 
-  const [status, setStatus] = useState("success");
-  const [open, setOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [equipmentId, setEquipmentId] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    console.log("Form Data:", formData);
+
+    if (!businessProfile?.id) {
+      toast.error("Business Profile ID is missing. Please try again.");
+      setIsProcessing(false);
+      return null;
+    }
+
+    const updatedFormData = {
+      ...formData,
+      partner_id: businessProfile.id,
+    };
+
+    setIsProcessing(true);
+    try {
+      const response = await api.post(
+        "/partner/api/v1/equipments/create-equipment",
+        updatedFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(response.data.message || "Failed to create equipment");
+        return null;
+      }
+
+      return response.data.data.id; // Return the created equipment ID
+    } catch (error) {
+      toast.error(formatError(error, "Failed to create equipment"));
+      return null;
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const steps = [
     <Intro onNext={() => setCurrentStep(1)} />,
@@ -47,38 +93,23 @@ const FormStepsWithContext = ({
       onBack={() => setCurrentStep(1)}
     />,
     <StepThree
-      onNext={() => setCurrentStep(4)}
+      onNext={async () => {
+        const id = await handleSubmit();
+        if (id) {
+          setEquipmentId(id);
+          setCurrentStep(4);
+        }
+      }}
       onBack={() => setCurrentStep(2)}
     />,
-    <StepFour
-      onNext={() => setCurrentStep(5)}
-      onBack={() => setCurrentStep(3)}
-    />,
-    <StepFive
-      onSubmit={() => {
-        console.log("Form Data:", formData);
-        setOpen(true);
-        setStatus("success");
-        updateFormData({
-          category: "",
-          availability: "",
-          name: "",
-          description: "",
-          features: [],
-          images: [],
-          address: "",
-          documents: [],
-        });
-      }}
-      onBack={() => setCurrentStep(4)}
-    />,
+    <StepFour equipmentId={equipmentId} onBack={() => setCurrentStep(3)} />,
   ];
 
   return (
-    <div className="space-y-9">
-      <ConfirmationModal status={status} open={open} setOpen={setOpen} />
-      {steps[currentStep]}
-    </div>
+    <>
+      {isProcessing && <LoadingState />}
+      <div className="space-y-9">{steps[currentStep]}</div>
+    </>
   );
 };
 

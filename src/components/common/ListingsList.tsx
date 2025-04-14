@@ -1,10 +1,9 @@
 "use client";
 
-import { listingsData } from "@/database/listingsData";
-import { ListingProps } from "@/types";
-import { formatPrice, webRoutes } from "@/utils";
+import { DocumentProps, ListingProps } from "@/types";
+import { DOCUMENT_URL, formatPrice, webRoutes } from "@/utils";
 import { ChevronLeft, ChevronRight, Heart, MapPin } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 
@@ -18,8 +17,7 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
         >
-          {/* TODO: Update this to use the actual images */}
-          <ImageSlider images={listingsData[0]?.images} />
+          <ImageSlider images={l.equipment_file} />
 
           <div>
             <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
@@ -49,7 +47,7 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
   );
 };
 
-const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
+const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
@@ -116,9 +114,11 @@ const ImageSlider = ({ images }: { images: StaticImageData[] }) => {
             className="aspect-square h-auto w-full flex-shrink-0"
           >
             <Image
-              src={img}
-              alt=""
+              src={DOCUMENT_URL + img?.path}
+              alt={DOCUMENT_URL + img?.path}
               className="aspect-square h-auto w-full rounded-md object-cover"
+              width={500}
+              height={500}
             />
           </div>
         ))}

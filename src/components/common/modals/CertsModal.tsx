@@ -1,6 +1,7 @@
 "use client";
 
-import { CertsProps } from "@/types";
+import { DocumentProps } from "@/types";
+import { DOCUMENT_URL } from "@/utils";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +11,7 @@ export const CertsModal = ({
   cert,
   onClose,
 }: {
-  cert: CertsProps;
+  cert: DocumentProps;
   onClose: () => void;
 }) => {
   return (
@@ -37,15 +38,18 @@ export const CertsModal = ({
 
         <div className="mx-8 my-6 flex flex-col-reverse gap-6 lg:flex-row">
           <Image
-            src={cert.image || ""}
-            alt={cert.title || ""}
+            src={DOCUMENT_URL + cert.path || ""}
+            alt={cert.name || ""}
             className="h-full w-auto flex-1"
           />
 
           <div className="w-full lg:mt-8 lg:max-w-[288px]">
-            <h3 className="font-semibold text-[#343434]">{cert.title}</h3>
-            <p>{cert.description}</p>
-            <Link href={cert.download_url || ""} className="text-[#3784FF]">
+            <h3 className="font-semibold text-[#343434]">{cert.name}</h3>
+            <p>{cert.name}</p>
+            <Link
+              href={DOCUMENT_URL + cert.path || ""}
+              className="text-[#3784FF]"
+            >
               [ download Link ]
             </Link>
           </div>
