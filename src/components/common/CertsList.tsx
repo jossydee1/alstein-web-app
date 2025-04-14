@@ -1,38 +1,35 @@
 "use client";
 
 import { DocumentProps } from "@/types";
-import Image from "next/image";
-import React, { useState } from "react";
-import { CertsModal } from "./modals";
+import React from "react";
+import { Eye } from "lucide-react";
+import { DOCUMENT_URL } from "@/utils";
+import Link from "next/link";
 
 export const CertsList = ({ certs }: { certs: DocumentProps[] }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return certs.length === 0 ? (
     <p className="text-[#8B8B8B]">No certifications available.</p>
   ) : (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {certs.map((p, index) => (
-        <div key={index}>
-          <button
-            type="button"
-            onClick={() => setIsModalOpen(true)}
-            className="block space-y-1.5 text-left"
+    <div className="grid grid-cols-1 gap-3">
+      {certs.map((cert, index) => (
+        <div
+          key={index}
+          className="inline-flex items-start justify-start gap-4"
+        >
+          <div className="">
+            <h3 className="font-semibold capitalize text-[#343434]">
+              {cert?.name?.replace(/-/g, " ")}
+            </h3>
+          </div>
+          <Link
+            href={DOCUMENT_URL + cert?.path || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-2 text-blue-600 hover:underline"
           >
-            <h3 className="font-semibold text-[#343434]">{p?.name}</h3>
-            <p>{p?.name}</p>
-            <div className="aspect-video h-[110px] w-auto overflow-hidden rounded-md hover:shadow-lg">
-              <Image
-                src={p?.path || ""}
-                alt={p?.path || ""}
-                className="aspect-video h-[110px] w-auto rounded-md object-cover transition-transform hover:scale-105"
-              />
-            </div>
-          </button>
-
-          {p && isModalOpen && (
-            <CertsModal cert={p} onClose={() => setIsModalOpen(false)} />
-          )}
+            <Eye size={20} />
+            <span className="">View</span>
+          </Link>
         </div>
       ))}
     </div>
