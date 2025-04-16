@@ -42,7 +42,7 @@ const CheckoutContent = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { date, numberOfDays, resetDateTime, fromTime } = useDateTime();
+  const { date, numberOfDays, resetDateTime, fromTime, toTime } = useDateTime();
 
   const { user, token, userId } = useAuth();
   const [error] = useState("");
@@ -114,8 +114,8 @@ const CheckoutContent = () => {
             date?.from ? date.from.toISOString() : "",
           ),
           end_date: formatIOSToDate(date?.to ? date.to.toISOString() : ""),
-          // start_time: date?.from?.toISOString(),
-          // end_time: date?.to?.toISOString(),
+          // start_time: `${fromTime.hours}:${fromTime.minutes}`,
+          // end_time: `${toTime.hours}:${toTime.minutes}`,
           client_id: userId,
         },
         {
@@ -187,7 +187,7 @@ const CheckoutContent = () => {
         {
           display_name: "Start Time",
           variable_name: "start_time",
-          value: date?.from?.toLocaleTimeString(),
+          value: `${fromTime.hours}:${fromTime.minutes}`,
         },
         {
           display_name: "End Date",
@@ -197,7 +197,7 @@ const CheckoutContent = () => {
         {
           display_name: "End Time",
           variable_name: "end_time",
-          value: date?.to?.toLocaleTimeString(),
+          value: `${toTime.hours}:${toTime.minutes}`,
         },
         {
           display_name: "Cost per day",
