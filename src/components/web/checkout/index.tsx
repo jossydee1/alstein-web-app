@@ -225,7 +225,11 @@ const CheckoutContent = () => {
   // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
   const isPaystackDisabled =
     !date?.from ||
-    !fromTime ||
+    !fromTime?.hours ||
+    !fromTime?.minutes ||
+    !date?.to ||
+    !toTime?.hours ||
+    !toTime?.minutes ||
     Object.values(formData).some(value => value === "") ||
     totalCost <= 0;
 
