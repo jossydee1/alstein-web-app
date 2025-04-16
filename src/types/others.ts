@@ -68,3 +68,29 @@ export interface DocumentProps {
   path: string;
   name?: string;
 }
+
+export interface NotificationProps {
+  id: string;
+  partner_id: string;
+  message: string;
+  title: string;
+  client_id: string;
+  created_at: string;
+  updated_at: string;
+  client: {
+    first_name: string;
+    last_name: string;
+    user_avatar: string | null;
+    id: string;
+  };
+  partner: {
+    name: string;
+    logo: string | null;
+    id: string;
+  };
+}
+
+export interface NotificationsHistoryProps {
+  total_count: number;
+  data: NotificationProps[];
+}

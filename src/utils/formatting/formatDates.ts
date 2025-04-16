@@ -47,7 +47,7 @@ export const formatTimeTo12Hour = (time: string): string => {
 };
 
 // takes in "2025-03-25T21:24:07.913Z" and returns 2hrs ago, a week ago, a month ago, a year ago
-export const formatDateToRelative = (date: string): string => {
+export const formatDateToRelativeTime = (date: string): string => {
   if (typeof date !== "string") return "";
 
   const newDate = new Date(date);
@@ -79,7 +79,7 @@ export const formatDateToRelative = (date: string): string => {
 };
 
 // in "2025-03-25T21:24:07.913Z" and returns how many years from now in numbers
-export const formatDateToRelativeWithTime = (date: string): string => {
+export const formatDateToRelativeTimeYearWithTime = (date: string): string => {
   if (typeof date !== "string") return "";
 
   const newDate = new Date(date);

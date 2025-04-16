@@ -4,7 +4,7 @@ import Image from "next/image";
 import { BadgeCheck, Building2, Globe, Mail, Phone, Star } from "lucide-react";
 import Link from "next/link";
 import { PartnerProps } from "@/types";
-import { formatDateToRelativeWithTime } from "@/utils";
+import { formatDateToRelativeTimeYearWithTime } from "@/utils";
 
 const Profile = ({
   partnerData,
@@ -62,7 +62,9 @@ const Profile = ({
 
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
-                {formatDateToRelativeWithTime(partnerData.created_at || "")}
+                {formatDateToRelativeTimeYearWithTime(
+                  partnerData.created_at || "",
+                )}
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
                 Years of service
