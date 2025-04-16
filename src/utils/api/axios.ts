@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAPIBaseURL } from "../others";
+import { useAuth } from "@/context";
 
 // Create an Axios instance with default settings
 const api = axios.create({
@@ -20,6 +21,19 @@ api.interceptors.request.use(
     return config;
   },
   error => Promise.reject(error),
+);
+
+// Response Interceptor: Handle 403 status code
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 403) {
+      // TODO:  not sure if it is 403 or 401
+      const { logout } = useAuth(); // Access logout function
+      logout(); // Log out the user
+    }
+    return Promise.reject(error);
+  },
 );
 
 export default api;

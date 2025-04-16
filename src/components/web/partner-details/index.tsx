@@ -8,6 +8,7 @@ import PartnerListings from "./Listings";
 import Certifications from "./Certifications";
 import {
   AverageRatingProps,
+  CommentProps,
   CountProps,
   ListingsProps,
   PartnerProps,
@@ -15,6 +16,7 @@ import {
 import { useClientFetch } from "@/hooks";
 import { useParams } from "next/navigation";
 import ListingDetailsSkeleton from "../listing-details/Skeleton";
+import Reviews from "./Reviews";
 
 const PartnerDetailsContent = () => {
   const { id } = useParams();
@@ -41,6 +43,10 @@ const PartnerDetailsContent = () => {
 
   const { data: reviews } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
+  });
+
+  const { data: comments } = useClientFetch<CommentProps[]>({
+    endpoint: `partner/public/api/v1/comments/get-comments?skip=0&take=20&partner_id=${partnerData?.id}`,
   });
 
   const links = [
@@ -106,6 +112,11 @@ const PartnerDetailsContent = () => {
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
         <PartnerListings listings={listingsData?.data || []} />
+
+        <Reviews
+          averageRating={rating?._avg?.score || 0}
+          comments={comments || []}
+        />
       </main>
     </div>
   );

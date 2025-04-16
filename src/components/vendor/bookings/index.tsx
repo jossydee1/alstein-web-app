@@ -12,14 +12,14 @@ const VendorBookingHistory = () => {
       <Tab
         tabs={[
           {
-            key: "bookings",
-            title: "Bookings",
-            content: <BookingHistory />,
-          },
-          {
             key: "requests",
             title: "Requests",
             content: <RequestHistory />,
+          },
+          {
+            key: "bookings",
+            title: "Bookings",
+            content: <BookingHistory />,
           },
         ]}
         queryParam="tab"

@@ -61,8 +61,8 @@ const OrderHistoryContent = () => {
     "all",
     "initiated",
     "approved",
-    "canceled",
     "declined",
+    "canceled",
   ];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);

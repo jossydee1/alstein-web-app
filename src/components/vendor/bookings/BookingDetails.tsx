@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
+import { api, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { X } from "lucide-react";
 import Link from "next/link";
 import ConfirmationModal from "./ConfirmationModal";
@@ -9,6 +9,7 @@ import { useAuth } from "@/context";
 import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { OrderProps } from "@/types";
+import { LoadingState } from "@/components/common";
 
 const STYLES = {
   section: "dashboard-section-card relative grid gap-6 !p-6 max-w-screen-sm",
@@ -25,24 +26,65 @@ const BookingDetails = () => {
   const { token } = useAuth();
   const [status, setStatus] = useState("accept");
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     setStatus("accept");
     setOpen(true);
+    setLoading(true);
+
+    try {
+      await api.post(
+        "/partner/api/v1/booking/booking-process",
+        {
+          booking_id: bookingId,
+          status: "approved",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDecline = () => {
+  const handleDecline = async () => {
     setStatus("decline");
     setOpen(true);
+    setLoading(true);
+
+    try {
+      await api.post(
+        "/partner/api/v1/booking/booking-process",
+        {
+          booking_id: bookingId,
+          status: "declined",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const { data } = useClientFetch<OrderProps>({
+  const { data, isLoading } = useClientFetch<OrderProps>({
     endpoint: `/partner/api/v1/booking/booking-details?booking_id=${bookingId}`,
     token,
   });
 
+  const showButtons = data?.status === "initiated";
+
   return (
     <>
+      {(loading || isLoading) && <LoadingState />}{" "}
+      {/* Show loading state when loading */}
       <ConfirmationModal status={status} open={open} />
       <main className="dashboard-section-card relative grid gap-7">
         <h1 className="text-2xl font-semibold text-[#172554]">
@@ -139,14 +181,20 @@ const BookingDetails = () => {
           </p>
         </section>
 
-        <footer className="flex max-w-screen-sm flex-col items-center justify-between gap-x-7 gap-y-4 sm:flex-row">
-          <Button className="w-full bg-brandColor" onClick={handleAccept}>
-            Accept Booking
-          </Button>
-          <Button variant="outline" className="w-full" onClick={handleDecline}>
-            Decline Booking
-          </Button>
-        </footer>
+        {showButtons && (
+          <footer className="flex max-w-screen-sm flex-col items-center justify-between gap-x-7 gap-y-4 sm:flex-row">
+            <Button className="w-full bg-brandColor" onClick={handleAccept}>
+              Accept Booking
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleDecline}
+            >
+              Decline Booking
+            </Button>
+          </footer>
+        )}
       </main>
     </>
   );
