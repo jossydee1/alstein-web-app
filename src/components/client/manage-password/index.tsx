@@ -114,11 +114,7 @@ const ManagePasswordContent = () => {
           />
         </div>
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-brandColor !p-5 text-white"
-        >
+        <Button type="submit" disabled={isSubmitting} className="w-ful">
           {isSubmitting ? "Updating..." : "Update Password"}
         </Button>
       </form>
