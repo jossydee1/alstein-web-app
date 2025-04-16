@@ -16,27 +16,26 @@ export function isPartner(Component: AppProps["Component"]) {
 
     useEffect(() => {
       if (!userId || !token) {
-        router.push("/");
-        return;
+        router.push("/login");
       }
       if (!businessProfile) {
         router.push("/partner-setup");
       }
+      //TODO: Uncomment this code when admin is ready
+      // if (businessProfile?.is_verified === false) {
+      //   router.push("/partner-status");
+      // }
     }, [token, userId, router, businessProfile]);
 
-    if (userId && token) {
-      return (
-        <ReactQueryProvider>
-          <AuthProvider>
-            <ToastContainer />
-            <Component {...props} />
-          </AuthProvider>
-          <PrelineScript />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ReactQueryProvider>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <ReactQueryProvider>
+        <AuthProvider>
+          <ToastContainer />
+          <Component {...props} />
+        </AuthProvider>
+        <PrelineScript />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ReactQueryProvider>
+    );
   };
 }

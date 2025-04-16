@@ -16,7 +16,7 @@ export function withAuth(Component: AppProps["Component"]) {
 
     useEffect(() => {
       if (!userId || !token) {
-        router.push("/");
+        router.push("/login");
       }
     }, [token, userId, router]);
 
