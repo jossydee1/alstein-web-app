@@ -3,7 +3,7 @@
 import Greetings from "@/components/common/Greetings";
 import { LinkTab } from "@/components/common/LinkTab";
 import NavBar from "@/components/navigation/dashboard/client/NavBar";
-import { dashboardRoutes } from "@/utils";
+import { dashboardRoutes, withAuth } from "@/utils";
 import {
   BellDot,
   Receipt,
@@ -56,4 +56,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default DashboardLayout;
+export default withAuth(DashboardLayout);
