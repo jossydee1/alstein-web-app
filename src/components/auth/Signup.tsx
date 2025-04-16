@@ -103,7 +103,7 @@ const FormLayout = ({
           <Button
             variant="ghost"
             type="button"
-            onClick={() => router.back()}
+            onClick={() => router.push(authRoutes.register)}
             className={style.backButton}
           >
             <ChevronLeft />

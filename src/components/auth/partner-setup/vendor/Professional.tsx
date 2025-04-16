@@ -5,7 +5,13 @@ import Banner from "../../Banner";
 import style from "../../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft, Upload, Check, Loader2, X } from "lucide-react";
-import { webRoutes, formatError, api, dashboardRoutes } from "@/utils";
+import {
+  webRoutes,
+  formatError,
+  api,
+  dashboardRoutes,
+  authRoutes,
+} from "@/utils";
 import { Button } from "../../../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -541,7 +547,7 @@ const ProfessionalPageContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.back()}
+              onClick={() => router.push(authRoutes.partner_setup)}
               className={style.backButton}
             >
               <ChevronLeft />

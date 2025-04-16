@@ -5,7 +5,7 @@ import Banner from "../Banner";
 import style from "../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { api, formatError, webRoutes } from "@/utils";
+import { api, dashboardRoutes, formatError, webRoutes } from "@/utils";
 import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -109,7 +109,7 @@ const PartnerSetupContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.back()}
+              onClick={() => router.push(dashboardRoutes.client_order_history)}
               className={style.backButton}
             >
               <ChevronLeft />
