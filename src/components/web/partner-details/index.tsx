@@ -5,7 +5,6 @@ import { Breadcrumbs } from "@/components/common";
 import { formatError } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";
-import Certifications from "./Certifications";
 import {
   AverageRatingProps,
   CommentProps,
@@ -104,10 +103,6 @@ const PartnerDetailsContent = () => {
           rating={rating?._avg?.score || 0}
           reviews={reviews?.count || 0}
         />
-
-        <hr className="my-[57px] border border-[#EBEBEB]" />
-
-        <Certifications certs={Object.values(partnerData?.partner_doc || [])} />
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
