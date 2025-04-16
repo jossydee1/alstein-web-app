@@ -16,7 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import {
@@ -214,14 +214,6 @@ const RequestHistory = () => {
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
-                        <Button asChild variant="ghost">
-                          <Link
-                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
-                          >
-                            <Eye className="size-4 text-[#6B7280]" />
-                            View
-                          </Link>
-                        </Button>
                         <Button asChild variant="outline">
                           <Link
                             href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}

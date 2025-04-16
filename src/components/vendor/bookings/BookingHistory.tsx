@@ -61,7 +61,7 @@ const BookingHistory = () => {
 
   const navRef = useRef(null);
 
-  const filterOptions = ["all", "approved", "canceled", "declined"];
+  const filterOptions = ["all", "approved", "declined", "canceled"];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
