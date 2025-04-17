@@ -242,7 +242,7 @@ const NavBar = () => {
                           <Image
                             alt="Avatar"
                             src={
-                              !user?.profile_picture
+                              !user?.profile_photo
                                 ? avatar
                                 : DOCUMENT_URL + user?.profile_picture
                             }

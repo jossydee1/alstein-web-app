@@ -4,6 +4,9 @@ import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
+import { Edit } from "lucide-react";
+import Link from "next/link";
+import { dashboardRoutes } from "@/utils";
 // import { Edit } from "lucide-react";
 
 const Greetings = () => {
@@ -26,15 +29,15 @@ const Greetings = () => {
         <div className="flex items-start gap-x-1.5">
           <Image
             alt="Avatar"
-            src={!user?.profile_picture ? avatar : user?.profile_picture}
+            src={!user?.profile_photo ? avatar : user?.profile_photo}
             width={62}
             height={62}
             className="rounded-md"
             objectFit="contain"
           />
-          {/* <button type="button">
+          <Link href={dashboardRoutes.client_account_settings}>
             <Edit className="text-white" size={17} />
-          </button> */}
+          </Link>
         </div>
 
         <p className="mt-3 grid gap-y-1.5">
