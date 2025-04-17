@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { api, authRoutes, DOCUMENT_URL, formatError } from "@/utils";
-import { ApiResponseProps, DocumentProps, PartnerProps } from "@/types";
+import { DocumentProps, PartnerProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import Image from "next/image";
@@ -19,14 +19,11 @@ const VendorSettingsContent = () => {
 
   const url = `/partner/public/api/v1/get-partner?id=${businessProfile?.id}`;
 
-  const {
-    data: partnerDetails,
-    isLoading: fetchingPartnerDetails,
-    // error: partnerDetailsError,
-  } = useClientFetch<PartnerProps>({
-    endpoint: url,
-    token,
-  });
+  const { data: partnerDetails, isLoading: fetchingPartnerDetails } =
+    useClientFetch<PartnerProps>({
+      endpoint: url,
+      token,
+    });
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -58,7 +55,7 @@ const VendorSettingsContent = () => {
           ? partnerDetails.partner_doc.map(doc => ({
               ...doc,
               path: `${DOCUMENT_URL}${doc?.path}`,
-              name: doc?.name || "Unnamed Document", // Ensure 'name' is included
+              name: doc?.name || "Unnamed Document",
             }))
           : [],
       });
@@ -73,15 +70,16 @@ const VendorSettingsContent = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setIsProcessing(true);
-
+  const uploadLogoToS3 = async (file: File) => {
     try {
-      const response = await api.post<ApiResponseProps<unknown>>(
-        "/client/api/v1/update-partnerDetails-info",
-        formData,
+      const uploadLinkResponse = await api.post(
+        "/partner/api/v1/docs/create-upload-link",
+        {
+          partner_id: businessProfile?.id,
+          document_name: "logo",
+          category: "utility",
+          file_type: file.type,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -89,20 +87,56 @@ const VendorSettingsContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
+      if (!uploadLinkResponse.data?.data?.upload_link) {
+        throw new Error("Failed to get upload URL");
+      }
+
+      const uploadLink = uploadLinkResponse.data.data.upload_link;
+
+      await api.put(uploadLink, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      const fileUrl =
+        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0];
+
+      setFormData(prevData => ({
+        ...prevData,
+        logo: fileUrl,
+      }));
+
+      toast.success("Logo uploaded successfully!");
+    } catch (error) {
+      toast.error(formatError(error, "Failed to upload logo"));
+    }
+  };
+
+  const handleUpdateLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (max 3MB)
+      const maxSizeInBytes = 3 * 1024 * 1024;
+      if (file.size > maxSizeInBytes) {
         toast.error(
-          response.data.message || "Failed to update partnerDetails info",
+          `File size must be less than 3MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`,
         );
         return;
       }
 
-      toast.success(response.data.message);
-      return response.data.data;
-    } catch (error) {
-      toast.error(formatError(error, "Failed to update partnerDetails info"));
-    } finally {
-      setIsProcessing(false);
+      // Check file type
+      if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+        toast.error("Only PNG, JPEG, and JPG files are allowed");
+        return;
+      }
+
+      await uploadLogoToS3(file);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
 
   const handleDeactivate = async () => {
@@ -174,22 +208,10 @@ const VendorSettingsContent = () => {
                   type="file"
                   id="logo"
                   name="logo"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg"
                   className="border border-[#E5E7EB] p-2"
                   hidden
-                  onChange={e => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        setFormData(prevData => ({
-                          ...prevData,
-                          logo: reader.result as string,
-                        }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+                  onChange={handleUpdateLogo}
                 />
               </div>
             </div>
@@ -268,43 +290,6 @@ const VendorSettingsContent = () => {
                   <div className="text-gray-500">No documents uploaded yet</div>
                 )}
               </div>
-              {/* <div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="border-brandColor text-xs text-brandColor"
-                  asChild
-                >
-                  <Label htmlFor="documents">Upload Documents</Label>
-                </Button>
-                <input
-                  type="file"
-                  id="documents"
-                  name="documents"
-                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                  multiple
-                  className="hidden"
-                  onChange={e => {
-                    const files = e.target.files;
-                    if (files) {
-                      const newDocuments = Array.from(files).map(file => ({
-                        name: file.name,
-                        file,
-                      }));
-                      setFormData(prevData => ({
-                        ...prevData,
-                        documents: [
-                          ...prevData.documents,
-                          ...newDocuments.map(file => ({
-                            name: file.name,
-                            path: URL.createObjectURL(file.file),
-                          })),
-                        ],
-                      }));
-                    }
-                  }}
-                />
-              </div> */}
             </div>
 
             <Button
@@ -356,7 +341,6 @@ const VendorSettingsContent = () => {
             <form
               onSubmit={e => {
                 e.preventDefault();
-                // Handle sending message logic here
                 toast.success("Message sent successfully!");
               }}
               className="mt-6"

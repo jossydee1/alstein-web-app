@@ -14,7 +14,13 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { usePathname } from "next/navigation";
-import { authRoutes, dashboardRoutes, formatError, webRoutes } from "@/utils";
+import {
+  authRoutes,
+  dashboardRoutes,
+  DOCUMENT_URL,
+  formatError,
+  webRoutes,
+} from "@/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
@@ -236,9 +242,9 @@ const NavBar = () => {
                           <Image
                             alt="Avatar"
                             src={
-                              !user?.profile_picture
+                              !user?.profile_photo
                                 ? avatar
-                                : user?.profile_picture
+                                : DOCUMENT_URL + user?.profile_picture
                             }
                             width={50}
                             height={50}
@@ -259,7 +265,11 @@ const NavBar = () => {
                               <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                                 <Image
                                   alt="Avatar"
-                                  src={user?.profile_picture || avatar}
+                                  src={
+                                    user?.profile_picture
+                                      ? DOCUMENT_URL + user?.profile_picture
+                                      : avatar.src
+                                  }
                                   width={20}
                                   height={20}
                                   className="rounded-full"

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -15,20 +14,19 @@ const AddWithdrawalMethod = ({
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { token } = useAuth();
+  const { token, businessProfile } = useAuth();
 
   const [formData, setFormData] = useState<{
-    bankName: string;
-    bankAccount: string;
-    accountName: string;
-    bankCode: string;
+    bank_name: string;
+    account_name: string;
+    account_number: string;
+    cbn_code: string;
   }>({
-    bankName: "",
-    bankAccount: "",
-    accountName: "",
-    bankCode: "",
+    bank_name: "",
+    account_name: "",
+    account_number: "",
+    cbn_code: "56464",
   });
-  const [defaultMethod, setDefaultMethod] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,8 +44,8 @@ const AddWithdrawalMethod = ({
 
     try {
       const response = await api.post<ApiResponseProps<unknown>>(
-        "/client/api/v1/update-bank-account-info",
-        formData,
+        "/partner/api/v1/payment/add-bank-account",
+        { partner_id: businessProfile?.id, ...formData },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +58,14 @@ const AddWithdrawalMethod = ({
         return;
       }
 
-      toast.success(response.data.message);
+      setFormData({
+        bank_name: "",
+        account_name: "",
+        account_number: "",
+        cbn_code: "56464",
+      });
+      // setDefaultMethod(false);
+      toast.success("Bank account added successfully");
       return response.data.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to add new bank account"));
@@ -96,45 +101,45 @@ const AddWithdrawalMethod = ({
         <form onSubmit={handleSubmit}>
           <div className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
             <div className="">
-              <Label htmlFor="account-name" className="mb-2">
+              <Label htmlFor="account_name" className="mb-2">
                 Account Holder Name
               </Label>
               <Input
                 className="border border-[#E5E7EB] p-5"
                 type="text"
-                id="account-name"
-                name="accountName"
-                value={formData.accountName}
+                id="account_name"
+                name="account_name"
+                value={formData.account_name}
                 onChange={handleChange}
                 placeholder="Enter account name"
                 required
               />
             </div>
             <div className="">
-              <Label htmlFor="bank-name" className="mb-2">
+              <Label htmlFor="bank_name" className="mb-2">
                 Bank Name
               </Label>
               <Input
                 className="border border-[#E5E7EB] p-5"
                 type="text"
-                id="bank-name"
-                name="bankName"
-                value={formData.bankName}
+                id="bank_name"
+                name="bank_name"
+                value={formData.bank_name}
                 onChange={handleChange}
                 placeholder="Enter bank name"
                 required
               />
             </div>
             <div className="">
-              <Label htmlFor="account-number" className="mb-2">
+              <Label htmlFor="account_number" className="mb-2">
                 Account Number{" "}
               </Label>
               <Input
                 className="border border-[#E5E7EB] p-5"
                 type="tel"
-                id="account-number"
-                name="bankAccount"
-                value={formData.bankAccount}
+                id="account_number"
+                name="account_number"
+                value={formData.account_number}
                 onChange={handleChange}
                 placeholder="Enter account number"
                 minLength={10}
@@ -154,19 +159,6 @@ const AddWithdrawalMethod = ({
             >
               {isProcessing ? "Saving..." : "Save Payout Method"}
             </Button>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="default-payout"
-                checked={defaultMethod}
-                onCheckedChange={checked => setDefaultMethod(checked === true)}
-              />
-              <label
-                htmlFor="default-payout"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Set as Default Payout Method
-              </label>
-            </div>
           </div>
         </form>
       </section>

@@ -10,9 +10,11 @@ import { useAuth } from "@/context";
 import { api, formatError } from "@/utils";
 import { ApiResponseProps } from "@/types";
 import { toast } from "react-toastify";
+import avatar from "@/public/icons/avatar.svg";
+import Image from "next/image";
 
 const AccountSettingsContent = () => {
-  const { user, token } = useAuth();
+  const { user, userId, token } = useAuth();
 
   const [showForm, setShowForm] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -22,8 +24,8 @@ const AccountSettingsContent = () => {
     last_name: "",
     email: "",
     phone_number: "",
-    address: "",
   });
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -32,8 +34,8 @@ const AccountSettingsContent = () => {
         last_name: user.last_name || "",
         email: user.email || "",
         phone_number: user.phone_number || "",
-        address: user.address || "",
       });
+      setProfilePhoto(user.profile_photo || null);
     }
   }, [user]);
 
@@ -43,6 +45,48 @@ const AccountSettingsContent = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const uploadAvatarToS3 = async (file: File) => {
+    try {
+      const uploadLinkResponse = await api.post(
+        "/client/api/v1/docs/create-upload-link",
+        {
+          client_id: userId,
+          document_name: "profile_photo",
+          file_type: file.type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!uploadLinkResponse.data?.data?.upload_link) {
+        throw new Error("Failed to get upload URL");
+      }
+
+      const uploadLink = uploadLinkResponse.data.data.upload_link;
+
+      await api.put(uploadLink, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      const fileUrl =
+        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0];
+
+      setFormData(prevData => ({
+        ...prevData,
+        profile_photo: fileUrl,
+      }));
+
+      toast.success("Avatar uploaded successfully!");
+    } catch (error) {
+      toast.error(formatError(error, "Failed to upload profile_photo"));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -130,6 +174,62 @@ const AccountSettingsContent = () => {
 
         {showForm && (
           <form onSubmit={handleSubmit}>
+            <div className="mb-8 flex items-center gap-4">
+              <Image
+                src={profilePhoto || avatar}
+                alt="Current Avatar"
+                className="rounded-md border-2 border-[#E5E7EB]"
+                width={64}
+                height={64}
+                objectFit="contain"
+              />
+
+              <div>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-brandColor text-xs text-brandColor"
+                >
+                  <Label htmlFor="profile_photo" className="mb-2">
+                    Change Avatar
+                  </Label>
+                </Button>
+                <input
+                  type="file"
+                  id="profile_photo"
+                  name="profile_photo"
+                  accept="image/png, image/jpeg, image/jpg"
+                  className="hidden"
+                  onChange={async e => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      // Check file size (max 3MB)
+                      const maxSizeInBytes = 3 * 1024 * 1024;
+                      if (file.size > maxSizeInBytes) {
+                        toast.error(
+                          `File size must be less than 3MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+                        );
+                        return;
+                      }
+
+                      // Check file type
+                      if (
+                        !["image/png", "image/jpeg", "image/jpg"].includes(
+                          file.type,
+                        )
+                      ) {
+                        toast.error(
+                          "Only PNG, JPEG, and JPG files are allowed",
+                        );
+                        return;
+                      }
+
+                      await uploadAvatarToS3(file);
+                    }
+                  }}
+                />
+              </div>
+            </div>
             <div className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
               <div className="">
                 <Label htmlFor="first_name" className="mb-2">
@@ -191,7 +291,7 @@ const AccountSettingsContent = () => {
                   required
                 />
               </div>
-              <div className="">
+              {/* <div className="">
                 <Label htmlFor="address" className="mb-2">
                   Physical Address
                 </Label>
@@ -205,7 +305,7 @@ const AccountSettingsContent = () => {
                   placeholder="Enter physical address"
                   required
                 />
-              </div>
+              </div> */}
             </div>
             <Button
               variant="outline"
