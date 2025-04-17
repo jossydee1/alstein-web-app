@@ -37,7 +37,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1;
+  const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
 
   // Check for category in URL params on load
@@ -149,7 +149,9 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   return (

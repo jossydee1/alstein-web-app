@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs } from "@/components/common";
+import { Breadcrumbs, Reviews } from "@/components/common";
 import { formatError } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";
 import {
   AverageRatingProps,
-  CommentProps,
   CountProps,
   ListingsProps,
   PartnerProps,
@@ -15,7 +14,6 @@ import {
 import { useClientFetch } from "@/hooks";
 import { useParams } from "next/navigation";
 import ListingDetailsSkeleton from "../listing-details/Skeleton";
-import Reviews from "./Reviews";
 
 const PartnerDetailsContent = () => {
   const { id } = useParams();
@@ -36,16 +34,13 @@ const PartnerDetailsContent = () => {
     endpoint: `/client/public/api/v1/equipments/get-equipments?skip=0&take=50?partner_id=${id}`,
   });
 
-  const { data: rating } = useClientFetch<AverageRatingProps>({
-    endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
-  });
+  const { data: rating, refetch: refetchRating } =
+    useClientFetch<AverageRatingProps>({
+      endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
+    });
 
   const { data: reviews } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
-  });
-
-  const { data: comments } = useClientFetch<CommentProps[]>({
-    endpoint: `partner/public/api/v1/comments/get-comments?skip=0&take=20&partner_id=${partnerData?.id}`,
   });
 
   const links = [
@@ -109,8 +104,9 @@ const PartnerDetailsContent = () => {
         <PartnerListings listings={listingsData?.data || []} />
 
         <Reviews
+          partnerId={partnerData.id}
           averageRating={rating?._avg?.score || 0}
-          comments={comments || []}
+          refetchRating={refetchRating}
         />
       </main>
     </div>

@@ -93,27 +93,29 @@ const Listings = ({
       <section className={CONTAINER_STYLES.pt}>
         <ListingsList listings={listings} />
 
-        <Pagination className="mt-[70px]">
-          <PaginationContent className={PAGINATION_STYLES.content}>
-            <PaginationItem
-              onClick={() =>
-                currentPage > 1 && handlePageChange(currentPage - 1)
-              }
-              className={`${PAGINATION_STYLES.button} ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
-            >
-              <ChevronLeft />
-            </PaginationItem>
-            {renderPaginationItems()}
-            <PaginationItem
-              className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
-              onClick={() =>
-                currentPage < totalPages && handlePageChange(currentPage + 1)
-              }
-            >
-              <ChevronRight />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        {totalPages > 1 && (
+          <Pagination className="mt-[70px]">
+            <PaginationContent className={PAGINATION_STYLES.content}>
+              <PaginationItem
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                className={`${PAGINATION_STYLES.button} ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
+              >
+                <ChevronLeft />
+              </PaginationItem>
+              {renderPaginationItems()}
+              <PaginationItem
+                className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
+                onClick={() =>
+                  currentPage < totalPages && handlePageChange(currentPage + 1)
+                }
+              >
+                <ChevronRight />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </section>
     </div>
   );
