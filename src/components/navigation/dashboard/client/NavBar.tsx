@@ -50,10 +50,6 @@ const NavBar = () => {
     }
   }, [error]);
 
-  console.log(
-    user?.profile_picture ? DOCUMENT_URL + user?.profile_picture : avatar,
-  );
-
   return (
     <>
       {isLoading && <LoadingState />}
