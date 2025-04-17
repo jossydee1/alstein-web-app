@@ -35,6 +35,11 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     "Insurance 5",
   ];
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1;
+  const [totalPages, setTotalPages] = useState(1);
+
   // Check for category in URL params on load
   useEffect(() => {
     const categoryFromURL = searchParams.get("category");
@@ -43,31 +48,51 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [searchParams]);
 
-  const { data: listings, isLoading } = useClientFetch<ListingsProps>({
-    endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=50",
+  // Fetch all listings
+  const {
+    data: listings,
+    isLoading: fetchingListings,
+    refetch: refetchListings,
+  } = useClientFetch<ListingsProps>({
+    endpoint: `/client/public/api/v1/equipments/get-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
   });
 
   // Fetch listings by category if a category is selected
   const {
     data: listingsByCategory,
-    isLoading: listingsByCategoryLoading,
-    // error: listingsByCategoryError,
+    isLoading: fetchingListingsByCategory,
+    refetch: refetchListingsByCategory,
   } = useClientFetch<ListingsProps>({
-    endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=0&take=50&category_slug=${selectedCategory}`,
+    endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&category_slug=${selectedCategory}`,
     enabled: !!selectedCategory,
   });
 
-  // Set initial listings
+  // Refetch listings when currentPage changes
+  useEffect(() => {
+    // setCurrentPage(1);
+    refetchListings();
+  }, [currentPage, refetchListings]);
+
+  // Refetch listingsByCategory when currentPage or selectedCategory changes
+  useEffect(() => {
+    if (selectedCategory) {
+      setCurrentPage(1);
+      refetchListingsByCategory();
+    }
+  }, [selectedCategory, refetchListingsByCategory]);
+
+  // Update listings and total pages when data changes
   useEffect(() => {
     if (listings && listings.data && !selectedCategory) {
       setFilteredListings(listings.data);
+      setTotalPages(Math.ceil(listings.total_count / itemsPerPage));
     }
   }, [listings, selectedCategory]);
 
-  // Update listings when category changes
   useEffect(() => {
     if (selectedCategory && listingsByCategory) {
       setFilteredListings(listingsByCategory.data);
+      setTotalPages(Math.ceil(listingsByCategory.total_count / itemsPerPage));
     }
   }, [selectedCategory, listingsByCategory]);
 
@@ -90,6 +115,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
 
     setFilteredListings(filtered);
+    setCurrentPage(1);
   };
 
   // Handle filtering
@@ -103,43 +129,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         ? [...listingsByCategory.data]
         : [...listings.data];
 
-    // Filter by ratings
-    // if (selectedRatings.length > 0) {
-    //   filtered = filtered.filter(
-    //     item =>
-    //       item.rating && selectedRatings.includes(Math.round(item.rating)),
-    //   );
-    // }
-
-    // Filter by insurance (assuming items have insurance property)
-    // if (selectedInsurance.length > 0) {
-    //   filtered = filtered.filter(
-    //     item =>
-    //       item.insurance &&
-    //       selectedInsurance.some(ins => item.insurance.includes(ins)),
-    //   );
-    // }
-
-    // Filter by availability flags
-    // if (availability) {
-    //   filtered = filtered.filter(item => item.isAvailable);
-    // }
-
-    // if (lease) {
-    //   filtered = filtered.filter(item => item.isForLease);
-    // }
-
-    // if (onSite) {
-    //   filtered = filtered.filter(item => item.isOnSiteOnly);
-    // }
-
-    // Apply distance filter if selected (would need geolocation to fully implement)
-    // if (selectedDistance) {
-    //   // This would require calculating actual distances
-    //   console.log(`Filtering by distance: ${selectedDistance} miles`);
-    // }
-
     setFilteredListings(filtered);
+    setCurrentPage(1);
   };
 
   // Reset filters
@@ -151,10 +142,14 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     setAvailability(false);
     setLease(false);
     setOnSite(false);
-
+    setCurrentPage(1);
     if (listings) {
       setFilteredListings(listings.data);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -185,12 +180,16 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         setOnSite={setOnSite}
         handleFiltering={handleFiltering}
         resetFilter={resetFilter}
-        isFiltering={isLoading || listingsByCategoryLoading}
+        isFiltering={fetchingListings || fetchingListingsByCategory}
       />
 
       <Listings
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
         listings={filteredListings || []}
-        isLoading={isLoading || listingsByCategoryLoading}
+        isLoading={fetchingListings || fetchingListingsByCategory}
       />
     </main>
   );
