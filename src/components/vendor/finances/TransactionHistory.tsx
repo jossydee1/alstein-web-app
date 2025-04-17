@@ -17,13 +17,14 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn, formatPrice } from "@/utils";
+import { cn, dashboardRoutes, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 // import Link from "next/link";
 
 const tableHeads = [
@@ -130,9 +131,11 @@ const TransactionHistory = () => {
       {isLoading && <LoadingState />}
 
       <header className="mb-6 flex items-center justify-between pb-2.5">
-        <h1 className="text-2xl font-bold">Transaction History</h1>
-        <Button type="button" className="bg-brandColor">
-          Withdraw Fund
+        <h1 className="text-2xl font-bold">Payout History</h1>
+        <Button type="button" className="bg-brandColor" asChild>
+          <Link href={dashboardRoutes.vendor_finances + "?tab=withdraw"}>
+            Withdraw Fund
+          </Link>
         </Button>
       </header>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
