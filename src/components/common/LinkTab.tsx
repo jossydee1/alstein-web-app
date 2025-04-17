@@ -58,14 +58,14 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
 
         <div
           ref={tabsRef}
-          className="scrollbar-hide flex justify-between gap-4 overflow-x-auto py-2"
+          className="scrollbar-hide flex justify-start gap-4 overflow-x-auto py-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {tabs.map((tab, index) => (
             <Link
               key={index}
               href={tab.link}
-              className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors ${
+              className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors hover:bg-[#EFF6FF] hover:text-brandColor ${
                 pathname === tab.link
                   ? "bg-[#EFF6FF] text-brandColor"
                   : "text-[#6B7280]"
