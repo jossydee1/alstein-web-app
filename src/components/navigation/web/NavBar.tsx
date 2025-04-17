@@ -266,8 +266,9 @@ const NavBar = () => {
                                 <Image
                                   alt="Avatar"
                                   src={
-                                    DOCUMENT_URL + user?.profile_picture ||
-                                    avatar
+                                    user?.profile_picture
+                                      ? DOCUMENT_URL + user?.profile_picture
+                                      : avatar.src
                                   }
                                   width={20}
                                   height={20}

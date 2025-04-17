@@ -131,7 +131,11 @@ export const Navbar = () => {
                         <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                           <Image
                             alt="Avatar"
-                            src={DOCUMENT_URL + user?.profile_picture || avatar}
+                            src={
+                              user?.profile_picture
+                                ? DOCUMENT_URL + user?.profile_picture
+                                : avatar.src
+                            }
                             width={20}
                             height={20}
                             className="rounded-full"
