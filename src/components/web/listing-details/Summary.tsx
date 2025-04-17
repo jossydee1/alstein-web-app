@@ -97,7 +97,14 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
           style={{
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
-          disabled={!date?.from || !date?.to}
+          disabled={
+            !date?.from ||
+            !fromTime?.hours ||
+            !fromTime?.minutes ||
+            !date?.to ||
+            !toTime?.hours ||
+            !toTime?.minutes
+          }
           onClick={handleCheckout}
         >
           Proceed to Checkout

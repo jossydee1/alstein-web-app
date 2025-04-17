@@ -11,6 +11,7 @@ import { useDateTime } from "@/context/DateTimeContext";
 const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
   const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
     useDateTime();
+
   return (
     <article>
       <section className="description">

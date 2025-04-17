@@ -109,6 +109,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         selected={date}
         onSelect={setDate}
         numberOfMonths={2}
+        disabled={{ before: new Date() }} // Disable past dates
       />
     </div>
   );

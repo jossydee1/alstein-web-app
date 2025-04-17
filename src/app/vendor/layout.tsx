@@ -6,6 +6,7 @@ import {
   Navbar,
   Sidebar,
 } from "@/components/navigation/dashboard/partner";
+import { isPartner } from "@/utils";
 
 interface DashboardLayoutProps {
   children: ReactElement<
@@ -32,4 +33,4 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default isPartner(DashboardLayout);

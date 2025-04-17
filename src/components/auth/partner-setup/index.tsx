@@ -5,7 +5,7 @@ import Banner from "../Banner";
 import style from "../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { api, formatError, webRoutes } from "@/utils";
+import { authRoutes, dashboardRoutes, webRoutes } from "@/utils";
 import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -16,9 +16,6 @@ import {
   User,
   BriefcaseMedical,
 } from "lucide-react";
-import { useAuth } from "@/context";
-import { toast } from "react-toastify";
-import { LoadingState } from "@/components/common";
 
 const options = [
   {
@@ -52,55 +49,25 @@ const options = [
 ];
 
 const PartnerSetupContent = () => {
-  const { token } = useAuth();
   const router = useRouter();
 
   const [selected, setSelected] = useState("");
   const [selectedSubOption, setSelectedSubOption] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleCreatePartnerType = async () => {
-    setShowMessage(false);
-    setIsProcessing(false);
-
-    if (!selected) return;
-
+  const handleContinue = () => {
     if (selected !== "LAB") {
-      return setShowMessage(true);
-    }
-
-    setShowMessage(false);
-    setIsProcessing(true);
-    try {
-      const response = await api.post(
-        "/partner/api/v1/create-partner",
-        { type: selected },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to create partner type");
-        return;
-      }
-
+      setShowMessage(true);
+    } else {
+      setShowMessage(false);
       router.push(
-        `/partner-setup/vendor?partner_type=${selected}&sub_type=${selectedSubOption}&partner_id=${response.data.id}`,
+        `${authRoutes.partner_setup_vendor}?partner_type=${selected}&sub_type=${selectedSubOption}`,
       );
-    } catch (error) {
-      toast.error(formatError(error, "Failed to create partner type"));
-    } finally {
-      setIsProcessing(false);
     }
   };
 
   return (
     <>
-      {isProcessing && <LoadingState />}
       <div className={style.wrapper}>
         <Banner />
 
@@ -109,7 +76,7 @@ const PartnerSetupContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.back()}
+              onClick={() => router.push(dashboardRoutes.client_order_history)}
               className={style.backButton}
             >
               <ChevronLeft />
@@ -217,7 +184,7 @@ const PartnerSetupContent = () => {
                 </div>
               )}
               <Button
-                onClick={handleCreatePartnerType}
+                onClick={handleContinue}
                 className="w-full"
                 disabled={
                   !selected || (selected === "vendor" && !selectedSubOption)

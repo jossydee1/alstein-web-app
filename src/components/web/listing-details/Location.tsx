@@ -1,10 +1,32 @@
+"use client";
 import { MapPin } from "lucide-react";
-import React from "react";
-import map from "@/public/images/google-map.png";
-import Image from "next/image";
+import React, { useMemo } from "react";
 import { ListingInfoProps } from "@/types";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
 const Location = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+  const libraries = useMemo(() => ["places"], []);
+  const mapCenter = useMemo(
+    () => ({ lat: 27.672932021393862, lng: 85.31184012689732 }),
+    [],
+  );
+
+  const mapOptions = useMemo<google.maps.MapOptions>(
+    () => ({
+      disableDefaultUI: true,
+      clickableIcons: true,
+      scrollwheel: false,
+    }),
+    [],
+  );
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
+    libraries: libraries as "places"[],
+  });
+
+  if (!isLoaded) return <div>Loading...</div>; // Ensure the map only renders after loading
+
   return (
     <section>
       <hr className="my-6 border border-[#EBEBEB]" />
@@ -21,10 +43,13 @@ const Location = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
         </span>
       </p>
 
-      <Image
-        src={map}
-        alt="Google Map"
-        className="mb-[90px] h-[380px] w-full object-cover"
+      <GoogleMap
+        options={mapOptions}
+        zoom={14}
+        center={mapCenter}
+        mapTypeId={window.google.maps.MapTypeId.ROADMAP} // Access google from window
+        mapContainerStyle={{ width: "100%", height: "380px" }}
+        onLoad={() => console.log("Map Component Loaded...")}
       />
     </section>
   );

@@ -5,13 +5,14 @@ import { Check, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { api, DOCUMENT_URL, formatError } from "@/utils";
+import { api, authRoutes, DOCUMENT_URL, formatError } from "@/utils";
 import { ApiResponseProps, DocumentProps, PartnerProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
+import Link from "next/link";
 
 const VendorSettingsContent = () => {
   const { token, businessProfile } = useAuth();
@@ -306,14 +307,15 @@ const VendorSettingsContent = () => {
               </div> */}
             </div>
 
-            {/* <Button
+            <Button
               variant="outline"
               type="submit"
               disabled={isProcessing}
               className="buttonBlue2"
+              asChild
             >
-              {isProcessing ? "Saving..." : "Save Changes"}
-            </Button> */}
+              <Link href={authRoutes.partner_setup_vendor}>Update Profile</Link>
+            </Button>
           </form>
 
           <div className="flex items-start gap-5 py-4">

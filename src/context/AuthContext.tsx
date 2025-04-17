@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("user");
     localStorage.removeItem("businessProfile");
-    router.push("/");
+    router.push("/login");
   };
 
   const setBusinessProfileHandler = (profile: PartnerProps) => {

@@ -3,10 +3,10 @@
 import Greetings from "@/components/common/Greetings";
 import { LinkTab } from "@/components/common/LinkTab";
 import NavBar from "@/components/navigation/dashboard/client/NavBar";
-import { dashboardRoutes } from "@/utils";
+import { dashboardRoutes, withAuth } from "@/utils";
 import {
   BellDot,
-  Receipt,
+  // Receipt,
   Settings2,
   ShoppingBasket,
   Unplug,
@@ -35,11 +35,11 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       link: dashboardRoutes.client_notifications,
       icon: <BellDot size="16" />,
     },
-    {
-      title: "Payment Method",
-      link: dashboardRoutes.client_payment_methods,
-      icon: <Receipt size="16" />,
-    },
+    // {
+    //   title: "Payment Method",
+    //   link: dashboardRoutes.client_payment_methods,
+    //   icon: <Receipt size="16" />,
+    // },
   ];
 
   return (
@@ -56,4 +56,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default DashboardLayout;
+export default withAuth(DashboardLayout);

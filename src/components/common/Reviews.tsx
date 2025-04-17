@@ -1,19 +1,17 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
 import { Button } from "@/components/ui/button";
-import { Check, Loader, Star } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Loader, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
   api,
@@ -27,40 +25,34 @@ import { useAuth } from "@/context";
 import { toast } from "react-toastify";
 import { useSearchParams } from "next/navigation";
 import { CommentProps } from "@/types";
+import { useClientFetch } from "@/hooks";
 
 const PAGINATION_STYLES = {
   content: "flex justify-center gap-3",
-  button: "rounded-sm  border-[0.5px] border-[#7B7485]",
+  button: "rounded-sm p-1.5 border-[0.5px] border-[#7B7485]",
   isActive: "bg-[#2C2C2C] border-[#303030] text-white",
 };
 
-const Reviews = ({
+export const Reviews = ({
   partnerId,
   averageRating,
   listingId,
-  comments,
   refetchRating,
-  refetchComments,
 }: {
   partnerId: string;
   averageRating: number;
-  listingId: string;
-  comments: CommentProps[];
+  listingId?: string;
   refetchRating: () => void;
-  refetchComments: () => void;
 }) => {
   const { userId, token } = useAuth();
   const searchParams = useSearchParams();
   const savedComment = searchParams.get("comment");
 
-  const sortedComments = useMemo(
-    () =>
-      [...comments].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-      ),
-    [comments],
-  );
+  useEffect(() => {
+    if (savedComment) {
+      setComment(savedComment);
+    }
+  }, [savedComment]);
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -69,15 +61,83 @@ const Reviews = ({
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
-  const filteredReviews = showAllReviews
-    ? sortedComments
-    : sortedComments.slice(0, 2);
+  // Pagination state
+  const itemsPerPage = 50;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
 
+  const url = listingId
+    ? `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
+    : `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
+
+  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
+  // const { data: comments, refetch: refetchComments } = useClientFetch<{
+  //   data: CommentProps[];
+  //   total_count: number;
+  // }>({
+  //   endpoint: url,
+  // });
+  const { data: comments, refetch: refetchComments } = useClientFetch<
+    CommentProps[]
+  >({
+    endpoint: url,
+  });
+
+  // Update comments and total pages when data changes
+  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
+  // useEffect(() => {
+  //   if (comments) {
+  //     setCommentsData(comments.data);
+  //     setTotalPages(Math.ceil(comments.total_count / itemsPerPage));
+  //   }
+  // }, [comments]);
   useEffect(() => {
-    if (savedComment) {
-      setComment(savedComment);
+    if (comments) {
+      setCommentsData(comments);
+      setTotalPages(Math.ceil(10 / itemsPerPage));
     }
-  }, [savedComment]);
+  }, [comments]);
+
+  const filteredReviews = showAllReviews
+    ? commentsData
+    : commentsData.slice(0, 2);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const renderPaginationItems = () => {
+    const items = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
+      ) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageChange(i)}
+              className={`${PAGINATION_STYLES.button} ${currentPage === i ? PAGINATION_STYLES.isActive : ""}`}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>,
+        );
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationEllipsis />
+          </PaginationItem>,
+        );
+      }
+    }
+    return items;
+  };
 
   const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
@@ -191,7 +251,7 @@ const Reviews = ({
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
         <div>
-          {sortedComments.length === 0 ? (
+          {commentsData.length === 0 ? (
             <p className="text-center text-gray-500">
               No reviews yet, be the first one!
             </p>
@@ -222,47 +282,27 @@ const Reviews = ({
             </div>
           )}
 
-          {filteredReviews.length > 20 && (
-            <Pagination className="mt-4 justify-start">
+          {showAllReviews && totalPages > 1 && (
+            <Pagination className="mt-12 justify-start">
               <PaginationContent className={PAGINATION_STYLES.content}>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    className={PAGINATION_STYLES.button}
-                  />
+                <PaginationItem
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={`${PAGINATION_STYLES.button} ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
+                >
+                  <ChevronLeft />
                 </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    className={`${PAGINATION_STYLES.button} ${PAGINATION_STYLES.isActive}`}
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" className={PAGINATION_STYLES.button}>
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" className={PAGINATION_STYLES.button}>
-                    3
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis className={PAGINATION_STYLES.button} />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    className={PAGINATION_STYLES.button}
-                  />
+                {renderPaginationItems()}
+                <PaginationItem
+                  className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  <ChevronRight />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
           )}
 
-          {sortedComments.length > 2 && (
+          {commentsData.length > 2 && (
             <Button
               type="button"
               variant="outline"
@@ -357,5 +397,3 @@ const Reviews = ({
     </section>
   );
 };
-
-export default Reviews;
