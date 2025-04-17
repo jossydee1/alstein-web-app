@@ -1,10 +1,10 @@
 export interface UserDetailsProps {
+  id?: string;
   first_name: string;
   last_name: string;
   email: string;
-  id?: string;
   phone_number: string;
-  profile_picture?: string | null;
+  profile_photo?: string | null;
   address?: string;
   city?: string;
   country?: string;
