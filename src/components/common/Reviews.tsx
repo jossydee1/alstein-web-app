@@ -16,6 +16,7 @@ import {
 import {
   api,
   authRoutes,
+  DOCUMENT_URL,
   formatDateToRelativeTime,
   formatError,
   webRoutes,
@@ -261,7 +262,7 @@ export const Reviews = ({
                 <div key={r.id}>
                   <div className="flex items-center gap-3">
                     <Image
-                      src={r.profiles.user_avatar || avatar}
+                      src={DOCUMENT_URL + r.profiles.user_avatar || avatar}
                       alt={r.profiles.user_avatar || "User Avatar"}
                       width={58}
                       height={58}
