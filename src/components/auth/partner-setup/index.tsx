@@ -5,7 +5,7 @@ import Banner from "../Banner";
 import style from "../style.module.scss";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { dashboardRoutes, webRoutes } from "@/utils";
+import { authRoutes, dashboardRoutes, webRoutes } from "@/utils";
 import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -61,7 +61,7 @@ const PartnerSetupContent = () => {
     } else {
       setShowMessage(false);
       router.push(
-        `/partner-setup/vendor?partner_type=${selected}&sub_type=${selectedSubOption}`,
+        `${authRoutes.partner_setup_vendor}?partner_type=${selected}&sub_type=${selectedSubOption}`,
       );
     }
   };

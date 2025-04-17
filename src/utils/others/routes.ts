@@ -10,12 +10,14 @@ export const webRoutes = {
   blog: "/blog",
   terms: "/terms",
   privacy: "/privacy",
+  partner_status: "/partner-status",
 };
 
 export const authRoutes = {
   register: "/register",
   signup: "/signup",
   partner_setup: "/partner-setup",
+  partner_setup_vendor: "/partner-setup/vendor",
   login: "/login",
   forgot_password: "/forgot-password",
   reset_password: "/reset-password",
@@ -31,6 +33,8 @@ export const dashboardRoutes = {
   vendor_overview: "/vendor",
   vendor_equipments: "/vendor/equipment",
   vendor_new_equipment: "/vendor/equipment/new",
+  vendor_view_equipment: "/vendor/equipment/view",
+  vendor_edit_equipment: "/vendor/equipment/edit",
   vendor_bookings: "/vendor/bookings",
   vendor_finances: "/vendor/finances",
   vendor_notifications: "/vendor/notifications",
