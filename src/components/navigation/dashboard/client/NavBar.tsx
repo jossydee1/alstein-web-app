@@ -135,7 +135,7 @@ const NavBar = () => {
                           }
                           width={20}
                           height={20}
-                          className="rounded-full"
+                          className="aspect-square rounded-full object-cover"
                           objectFit="cover"
                         />
                       </span>

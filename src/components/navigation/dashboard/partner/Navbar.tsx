@@ -114,7 +114,7 @@ export const Navbar = () => {
                       }
                       width={50}
                       height={50}
-                      className="rounded-md"
+                      className="aspect-square rounded-full rounded-md object-cover"
                       objectFit="contain"
                     />
                   </button>
@@ -138,7 +138,7 @@ export const Navbar = () => {
                             }
                             width={20}
                             height={20}
-                            className="rounded-full"
+                            className="aspect-square rounded-full object-cover"
                             objectFit="cover"
                           />
                         </span>
