@@ -69,8 +69,8 @@ export const Reviews = ({
   const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
 
   const url = listingId
-    ? `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
-    : `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
+    ? `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
+    : `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
 
   // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
   // const { data: comments, refetch: refetchComments } = useClientFetch<{

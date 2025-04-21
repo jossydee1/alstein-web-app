@@ -26,20 +26,20 @@ const ListingDetailsContent = () => {
     isLoading,
     error,
   } = useClientFetch<ListingInfoProps>({
-    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+    endpoint: `/client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
   });
 
   // Get rating info
   const { data: rating, refetch: refetchRating } =
     useClientFetch<AverageRatingProps>({
-      endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+      endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
     });
 
   // Get partner approved listing count
   const { data: listingCount } = useClientFetch<{
     total_approved_listing: number;
   }>({
-    endpoint: `client/public/api/v1/equipments/get-partner-approved-listing?partner_id=${listingInfo?.partner?.id}`,
+    endpoint: `/client/public/api/v1/equipments/get-partner-approved-listing?partner_id=${listingInfo?.partner?.id}`,
   });
 
   const links = [

@@ -71,7 +71,7 @@ const CheckoutContent = () => {
     isLoading,
     error: listingError,
   } = useClientFetch<ListingInfoProps>({
-    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+    endpoint: `/client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
   });
 
   const links = [

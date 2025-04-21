@@ -31,12 +31,12 @@ const PartnerDetailsContent = () => {
     isLoading: loadingListings,
     error: errorListings,
   } = useClientFetch<ListingsProps>({
-    endpoint: `/client/public/api/v1/equipments/get-equipments?skip=0&take=50?partner_id=${id}`,
+    endpoint: `/client/public/api/v1/equipments/get-partner-equipments?skip=0&take=50&partner_id=${id}`,
   });
 
   const { data: rating, refetch: refetchRating } =
     useClientFetch<AverageRatingProps>({
-      endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
+      endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
     });
 
   const { data: reviews } = useClientFetch<CountProps>({
