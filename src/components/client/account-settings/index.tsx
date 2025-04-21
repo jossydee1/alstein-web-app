@@ -18,6 +18,7 @@ const AccountSettingsContent = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [formData, setFormData] = useState<UserDetailsProps>({
     first_name: "",
@@ -48,6 +49,7 @@ const AccountSettingsContent = () => {
   };
 
   const uploadAvatarToS3 = async (file: File) => {
+    setIsUploading(true);
     try {
       const uploadLinkResponse = await api.post(
         "/client/api/v1/docs/create-upload-link",
@@ -86,6 +88,8 @@ const AccountSettingsContent = () => {
       toast.success("Avatar uploaded successfully!");
     } catch (error) {
       toast.error(formatError(error, "Failed to upload profile_photo"));
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -188,10 +192,11 @@ const AccountSettingsContent = () => {
                 <Button
                   asChild
                   variant="outline"
-                  className="border-brandColor text-xs text-brandColor"
+                  className="border-brandColor text-xs text-brandColor disabled:cursor-not-allowed"
+                  disabled={isUploading}
                 >
                   <Label htmlFor="profile_photo" className="mb-2">
-                    Change Avatar
+                    {isUploading ? "Uploading..." : "Change Avatar"}
                   </Label>
                 </Button>
                 <input
@@ -200,6 +205,7 @@ const AccountSettingsContent = () => {
                   name="profile_photo"
                   accept="image/png, image/jpeg, image/jpg"
                   className="hidden"
+                  disabled={isUploading}
                   onChange={async e => {
                     const file = e.target.files?.[0];
                     if (file) {

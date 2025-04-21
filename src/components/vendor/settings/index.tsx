@@ -15,26 +15,28 @@ import { LoadingState } from "@/components/common";
 import Link from "next/link";
 
 const VendorSettingsContent = () => {
-  const { token, businessProfile } = useAuth();
+  const { token, businessProfile, setBusinessProfile } = useAuth();
 
   const url = `/partner/public/api/v1/get-partner?id=${businessProfile?.id}`;
 
-  const { data: partnerDetails, isLoading: fetchingPartnerDetails } =
-    useClientFetch<PartnerProps>({
-      endpoint: url,
-      token,
-    });
+  const {
+    data: partnerDetails,
+    isLoading: fetchingPartnerDetails,
+    refetch: refetchPartnerDetails,
+  } = useClientFetch<PartnerProps>({
+    endpoint: url,
+    token,
+  });
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [formData, setFormData] = useState<{
-    logo: string;
     name: string;
     email: string;
     address: string;
     documents: DocumentProps[];
   }>({
-    logo: "",
     name: "",
     email: "",
     address: "",
@@ -44,7 +46,6 @@ const VendorSettingsContent = () => {
   useEffect(() => {
     if (partnerDetails) {
       setFormData({
-        logo: partnerDetails.logo || "",
         name: partnerDetails.name || "",
         address: partnerDetails.address || "",
         email:
@@ -71,6 +72,7 @@ const VendorSettingsContent = () => {
   };
 
   const uploadLogoToS3 = async (file: File) => {
+    setIsUploading(true);
     try {
       const uploadLinkResponse = await api.post(
         "/partner/api/v1/docs/create-upload-link",
@@ -108,8 +110,14 @@ const VendorSettingsContent = () => {
       }));
 
       toast.success("Logo uploaded successfully!");
+      await refetchPartnerDetails();
+      if (partnerDetails) {
+        setBusinessProfile(partnerDetails);
+      }
     } catch (error) {
       toast.error(formatError(error, "Failed to upload logo"));
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -166,6 +174,10 @@ const VendorSettingsContent = () => {
     }
   };
 
+  // if a for each doc object in partner_doc array has a name of logo, get the path
+  const logo =
+    partnerDetails?.partner_doc?.find(doc => doc.name === "logo")?.path || "";
+
   return (
     <>
       {fetchingPartnerDetails && <LoadingState />}
@@ -181,9 +193,9 @@ const VendorSettingsContent = () => {
           <form onSubmit={handleSubmit}>
             {/* Change profile logo */}
             <div className="mb-10 flex items-center gap-4">
-              {formData.logo ? (
+              {logo ? (
                 <Image
-                  src={formData.logo}
+                  src={DOCUMENT_URL + logo}
                   alt="Current Logo"
                   className="h-16 w-16 rounded-md bg-gray-200 object-cover"
                   width={64}
@@ -199,9 +211,10 @@ const VendorSettingsContent = () => {
                   asChild
                   variant="outline"
                   className="border-brandColor text-xs text-brandColor"
+                  disabled={isUploading}
                 >
                   <Label htmlFor="logo" className="mb-2">
-                    Change Logo
+                    {isUploading ? "Uploading..." : "Change Logo"}{" "}
                   </Label>
                 </Button>
                 <input
@@ -209,9 +222,10 @@ const VendorSettingsContent = () => {
                   id="logo"
                   name="logo"
                   accept="image/png, image/jpeg, image/jpg"
-                  className="border border-[#E5E7EB] p-2"
+                  className="border border-[#E5E7EB] p-2 disabled:cursor-not-allowed"
                   hidden
                   onChange={handleUpdateLogo}
+                  disabled={isUploading}
                 />
               </div>
             </div>
