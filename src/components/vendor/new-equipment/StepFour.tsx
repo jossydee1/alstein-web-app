@@ -91,8 +91,6 @@ const StepFour = ({
         return;
       }
 
-      toast.success("Specifications saved successfully");
-
       // Step 2: Upload all images
       let allImagesUploaded = true;
 
@@ -143,7 +141,6 @@ const StepFour = ({
 
       // Only show success if both specifications and all images were uploaded
       if (allImagesUploaded) {
-        toast.success("All images uploaded successfully");
         setOpen(true);
         setStatus("success");
       } else {

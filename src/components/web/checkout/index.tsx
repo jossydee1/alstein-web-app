@@ -60,7 +60,7 @@ const CheckoutContent = () => {
         fullname: `${user?.first_name} ${user?.last_name}`,
         phone: user?.phone_number,
         email: user?.email,
-        address: "",
+        address: user?.address || "",
       });
     }
   }, [user]);

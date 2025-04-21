@@ -19,11 +19,10 @@ const AccountSettingsContent = () => {
 
   const url = "/client/api/v1/get-user-info";
 
-  const { data: userDetails, refetch: refetchUserDetails } =
-    useClientFetch<UserDetailsProps>({
-      endpoint: url,
-      token,
-    });
+  const { refetch: refetchUserDetails } = useClientFetch<UserDetailsProps>({
+    endpoint: url,
+    token,
+  });
 
   const [showForm, setShowForm] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -92,12 +91,15 @@ const AccountSettingsContent = () => {
         },
       });
 
-      toast.success("Avatar uploaded successfully!");
-      await refetchUserDetails();
-      if (userDetails) {
-        setUser(userDetails);
-        setProfilePhoto(userDetails?.user_avatar ?? null);
+      // Refetch user details and update state
+      const updatedUserDetails = await refetchUserDetails();
+      if (updatedUserDetails) {
+        if (updatedUserDetails?.data) {
+          setProfilePhoto(updatedUserDetails?.data?.user_avatar ?? null);
+        }
       }
+
+      toast.success("Avatar uploaded successfully!");
     } catch (error) {
       toast.error(formatError(error, "Failed to upload user photo"));
       setTempPhoto(null);
@@ -127,13 +129,15 @@ const AccountSettingsContent = () => {
         return;
       }
 
-      toast.success(response?.data?.message);
-
       // Refetch user details and update state
-      await refetchUserDetails();
-      if (userDetails) {
-        setUser(userDetails);
+      const updatedUserDetails = await refetchUserDetails();
+      if (updatedUserDetails) {
+        if (updatedUserDetails?.data) {
+          setUser(updatedUserDetails.data);
+        }
       }
+
+      toast.success(response?.data?.message);
 
       return response?.data?.data;
     } catch (error) {

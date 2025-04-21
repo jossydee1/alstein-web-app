@@ -12,7 +12,7 @@ export const useGetBusinessProfiles = () => {
     queryKey: ["getBusinessProfiles"],
     queryFn: async () => {
       const response = await api.get<ApiResponseProps<PartnerProps[]>>(
-        "//partner/api/v1/get-my-business-profiles",
+        "/partner/api/v1/get-my-business-profiles",
         {
           headers: {
             Authorization: `Bearer ${token}`,

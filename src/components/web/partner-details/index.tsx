@@ -49,10 +49,6 @@ const PartnerDetailsContent = () => {
       link: "#",
     },
     {
-      title: partnerData?.type?.toLocaleLowerCase() || "...",
-      link: "#",
-    },
-    {
       title: partnerData?.name || "...",
       link: "#",
     },

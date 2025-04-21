@@ -53,6 +53,7 @@ const FormStepsWithContext = ({
 
     const updatedFormData = {
       ...formData,
+      price: formData?.price * 100,
       partner_id: businessProfile?.id,
     };
 

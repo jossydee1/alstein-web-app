@@ -118,6 +118,14 @@ const VendorSettingsContent = () => {
       if (partnerDetails) {
         setBusinessProfile(partnerDetails);
       }
+
+      // Refetch user details and update state
+      const updatedPartnerDetails = await refetchPartnerDetails();
+      if (updatedPartnerDetails) {
+        if (updatedPartnerDetails?.data) {
+          setBusinessProfile(updatedPartnerDetails?.data);
+        }
+      }
     } catch (error) {
       toast.error(formatError(error, "Failed to upload logo"));
       setTempPhoto(null);
