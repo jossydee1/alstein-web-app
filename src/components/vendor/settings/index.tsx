@@ -30,6 +30,7 @@ const VendorSettingsContent = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [tempPhoto, setTempPhoto] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<{
     name: string;
@@ -72,6 +73,9 @@ const VendorSettingsContent = () => {
   };
 
   const uploadLogoToS3 = async (file: File) => {
+    const temporaryPhoto = URL.createObjectURL(file); // Show the selected photo immediately
+    setTempPhoto(temporaryPhoto);
+
     setIsUploading(true);
     try {
       const uploadLinkResponse = await api.post(
@@ -116,6 +120,7 @@ const VendorSettingsContent = () => {
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to upload logo"));
+      setTempPhoto(null);
     } finally {
       setIsUploading(false);
     }
@@ -193,9 +198,9 @@ const VendorSettingsContent = () => {
           <form onSubmit={handleSubmit}>
             {/* Change profile logo */}
             <div className="mb-10 flex items-center gap-4">
-              {logo ? (
+              {tempPhoto || logo ? (
                 <Image
-                  src={DOCUMENT_URL + logo}
+                  src={tempPhoto || DOCUMENT_URL + logo}
                   alt="Current Logo"
                   className="h-16 w-16 rounded-md bg-gray-200 object-cover"
                   width={64}

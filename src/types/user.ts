@@ -5,6 +5,7 @@ export interface UserDetailsProps {
   email: string;
   phone_number: string;
   profile_photo?: string | null;
+  user_avatar?: string | null;
   address?: string;
   city?: string;
   country?: string;

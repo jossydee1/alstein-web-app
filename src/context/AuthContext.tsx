@@ -18,6 +18,7 @@ interface AuthContextType {
   businessProfile: PartnerProps | null;
   login: (user: UserContextProps) => void;
   logout: () => void;
+  setUser: (user: UserDetailsProps) => void;
   setBusinessProfile: (profile: PartnerProps) => void;
 }
 
@@ -52,13 +53,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const login = (user: UserContextProps) => {
-    setUserId(user.id);
-    setUser(user.user);
-    setToken(user.token);
-    localStorage.setItem("userId", user.id);
-    localStorage.setItem("userToken", user.token);
-    localStorage.setItem("user", JSON.stringify(user.user));
+  const login = ({ id, token, user }: UserContextProps) => {
+    setUserId(id);
+    setUser(user);
+    setToken(token);
+    localStorage.setItem("userId", id);
+    localStorage.setItem("userToken", token);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const logout = () => {
@@ -71,6 +72,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("businessProfile");
     router.push("/login");
+  };
+
+  const setUserProfileHandler = (user: UserDetailsProps) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const setBusinessProfileHandler = (profile: PartnerProps) => {
@@ -87,6 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         businessProfile,
         login,
         logout,
+        setUser: setUserProfileHandler,
         setBusinessProfile: setBusinessProfileHandler,
       }}
     >

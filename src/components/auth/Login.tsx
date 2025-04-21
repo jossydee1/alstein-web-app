@@ -58,7 +58,7 @@ const LoginContent = () => {
       const response = await api.post("/client/public/api/v1/login", params);
 
       if (response.status === 200) {
-        handleSuccessfulLogin(response.data);
+        await handleSuccessfulLogin(response.data.id, response.data.token);
       }
     } catch (error) {
       handleLoginError(error);
@@ -67,8 +67,14 @@ const LoginContent = () => {
     }
   };
 
-  const handleSuccessfulLogin = (data: any) => {
-    login(data);
+  const handleSuccessfulLogin = async (id: string, token: string) => {
+    const response = await api.get("/client/api/v1/get-user-info", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    login({ id, token, user: response.data.data });
     setEmail("");
     setPassword("");
 

@@ -105,14 +105,13 @@ const NavBar = () => {
                   <Image
                     alt="Avatar"
                     src={
-                      user?.profile_photo
-                        ? DOCUMENT_URL + user?.profile_photo
+                      user?.user_avatar
+                        ? DOCUMENT_URL + user?.user_avatar
                         : avatar.src
                     }
                     width={50}
                     height={50}
-                    className="rounded-md"
-                    objectFit="contain"
+                    className="aspect-square rounded-md object-cover"
                   />
                 </button>
 
@@ -129,14 +128,13 @@ const NavBar = () => {
                         <Image
                           alt="Avatar"
                           src={
-                            user?.profile_photo
-                              ? DOCUMENT_URL + user?.profile_photo
+                            user?.user_avatar
+                              ? DOCUMENT_URL + user?.user_avatar
                               : avatar.src
                           }
                           width={20}
                           height={20}
                           className="aspect-square rounded-full object-cover"
-                          objectFit="cover"
                         />
                       </span>
                       <span className="text-lg font-medium leading-4 text-[#2F2F2F]">
