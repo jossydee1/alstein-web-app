@@ -234,7 +234,7 @@ const DocumentUpload = ({
 
   return (
     <label
-      className={`flex min-h-16 cursor-pointer items-center space-x-3 rounded-md border ${
+      className={`flex min-h-16 w-full cursor-pointer items-center space-x-3 rounded-md border ${
         isUploaded
           ? "border-green-500 bg-green-50"
           : uploadFailed

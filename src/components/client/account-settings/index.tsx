@@ -200,7 +200,9 @@ const AccountSettingsContent = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-8 flex items-center gap-4">
               <Image
-                src={tempPhoto || DOCUMENT_URL + profilePhoto || avatar}
+                src={
+                  tempPhoto ? tempPhoto : DOCUMENT_URL + profilePhoto || avatar
+                }
                 alt="Current Avatar"
                 className="aspect-square rounded-md border-2 border-[#E5E7EB] object-cover"
                 width={64}

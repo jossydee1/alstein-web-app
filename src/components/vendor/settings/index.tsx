@@ -200,7 +200,7 @@ const VendorSettingsContent = () => {
             <div className="mb-10 flex items-center gap-4">
               {tempPhoto || logo ? (
                 <Image
-                  src={tempPhoto || DOCUMENT_URL + logo}
+                  src={tempPhoto ? tempPhoto : DOCUMENT_URL + logo}
                   alt="Current Logo"
                   className="h-16 w-16 rounded-md bg-gray-200 object-cover"
                   width={64}

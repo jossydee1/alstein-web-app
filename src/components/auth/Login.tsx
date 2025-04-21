@@ -184,7 +184,7 @@ const LoginContent = () => {
             <div className={style.altBtns}>
               <button type="button" className={style.altBtn}>
                 <Image src={google} alt="Google Logo" width={24} height={24} />
-                Sign up with Google
+                Continue with Google
               </button>
             </div>
 
