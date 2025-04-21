@@ -77,14 +77,14 @@ const NavBar = () => {
                 variant="ghost"
                 className="font-Groteskbold h-auto border border-[#7B7B7B] text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0 lg:hover:bg-transparent lg:hover:underline"
               >
-                <Link href={webRoutes?.partners}>Join as a Partner</Link>
+                <Link href={authRoutes.login}>Login</Link>
               </Button>
               <Button
                 type="button"
                 className="font-Groteskbold px-12 text-lg font-normal"
                 asChild
               >
-                <Link href={authRoutes?.register}>Register/Log in</Link>
+                <Link href={authRoutes?.register}>Register</Link>
               </Button>
             </div>
           ) : (
