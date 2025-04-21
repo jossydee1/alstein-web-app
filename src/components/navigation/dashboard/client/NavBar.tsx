@@ -11,7 +11,7 @@ import React, { useState, useRef, useEffect } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { BellDot, LogOut, Building2, UserRound } from "lucide-react";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
-import avatar from "@/public/icons/avatar?.svg";
+import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/common";

@@ -3,7 +3,7 @@
 import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
-import avatar from "@/public/icons/avatar?.svg";
+import avatar from "@/public/icons/avatar.svg";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { dashboardRoutes, DOCUMENT_URL } from "@/utils";
