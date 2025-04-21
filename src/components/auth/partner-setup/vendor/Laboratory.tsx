@@ -291,7 +291,7 @@ const LaboratoryPageContent = () => {
   const subType = searchParams.get("sub_type");
 
   const router = useRouter();
-  const { token, businessProfile } = useAuth();
+  const { token, businessProfile, setBusinessProfile } = useAuth();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
@@ -300,6 +300,9 @@ const LaboratoryPageContent = () => {
     null,
   );
 
+  console.log("Partner ID:", partnerId);
+  console.log("businessProfile:", businessProfile);
+
   useEffect(() => {
     if (!type || !subType) {
       router.push("/partner-setup");
@@ -307,6 +310,11 @@ const LaboratoryPageContent = () => {
     }
 
     const handleCreatePartnerType = async () => {
+      if (!token) {
+        toast.error("Token is missing. Please log in again.");
+        return;
+      }
+
       setIsProcessing(true);
       try {
         const response = await api.post(
@@ -320,7 +328,8 @@ const LaboratoryPageContent = () => {
         );
 
         if (response.status === 200) {
-          setPartnerId(response.data.id);
+          setPartnerId(response.data.data.id);
+          setBusinessProfile(response.data.data);
           setIsFormDisabled(false);
         }
       } catch (error) {
@@ -667,11 +676,11 @@ const LaboratoryPageContent = () => {
       case 3:
         return (
           <div>
-            <div>
-              <h3 className="mb-2">Existing Documents</h3>
-              <div className="mb-6 flex flex-wrap gap-2">
-                {existingDocuments.length > 0 &&
-                  existingDocuments.map((doc, index) => (
+            {existingDocuments.length > 0 && (
+              <div>
+                <h3 className="mb-2">Existing Documents</h3>
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {existingDocuments.map((doc, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <Link
                         href={DOCUMENT_URL + doc.path}
@@ -683,9 +692,10 @@ const LaboratoryPageContent = () => {
                       </Link>
                     </div>
                   ))}
+                </div>
+                <h3 className="mb-2">Upload/Update Documents</h3>
               </div>
-              <h3 className="mb-2">Upload/Update Documents</h3>
-            </div>
+            )}
             <div className="space-y-3">
               {requiredDocuments.map((doc, index) => {
                 const documentStatusEntry = documentStatus[doc];
