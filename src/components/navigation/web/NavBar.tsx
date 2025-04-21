@@ -242,9 +242,9 @@ const NavBar = () => {
                           <Image
                             alt="Avatar"
                             src={
-                              !user?.profile_photo
-                                ? avatar
-                                : DOCUMENT_URL + user?.profile_picture
+                              user?.profile_photo
+                                ? DOCUMENT_URL + user?.profile_photo
+                                : avatar
                             }
                             width={50}
                             height={50}
@@ -266,18 +266,18 @@ const NavBar = () => {
                                 <Image
                                   alt="Avatar"
                                   src={
-                                    user?.profile_picture
-                                      ? DOCUMENT_URL + user?.profile_picture
+                                    user?.profile_photo
+                                      ? DOCUMENT_URL + user?.profile_photo
                                       : avatar.src
                                   }
                                   width={20}
                                   height={20}
-                                  className="rounded-full"
+                                  className="aspect-square rounded-full object-cover"
                                   objectFit="cover"
                                 />
                               </span>
                               <span className="text-lg font-medium leading-4 text-brandColor">
-                                {user?.first_name} {user?.last_name}
+                                {user?.first_name} {user?.last_name}{" "}
                               </span>
                             </Link>
 

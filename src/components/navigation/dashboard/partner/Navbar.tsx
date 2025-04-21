@@ -108,9 +108,9 @@ export const Navbar = () => {
                     <Image
                       alt="Avatar"
                       src={
-                        !user?.profile_picture
+                        !user?.profile_photo
                           ? avatar
-                          : DOCUMENT_URL + user?.profile_picture
+                          : DOCUMENT_URL + user?.profile_photo
                       }
                       width={50}
                       height={50}
@@ -132,8 +132,8 @@ export const Navbar = () => {
                           <Image
                             alt="Avatar"
                             src={
-                              user?.profile_picture
-                                ? DOCUMENT_URL + user?.profile_picture
+                              user?.profile_photo
+                                ? DOCUMENT_URL + user?.profile_photo
                                 : avatar.src
                             }
                             width={20}

@@ -105,8 +105,8 @@ const NavBar = () => {
                   <Image
                     alt="Avatar"
                     src={
-                      user?.profile_picture
-                        ? DOCUMENT_URL + user?.profile_picture
+                      user?.profile_photo
+                        ? DOCUMENT_URL + user?.profile_photo
                         : avatar.src
                     }
                     width={50}
@@ -129,8 +129,8 @@ const NavBar = () => {
                         <Image
                           alt="Avatar"
                           src={
-                            user?.profile_picture
-                              ? DOCUMENT_URL + user?.profile_picture
+                            user?.profile_photo
+                              ? DOCUMENT_URL + user?.profile_photo
                               : avatar.src
                           }
                           width={20}

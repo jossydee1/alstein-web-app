@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UserDetailsProps } from "@/types/user";
 import { useAuth } from "@/context";
-import { api, formatError } from "@/utils";
+import { api, DOCUMENT_URL, formatError } from "@/utils";
 import { ApiResponseProps } from "@/types";
 import { toast } from "react-toastify";
 import avatar from "@/public/icons/avatar.svg";
@@ -176,9 +176,9 @@ const AccountSettingsContent = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-8 flex items-center gap-4">
               <Image
-                src={profilePhoto || avatar}
+                src={DOCUMENT_URL + profilePhoto || avatar}
                 alt="Current Avatar"
-                className="rounded-md border-2 border-[#E5E7EB]"
+                className="aspect-square rounded-md border-2 border-[#E5E7EB] object-cover"
                 width={64}
                 height={64}
                 objectFit="contain"

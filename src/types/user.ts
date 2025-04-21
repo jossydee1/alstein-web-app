@@ -4,7 +4,6 @@ export interface UserDetailsProps {
   last_name: string;
   email: string;
   phone_number: string;
-  profile_picture?: string | null;
   profile_photo?: string | null;
   address?: string;
   city?: string;
