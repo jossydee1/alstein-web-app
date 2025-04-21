@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import WithdrawalMethod from "./AddWithdrawalMethod";
-import WithdrawForm from "./WithdrawForm";
+import AddWithdrawalMethod from "./AddWithdrawalMethod";
+import WithdrawFormAndMethods from "./WithdrawFormAndMethods";
 
 const WithdrawEarnings = () => {
   const [showForm, setShowForm] = useState(false);
@@ -10,9 +10,9 @@ const WithdrawEarnings = () => {
   return (
     <div>
       {showForm ? (
-        <WithdrawalMethod setShowForm={setShowForm} />
+        <AddWithdrawalMethod setShowForm={setShowForm} />
       ) : (
-        <WithdrawForm setShowForm={setShowForm} />
+        <WithdrawFormAndMethods setShowForm={setShowForm} />
       )}
     </div>
   );
