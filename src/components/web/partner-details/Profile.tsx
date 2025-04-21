@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BadgeCheck, Building2, Globe, Mail, Phone, Star } from "lucide-react";
+import { BadgeCheck, Building2, Mail, Star } from "lucide-react";
 import Link from "next/link";
 import { PartnerProps } from "@/types";
 import { formatDateToRelativeTimeYearWithTime } from "@/utils";
@@ -51,7 +50,7 @@ const Profile = ({
           <div className="flex flex-wrap justify-between gap-2 space-x-2 text-left md:flex-col md:items-end">
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
-                {rating.toFixed(1)} <Star size={24} fill="#161616" />
+                {rating?.toFixed(1)} <Star size={24} fill="#161616" />
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
                 Rating
@@ -63,7 +62,7 @@ const Profile = ({
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
                 {formatDateToRelativeTimeYearWithTime(
-                  partnerData.created_at || "",
+                  partnerData?.created_at || "",
                 )}
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
@@ -94,24 +93,6 @@ const Profile = ({
               {partnerData?.support_email}
             </Link>
           )}
-          {/* {partnerData?.support_number && (
-            <Link
-              href="tel:1234567890"
-              className="flex items-center gap-2 text-[#343434] hover:underline"
-            >
-              <Phone size={24} />
-              {partnerData?.support_number}
-            </Link>
-          )}
-          {partnerData?.website && (
-            <Link
-              href={partnerData?.website}
-              className="flex items-center gap-2 text-[#343434] hover:underline"
-            >
-              <Globe size={24} />
-              {partnerData?.website}
-            </Link>
-          )} */}
         </div>
       </section>
 

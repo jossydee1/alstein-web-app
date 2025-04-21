@@ -15,26 +15,29 @@ import { LoadingState } from "@/components/common";
 import Link from "next/link";
 
 const VendorSettingsContent = () => {
-  const { token, businessProfile } = useAuth();
+  const { token, businessProfile, setBusinessProfile } = useAuth();
 
   const url = `/partner/public/api/v1/get-partner?id=${businessProfile?.id}`;
 
-  const { data: partnerDetails, isLoading: fetchingPartnerDetails } =
-    useClientFetch<PartnerProps>({
-      endpoint: url,
-      token,
-    });
+  const {
+    data: partnerDetails,
+    isLoading: fetchingPartnerDetails,
+    refetch: refetchPartnerDetails,
+  } = useClientFetch<PartnerProps>({
+    endpoint: url,
+    token,
+  });
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [tempPhoto, setTempPhoto] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<{
-    logo: string;
     name: string;
     email: string;
     address: string;
     documents: DocumentProps[];
   }>({
-    logo: "",
     name: "",
     email: "",
     address: "",
@@ -44,15 +47,14 @@ const VendorSettingsContent = () => {
   useEffect(() => {
     if (partnerDetails) {
       setFormData({
-        logo: partnerDetails.logo || "",
-        name: partnerDetails.name || "",
-        address: partnerDetails.address || "",
+        name: partnerDetails?.name || "",
+        address: partnerDetails?.address || "",
         email:
-          partnerDetails.support_email ||
-          partnerDetails.institutional_email ||
+          partnerDetails?.support_email ||
+          partnerDetails?.institutional_email ||
           "",
-        documents: partnerDetails.partner_doc
-          ? partnerDetails.partner_doc.map(doc => ({
+        documents: partnerDetails?.partner_doc
+          ? partnerDetails?.partner_doc.map(doc => ({
               ...doc,
               path: `${DOCUMENT_URL}${doc?.path}`,
               name: doc?.name || "Unnamed Document",
@@ -71,6 +73,10 @@ const VendorSettingsContent = () => {
   };
 
   const uploadLogoToS3 = async (file: File) => {
+    const temporaryPhoto = URL.createObjectURL(file); // Show the selected photo immediately
+    setTempPhoto(temporaryPhoto);
+
+    setIsUploading(true);
     try {
       const uploadLinkResponse = await api.post(
         "/partner/api/v1/docs/create-upload-link",
@@ -78,7 +84,7 @@ const VendorSettingsContent = () => {
           partner_id: businessProfile?.id,
           document_name: "logo",
           category: "utility",
-          file_type: file.type,
+          file_type: file?.type,
         },
         {
           headers: {
@@ -87,20 +93,20 @@ const VendorSettingsContent = () => {
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_link) {
+      if (!uploadLinkResponse?.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadLink = uploadLinkResponse.data.data.upload_link;
+      const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
       await api.put(uploadLink, file, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": file?.type,
         },
       });
 
       const fileUrl =
-        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0];
+        uploadLinkResponse?.data?.data?.file_url || uploadLink.split("?")[0];
 
       setFormData(prevData => ({
         ...prevData,
@@ -108,8 +114,23 @@ const VendorSettingsContent = () => {
       }));
 
       toast.success("Logo uploaded successfully!");
+      await refetchPartnerDetails();
+      if (partnerDetails) {
+        setBusinessProfile(partnerDetails);
+      }
+
+      // Refetch user details and update state
+      const updatedPartnerDetails = await refetchPartnerDetails();
+      if (updatedPartnerDetails) {
+        if (updatedPartnerDetails?.data) {
+          setBusinessProfile(updatedPartnerDetails?.data);
+        }
+      }
     } catch (error) {
       toast.error(formatError(error, "Failed to upload logo"));
+      setTempPhoto(null);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -118,15 +139,15 @@ const VendorSettingsContent = () => {
     if (file) {
       // Check file size (max 3MB)
       const maxSizeInBytes = 3 * 1024 * 1024;
-      if (file.size > maxSizeInBytes) {
+      if (file?.size > maxSizeInBytes) {
         toast.error(
-          `File size must be less than 3MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+          `File size must be less than 3MB. Current size: ${(file?.size / (1024 * 1024)).toFixed(2)}MB`,
         );
         return;
       }
 
       // Check file type
-      if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+      if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
         toast.error("Only PNG, JPEG, and JPG files are allowed");
         return;
       }
@@ -152,19 +173,23 @@ const VendorSettingsContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to deactivate account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to deactivate account");
         return;
       }
 
-      toast.success(response.data.message);
-      return response.data.data;
+      toast.success(response?.data?.message);
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {
       setIsProcessing(false);
     }
   };
+
+  // if a for each doc object in partner_doc array has a name of logo, get the path
+  const logo =
+    partnerDetails?.partner_doc?.find(doc => doc?.name === "logo")?.path || "";
 
   return (
     <>
@@ -181,9 +206,9 @@ const VendorSettingsContent = () => {
           <form onSubmit={handleSubmit}>
             {/* Change profile logo */}
             <div className="mb-10 flex items-center gap-4">
-              {formData.logo ? (
+              {tempPhoto || logo ? (
                 <Image
-                  src={formData.logo}
+                  src={tempPhoto ? tempPhoto : DOCUMENT_URL + logo}
                   alt="Current Logo"
                   className="h-16 w-16 rounded-md bg-gray-200 object-cover"
                   width={64}
@@ -199,9 +224,10 @@ const VendorSettingsContent = () => {
                   asChild
                   variant="outline"
                   className="border-brandColor text-xs text-brandColor"
+                  disabled={isUploading}
                 >
                   <Label htmlFor="logo" className="mb-2">
-                    Change Logo
+                    {isUploading ? "Uploading..." : "Change Logo"}{" "}
                   </Label>
                 </Button>
                 <input
@@ -209,9 +235,10 @@ const VendorSettingsContent = () => {
                   id="logo"
                   name="logo"
                   accept="image/png, image/jpeg, image/jpg"
-                  className="border border-[#E5E7EB] p-2"
+                  className="border border-[#E5E7EB] p-2 disabled:cursor-not-allowed"
                   hidden
                   onChange={handleUpdateLogo}
+                  disabled={isUploading}
                 />
               </div>
             </div>
@@ -226,7 +253,7 @@ const VendorSettingsContent = () => {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={formData?.name}
                   onChange={handleChange}
                   placeholder="Enter business name"
                   required
@@ -242,7 +269,7 @@ const VendorSettingsContent = () => {
                   type="text"
                   id="address"
                   name="address"
-                  value={formData.address}
+                  value={formData?.address}
                   onChange={handleChange}
                   placeholder="Enter business address"
                   required
@@ -258,7 +285,7 @@ const VendorSettingsContent = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                   placeholder="Enter business email"
                   required
@@ -273,16 +300,16 @@ const VendorSettingsContent = () => {
                 Business Documents
               </Label>
               <div className="my-2 flex flex-wrap gap-2">
-                {formData.documents.length > 0 ? (
-                  formData.documents.map((doc, index) => (
+                {formData?.documents?.length > 0 ? (
+                  formData?.documents?.map((doc, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <a
-                        href={doc.path}
+                        href={doc?.path}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs text-blue-600 hover:underline"
                       >
-                        {doc.name || "Download Document"}
+                        {doc?.name || "Download Document"}
                       </a>
                     </div>
                   ))
@@ -299,7 +326,9 @@ const VendorSettingsContent = () => {
               className="buttonBlue2"
               asChild
             >
-              <Link href={authRoutes.partner_setup_vendor}>Update Profile</Link>
+              <Link href={authRoutes?.partner_setup_vendor}>
+                Update Profile
+              </Link>
             </Button>
           </form>
 

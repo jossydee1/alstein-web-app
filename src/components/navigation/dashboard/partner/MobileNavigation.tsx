@@ -17,12 +17,12 @@ export const MobileNavigation = ({
   // Show all breadcrumbs if there are 3 or fewer items
   // Otherwise show the first and last items with an ellipsis in between
   const displayedBreadcrumbs =
-    breadcrumbs.length <= 2
+    breadcrumbs?.length <= 2
       ? breadcrumbs
       : [
           breadcrumbs[0],
           { label: "...", href: undefined },
-          breadcrumbs[breadcrumbs.length - 1],
+          breadcrumbs[breadcrumbs?.length - 1],
         ];
 
   return (
@@ -43,32 +43,32 @@ export const MobileNavigation = ({
           </button>
 
           <ol className="ms-3 flex items-center overflow-hidden whitespace-nowrap">
-            {displayedBreadcrumbs.map((item, index) => {
-              const isLast = index === displayedBreadcrumbs.length - 1;
+            {displayedBreadcrumbs?.map((item, index) => {
+              const isLast = index === displayedBreadcrumbs?.length - 1;
 
               if (isLast) {
                 return (
                   <li
-                    key={item.label}
+                    key={item?.label}
                     className="truncate text-sm font-semibold text-gray-800"
                     aria-current="page"
                   >
-                    {item.label}
+                    {item?.label}
                   </li>
                 );
               }
 
               return (
                 <li
-                  key={item.label}
+                  key={item?.label}
                   className="flex items-center text-sm text-gray-800"
                 >
-                  {item.href && item.label !== "..." ? (
-                    <Link href={item.href} className="hover:text-gray-500">
-                      {item.label}
+                  {item?.href && item?.label !== "..." ? (
+                    <Link href={item?.href} className="hover:text-gray-500">
+                      {item?.label}
                     </Link>
                   ) : (
-                    item.label
+                    item?.label
                   )}
                   <ChevronRight className="mx-3 size-2.5 shrink-0 overflow-visible text-gray-400" />
                 </li>

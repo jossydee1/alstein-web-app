@@ -103,7 +103,7 @@ const FormLayout = ({
           <Button
             variant="ghost"
             type="button"
-            onClick={() => router.push(authRoutes.register)}
+            onClick={() => router.push(authRoutes?.register)}
             className={style.backButton}
           >
             <ChevronLeft />
@@ -112,7 +112,7 @@ const FormLayout = ({
 
           <Link
             className={style.logoLink}
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -226,7 +226,7 @@ const PersonalDetails = ({
             name="firstName"
             required
             placeholder="John"
-            value={formData.firstName}
+            value={formData?.firstName}
             onChange={handleChange}
           />
         </div>
@@ -239,7 +239,7 @@ const PersonalDetails = ({
             name="lastName"
             required
             placeholder="Doe"
-            value={formData.lastName}
+            value={formData?.lastName}
             onChange={handleChange}
           />
         </div>
@@ -252,7 +252,7 @@ const PersonalDetails = ({
                 name="countryCode"
                 id="countryCode"
                 required
-                value={formData.countryCode}
+                value={formData?.countryCode}
                 onChange={handleChange}
                 data-display-type="flag-code"
               >
@@ -270,14 +270,14 @@ const PersonalDetails = ({
                 ))}
               </select>
               <div className={style.selectedFlag}>
-                {formData.countryCode ? (
+                {formData?.countryCode ? (
                   <>
                     {
                       countriesList.find(
-                        c => c.dial_code === formData.countryCode,
+                        c => c.dial_code === formData?.countryCode,
                       )?.flag
                     }{" "}
-                    {formData.countryCode}
+                    {formData?.countryCode}
                   </>
                 ) : (
                   <>🌐 Select</>
@@ -290,7 +290,7 @@ const PersonalDetails = ({
               name="phone"
               required
               placeholder="123-456-7890"
-              value={formData.phone}
+              value={formData?.phone}
               onChange={handleChange}
             />
           </div>
@@ -304,7 +304,7 @@ const PersonalDetails = ({
             name="email"
             required
             placeholder="john@doe.com"
-            value={formData.email}
+            value={formData?.email}
             onChange={handleChange}
           />
         </div>
@@ -328,13 +328,13 @@ const PersonalDetails = ({
         <div className={style.altBtns}>
           <button type="button" className={style.altBtn}>
             <Image src={google} alt="Google Logo" width={24} height={24} />
-            Sign up with Google
+            Continue with Google
           </button>
         </div>
 
         <p className={style.cta}>
           Already have an account?{" "}
-          <Link className={style.link} href={authRoutes.login}>
+          <Link className={style.link} href={authRoutes?.login}>
             Sign In
           </Link>
         </p>
@@ -515,7 +515,7 @@ const Security = ({
       );
 
       if (response.status === 200) {
-        router.push(authRoutes.login + `?type=${type}`);
+        router.push(authRoutes?.login + `?type=${type}`);
       }
     } catch (error) {
       setError(formatError(error, "An error occurred while setting password"));
@@ -537,7 +537,7 @@ const Security = ({
             name="password"
             required
             placeholder="Enter password"
-            value={formData.password}
+            value={formData?.password}
             onChange={handleChange}
           />
         </div>
@@ -550,7 +550,7 @@ const Security = ({
             name="confirmPassword"
             required
             placeholder="Re-enter password"
-            value={formData.confirmPassword}
+            value={formData?.confirmPassword}
             onChange={handleChange}
           />
         </div>

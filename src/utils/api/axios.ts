@@ -28,10 +28,10 @@ api.interceptors.response.use(
   response => response,
   error => {
     if (
-      error.response?.status === 403 ||
-      error.response?.status === 401 ||
-      error.response?.code === 403 ||
-      error.response?.code === 401
+      error?.response?.status === 403 ||
+      error?.response?.status === 401 ||
+      error?.response?.code === 403 ||
+      error?.response?.code === 401
     ) {
       const { logout } = useAuth(); // Access logout function
       logout(); // Log out the user

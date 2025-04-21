@@ -40,7 +40,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           <div className="flex items-center gap-1 p-1">
             <Clock size={16} className="text-[#676767]" />
             <select
-              value={fromTime.hours}
+              value={fromTime?.hours}
               onChange={e =>
                 setFromTime(prev => ({ ...prev, hours: e.target.value }))
               }
@@ -54,7 +54,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             </select>
             <span>:</span>
             <select
-              value={fromTime.minutes}
+              value={fromTime?.minutes}
               onChange={e =>
                 setFromTime(prev => ({ ...prev, minutes: e.target.value }))
               }
@@ -74,7 +74,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           <div className="flex items-center gap-1 p-1">
             <Clock size={16} className="text-[#676767]" />
             <select
-              value={toTime.hours}
+              value={toTime?.hours}
               onChange={e =>
                 setToTime(prev => ({ ...prev, hours: e.target.value }))
               }
@@ -88,7 +88,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             </select>
             <span>:</span>
             <select
-              value={toTime.minutes}
+              value={toTime?.minutes}
               onChange={e =>
                 setToTime(prev => ({ ...prev, minutes: e.target.value }))
               }

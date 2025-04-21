@@ -57,10 +57,10 @@ const CheckoutContent = () => {
   useEffect(() => {
     if (user) {
       setFormData({
-        fullname: `${user.first_name} ${user.last_name}`,
-        phone: user.phone_number,
-        email: user.email,
-        address: "",
+        fullname: `${user?.first_name} ${user?.last_name}`,
+        phone: user?.phone_number,
+        email: user?.email,
+        address: user?.address || "",
       });
     }
   }, [user]);
@@ -71,23 +71,23 @@ const CheckoutContent = () => {
     isLoading,
     error: listingError,
   } = useClientFetch<ListingInfoProps>({
-    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+    endpoint: `/client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
   });
 
   const links = [
     {
       title: "Listings",
-      link: webRoutes.listings,
+      link: webRoutes?.listings,
     },
     {
       title: listingInfo?.category?.title || "...",
       link:
-        `${webRoutes.listings}?category=${listingInfo?.category?.title_slug}` ||
+        `${webRoutes?.listings}?category=${listingInfo?.category?.title_slug}` ||
         "",
     },
     {
       title: listingInfo?.name || "...",
-      link: `${webRoutes.listings}/${id}`,
+      link: `${webRoutes?.listings}/${id}`,
     },
     {
       title: "Checkout",
@@ -111,11 +111,11 @@ const CheckoutContent = () => {
           equipment_id: id,
           partner_id: listingInfo?.partner?.id,
           start_date: formatIOSToDate(
-            date?.from ? date.from.toISOString() : "",
+            date?.from ? date?.from.toISOString() : "",
           ),
-          end_date: formatIOSToDate(date?.to ? date.to.toISOString() : ""),
-          // start_time: `${fromTime.hours}:${fromTime.minutes}`,
-          // end_time: `${toTime.hours}:${toTime.minutes}`,
+          end_date: formatIOSToDate(date?.to ? date?.to.toISOString() : ""),
+          start_time: `${fromTime?.hours}:${fromTime?.minutes}`,
+          end_time: `${toTime?.hours}:${toTime?.minutes}`,
           client_id: userId,
         },
         {
@@ -125,17 +125,17 @@ const CheckoutContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to initiate booking");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to initiate booking");
         return;
       }
-      if (response.status === 200) {
+      if (response?.status === 200) {
         resetDateTime();
         setShowSuccessModal(true);
         return;
       }
 
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to initiate booking"));
     } finally {
@@ -144,7 +144,7 @@ const CheckoutContent = () => {
   };
 
   const paystackProps = {
-    email: formData.email,
+    email: formData?.email,
     amount: 5000,
     channels: ["card"],
     metadata: {
@@ -167,17 +167,17 @@ const CheckoutContent = () => {
         {
           display_name: "Name",
           variable_name: "name",
-          value: formData.fullname,
+          value: formData?.fullname,
         },
         {
           display_name: "Phone",
           variable_name: "phone",
-          value: formData.phone,
+          value: formData?.phone,
         },
         {
           display_name: "Address",
           variable_name: "address",
-          value: formData.address,
+          value: formData?.address,
         },
         {
           display_name: "Start Date",
@@ -187,7 +187,7 @@ const CheckoutContent = () => {
         {
           display_name: "Start Time",
           variable_name: "start_time",
-          value: `${fromTime.hours}:${fromTime.minutes}`,
+          value: `${fromTime?.hours}:${fromTime?.minutes}`,
         },
         {
           display_name: "End Date",
@@ -197,7 +197,7 @@ const CheckoutContent = () => {
         {
           display_name: "End Time",
           variable_name: "end_time",
-          value: `${toTime.hours}:${toTime.minutes}`,
+          value: `${toTime?.hours}:${toTime?.minutes}`,
         },
         {
           display_name: "Cost per day",

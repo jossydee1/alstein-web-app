@@ -11,6 +11,7 @@ import {
   api,
   dashboardRoutes,
   authRoutes,
+  DOCUMENT_URL,
 } from "@/utils";
 import { Button } from "../../../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +19,12 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
-import { ApiResponseProps, UpdatePartnerProps } from "@/types";
+import {
+  ApiResponseProps,
+  DocumentProps,
+  PartnerProps,
+  UpdatePartnerProps,
+} from "@/types";
 import { useAuth } from "@/context";
 import axios from "axios";
 
@@ -38,21 +44,21 @@ const steps = [
 export function Stepper({ currentStep }: { currentStep: number }) {
   return (
     <div className="flex items-center justify-between space-x-6">
-      {steps.map(step => (
-        <div key={step.id} className="flex items-center space-x-2">
+      {steps?.map(step => (
+        <div key={step?.id} className="flex items-center space-x-2">
           <div
             className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white ${
-              step.id <= currentStep ? "bg-blue-600" : "bg-gray-300"
+              step?.id <= currentStep ? "bg-blue-600" : "bg-gray-300"
             }`}
           >
-            {step.id}
+            {step?.id}
           </div>
           <span
             className={`text-sm font-medium ${
-              step.id <= currentStep ? "text-black" : "text-gray-400"
+              step?.id <= currentStep ? "text-black" : "text-gray-400"
             }`}
           >
-            {step.label}
+            {step?.label}
           </span>
         </div>
       ))}
@@ -105,14 +111,14 @@ const DocumentUpload = ({
       // Create an axios PUT request to the pre-signed URL with the file
       const response = await axios.put(uploadLink, file, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": file?.type,
         },
       });
 
-      if (response.status !== 200) {
-        console.error("S3 upload error:", response.status, response.data);
+      if (response?.status !== 200) {
+        console.error("S3 upload error:", response?.status, response?.data);
         throw new Error(
-          `S3 upload failed: ${response.status} ${response.statusText}`,
+          `S3 upload failed: ${response?.status} ${response?.statusText}`,
         );
       }
 
@@ -133,7 +139,7 @@ const DocumentUpload = ({
     setUploadFailed(false);
 
     // Check if file is PDF
-    if (file.type !== "application/pdf") {
+    if (file?.type !== "application/pdf") {
       toast.error("Only PDF files are allowed");
       // Reset the file input value
       if (e.target) e.target.value = "";
@@ -142,16 +148,16 @@ const DocumentUpload = ({
 
     // Check file size (max 3MB)
     const maxSizeInBytes = 3 * 1024 * 1024; // 3MB
-    if (file.size > maxSizeInBytes) {
+    if (file?.size > maxSizeInBytes) {
       toast.error(
-        `File size must be less than 3MB. Current size: ${bytesToMB(file.size).toFixed(2)}MB`,
+        `File size must be less than 3MB. Current size: ${bytesToMB(file?.size).toFixed(2)}MB`,
       );
       // Reset the file input value
       if (e.target) e.target.value = "";
       return;
     }
 
-    setFileName(file.name);
+    setFileName(file?.name);
     setIsUploading(true);
     onUploadStart(document);
 
@@ -173,22 +179,21 @@ const DocumentUpload = ({
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_link) {
+      if (!uploadLinkResponse?.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadLink = uploadLinkResponse.data.data.upload_link;
+      const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
       // 2. Upload the file directly to S3 using our helper function
       await uploadFileToS3(file, uploadLink);
 
       // 3. Construct the final URL for the file
       const fileUrl =
-        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0]; // Remove the query parameters to get the base URL
+        uploadLinkResponse?.data?.data?.file_url || uploadLink.split("?")[0]; // Remove the query parameters to get the base URL
 
       // Success handling
       onUploadComplete(document, fileUrl);
-      toast.success(`${document} uploaded successfully`);
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(formatError(error, `Failed to upload ${document}`));
@@ -229,7 +234,7 @@ const DocumentUpload = ({
 
   return (
     <label
-      className={`flex min-h-16 cursor-pointer items-center space-x-3 rounded-md border ${
+      className={`flex min-h-16 w-full cursor-pointer items-center space-x-3 rounded-md border ${
         isUploaded
           ? "border-green-500 bg-green-50"
           : uploadFailed
@@ -282,21 +287,73 @@ const ProfessionalPageContent = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("partner_type");
   const subType = searchParams.get("sub_type");
-  const id = searchParams.get("partner_id");
 
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, businessProfile, setBusinessProfile } = useAuth();
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [partnerId, setPartnerId] = useState("");
+  const [partnerDetails, setPartnerDetails] = useState<PartnerProps | null>(
+    null,
+  );
+
+  console.log("Partner ID:", partnerId);
+  console.log("businessProfile:", businessProfile);
 
   useEffect(() => {
-    if (!type || !subType || !id) {
+    if (!type || !subType) {
       router.push("/partner-setup");
       return;
     }
-  }, [id, router, subType, type]);
+
+    const handleCreatePartnerType = async () => {
+      if (!token) {
+        toast.error("Token is missing. Please log in again.");
+        return;
+      }
+
+      setIsProcessing(true);
+      try {
+        const response = await api.post(
+          "/partner/api/v1/create-partner",
+          { type },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (response?.status === 200) {
+          setPartnerId(response?.data?.data?.id);
+          setBusinessProfile(response?.data?.data);
+          setIsFormDisabled(false);
+        }
+      } catch (error) {
+        if (
+          axios.isAxiosError(error) &&
+          error.response?.status === 400 &&
+          error.response?.data?.message ===
+            "Partnership type already exists on this profile"
+        ) {
+          setPartnerId(businessProfile?.id || "");
+          setPartnerDetails(businessProfile);
+          setIsFormDisabled(false);
+        } else {
+          console.error("Failed to create partner type: " + error);
+        }
+      } finally {
+        setIsProcessing(false);
+      }
+    };
+
+    handleCreatePartnerType();
+  }, [businessProfile, router, setBusinessProfile, subType, token, type]);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<UpdatePartnerProps>({
-    id: id || "",
+    id: partnerId || "",
     name: "",
     institution: "",
     institutional_email: "",
@@ -304,12 +361,34 @@ const ProfessionalPageContent = () => {
     department_head_email: "",
   });
 
+  useEffect(() => {
+    if (partnerDetails) {
+      setFormData({
+        id: partnerDetails?.id || "",
+        name: partnerDetails?.name || "",
+        institution: partnerDetails?.institution || "",
+        institutional_email: partnerDetails?.institutional_email || "",
+        department: partnerDetails?.department || "",
+        department_head_email: partnerDetails?.department_head_email || "",
+      });
+
+      // Prepopulate document status if documents exist
+      if (partnerDetails?.partner_doc) {
+        setExistingDocuments(partnerDetails?.partner_doc);
+      }
+    } else {
+      setFormData(prev => ({ ...prev, id: partnerId }));
+    }
+  }, [partnerDetails, partnerId]);
+
   // Separate state for tracking document uploads
+  const [existingDocuments, setExistingDocuments] = useState<DocumentProps[]>(
+    [],
+  );
   const [documentStatus, setDocumentStatus] = useState<
     Record<string, DocumentStatus>
   >({});
   const [uploadingDocuments, setUploadingDocuments] = useState<string[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -368,14 +447,19 @@ const ProfessionalPageContent = () => {
   };
 
   const handleSaveAndContinue = async () => {
+    if (isFormDisabled) {
+      toast.error("Form submission is disabled. Please try again later.");
+      return;
+    }
+
     // Don't proceed if documents are still uploading in step 2
-    if (currentStep === 2 && uploadingDocuments.length > 0) {
+    if (currentStep === 2 && uploadingDocuments?.length > 0) {
       toast.info("Please wait for all documents to finish uploading");
       return;
     }
 
-    // If on last step, check if all documents are uploaded
-    if (currentStep === 2 && !areAllDocumentsUploaded()) {
+    // If on last step, if no documents exist, check if all required documents are uploaded
+    if (currentStep === 2 && !existingDocuments && !areAllDocumentsUploaded()) {
       toast.error("Please upload all required documents before submitting");
       return;
     }
@@ -383,7 +467,7 @@ const ProfessionalPageContent = () => {
     setIsProcessing(true);
 
     // Ensure the `id` exists
-    if (!formData.id) {
+    if (!formData?.id) {
       toast.error("Partner ID is missing. Please try again.");
       setIsProcessing(false);
       return;
@@ -394,17 +478,17 @@ const ProfessionalPageContent = () => {
     switch (currentStep) {
       case 1:
         stepData = {
-          id: formData.id,
-          name: formData.name,
-          institution: formData.institution,
-          institutional_email: formData.institutional_email,
-          department: formData.department,
-          department_head_email: formData.department_head_email,
+          id: formData?.id,
+          name: formData?.name,
+          institution: formData?.institution,
+          institutional_email: formData?.institutional_email,
+          department: formData?.department,
+          department_head_email: formData?.department_head_email,
         };
         break;
       case 2:
         // Just send the partner ID for documents step
-        stepData = { id: formData.id };
+        stepData = { id: formData?.id };
         break;
       default:
         break;
@@ -421,19 +505,16 @@ const ProfessionalPageContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to update partner data");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to update partner data");
         return;
       }
 
-      toast.success("Step data saved successfully!");
-
       // Move to the next step if not the last step
-      if (currentStep < steps.length) {
+      if (currentStep < steps?.length) {
         setCurrentStep(prev => prev + 1);
       } else {
-        toast.success("All steps completed!");
-        router.push(dashboardRoutes.vendor_overview);
+        router.push(dashboardRoutes?.vendor_overview);
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to update partner data"));
@@ -452,7 +533,7 @@ const ProfessionalPageContent = () => {
               <input
                 type="text"
                 id="name"
-                value={formData.name}
+                value={formData?.name}
                 onChange={e => handleChange(e, "name")}
                 placeholder="John Doe"
                 required
@@ -463,7 +544,7 @@ const ProfessionalPageContent = () => {
               <input
                 type="text"
                 id="institution"
-                value={formData.institution}
+                value={formData?.institution}
                 onChange={e => handleChange(e, "institution")}
                 placeholder="Acme University"
                 required
@@ -474,7 +555,7 @@ const ProfessionalPageContent = () => {
               <input
                 type="email"
                 id="institutional_email"
-                value={formData.institutional_email}
+                value={formData?.institutional_email}
                 onChange={e => handleChange(e, "institutional_email")}
                 placeholder="john.doe@acme.com"
                 required
@@ -485,7 +566,7 @@ const ProfessionalPageContent = () => {
               <input
                 type="text"
                 id="department"
-                value={formData.department}
+                value={formData?.department}
                 onChange={e => handleChange(e, "department")}
                 placeholder="Department of Medicine"
                 required
@@ -498,7 +579,7 @@ const ProfessionalPageContent = () => {
               <input
                 type="text"
                 id="department_head_email"
-                value={formData.department_head_email}
+                value={formData?.department_head_email}
                 onChange={e => handleChange(e, "department_head_email")}
                 placeholder="hod@acme.com"
                 required
@@ -508,27 +589,66 @@ const ProfessionalPageContent = () => {
         );
       case 2:
         return (
-          <div className="space-y-3">
-            {requiredDocuments.map((doc, index) => (
-              <DocumentUpload
-                key={index}
-                document={doc}
-                partnerId={id || ""}
-                token={token || ""}
-                onUploadComplete={handleDocumentUploadComplete}
-                onUploadStart={handleDocumentUploadStart}
-                onUploadFail={handleDocumentUploadFail}
-                isUploaded={!!documentStatus[doc]?.isUploaded}
-              />
-            ))}
-            <div className="mt-2 text-sm text-gray-500">
-              <p>* Only PDF files are allowed (Max size: 3MB)</p>
-              {uploadingDocuments.length > 0 && (
-                <p className="mt-1 flex items-center text-blue-500">
-                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                  Uploading {uploadingDocuments.length} document(s)...
-                </p>
-              )}
+          <div>
+            {existingDocuments.length > 0 && (
+              <div>
+                <h3 className="mb-2">Existing Documents</h3>
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {existingDocuments.map((doc, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Link
+                        href={DOCUMENT_URL + doc.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs text-blue-600 hover:underline"
+                      >
+                        {doc.name || "Download Document"}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+                <h3 className="mb-2">Upload/Update Documents</h3>
+              </div>
+            )}
+            <div className="space-y-3">
+              {requiredDocuments.map((doc, index) => {
+                const documentStatusEntry = documentStatus[doc];
+                return (
+                  <div key={index}>
+                    <DocumentUpload
+                      document={doc}
+                      partnerId={partnerId || ""}
+                      token={token || ""}
+                      onUploadComplete={handleDocumentUploadComplete}
+                      onUploadStart={handleDocumentUploadStart}
+                      onUploadFail={handleDocumentUploadFail}
+                      isUploaded={!!documentStatusEntry?.isUploaded}
+                    />
+                    {documentStatusEntry?.isUploaded &&
+                      documentStatusEntry?.url && (
+                        <div className="mt-2 text-sm text-gray-500">
+                          <a
+                            href={documentStatusEntry?.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline"
+                          >
+                            View Uploaded Document
+                          </a>
+                        </div>
+                      )}
+                  </div>
+                );
+              })}
+              <div className="mt-2 text-sm text-gray-500">
+                <p>* Only PDF files are allowed (Max size: 3MB)</p>
+                {uploadingDocuments?.length > 0 && (
+                  <p className="mt-1 flex items-center text-blue-500">
+                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                    Uploading {uploadingDocuments?.length} document(s)...
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -547,7 +667,7 @@ const ProfessionalPageContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.push(authRoutes.partner_setup)}
+              onClick={() => router.push(authRoutes?.partner_setup)}
               className={style.backButton}
             >
               <ChevronLeft />
@@ -555,7 +675,7 @@ const ProfessionalPageContent = () => {
             </Button>
             <Link
               className={style.logoLink}
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -585,14 +705,16 @@ const ProfessionalPageContent = () => {
                 onClick={handleSaveAndContinue}
                 className={style.inputGroup}
                 disabled={
-                  currentStep === 2 &&
-                  (uploadingDocuments.length > 0 || !areAllDocumentsUploaded())
+                  isFormDisabled ||
+                  (currentStep === 2 &&
+                    (uploadingDocuments?.length > 0 ||
+                      (!existingDocuments && !areAllDocumentsUploaded())))
                 }
               >
-                {currentStep === steps.length
+                {currentStep === steps?.length
                   ? "Submit for Review"
                   : "Save & Continue"}
-                {currentStep === 2 && uploadingDocuments.length > 0 && (
+                {currentStep === 2 && uploadingDocuments?.length > 0 && (
                   <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                 )}
               </Button>

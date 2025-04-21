@@ -60,23 +60,23 @@ interface DropdownItem {
 const NAV_ITEMS: NavItem[] = [
   {
     name: "Home",
-    href: webRoutes.home,
-    isActive: path => path === webRoutes.home,
+    href: webRoutes?.home,
+    isActive: path => path === webRoutes?.home,
   },
   {
     name: "Listings",
-    href: webRoutes.listings,
-    isActive: (path: string) => path.startsWith(webRoutes.listings),
+    href: webRoutes?.listings,
+    isActive: (path: string) => path.startsWith(webRoutes?.listings),
   },
   {
     name: "About",
-    href: webRoutes.about,
-    isActive: (path: string) => path === webRoutes.about,
+    href: webRoutes?.about,
+    isActive: (path: string) => path === webRoutes?.about,
   },
   {
     name: "Contact",
-    href: webRoutes.contact,
-    isActive: path => path === webRoutes.contact,
+    href: webRoutes?.contact,
+    isActive: path => path === webRoutes?.contact,
   },
 ];
 
@@ -100,9 +100,9 @@ const NavBar = () => {
     if (!data) return;
 
     if (data.length > 0) {
-      router.push(dashboardRoutes.vendor_overview);
+      router.push(dashboardRoutes?.vendor_overview);
     } else {
-      router.push(authRoutes.partner_setup);
+      router.push(authRoutes?.partner_setup);
     }
   }, [data, router]);
 
@@ -113,34 +113,34 @@ const NavBar = () => {
   }, [error]);
 
   const renderNavItem = (item: (typeof NAV_ITEMS)[0]) => {
-    if (item.isDropdown) {
+    if (item?.isDropdown) {
       return (
         <div
-          key={item.name}
+          key={item?.name}
           className="hs-dropdown [--adaptive:none] [--is-collapse:true] [--strategy:static] md:[--is-collapse:false] md:[--strategy:fixed]"
         >
           <button
             id="hs-header-base-dropdown"
             type="button"
-            className={`hs-dropdown-toggle flex w-full items-center rounded-md p-2 text-sm hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 ${item.isActive(path) ? STYLES.activeLink : ""}`}
+            className={`hs-dropdown-toggle flex w-full items-center rounded-md p-2 text-sm hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 ${item?.isActive(path) ? STYLES.activeLink : ""}`}
             aria-haspopup="menu"
             aria-expanded="false"
             aria-label="Dropdown"
           >
-            {item.name}
+            {item?.name}
             <ChevronDown className="ms-auto size-4 shrink-0 duration-300 hs-dropdown-open:-rotate-180 md:ms-1 md:hs-dropdown-open:rotate-0" />
           </button>
 
           <div className="hs-dropdown-menu duration-[0.1ms] md:duration-[150ms] relative top-full z-10 hidden w-full ps-7 opacity-0 transition-[opacity,margin] before:absolute before:-top-4 before:start-0 before:h-5 before:w-full after:absolute after:start-[18px] after:top-1 after:h-[calc(100%-0.25rem)] after:w-0.5 after:bg-gray-100 hs-dropdown-open:opacity-100 dark:after:bg-neutral-700 md:w-52 md:rounded-md md:bg-white md:ps-0 md:shadow-md md:after:hidden dark:md:bg-neutral-800">
             <div className="space-y-0.5 py-1 md:px-1">
-              {item.dropdownItems?.map(dropdownItem => (
-                <React.Fragment key={dropdownItem.name}>
-                  {dropdownItem.hasDivider && <hr />}
+              {item?.dropdownItems?.map(dropdownItem => (
+                <React.Fragment key={dropdownItem?.name}>
+                  {dropdownItem?.hasDivider && <hr />}
                   <Link
-                    className={`${STYLES.subLink} ${dropdownItem.isActive ? STYLES.activeSubLink : ""}`}
-                    href={dropdownItem.href}
+                    className={`${STYLES.subLink} ${dropdownItem?.isActive ? STYLES.activeSubLink : ""}`}
+                    href={dropdownItem?.href}
                   >
-                    {dropdownItem.name}
+                    {dropdownItem?.name}
                   </Link>
                 </React.Fragment>
               ))}
@@ -152,11 +152,11 @@ const NavBar = () => {
 
     return (
       <Link
-        key={item.name}
-        className={`${STYLES.link} ${item.isActive(path) ? STYLES.activeLink : ""}`}
-        href={item.href || "#"}
+        key={item?.name}
+        className={`${STYLES.link} ${item?.isActive(path) ? STYLES.activeLink : ""}`}
+        href={item?.href || "#"}
       >
-        {item.name}
+        {item?.name}
       </Link>
     );
   };
@@ -169,7 +169,7 @@ const NavBar = () => {
           <div className="flex items-center justify-between gap-x-1">
             <Link
               className="w-[130px] flex-none text-xl font-semibold"
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -204,7 +204,7 @@ const NavBar = () => {
               <div className="relative flex flex-col gap-0.5 py-2 lg:flex-row lg:items-center lg:gap-1 lg:py-0">
                 <div className="flex grow flex-col gap-9 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <div className="m-2 flex flex-col gap-0.5 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
-                    {NAV_ITEMS.map(renderNavItem)}
+                    {NAV_ITEMS?.map(renderNavItem)}
                   </div>
 
                   {!userId ? (
@@ -214,20 +214,20 @@ const NavBar = () => {
                         variant="ghost"
                         className="font-Groteskbold h-auto border border-[#7B7B7B] text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0 lg:hover:bg-transparent lg:hover:underline"
                       >
-                        <Link href={webRoutes.partners}>Join as a Partner</Link>
+                        <Link href={authRoutes.login}>Login</Link>
                       </Button>
                       <Button
                         type="button"
                         className="font-Groteskbold px-12 text-lg font-normal"
                         asChild
                       >
-                        <Link href={authRoutes.register}>Register/Log in</Link>
+                        <Link href={authRoutes?.register}>Register</Link>
                       </Button>
                     </div>
                   ) : (
                     <div className="flex gap-5 py-2">
                       <Link
-                        href={dashboardRoutes.client_notifications}
+                        href={dashboardRoutes?.client_notifications}
                         className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
                       >
                         <BellDot size="24" strokeWidth={1.5} />
@@ -242,14 +242,13 @@ const NavBar = () => {
                           <Image
                             alt="Avatar"
                             src={
-                              !user?.profile_photo
-                                ? avatar
-                                : DOCUMENT_URL + user?.profile_picture
+                              user?.user_avatar
+                                ? DOCUMENT_URL + user?.user_avatar
+                                : avatar.src
                             }
                             width={50}
                             height={50}
-                            className="rounded-md"
-                            objectFit="contain"
+                            className="aspect-square rounded-md object-cover"
                           />
                         </button>
 
@@ -259,30 +258,30 @@ const NavBar = () => {
                             style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
                           >
                             <Link
-                              href={dashboardRoutes.client_order_history}
+                              href={dashboardRoutes?.client_order_history}
                               className="inline-flex w-fit items-center rounded-md border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
                             >
                               <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
                                 <Image
                                   alt="Avatar"
                                   src={
-                                    user?.profile_picture
-                                      ? DOCUMENT_URL + user?.profile_picture
+                                    user?.user_avatar
+                                      ? DOCUMENT_URL + user?.user_avatar
                                       : avatar.src
                                   }
                                   width={20}
                                   height={20}
-                                  className="rounded-full"
+                                  className="aspect-square rounded-full object-cover"
                                   objectFit="cover"
                                 />
                               </span>
                               <span className="text-lg font-medium leading-4 text-brandColor">
-                                {user?.first_name} {user?.last_name}
+                                {user?.first_name} {user?.last_name}{" "}
                               </span>
                             </Link>
 
                             <Link
-                              href={dashboardRoutes.client_order_history}
+                              href={dashboardRoutes?.client_order_history}
                               className="inline-flex items-center rounded-md text-sm text-[#6B7280] hover:text-brandColor"
                             >
                               <span className="mr-2 inline-block">

@@ -29,9 +29,9 @@ const ShippingAddress = ({
             id="fullname"
             name="fullname"
             required
-            disabled={!!formData.fullname}
+            disabled={!!formData?.fullname}
             placeholder="John"
-            value={formData.fullname}
+            value={formData?.fullname}
             onChange={handleChange}
           />
         </div>
@@ -43,9 +43,9 @@ const ShippingAddress = ({
             id="phone"
             name="phone"
             required
-            disabled={!!formData.phone}
+            disabled={!!formData?.phone}
             placeholder="+2348060000000"
-            value={formData.phone}
+            value={formData?.phone}
             onChange={handleChange}
           />
         </div>
@@ -57,9 +57,9 @@ const ShippingAddress = ({
             id="email"
             name="email"
             required
-            disabled={!!formData.email}
+            disabled={!!formData?.email}
             placeholder="john@doe.com"
-            value={formData.email}
+            value={formData?.email}
             onChange={handleChange}
           />
         </div>
@@ -71,7 +71,7 @@ const ShippingAddress = ({
             name="address"
             required
             placeholder="123 Example St, Anytown, Nigeria"
-            value={formData.address}
+            value={formData?.address}
             onChange={handleChange}
           />
         </div>

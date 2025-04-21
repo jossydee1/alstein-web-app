@@ -56,7 +56,7 @@ export function CustomSelect() {
           className="w-full justify-between rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79]"
         >
           {value
-            ? frameworks.find(framework => framework.value === value)?.label
+            ? frameworks.find(framework => framework?.value === value)?.label
             : "Search for address..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -77,18 +77,18 @@ export function CustomSelect() {
               {frameworks.map(framework => (
                 <CommandItem
                   className="text-gray-500"
-                  key={framework.value}
-                  value={framework.value}
+                  key={framework?.value}
+                  value={framework?.value}
                   onSelect={currentValue => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {framework.label}
+                  {framework?.label}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0",
+                      value === framework?.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

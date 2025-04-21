@@ -53,8 +53,8 @@ const ForgotPasswordContent = () => {
         params,
       );
 
-      if (response.status === 200) {
-        setSuccess(response.data.message);
+      if (response?.status === 200) {
+        setSuccess(response?.data?.message);
         setCountdown(90);
       }
     } catch (error) {
@@ -74,7 +74,7 @@ const ForgotPasswordContent = () => {
         <div className={style.topBar}>
           <Link
             className={style.logoLink}
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -114,7 +114,7 @@ const ForgotPasswordContent = () => {
               />
               <p className={style.info}>
                 Back to{" "}
-                <Link className="text-brandColor" href={authRoutes.login}>
+                <Link className="text-brandColor" href={authRoutes?.login}>
                   Sign In
                 </Link>
               </p>

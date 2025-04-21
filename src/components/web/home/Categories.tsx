@@ -30,7 +30,7 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
       </h3>
       <ul className="list-inside list-disc">
         {category?.subcategory?.map(sub => (
-          <li key={sub.id}>{sub.description}</li>
+          <li key={sub?.id}>{sub?.description}</li>
         ))}
       </ul>
 
@@ -43,7 +43,7 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
         </span>
 
         <Link
-          href={`${webRoutes.listings}?category=${category?.title_slug}`}
+          href={`${webRoutes?.listings}?category=${category?.title_slug}`}
           className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"
         >
           View & Book

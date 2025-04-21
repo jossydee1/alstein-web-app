@@ -170,40 +170,40 @@ const BookingHistory = () => {
               <TableRow>
                 {tableHeads.map(head => (
                   <TableHead
-                    key={head.label}
-                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
+                    key={head?.label}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head?.className}`}
                   >
-                    {head.label}
+                    {head?.label}
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length > 0 ? (
+              {orderHistory && orderHistory?.data?.length > 0 ? (
                 orderHistory?.data?.map(order => (
-                  <TableRow key={order.id} className="py-10">
+                  <TableRow key={order?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
-                      {order.equipment.name}
+                      {order?.equipment?.name}
                     </TableCell>
                     <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                      {order.equipment.service_type}
+                      {order?.equipment?.service_type}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {order.id}
+                      {order?.id}
                     </TableCell>
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {formatIOSToDate(order.created_at)}
+                      {formatIOSToDate(order?.created_at)}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
-                      {formatPrice(order.booking_amount, "NGN")}
+                      {formatPrice(order?.booking_amount, "NGN")}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      {GetOrderStatusPill(order.status)}
+                      {GetOrderStatusPill(order?.status)}
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       {GetPaymentStatusPill(
-                        order.payment_status as
+                        order?.payment_status as
                           | "awaiting_payment_confirmation"
                           | "confirmed"
                           | "default",
@@ -213,7 +213,7 @@ const BookingHistory = () => {
                       <div className="flex items-center gap-2.5">
                         <Button asChild variant="ghost">
                           <Link
-                            href={`${dashboardRoutes.vendor_bookings}/process?booking=${order.id}`}
+                            href={`${dashboardRoutes?.vendor_bookings}/process?booking=${order?.id}`}
                           >
                             <Eye className="size-4 text-[#6B7280]" />
                             View

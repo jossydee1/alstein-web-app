@@ -27,7 +27,7 @@ export const Tab = ({ tabs, className = "", queryParam }: TabProps) => {
   useEffect(() => {
     if (queryParam && query) {
       const tabKey = query as string;
-      if (tabs.some(tab => tab.key === tabKey)) {
+      if (tabs.some(tab => tab?.key === tabKey)) {
         setActiveTab(tabKey);
       }
     }
@@ -76,17 +76,17 @@ export const Tab = ({ tabs, className = "", queryParam }: TabProps) => {
         >
           {tabs.map(tab => (
             <button
-              key={tab.key}
+              key={tab?.key}
               type="button"
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => setActiveTab(tab?.key)}
               className={`text-body-semibold-16 group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-3 transition-colors ${
-                activeTab === tab.key
+                activeTab === tab?.key
                   ? "bg-brandColor text-white"
                   : "bg-[#EFF6FF] text-brandColor"
               }`}
             >
-              {tab.icon}
-              <h2>{tab.title}</h2>
+              {tab?.icon}
+              <h2>{tab?.title}</h2>
             </button>
           ))}
         </div>
@@ -102,7 +102,7 @@ export const Tab = ({ tabs, className = "", queryParam }: TabProps) => {
         )}
       </nav>
 
-      {tabs.find(tab => tab.key === activeTab)?.content}
+      {tabs.find(tab => tab?.key === activeTab)?.content}
     </div>
   );
 };

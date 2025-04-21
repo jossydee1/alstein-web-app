@@ -8,7 +8,13 @@ import { ListingInfoProps } from "@/types";
 import DateTimePicker from "@/components/common/DateTimePicker";
 import { useDateTime } from "@/context/DateTimeContext";
 
-const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+const Details = ({
+  listingInfo,
+  listingCount,
+}: {
+  listingInfo: ListingInfoProps;
+  listingCount: number;
+}) => {
   const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
     useDateTime();
 
@@ -20,7 +26,7 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
           <p>{listingInfo?.description}</p>
           <ul className="mt-4 list-inside list-disc">
             {listingInfo?.specifications.map(spec => (
-              <li key={spec.id}>{spec.specification}</li>
+              <li key={spec?.id}>{spec?.specification}</li>
             ))}
           </ul>
         </div>
@@ -43,7 +49,9 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             <h3 className="mb-2 text-xl font-semibold text-[#161616]">
               {listingInfo?.partner?.name}
             </h3>
-            <p className="font-medium text-[#8B8B8B]">0 Listings</p>
+            <p className="font-medium text-[#8B8B8B]">
+              {listingCount} Listings
+            </p>
           </div>
         </div>
 
@@ -55,7 +63,7 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             </p>
           )}
           <Link
-            href={`${webRoutes.partners}/${listingInfo?.partner?.id}`}
+            href={`${webRoutes?.partners}/${listingInfo?.partner?.id}`}
             className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] underline transition-all hover:bg-transparent hover:text-neutral-800"
           >
             View Profile

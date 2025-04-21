@@ -6,7 +6,7 @@ import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import { dashboardRoutes } from "@/utils";
+import { dashboardRoutes, DOCUMENT_URL } from "@/utils";
 // import { Edit } from "lucide-react";
 
 const Greetings = () => {
@@ -29,13 +29,14 @@ const Greetings = () => {
         <div className="flex items-start gap-x-1.5">
           <Image
             alt="Avatar"
-            src={!user?.profile_photo ? avatar : user?.profile_photo}
+            src={
+              user?.user_avatar ? DOCUMENT_URL + user?.user_avatar : avatar?.src
+            }
             width={62}
             height={62}
-            className="rounded-md"
-            objectFit="contain"
+            className="aspect-square rounded-md object-cover"
           />
-          <Link href={dashboardRoutes.client_account_settings}>
+          <Link href={dashboardRoutes?.client_account_settings}>
             <Edit className="text-white" size={17} />
           </Link>
         </div>

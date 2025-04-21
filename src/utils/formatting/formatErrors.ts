@@ -20,7 +20,7 @@ export const formatError = (
       return fallback;
     }
   } else if (err instanceof Error) {
-    return err.message;
+    return err?.message;
   }
 
   return fallback;

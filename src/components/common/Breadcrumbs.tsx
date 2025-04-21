@@ -17,20 +17,20 @@ export const Breadcrumbs = ({
     <div className="section-container !pb-4 !pt-[22px]">
       <Breadcrumb>
         <BreadcrumbList>
-          {links.map((link, index) => (
+          {links?.map((link, index) => (
             <React.Fragment key={index}>
               <BreadcrumbItem>
-                {index < links.length - 1 ? (
-                  <BreadcrumbLink href={link.link} className="capitalize">
-                    {link.title || "..."}
+                {index < links?.length - 1 ? (
+                  <BreadcrumbLink href={link?.link} className="capitalize">
+                    {link?.title || "..."}
                   </BreadcrumbLink>
                 ) : (
                   <BreadcrumbPage className="capitalize">
-                    {link.title || "..."}
+                    {link?.title || "..."}
                   </BreadcrumbPage>
                 )}
               </BreadcrumbItem>
-              {index < links.length - 1 && <BreadcrumbSeparator />}
+              {index < links?.length - 1 && <BreadcrumbSeparator />}
             </React.Fragment>
           ))}
         </BreadcrumbList>

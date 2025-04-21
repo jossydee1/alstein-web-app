@@ -4,7 +4,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEquipmentForm } from "@/context";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { X } from "lucide-react";
 
 const StepTwo = ({
   onNext,
@@ -14,33 +13,12 @@ const StepTwo = ({
   onBack: () => void;
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
-  const [name, setName] = useState(formData.name || "");
-  const [description, setDescription] = useState(formData.description || "");
-  // const [features, setFeatures] = useState<string[]>(formData.features || []);
-  // const [featureInput, setFeatureInput] = useState(
-  //   formData.features?.[0] || "",
-  // );
-  const [price, setPrice] = useState(formData.price || 0);
+  const [name, setName] = useState(formData?.name || "");
+  const [description, setDescription] = useState(formData?.description || "");
+  const [price, setPrice] = useState(formData?.price || 0);
   const [error, setError] = useState("");
 
-  // const handleFeatureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFeatureInput(e.target.value);
-  // };
-
-  // const handleFeatureKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === "Enter" && featureInput.trim()) {
-  //     e.preventDefault();
-  //     setFeatures(prevFeatures => [...prevFeatures, featureInput.trim()]);
-  //     setFeatureInput("");
-  //   }
-  // };
-
   const handleNext = () => {
-    // if (features.length < 5) {
-    //   setError("Please add at least 5 features.");
-    //   return;
-    // }
-
     if (!name || !description) {
       setError("Please enter a name and description option.");
       return;
@@ -114,45 +92,6 @@ const StepTwo = ({
                 required
               />
             </div>
-            {/* <div className="w-full">
-              <Label htmlFor="feature" className="mb-2">
-                Key Features
-              </Label>
-              <Input
-                className="max-w-[420px] border border-[#E5E7EB] p-5"
-                type="text"
-                id="feature"
-                name="feature"
-                placeholder="e.g Durable"
-                value={featureInput}
-                onChange={handleFeatureInputChange}
-                onKeyPress={handleFeatureKeyPress}
-                required
-              />
-              <sup className="mt-4 block">Min of 5 Features</sup>
-
-              <div className="mt-4 flex flex-wrap gap-4">
-                {features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center rounded-[10px] border border-[#E5E7EB] bg-[#F8FAFC] px-4 py-2 text-sm font-medium text-[#6B7280]"
-                  >
-                    <span>{feature}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFeatures(prevFeatures =>
-                          prevFeatures.filter((_, i) => i !== index),
-                        )
-                      }
-                      className="ml-2 text-red-500 hover:text-red-700"
-                    >
-                      <X size={15} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div> */}
           </form>
 
           {error && (

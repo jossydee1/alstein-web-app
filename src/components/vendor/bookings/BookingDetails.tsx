@@ -92,7 +92,7 @@ const BookingDetails = () => {
         </h1>
         {/* close button */}
         <Link
-          href={dashboardRoutes.vendor_bookings}
+          href={dashboardRoutes?.vendor_bookings}
           className="absolute right-4 top-4"
         >
           <X className="size-5 text-[#757575]" />

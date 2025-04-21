@@ -17,7 +17,7 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
           key={index}
           className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
         >
-          <ImageSlider images={l.equipment_file} />
+          <ImageSlider images={l?.equipment_file} />
 
           <div>
             <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
@@ -35,7 +35,7 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
             </p>
 
             <Link
-              href={`${webRoutes.listings}/${l?.id}`}
+              href={`${webRoutes?.listings}/${l?.id}`}
               className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
             >
               View Details
@@ -54,7 +54,7 @@ const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
   const touchEndX = useRef<number | null>(null);
 
   const nextSlide = () => {
-    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+    setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
   };
 
   const prevSlide = () => {
@@ -78,7 +78,7 @@ const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
 
       if (deltaX > 50) {
         // Swiped left -> Next slide
-        setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+        setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
       } else if (deltaX < -50) {
         // Swiped right -> Previous slide
         setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
@@ -108,7 +108,7 @@ const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {images.map((img, index) => (
+        {images?.map((img, index) => (
           <div
             key={index}
             className="aspect-square h-auto w-full flex-shrink-0"
@@ -126,7 +126,7 @@ const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
 
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
-        {images.map((_, index) => (
+        {images?.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
@@ -149,7 +149,7 @@ const ImageSlider = ({ images }: { images: DocumentProps[] }) => {
       <button
         className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 opacity-0 transition hover:bg-[#dedede] disabled:hidden disabled:hover:bg-[#C3C3C38F] group-hover:opacity-100"
         onClick={nextSlide}
-        disabled={currentIndex === images.length - 1}
+        disabled={currentIndex === images?.length - 1}
       >
         <ChevronRight size={20} className="text-black/80 hover:text-black" />
       </button>

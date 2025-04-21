@@ -57,8 +57,8 @@ const LoginContent = () => {
     try {
       const response = await api.post("/client/public/api/v1/login", params);
 
-      if (response.status === 200) {
-        handleSuccessfulLogin(response.data);
+      if (response?.status === 200) {
+        await handleSuccessfulLogin(response?.data?.id, response?.data?.token);
       }
     } catch (error) {
       handleLoginError(error);
@@ -67,18 +67,24 @@ const LoginContent = () => {
     }
   };
 
-  const handleSuccessfulLogin = (data: any) => {
-    login(data);
+  const handleSuccessfulLogin = async (id: string, token: string) => {
+    const response = await api.get("/client/api/v1/get-user-info", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    login({ id, token, user: response?.data?.data });
     setEmail("");
     setPassword("");
 
     if (type === "client") {
-      router.push(dashboardRoutes.client_order_history);
+      router.push(dashboardRoutes?.client_order_history);
       return;
     }
 
     if (type === "partner") {
-      router.push(authRoutes.partner_setup);
+      router.push(authRoutes?.partner_setup);
       return;
     }
 
@@ -89,14 +95,14 @@ const LoginContent = () => {
         : `${url}${idParam ? `#${idParam}` : ""}`;
       router.push(redirectWithParams);
     } else {
-      router.push(dashboardRoutes.client_order_history);
+      router.push(dashboardRoutes?.client_order_history);
     }
   };
 
   const handleLoginError = (error: any) => {
     if (error?.response?.status === 409) {
       router.push(
-        `${authRoutes.signup}?step=2&id=${error?.response?.data?.id}`,
+        `${authRoutes?.signup}?step=2&id=${error?.response?.data?.id}`,
       );
       return;
     }
@@ -111,7 +117,7 @@ const LoginContent = () => {
         <div className={style.topBar}>
           <Link
             className={style.logoLink}
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -152,7 +158,7 @@ const LoginContent = () => {
               <p className={style.info}>
                 <Link
                   className="text-[#FF7D31]"
-                  href={authRoutes.forgot_password}
+                  href={authRoutes?.forgot_password}
                 >
                   Forgotten Password?
                 </Link>
@@ -178,13 +184,13 @@ const LoginContent = () => {
             <div className={style.altBtns}>
               <button type="button" className={style.altBtn}>
                 <Image src={google} alt="Google Logo" width={24} height={24} />
-                Sign up with Google
+                Continue with Google
               </button>
             </div>
 
             <p className={style.cta}>
               Don&apos;t have an account?{" "}
-              <Link className={style.link} href={authRoutes.register}>
+              <Link className={style.link} href={authRoutes?.register}>
                 Sign Up
               </Link>
             </p>

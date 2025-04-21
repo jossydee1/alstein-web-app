@@ -26,24 +26,31 @@ const ListingDetailsContent = () => {
     isLoading,
     error,
   } = useClientFetch<ListingInfoProps>({
-    endpoint: `client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+    endpoint: `/client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
   });
 
   // Get rating info
   const { data: rating, refetch: refetchRating } =
     useClientFetch<AverageRatingProps>({
-      endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+      endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
     });
+
+  // Get partner approved listing count
+  const { data: listingCount } = useClientFetch<{
+    total_approved_listing: number;
+  }>({
+    endpoint: `/client/public/api/v1/equipments/get-partner-approved-listing?partner_id=${listingInfo?.partner?.id}`,
+  });
 
   const links = [
     {
       title: "Listings",
-      link: webRoutes.listings,
+      link: webRoutes?.listings,
     },
     {
       title: listingInfo?.category?.title || "...",
       link:
-        `${webRoutes.listings}?category=${listingInfo?.category?.title_slug}` ||
+        `${webRoutes?.listings}?category=${listingInfo?.category?.title_slug}` ||
         "",
     },
     {
@@ -82,7 +89,10 @@ const ListingDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <div className="flex flex-col justify-between gap-7 lg:flex-row">
           <div className="w-full flex-1 lg:max-w-[540px]">
-            <Details listingInfo={listingInfo} />
+            <Details
+              listingInfo={listingInfo}
+              listingCount={listingCount?.total_approved_listing || 0}
+            />
           </div>
 
           <div className="min-w-[340px] max-w-[340px]">
@@ -93,8 +103,8 @@ const ListingDetailsContent = () => {
         <Location listingInfo={listingInfo} />
 
         <Reviews
-          partnerId={listingInfo.partner_id}
-          listingId={listingInfo.id}
+          partnerId={listingInfo?.partner_id}
+          listingId={listingInfo?.id}
           averageRating={rating?._avg?.score || 0}
           refetchRating={refetchRating}
         />

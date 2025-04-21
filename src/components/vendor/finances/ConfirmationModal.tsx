@@ -70,7 +70,7 @@ const ConfirmationModal = ({
         </section>
 
         <Button className="mr-auto bg-brandColor" asChild>
-          <Link href={dashboardRoutes.vendor_bookings}>Return Homepage</Link>
+          <Link href={dashboardRoutes?.vendor_bookings}>Return Homepage</Link>
         </Button>
       </div>
     </div>

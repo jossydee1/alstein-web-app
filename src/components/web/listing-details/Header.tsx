@@ -38,7 +38,7 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
           </Button>
 
           <div className="hidden gap-3 md:grid md:grid-cols-4">
-            {listingInfo.equipment_file.map((img, index) =>
+            {listingInfo?.equipment_file.map((img, index) =>
               index < 5 ? (
                 index === 0 ? (
                   <Image
@@ -67,7 +67,7 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
 
           <div className="relative md:hidden">
             <DefaultSlide
-              images={listingInfo.equipment_file.map(
+              images={listingInfo?.equipment_file?.map(
                 img => DOCUMENT_URL + img?.path,
               )}
               onClick={() => setIsModalOpen(true)}
@@ -85,7 +85,7 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
 
         {isModalOpen && (
           <ListingImageModal
-            images={listingInfo.equipment_file}
+            images={listingInfo?.equipment_file}
             onClose={() => setIsModalOpen(false)}
           />
         )}

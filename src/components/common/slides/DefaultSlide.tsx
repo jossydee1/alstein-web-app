@@ -14,7 +14,7 @@ export const DefaultSlide = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
-    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+    setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
   };
 
   const prevSlide = () => {
@@ -25,7 +25,7 @@ export const DefaultSlide = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
-        setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+        setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
       }
       if (e.key === "ArrowLeft") {
         setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
@@ -37,7 +37,7 @@ export const DefaultSlide = ({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [images.length, onClick]);
+  }, [images?.length, onClick]);
 
   return (
     <div className="relative overflow-hidden rounded-md">
@@ -45,7 +45,7 @@ export const DefaultSlide = ({
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {images.map((img, index) => (
+        {images?.map((img, index) => (
           <div key={index} className="aspect-video h-auto w-full flex-shrink-0">
             <Image
               src={img}
@@ -62,13 +62,13 @@ export const DefaultSlide = ({
       {/* Image count */}
       <div className="absolute bottom-3 right-3 rounded-md bg-black/30 px-2 py-1">
         <p className="text-center text-sm text-white">
-          {currentIndex + 1} of {images.length}
+          {currentIndex + 1} of {images?.length}
         </p>
       </div>
 
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
-        {images.map((_, index) => (
+        {images?.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
@@ -91,7 +91,7 @@ export const DefaultSlide = ({
       <button
         className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
         onClick={nextSlide}
-        disabled={currentIndex === images.length - 1}
+        disabled={currentIndex === images?.length - 1}
       >
         <ChevronRight size={20} className="text-black/80 hover:text-black" />
       </button>

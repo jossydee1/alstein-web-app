@@ -13,7 +13,7 @@ import { Check, X } from "lucide-react";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 
-const WithdrawForm = ({
+const WithdrawFormAndMethods = ({
   setShowForm,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +37,7 @@ const WithdrawForm = ({
     toast.error(formatError(error, "Failed to fetch bank account details"));
   }
 
-  const handleDefault = async (bankId: string, partnerId: string) => {
+  const handleSetDefault = async (bankId: string, partnerId: string) => {
     setIsProcessing(true);
 
     try {
@@ -51,14 +51,14 @@ const WithdrawForm = ({
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to set default account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to set default account");
         return;
       }
 
       refetch();
       toast.success("Default account set successfully");
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to set default account"));
     } finally {
@@ -66,7 +66,35 @@ const WithdrawForm = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRemove = async (bankId: string) => {
+    setIsProcessing(true);
+
+    try {
+      const response = await api.delete<ApiResponseProps<unknown>>(
+        `/partner/api/v1/payment/delete-bank-account?bank_id=${bankId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to remove bank account");
+        return;
+      }
+
+      refetch();
+      toast.success("Bank account removed successfully");
+      return response?.data?.data;
+    } catch (error) {
+      toast.error(formatError(error, "Failed to remove bank account"));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     alert("Withdraw request submitted");
     // setIsSuccess(false);
@@ -84,13 +112,13 @@ const WithdrawForm = ({
     //     },
     //   );
 
-    //   if (response.status !== 200 || !response.data) {
-    //     toast.error(response.data.message || "Failed to add new bank account");
+    //   if (response?.status !== 200 || !response?.data) {
+    //     toast.error(response?.data?.message || "Failed to add new bank account");
     //     return;
     //   }
 
-    //   toast.success(response.data.message);
-    //   return response.data.data;
+    //   toast.success(response?.data?.message);
+    //   return response?.data?.data;
     // } catch (error) {
     //   toast.error(formatError(error, "Failed to add new bank account"));
     // } finally {
@@ -160,7 +188,7 @@ const WithdrawForm = ({
           </div>
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleRequest}
             className="flex min-w-[300px] max-w-[430px] flex-1 flex-col items-start justify-start gap-4"
           >
             <div className="w-full">
@@ -190,30 +218,30 @@ const WithdrawForm = ({
         </section>
 
         <section className="mt-[50px] space-y-7">
-          {data?.data && data.data.length > 0
-            ? data.data.map(item => (
+          {data?.data && data?.data?.length > 0
+            ? data?.data?.map(item => (
                 <div
-                  key={item.id}
+                  key={item?.id}
                   className="space-y-2.5 rounded-2xl border border-[#E5E7EB] bg-white p-7"
                 >
                   <h2 className="dashboard-section-card-title">
                     Direct to Bank Account - Account ending in{" "}
-                    {item.account_number.slice(-4)}
+                    {item?.account_number.slice(-4)}
                   </h2>
                   <p
-                    className={`${item.is_prefered ? "text-green-600" : "text-orange-600"}`}
+                    className={`${item?.is_prefered ? "text-green-600" : "text-orange-600"}`}
                   >
-                    {item.is_prefered ? "Default" : "Not Default"}
+                    {item?.is_prefered ? "Default" : "Not Default"}
                   </p>
                   <div className="flex flex-row flex-wrap items-center justify-start gap-4">
-                    {!item.is_prefered && (
+                    {!item?.is_prefered && (
                       <Button
                         variant="outline"
                         type="button"
                         disabled={isProcessing}
                         className="border border-[#E5E7EB]"
                         onClick={() =>
-                          handleDefault(item?.id, item?.partner_id)
+                          handleSetDefault(item?.id, item?.partner_id)
                         }
                       >
                         Set As Default
@@ -223,6 +251,7 @@ const WithdrawForm = ({
                       variant="outline"
                       type="button"
                       disabled={isProcessing}
+                      onClick={() => handleRemove(item?.id)}
                       className="border border-[#E5E7EB] text-red-600 hover:text-red-600"
                     >
                       Remove
@@ -237,4 +266,4 @@ const WithdrawForm = ({
   );
 };
 
-export default WithdrawForm;
+export default WithdrawFormAndMethods;

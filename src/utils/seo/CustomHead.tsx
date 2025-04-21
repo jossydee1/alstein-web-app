@@ -19,16 +19,16 @@ const isProduction =
   process.env.NODE_ENV === "production";
 
 const CustomHead = (props: CustomHeadProps) => {
-  const title = props.title || site.title || "Default Title";
+  const title = props?.title || site?.title || "Default Title";
   const description =
-    props.description || site.description || "Default Description";
-  const url = props.url || site.url || "";
-  const type = props.type || site.type || "website";
-  const author = props.author || site.author || "Site Author";
-  const keywords = props.keywords || site.keywords || "";
-  const imageUrl = props.imageUrl || site.cover_image || "/favicon.ico";
-  const imageAlt = props.imageAlt || site.cover_image_alt || title;
-  const twitter = site.twitter || "";
+    props?.description || site?.description || "Default Description";
+  const url = props?.url || site?.url || "";
+  const type = props?.type || site?.type || "website";
+  const author = props?.author || site?.author || "Site Author";
+  const keywords = props?.keywords || site?.keywords || "";
+  const imageUrl = props?.imageUrl || site?.cover_image || "/favicon.ico";
+  const imageAlt = props?.imageAlt || site?.cover_image_alt || title;
+  const twitter = site?.twitter || "";
 
   return (
     <Head>
@@ -54,13 +54,15 @@ const CustomHead = (props: CustomHeadProps) => {
         sizes="16x16"
         href="/favicon-16x16.png"
       />
-      <link rel="manifest" href="/site.webmanifest" />
+      <link rel="manifest" href="/site?.webmanifest" />
 
       {/* determine if the page should be indexed */}
       <meta
         name="robots"
         content={
-          isProduction && !props.noIndex ? "index, follow" : "noindex, nofollow"
+          isProduction && !props?.noIndex
+            ? "index, follow"
+            : "noindex, nofollow"
         }
       />
 
@@ -96,7 +98,9 @@ const CustomHead = (props: CustomHeadProps) => {
       <meta property="twitter:image:alt" content={imageAlt} />
 
       {/* canonical url */}
-      {props.canonicalUrl && <link rel="canonical" href={props.canonicalUrl} />}
+      {props?.canonicalUrl && (
+        <link rel="canonical" href={props?.canonicalUrl} />
+      )}
     </Head>
   );
 };

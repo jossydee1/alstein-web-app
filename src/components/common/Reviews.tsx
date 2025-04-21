@@ -69,40 +69,27 @@ export const Reviews = ({
   const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
 
   const url = listingId
-    ? `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
-    : `partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
+    ? `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
+    : `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
 
-  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
-  // const { data: comments, refetch: refetchComments } = useClientFetch<{
-  //   data: CommentProps[];
-  //   total_count: number;
-  // }>({
-  //   endpoint: url,
-  // });
-  const { data: comments, refetch: refetchComments } = useClientFetch<
-    CommentProps[]
-  >({
+  const { data: comments, refetch: refetchComments } = useClientFetch<{
+    data: CommentProps[];
+    item_count: number;
+  }>({
     endpoint: url,
   });
 
   // Update comments and total pages when data changes
-  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
-  // useEffect(() => {
-  //   if (comments) {
-  //     setCommentsData(comments.data);
-  //     setTotalPages(Math.ceil(comments.total_count / itemsPerPage));
-  //   }
-  // }, [comments]);
   useEffect(() => {
     if (comments) {
-      setCommentsData(comments);
-      setTotalPages(Math.ceil(10 / itemsPerPage));
+      setCommentsData(comments?.data);
+      setTotalPages(Math.ceil(comments?.item_count / itemsPerPage));
     }
   }, [comments]);
 
   const filteredReviews = showAllReviews
     ? commentsData
-    : commentsData.slice(0, 2);
+    : commentsData?.slice(0, 2);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -140,7 +127,7 @@ export const Reviews = ({
     return items;
   };
 
-  const redirectUrl = `${authRoutes.login}?redirect=${encodeURIComponent(`${webRoutes.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
+  const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
   const handleShowAllReviews = () => {
     setShowAllReviews(prev => !prev);
@@ -168,13 +155,13 @@ export const Reviews = ({
         },
       );
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success("Rating submitted successfully");
         setIsRatingSubmitted(true);
         refetchRating();
       } else {
         toast.error(
-          formatError(response.data.message) || "Failed to submit rating",
+          formatError(response?.data?.message) || "Failed to submit rating",
         );
         setIsRatingSubmitted(false);
       }
@@ -213,7 +200,7 @@ export const Reviews = ({
         },
       );
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success("Comment submitted successfully");
         setComment("");
         setIsCommentSubmitting(false);
@@ -245,39 +232,39 @@ export const Reviews = ({
             className="text-5xl font-[500] text-[#5D5D5D]"
             aria-label="Average Rating"
           >
-            {averageRating.toFixed(1)}
+            {averageRating?.toFixed(1)}
           </p>
         </div>
       </div>
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
         <div>
-          {commentsData.length === 0 ? (
+          {!filteredReviews || filteredReviews?.length === 0 ? (
             <p className="text-center text-gray-500">
               No reviews yet, be the first one!
             </p>
           ) : (
             <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
               {filteredReviews.map(r => (
-                <div key={r.id}>
+                <div key={r?.id}>
                   <div className="flex items-center gap-3">
                     <Image
-                      src={DOCUMENT_URL + r.profiles.user_avatar || avatar}
-                      alt={r.profiles.user_avatar || "User Avatar"}
+                      src={DOCUMENT_URL + r?.profiles?.user_avatar || avatar}
+                      alt={r?.profiles?.user_avatar || "User Avatar"}
                       width={58}
                       height={58}
                       className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
                     />
                     <div>
                       <h3 className="font-semibold text-[#404040]">
-                        {r.profiles.first_name} {r.profiles.last_name}
+                        {r?.profiles?.first_name} {r?.profiles?.last_name}
                       </h3>
                       <p className="font-medium text-[#404040]">
-                        {formatDateToRelativeTime(r.created_at)}
+                        {formatDateToRelativeTime(r?.created_at)}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-3 text-[#4E4E4E]">{r.comments}</p>
+                  <p className="mt-3 text-[#4E4E4E]">{r?.comments}</p>
                 </div>
               ))}
             </div>
@@ -303,7 +290,7 @@ export const Reviews = ({
             </Pagination>
           )}
 
-          {commentsData.length > 2 && (
+          {commentsData?.length > 2 && (
             <Button
               type="button"
               variant="outline"

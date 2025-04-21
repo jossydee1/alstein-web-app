@@ -53,10 +53,19 @@ const EquipmentListings = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
-  const [totalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const url = `/partner/api/v1/equipments/get-equipments?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
+  // const {
+  //   data: equipments,
+  //   isLoading,
+  //   error: listingError,
+  //   refetch,
+  // } = useClientFetch<ListingsProps>({
+  //   endpoint: url,
+  //   token,
+  // });
   const {
     data: equipments,
     isLoading,
@@ -67,15 +76,23 @@ const EquipmentListings = () => {
     token,
   });
 
-  console.log(equipments);
+  useEffect(() => {
+    refetch();
+  }, []);
 
+  // useEffect(() => {
+  //   if (listingError) {
+  //     toast.error(listingError?.message);
+  //   }
+  //   if (equipments?.total_count) {
+  //     setTotalPages(Math.ceil(equipments?.total_count / itemsPerPage));
+  //   }
+  // }, [listingError, equipments]);
   useEffect(() => {
     if (listingError) {
-      toast.error(listingError.message);
+      toast.error(listingError?.message);
     }
-    // if (equipments?.total_count) {
-    //   setTotalPages(Math.ceil(equipments.total_count / itemsPerPage));
-    // }
+    setTotalPages(10);
   }, [listingError, equipments]);
 
   const handlePageChange = (page: number) => {
@@ -124,7 +141,7 @@ const EquipmentListings = () => {
         <h1 className="text-2xl font-bold">Listed Equipments</h1>
 
         <Button className="buttonBlue2" asChild>
-          <Link href={dashboardRoutes.vendor_new_equipment}>
+          <Link href={dashboardRoutes?.vendor_new_equipment}>
             List an equipment
           </Link>
         </Button>
@@ -136,10 +153,10 @@ const EquipmentListings = () => {
               <TableRow>
                 {tableHeads.map(head => (
                   <TableHead
-                    key={head.label}
-                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
+                    key={head?.label}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head?.className}`}
                   >
-                    {head.label}
+                    {head?.label}
                   </TableHead>
                 ))}
               </TableRow>
@@ -168,7 +185,7 @@ const EquipmentListings = () => {
                       <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes.vendor_equipments}/view?equipment=0112455`}
+                            // href={`${dashboardRoutes?.vendor_equipments}/view?equipment=0112455`}
                             href="#"
                           >
                             <Eye className="size-4 text-[#6B7280]" />
@@ -177,7 +194,7 @@ const EquipmentListings = () => {
                         </Button>
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
+                            // href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                             href="#"
                           >
                             <Edit className="size-4 text-[#6B7280]" />
@@ -186,7 +203,7 @@ const EquipmentListings = () => {
                         </Button>
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
+                            href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                           >
                             <Trash className="size-4 text-[#6B7280]" />
                             Delete

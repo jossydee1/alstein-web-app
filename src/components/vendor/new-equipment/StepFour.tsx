@@ -29,8 +29,6 @@ const StepFour = ({
   const [status, setStatus] = useState("success");
   const [open, setOpen] = useState(false);
 
-  console.log(equipmentId);
-
   const handleFeatureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSpecInput(e.target.value);
   };
@@ -93,8 +91,6 @@ const StepFour = ({
         return;
       }
 
-      toast.success("Specifications saved successfully");
-
       // Step 2: Upload all images
       let allImagesUploaded = true;
 
@@ -106,7 +102,7 @@ const StepFour = ({
             {
               equipment_id: equipmentId,
               partner_id: businessProfile?.id,
-              file_type: image.type,
+              file_type: image?.type,
             },
             {
               headers: {
@@ -115,18 +111,18 @@ const StepFour = ({
             },
           );
 
-          if (!uploadLinkResponse.data?.data?.upload_link) {
+          if (!uploadLinkResponse?.data?.data?.upload_link) {
             throw new Error("Failed to get upload URL");
           }
 
-          const uploadLink = uploadLinkResponse.data.data.upload_link;
+          const uploadLink = uploadLinkResponse?.data.data.upload_link;
 
           // 2. Upload the file directly to S3
           const response = await fetch(uploadLink, {
             method: "PUT",
             body: image,
             headers: {
-              "Content-Type": image.type,
+              "Content-Type": image?.type,
             },
           });
 
@@ -134,9 +130,9 @@ const StepFour = ({
             throw new Error("Failed to upload image to S3");
           }
         } catch (error) {
-          console.error(`Failed to upload image: ${image.name}`, error);
+          console.error(`Failed to upload image: ${image?.name}`, error);
           toast.error(
-            formatError(error, `Failed to upload image: ${image.name}`),
+            formatError(error, `Failed to upload image: ${image?.name}`),
           );
           allImagesUploaded = false;
           break;
@@ -145,7 +141,6 @@ const StepFour = ({
 
       // Only show success if both specifications and all images were uploaded
       if (allImagesUploaded) {
-        toast.success("All images uploaded successfully");
         setOpen(true);
         setStatus("success");
       } else {
