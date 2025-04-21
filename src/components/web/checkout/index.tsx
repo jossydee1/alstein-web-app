@@ -114,8 +114,8 @@ const CheckoutContent = () => {
             date?.from ? date.from.toISOString() : "",
           ),
           end_date: formatIOSToDate(date?.to ? date.to.toISOString() : ""),
-          // start_time: `${fromTime.hours}:${fromTime.minutes}`,
-          // end_time: `${toTime.hours}:${toTime.minutes}`,
+          start_time: `${fromTime.hours}:${fromTime.minutes}`,
+          end_time: `${toTime.hours}:${toTime.minutes}`,
           client_id: userId,
         },
         {
