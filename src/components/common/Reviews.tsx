@@ -72,31 +72,18 @@ export const Reviews = ({
     ? `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
     : `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
 
-  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
-  // const { data: comments, refetch: refetchComments } = useClientFetch<{
-  //   data: CommentProps[];
-  //   total_count: number;
-  // }>({
-  //   endpoint: url,
-  // });
-  const { data: comments, refetch: refetchComments } = useClientFetch<
-    CommentProps[]
-  >({
+  const { data: comments, refetch: refetchComments } = useClientFetch<{
+    data: CommentProps[];
+    item_count: number;
+  }>({
     endpoint: url,
   });
 
   // Update comments and total pages when data changes
-  // TODO: WHEN THE total_count IS READY, UNCOMMENT THIS
-  // useEffect(() => {
-  //   if (comments) {
-  //     setCommentsData(comments.data);
-  //     setTotalPages(Math.ceil(comments.total_count / itemsPerPage));
-  //   }
-  // }, [comments]);
   useEffect(() => {
     if (comments) {
-      setCommentsData(comments);
-      setTotalPages(Math.ceil(10 / itemsPerPage));
+      setCommentsData(comments.data);
+      setTotalPages(Math.ceil(comments.item_count / itemsPerPage));
     }
   }, [comments]);
 
