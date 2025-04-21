@@ -47,14 +47,14 @@ const VendorSettingsContent = () => {
   useEffect(() => {
     if (partnerDetails) {
       setFormData({
-        name: partnerDetails.name || "",
-        address: partnerDetails.address || "",
+        name: partnerDetails?.name || "",
+        address: partnerDetails?.address || "",
         email:
-          partnerDetails.support_email ||
-          partnerDetails.institutional_email ||
+          partnerDetails?.support_email ||
+          partnerDetails?.institutional_email ||
           "",
-        documents: partnerDetails.partner_doc
-          ? partnerDetails.partner_doc.map(doc => ({
+        documents: partnerDetails?.partner_doc
+          ? partnerDetails?.partner_doc.map(doc => ({
               ...doc,
               path: `${DOCUMENT_URL}${doc?.path}`,
               name: doc?.name || "Unnamed Document",
@@ -84,7 +84,7 @@ const VendorSettingsContent = () => {
           partner_id: businessProfile?.id,
           document_name: "logo",
           category: "utility",
-          file_type: file.type,
+          file_type: file?.type,
         },
         {
           headers: {
@@ -93,20 +93,20 @@ const VendorSettingsContent = () => {
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_link) {
+      if (!uploadLinkResponse?.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadLink = uploadLinkResponse.data.data.upload_link;
+      const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
       await api.put(uploadLink, file, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": file?.type,
         },
       });
 
       const fileUrl =
-        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0];
+        uploadLinkResponse?.data?.data?.file_url || uploadLink.split("?")[0];
 
       setFormData(prevData => ({
         ...prevData,
@@ -131,15 +131,15 @@ const VendorSettingsContent = () => {
     if (file) {
       // Check file size (max 3MB)
       const maxSizeInBytes = 3 * 1024 * 1024;
-      if (file.size > maxSizeInBytes) {
+      if (file?.size > maxSizeInBytes) {
         toast.error(
-          `File size must be less than 3MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+          `File size must be less than 3MB. Current size: ${(file?.size / (1024 * 1024)).toFixed(2)}MB`,
         );
         return;
       }
 
       // Check file type
-      if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+      if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
         toast.error("Only PNG, JPEG, and JPG files are allowed");
         return;
       }
@@ -165,13 +165,13 @@ const VendorSettingsContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to deactivate account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to deactivate account");
         return;
       }
 
-      toast.success(response.data.message);
-      return response.data.data;
+      toast.success(response?.data?.message);
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {
@@ -181,7 +181,7 @@ const VendorSettingsContent = () => {
 
   // if a for each doc object in partner_doc array has a name of logo, get the path
   const logo =
-    partnerDetails?.partner_doc?.find(doc => doc.name === "logo")?.path || "";
+    partnerDetails?.partner_doc?.find(doc => doc?.name === "logo")?.path || "";
 
   return (
     <>
@@ -245,7 +245,7 @@ const VendorSettingsContent = () => {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={formData?.name}
                   onChange={handleChange}
                   placeholder="Enter business name"
                   required
@@ -261,7 +261,7 @@ const VendorSettingsContent = () => {
                   type="text"
                   id="address"
                   name="address"
-                  value={formData.address}
+                  value={formData?.address}
                   onChange={handleChange}
                   placeholder="Enter business address"
                   required
@@ -277,7 +277,7 @@ const VendorSettingsContent = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                   placeholder="Enter business email"
                   required
@@ -292,16 +292,16 @@ const VendorSettingsContent = () => {
                 Business Documents
               </Label>
               <div className="my-2 flex flex-wrap gap-2">
-                {formData.documents.length > 0 ? (
-                  formData.documents.map((doc, index) => (
+                {formData?.documents?.length > 0 ? (
+                  formData?.documents?.map((doc, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <a
-                        href={doc.path}
+                        href={doc?.path}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs text-blue-600 hover:underline"
                       >
-                        {doc.name || "Download Document"}
+                        {doc?.name || "Download Document"}
                       </a>
                     </div>
                   ))
@@ -318,7 +318,9 @@ const VendorSettingsContent = () => {
               className="buttonBlue2"
               asChild
             >
-              <Link href={authRoutes.partner_setup_vendor}>Update Profile</Link>
+              <Link href={authRoutes?.partner_setup_vendor}>
+                Update Profile
+              </Link>
             </Button>
           </form>
 

@@ -64,15 +64,15 @@ export const LinkTab = ({ tabs, className = "" }: LinkTabProps) => {
           {tabs.map((tab, index) => (
             <Link
               key={index}
-              href={tab.link}
+              href={tab?.link}
               className={`group flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium leading-6 transition-colors hover:bg-[#EFF6FF] hover:text-brandColor ${
-                pathname === tab.link
+                pathname === tab?.link
                   ? "bg-[#EFF6FF] text-brandColor"
                   : "text-[#6B7280]"
               }`}
             >
-              {tab.icon}
-              <h2>{tab.title}</h2>
+              {tab?.icon}
+              <h2>{tab?.title}</h2>
             </Link>
           ))}
         </div>

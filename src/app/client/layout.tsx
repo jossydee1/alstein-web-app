@@ -17,27 +17,27 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const tabItems = [
     {
       title: "Order History",
-      link: dashboardRoutes.client_order_history,
+      link: dashboardRoutes?.client_order_history,
       icon: <ShoppingBasket size="16" />,
     },
     {
       title: "Account Settings",
-      link: dashboardRoutes.client_account_settings,
+      link: dashboardRoutes?.client_account_settings,
       icon: <Settings2 size="16" />,
     },
     {
       title: "Manage Password",
-      link: dashboardRoutes.client_manage_password,
+      link: dashboardRoutes?.client_manage_password,
       icon: <Unplug size="16" />,
     },
     {
       title: "Notification",
-      link: dashboardRoutes.client_notifications,
+      link: dashboardRoutes?.client_notifications,
       icon: <BellDot size="16" />,
     },
     {
       title: "Payment Method",
-      link: dashboardRoutes.client_payment_methods,
+      link: dashboardRoutes?.client_payment_methods,
       icon: <Receipt size="16" />,
     },
   ];

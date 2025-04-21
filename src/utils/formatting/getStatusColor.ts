@@ -1,5 +1,8 @@
 export const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
+  if (!status)
+    return "bg-gray-100 text-gray-800 dark:bg-neutral-900 dark:text-neutral-200";
+
+  switch (status?.toLowerCase()) {
     case "pending":
       return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
     case "in escrow":

@@ -45,11 +45,11 @@ const Partners = () => {
           </h2>
 
           <div className="flex flex-wrap justify-center gap-12">
-            {partners.map((p, index) => (
+            {partners?.map((p, index) => (
               <Image
                 key={index}
-                src={p.image}
-                alt={p.name}
+                src={p?.image}
+                alt={p?.name}
                 className="h-[60px] w-auto"
               />
             ))}

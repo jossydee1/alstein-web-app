@@ -49,7 +49,7 @@ const PartnerDetailsContent = () => {
       link: "#",
     },
     {
-      title: partnerData?.type.toLocaleLowerCase() || "...",
+      title: partnerData?.type?.toLocaleLowerCase() || "...",
       link: "#",
     },
     {
@@ -104,7 +104,7 @@ const PartnerDetailsContent = () => {
         <PartnerListings listings={listingsData?.data || []} />
 
         <Reviews
-          partnerId={partnerData.id}
+          partnerId={partnerData?.id}
           averageRating={rating?._avg?.score || 0}
           refetchRating={refetchRating}
         />

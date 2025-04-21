@@ -45,12 +45,12 @@ const ListingDetailsContent = () => {
   const links = [
     {
       title: "Listings",
-      link: webRoutes.listings,
+      link: webRoutes?.listings,
     },
     {
       title: listingInfo?.category?.title || "...",
       link:
-        `${webRoutes.listings}?category=${listingInfo?.category?.title_slug}` ||
+        `${webRoutes?.listings}?category=${listingInfo?.category?.title_slug}` ||
         "",
     },
     {
@@ -103,8 +103,8 @@ const ListingDetailsContent = () => {
         <Location listingInfo={listingInfo} />
 
         <Reviews
-          partnerId={listingInfo.partner_id}
-          listingId={listingInfo.id}
+          partnerId={listingInfo?.partner_id}
+          listingId={listingInfo?.id}
           averageRating={rating?._avg?.score || 0}
           refetchRating={refetchRating}
         />

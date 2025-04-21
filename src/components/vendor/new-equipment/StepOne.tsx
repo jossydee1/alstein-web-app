@@ -22,8 +22,8 @@ const StepOne = ({
   onBack: () => void;
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
-  const [category, setCategory] = useState(formData.category_id || "");
-  const [serviceType, setAvailability] = useState(formData.service_type || "");
+  const [category, setCategory] = useState(formData?.category_id || "");
+  const [serviceType, setAvailability] = useState(formData?.service_type || "");
   const [error, setError] = useState("");
 
   const handleNext = () => {
@@ -75,8 +75,8 @@ const StepOne = ({
                   </SelectTrigger>
                   <SelectContent>
                     {data?.map(category => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.title}
+                      <SelectItem key={category?.id} value={category?.id}>
+                        {category?.title}
                       </SelectItem>
                     ))}
                   </SelectContent>

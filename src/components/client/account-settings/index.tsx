@@ -42,13 +42,13 @@ const AccountSettingsContent = () => {
   useEffect(() => {
     if (user) {
       setFormData({
-        first_name: user.first_name || "",
-        last_name: user.last_name || "",
-        email: user.email || "",
-        phone_number: user.phone_number || "",
-        address: user.address || "",
+        first_name: user?.first_name || "",
+        last_name: user?.last_name || "",
+        email: user?.email || "",
+        phone_number: user?.phone_number || "",
+        address: user?.address || "",
       });
-      setProfilePhoto(user.user_avatar || null);
+      setProfilePhoto(user?.user_avatar || null);
     }
   }, [user]);
 
@@ -71,7 +71,7 @@ const AccountSettingsContent = () => {
         {
           client_id: userId,
           document_name: "profile_photo",
-          file_type: file.type,
+          file_type: file?.type,
         },
         {
           headers: {
@@ -80,15 +80,15 @@ const AccountSettingsContent = () => {
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_link) {
+      if (!uploadLinkResponse?.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadLink = uploadLinkResponse.data.data.upload_link;
+      const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
       await api.put(uploadLink, file, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": file?.type,
         },
       });
 
@@ -96,7 +96,7 @@ const AccountSettingsContent = () => {
       await refetchUserDetails();
       if (userDetails) {
         setUser(userDetails);
-        setProfilePhoto(userDetails.user_avatar ?? null);
+        setProfilePhoto(userDetails?.user_avatar ?? null);
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to upload user photo"));
@@ -122,12 +122,12 @@ const AccountSettingsContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to update user info");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to update user info");
         return;
       }
 
-      toast.success(response.data.message);
+      toast.success(response?.data?.message);
 
       // Refetch user details and update state
       await refetchUserDetails();
@@ -135,7 +135,7 @@ const AccountSettingsContent = () => {
         setUser(userDetails);
       }
 
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to update user info"));
     } finally {
@@ -153,13 +153,13 @@ const AccountSettingsContent = () => {
         },
       });
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to deactivate account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to deactivate account");
         return;
       }
 
-      toast.success(response.data.message);
-      return response.data.data;
+      toast.success(response?.data?.message);
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {
@@ -231,9 +231,9 @@ const AccountSettingsContent = () => {
                     if (file) {
                       // Check file size (max 3MB)
                       const maxSizeInBytes = 3 * 1024 * 1024;
-                      if (file.size > maxSizeInBytes) {
+                      if (file?.size > maxSizeInBytes) {
                         toast.error(
-                          `File size must be less than 3MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+                          `File size must be less than 3MB. Current size: ${(file?.size / (1024 * 1024)).toFixed(2)}MB`,
                         );
                         return;
                       }
@@ -241,7 +241,7 @@ const AccountSettingsContent = () => {
                       // Check file type
                       if (
                         !["image/png", "image/jpeg", "image/jpg"].includes(
-                          file.type,
+                          file?.type,
                         )
                       ) {
                         toast.error(
@@ -266,7 +266,7 @@ const AccountSettingsContent = () => {
                   type="text"
                   id="first_name"
                   name="first_name"
-                  value={formData.first_name}
+                  value={formData?.first_name}
                   onChange={handleChange}
                   placeholder="Enter first name"
                   required
@@ -281,7 +281,7 @@ const AccountSettingsContent = () => {
                   type="text"
                   id="last_name"
                   name="last_name"
-                  value={formData.last_name}
+                  value={formData?.last_name}
                   onChange={handleChange}
                   placeholder="Enter last name"
                   required
@@ -296,7 +296,7 @@ const AccountSettingsContent = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                   placeholder="Enter email"
                   required
@@ -311,7 +311,7 @@ const AccountSettingsContent = () => {
                   type="tel"
                   id="phone"
                   name="phone_number"
-                  value={formData.phone_number}
+                  value={formData?.phone_number}
                   onChange={handleChange}
                   placeholder="Enter phone number"
                   required
@@ -326,7 +326,7 @@ const AccountSettingsContent = () => {
                   type="text"
                   id="address"
                   name="address"
-                  value={formData.address}
+                  value={formData?.address}
                   onChange={handleChange}
                   placeholder="Enter physical address"
                   required

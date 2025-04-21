@@ -71,10 +71,10 @@ const EquipmentListings = () => {
 
   useEffect(() => {
     if (listingError) {
-      toast.error(listingError.message);
+      toast.error(listingError?.message);
     }
     if (equipments?.total_count) {
-      setTotalPages(Math.ceil(equipments.total_count / itemsPerPage));
+      setTotalPages(Math.ceil(equipments?.total_count / itemsPerPage));
     }
   }, [listingError, equipments]);
 
@@ -124,7 +124,7 @@ const EquipmentListings = () => {
         <h1 className="text-2xl font-bold">Listed Equipments</h1>
 
         <Button className="buttonBlue2" asChild>
-          <Link href={dashboardRoutes.vendor_new_equipment}>
+          <Link href={dashboardRoutes?.vendor_new_equipment}>
             List an equipment
           </Link>
         </Button>
@@ -136,10 +136,10 @@ const EquipmentListings = () => {
               <TableRow>
                 {tableHeads.map(head => (
                   <TableHead
-                    key={head.label}
-                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
+                    key={head?.label}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head?.className}`}
                   >
-                    {head.label}
+                    {head?.label}
                   </TableHead>
                 ))}
               </TableRow>
@@ -147,7 +147,7 @@ const EquipmentListings = () => {
 
             <TableBody>
               {equipments && equipments?.data?.length > 0 ? (
-                equipments?.data.map(e => (
+                equipments?.data?.map(e => (
                   <TableRow key={e?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {e?.name}
@@ -168,7 +168,7 @@ const EquipmentListings = () => {
                       <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes.vendor_equipments}/view?equipment=0112455`}
+                            // href={`${dashboardRoutes?.vendor_equipments}/view?equipment=0112455`}
                             href="#"
                           >
                             <Eye className="size-4 text-[#6B7280]" />
@@ -177,7 +177,7 @@ const EquipmentListings = () => {
                         </Button>
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
+                            // href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                             href="#"
                           >
                             <Edit className="size-4 text-[#6B7280]" />
@@ -186,7 +186,7 @@ const EquipmentListings = () => {
                         </Button>
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            href={`${dashboardRoutes.vendor_equipments}/edit?equipment=0112455`}
+                            href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                           >
                             <Trash className="size-4 text-[#6B7280]" />
                             Delete

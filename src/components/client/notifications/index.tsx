@@ -35,19 +35,19 @@ const NotificationsContent = () => {
           </div>
         )}
 
-        {data && data.data.length > 0 ? (
+        {data && data?.data?.length > 0 ? (
           <ul className="mt-[50px] grid gap-6">
-            {data.data.map(n => (
-              <li key={n.id} className="flex items-start gap-5 py-4">
+            {data?.data?.map(n => (
+              <li key={n?.id} className="flex items-start gap-5 py-4">
                 <div className="p-2">
                   <Bell className="text-brandColor" size={20} />
                 </div>
                 <div className="flex-1">
                   <p className="dashboard-section-card-title !text-lg">
-                    {n.title}
+                    {n?.title}
                   </p>
                   <p className="dashboard-section-card-description">
-                    {formatDateToRelativeTime(n.created_at)} • {n.message}
+                    {formatDateToRelativeTime(n?.created_at)} • {n?.message}
                   </p>
                 </div>
               </li>

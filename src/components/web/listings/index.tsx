@@ -83,16 +83,16 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
 
   // Update listings and total pages when data changes
   useEffect(() => {
-    if (listings && listings.data && !selectedCategory) {
-      setFilteredListings(listings.data);
-      setTotalPages(Math.ceil(listings.total_count / itemsPerPage));
+    if (listings && listings?.data && !selectedCategory) {
+      setFilteredListings(listings?.data);
+      setTotalPages(Math.ceil(listings?.total_count / itemsPerPage));
     }
   }, [listings, selectedCategory]);
 
   useEffect(() => {
     if (selectedCategory && listingsByCategory) {
-      setFilteredListings(listingsByCategory.data);
-      setTotalPages(Math.ceil(listingsByCategory.total_count / itemsPerPage));
+      setFilteredListings(listingsByCategory?.data);
+      setTotalPages(Math.ceil(listingsByCategory?.total_count / itemsPerPage));
     }
   }, [selectedCategory, listingsByCategory]);
 
@@ -100,17 +100,17 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const handleSearch = () => {
     if (!listings) return;
 
-    let filtered = [...listings.data];
+    let filtered = [...listings?.data];
 
     if (equipment) {
       filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(equipment.toLowerCase()),
+        item?.name.toLowerCase().includes(equipment?.toLowerCase()),
       );
     }
 
     if (region) {
       filtered = filtered.filter(item =>
-        item.address.toLowerCase().includes(region.toLowerCase()),
+        item?.address.toLowerCase().includes(region?.toLowerCase()),
       );
     }
 
@@ -127,7 +127,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     const filtered =
       selectedCategory && listingsByCategory
         ? [...listingsByCategory.data]
-        : [...listings.data];
+        : [...listings?.data];
 
     setFilteredListings(filtered);
     setCurrentPage(1);
@@ -144,7 +144,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     setOnSite(false);
     setCurrentPage(1);
     if (listings) {
-      setFilteredListings(listings.data);
+      setFilteredListings(listings?.data);
     }
   };
 

@@ -164,17 +164,17 @@ export const FilterMenu = ({
                         {categories?.map(c => (
                           <div
                             className={STYLES.optionWrapper}
-                            key={c.title_slug}
+                            key={c?.title_slug}
                           >
                             <RadioGroupItem
-                              value={c.title_slug}
-                              id={c.title_slug}
+                              value={c?.title_slug}
+                              id={c?.title_slug}
                             />
                             <Label
-                              htmlFor={c.title_slug}
+                              htmlFor={c?.title_slug}
                               className={STYLES.optionLabel}
                             >
-                              {c.title}
+                              {c?.title}
                             </Label>
                           </div>
                         ))}
@@ -200,11 +200,11 @@ export const FilterMenu = ({
                         {distances.map(distance => (
                           <div className={STYLES.optionWrapper} key={distance}>
                             <RadioGroupItem
-                              value={distance.toString()}
-                              id={distance.toString()}
+                              value={distance?.toString()}
+                              id={distance?.toString()}
                             />
                             <Label
-                              htmlFor={distance.toString()}
+                              htmlFor={distance?.toString()}
                               className={STYLES.optionLabel}
                             >
                               {distance} miles
@@ -249,12 +249,12 @@ export const FilterMenu = ({
                       {ratings.map(rating => (
                         <div key={rating} className={STYLES.optionWrapper}>
                           <Checkbox
-                            id={rating.toString()}
+                            id={rating?.toString()}
                             checked={selectedRatings.includes(rating)}
                             onCheckedChange={() => toggleRating(rating)}
                           />
                           <label
-                            htmlFor={rating.toString()}
+                            htmlFor={rating?.toString()}
                             className={STYLES.optionLabel}
                           >
                             <Ratings ratings={rating} size={16} />

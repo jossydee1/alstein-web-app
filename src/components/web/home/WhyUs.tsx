@@ -110,26 +110,27 @@ const WhyUs = () => {
               width: `${(extendedSlides.length / slidesPerView) * 100}%`,
             }}
           >
-            {extendedSlides.map((slide, index) => (
-              <div
-                key={index}
-                className="flex-shrink-0"
-                style={{ width: `${slideWidth}px` }}
-              >
-                <article
-                  className="max-w-[390px] rounded-md px-8 py-12 text-white"
-                  style={{ background: slide.bg }}
+            {extendedSlides &&
+              extendedSlides?.map((slide, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0"
+                  style={{ width: `${slideWidth}px` }}
                 >
-                  <slide.icon size="48" />
-                  <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-                    {slide.title}
-                  </h3>
-                  <p className="text-[18px] leading-[20px] text-[#A4A4A4]">
-                    {slide.description}
-                  </p>
-                </article>
-              </div>
-            ))}
+                  <article
+                    className="max-w-[390px] rounded-md px-8 py-12 text-white"
+                    style={{ background: slide?.bg }}
+                  >
+                    <slide.icon size="48" />
+                    <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+                      {slide?.title}
+                    </h3>
+                    <p className="text-[18px] leading-[20px] text-[#A4A4A4]">
+                      {slide?.description}
+                    </p>
+                  </article>
+                </div>
+              ))}
           </div>
         </div>
 

@@ -30,11 +30,11 @@ export function useClientFetch<T>({
             : {},
         });
 
-        if (response.status !== 200 || !response.data) {
-          throw new Error(response.data.message || "No data found");
+        if (response?.status !== 200 || !response?.data) {
+          throw new Error(response?.data?.message || "No data found");
         }
 
-        return response.data.data;
+        return response?.data?.data;
       } catch (error) {
         throw new Error(formatError(error, "Failed to fetch data"));
       }

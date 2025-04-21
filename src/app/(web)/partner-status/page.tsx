@@ -8,7 +8,9 @@ const Page = () => {
     <div className="m-8 h-screen space-y-4 text-center">
       <p>Your business profile is being verified. Please check back later.</p>
       <Button asChild>
-        <Link href={dashboardRoutes.client_order_history}>Go to Dashboard</Link>
+        <Link href={dashboardRoutes?.client_order_history}>
+          Go to Dashboard
+        </Link>
       </Button>
     </div>
   );

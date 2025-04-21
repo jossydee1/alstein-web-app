@@ -54,9 +54,9 @@ const OrderDetails = ({
   const handleCheckoutRedirect = () => {
     if (!user) {
       // Redirect to login with a redirect URL back to the listing page
-      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      const redirectUrl = `${webRoutes?.listings}/${listingInfo?.id}`;
       router.push(
-        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+        `${authRoutes?.login}?redirect=${encodeURIComponent(redirectUrl)}`,
       );
     }
   };
@@ -80,7 +80,7 @@ const OrderDetails = ({
 
         <div className="flex gap-5">
           <Image
-            src={DOCUMENT_URL + listingInfo.equipment_file[0]?.path}
+            src={DOCUMENT_URL + listingInfo?.equipment_file[0]?.path}
             alt={listingInfo?.name}
             width={100}
             height={100}
@@ -88,10 +88,10 @@ const OrderDetails = ({
           />
           <div>
             <h3 className="mb-4 font-semibold uppercase text-[#172554]">
-              {listingInfo.name}
+              {listingInfo?.name}
             </h3>
             <p className="text-[#6B7280]">
-              {listingInfo.description.slice(0, 150)}
+              {listingInfo?.description.slice(0, 150)}
             </p>
           </div>
         </div>

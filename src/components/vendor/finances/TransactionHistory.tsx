@@ -73,10 +73,10 @@ const TransactionHistory = () => {
 
   useEffect(() => {
     if (listingError) {
-      toast.error(listingError.message);
+      toast.error(listingError?.message);
     }
     if (orderHistory?.total_count) {
-      setTotalPages(Math.ceil(orderHistory.total_count / itemsPerPage));
+      setTotalPages(Math.ceil(orderHistory?.total_count / itemsPerPage));
     }
   }, [listingError, orderHistory]);
 
@@ -133,7 +133,7 @@ const TransactionHistory = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Payout History</h1>
         <Button type="button" className="bg-brandColor" asChild>
-          <Link href={dashboardRoutes.vendor_finances + "?tab=withdraw"}>
+          <Link href={dashboardRoutes?.vendor_finances + "?tab=withdraw"}>
             Withdraw Fund
           </Link>
         </Button>
@@ -165,19 +165,19 @@ const TransactionHistory = () => {
               <TableRow>
                 {tableHeads.map(head => (
                   <TableHead
-                    key={head.label}
-                    className={`whitespace-nowrap rounded-[6px] px-5 ${head.className}`}
+                    key={head?.label}
+                    className={`whitespace-nowrap rounded-[6px] px-5 ${head?.className}`}
                   >
-                    {head.label}
+                    {head?.label}
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {orderHistory && orderHistory?.data.length > 0 ? (
+              {orderHistory && orderHistory?.data?.length > 0 ? (
                 orderHistory?.data?.map(order => (
-                  <TableRow key={order.id} className="py-10">
+                  <TableRow key={order?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
                       0112455
                     </TableCell>

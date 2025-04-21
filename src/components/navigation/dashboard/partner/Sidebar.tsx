@@ -36,30 +36,30 @@ const commonStyles = {
 };
 
 const AccordionItem = ({ item }: { item: NavItem }) => {
-  if (!item.children) {
+  if (!item?.children) {
     return (
       <li>
         <Link
-          href={item.href || dashboardRoutes.vendor_overview}
-          className={`${commonStyles.link} ${item.isActive ? "bg-[#EFF6FF] text-[#2563EB]" : ""}`}
+          href={item?.href || dashboardRoutes?.vendor_overview}
+          className={`${commonStyles.link} ${item?.isActive ? "bg-[#EFF6FF] text-[#2563EB]" : ""}`}
         >
-          {item.icon}
-          {item.label}
+          {item?.icon}
+          {item?.label}
         </Link>
       </li>
     );
   }
 
   return (
-    <li className="hs-accordion" id={`${item.id}-accordion`}>
+    <li className="hs-accordion" id={`${item?.id}-accordion`}>
       <button
         type="button"
-        className={`${commonStyles.accordionButton} ${item.isActive ? "bg-[#EFF6FF] text-[#2563EB]" : ""}`}
+        className={`${commonStyles.accordionButton} ${item?.isActive ? "bg-[#EFF6FF] text-[#2563EB]" : ""}`}
         aria-expanded="true"
-        aria-controls={`${item.id}-accordion-child`}
+        aria-controls={`${item?.id}-accordion-child`}
       >
-        {item.icon}
-        {item.label}
+        {item?.icon}
+        {item?.label}
         <ChevronUp
           className={`ms-auto hidden hs-accordion-active:block ${commonStyles.iconSize}`}
         />
@@ -69,13 +69,13 @@ const AccordionItem = ({ item }: { item: NavItem }) => {
       </button>
 
       <div
-        id={`${item.id}-accordion-child`}
+        id={`${item?.id}-accordion-child`}
         className={commonStyles.accordionContent}
         role="region"
-        aria-labelledby={`${item.id}-accordion`}
+        aria-labelledby={`${item?.id}-accordion`}
       >
         <ul className="space-y-1 ps-8 pt-1">
-          {item.children.map(child => (
+          {item?.children.map(child => (
             <AccordionItem key={child.id} item={child} />
           ))}
         </ul>
@@ -92,8 +92,8 @@ export const Sidebar = () => {
       id: "overview",
       label: "Dashboard",
       icon: <LayoutDashboard className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_overview,
-      isActive: pathname === dashboardRoutes.vendor_overview,
+      href: dashboardRoutes?.vendor_overview,
+      isActive: pathname === dashboardRoutes?.vendor_overview,
     },
   ];
 
@@ -102,36 +102,36 @@ export const Sidebar = () => {
       id: "manage-equipment",
       label: "Manage Equipment",
       icon: <FlaskConical className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_equipments,
-      isActive: pathname?.includes(dashboardRoutes.vendor_equipments),
+      href: dashboardRoutes?.vendor_equipments,
+      isActive: pathname?.includes(dashboardRoutes?.vendor_equipments),
     },
     {
       id: "bookings",
       label: "Bookings",
       icon: <Files className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_bookings,
-      isActive: pathname?.includes(dashboardRoutes.vendor_bookings),
+      href: dashboardRoutes?.vendor_bookings,
+      isActive: pathname?.includes(dashboardRoutes?.vendor_bookings),
     },
     {
       id: "finances",
       label: "Finances",
       icon: <Receipt className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_finances,
-      isActive: pathname?.includes(dashboardRoutes.vendor_finances),
+      href: dashboardRoutes?.vendor_finances,
+      isActive: pathname?.includes(dashboardRoutes?.vendor_finances),
     },
     {
       id: "notifications",
       label: "Notifications",
       icon: <MessagesSquare className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_notifications,
-      isActive: pathname?.includes(dashboardRoutes.vendor_notifications),
+      href: dashboardRoutes?.vendor_notifications,
+      isActive: pathname?.includes(dashboardRoutes?.vendor_notifications),
     },
     {
       id: "settings",
       label: "Settings",
       icon: <KeyRound className={commonStyles.iconSize} />,
-      href: dashboardRoutes.vendor_settings,
-      isActive: pathname?.includes(dashboardRoutes.vendor_settings),
+      href: dashboardRoutes?.vendor_settings,
+      isActive: pathname?.includes(dashboardRoutes?.vendor_settings),
     },
   ];
 
@@ -147,7 +147,7 @@ export const Sidebar = () => {
         <div className="flex items-center px-6 py-4">
           <Link
             className="w-[130px] flex-none text-xl font-semibold"
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -162,7 +162,7 @@ export const Sidebar = () => {
           >
             <ul className="flex flex-col gap-4">
               {topNavItems.map(item => (
-                <AccordionItem key={item.id} item={item} />
+                <AccordionItem key={item?.id} item={item} />
               ))}
 
               <div className="px-2.5 text-sm uppercase text-gray-800">
@@ -170,7 +170,7 @@ export const Sidebar = () => {
               </div>
 
               {mainNavItems.map(item => (
-                <AccordionItem key={item.id} item={item} />
+                <AccordionItem key={item?.id} item={item} />
               ))}
             </ul>
           </nav>

@@ -34,13 +34,13 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
   const handleCheckout = () => {
     if (!user) {
       // Redirect to login with a redirect URL back to the listing page
-      const redirectUrl = `${webRoutes.listings}/${listingInfo?.id}`;
+      const redirectUrl = `${webRoutes?.listings}/${listingInfo?.id}`;
       router.push(
-        `${authRoutes.login}?redirect=${encodeURIComponent(redirectUrl)}`,
+        `${authRoutes?.login}?redirect=${encodeURIComponent(redirectUrl)}`,
       );
     } else {
       // Redirect to checkout page
-      router.push(`${webRoutes.checkout}?id=${listingInfo?.id}`);
+      router.push(`${webRoutes?.checkout}?id=${listingInfo?.id}`);
     }
   };
 

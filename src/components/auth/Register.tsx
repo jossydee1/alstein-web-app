@@ -18,7 +18,7 @@ const RegisterContent = () => {
         <div className={style.topBar}>
           <Link
             className={style.logoLink}
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -28,7 +28,7 @@ const RegisterContent = () => {
             Already have an account?{" "}
             <Link
               className="text-brandColor"
-              href={authRoutes.login}
+              href={authRoutes?.login}
               aria-label="Brand"
             >
               Sign In
@@ -47,7 +47,7 @@ const RegisterContent = () => {
 
           <div className="grid w-full gap-y-3">
             <Link
-              href={`${authRoutes.signup}?type=client`}
+              href={`${authRoutes?.signup}?type=client`}
               className="group flex w-full items-center justify-between rounded-md border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
             >
               <div className="flex items-center gap-x-4">
@@ -70,7 +70,7 @@ const RegisterContent = () => {
             </Link>
 
             <Link
-              href={`${authRoutes.signup}?type=partner`}
+              href={`${authRoutes?.signup}?type=partner`}
               className="group flex w-full items-center justify-between rounded-md border border-[#8692A6] p-6 transition-all hover:border-brandColor hover:ring-1 hover:ring-brandColor"
             >
               <div className="flex items-center gap-x-4">

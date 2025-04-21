@@ -37,7 +37,7 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (date?.from && date?.to) {
-      setNumberOfDays(differenceInDays(date.to, date.from));
+      setNumberOfDays(differenceInDays(date?.to, date?.from));
     } else if (date?.from && !date?.to) {
       setNumberOfDays(1);
     } else {

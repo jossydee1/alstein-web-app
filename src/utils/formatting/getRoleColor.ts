@@ -1,5 +1,7 @@
 export const getRoleColor = (role: string) => {
-  switch (role.toLowerCase()) {
+  if (!role) return "text-emerald-500 dark:text-neutral-700";
+
+  switch (role?.toLowerCase()) {
     case "buyer":
       return "text-emerald-500 dark:text-green-500";
     case "seller":

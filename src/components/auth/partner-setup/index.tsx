@@ -61,7 +61,7 @@ const PartnerSetupContent = () => {
     } else {
       setShowMessage(false);
       router.push(
-        `${authRoutes.partner_setup_vendor}?partner_type=${selected}&sub_type=${selectedSubOption}`,
+        `${authRoutes?.partner_setup_vendor}?partner_type=${selected}&sub_type=${selectedSubOption}`,
       );
     }
   };
@@ -76,7 +76,7 @@ const PartnerSetupContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.push(dashboardRoutes.client_order_history)}
+              onClick={() => router.push(dashboardRoutes?.client_order_history)}
               className={style.backButton}
             >
               <ChevronLeft />
@@ -85,7 +85,7 @@ const PartnerSetupContent = () => {
 
             <Link
               className={style.logoLink}
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -110,45 +110,46 @@ const PartnerSetupContent = () => {
             <section className="w-full max-w-lg space-y-4 p-6">
               {options.map(option => (
                 <button
-                  key={option.type}
+                  key={option?.type}
                   onClick={() => {
-                    setSelected(option.type);
+                    setSelected(option?.type);
                     setSelectedSubOption("");
                   }}
                   className={`block cursor-pointer rounded-md border p-4 text-left transition-all ${
-                    selected === option.type
+                    selected === option?.type
                       ? "border-red-500 bg-blue-50"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div>{option.icon}</div>
+                      <div>{option?.icon}</div>
                       <div>
                         <h3 className="font-semibold text-gray-900">
-                          {option.title}
+                          {option?.title}
                         </h3>
                         <p className="font-visbymedium text-sm text-gray-500 antialiased">
-                          {option.description}
+                          {option?.description}
                         </p>
                       </div>
                     </div>
-                    {selected === option.type && (
+                    {selected === option?.type && (
                       <CheckCircle className="h-6 w-6 text-blue-600" />
                     )}
                   </div>
 
-                  {selected === option.type && option.subOptions && (
+                  {selected === option?.type && option?.subOptions && (
                     <div className="mt-4">
                       <h4 className="mb-2 pl-9 pr-1 text-sm font-semibold text-gray-900">
                         Select type
                       </h4>
                       <div className="mt-3 grid grid-cols-2 gap-3 pl-9 pr-1">
-                        {option.subOptions.map(subOption => {
-                          const isSelected = selectedSubOption === subOption.id;
+                        {option?.subOptions.map(subOption => {
+                          const isSelected =
+                            selectedSubOption === subOption?.id;
                           return (
                             <label
-                              key={subOption.id}
+                              key={subOption?.id}
                               className={`flex cursor-pointer items-center justify-center rounded-md border px-4 py-2 text-sm font-medium shadow transition-all ${
                                 isSelected
                                   ? "border-blue-600 bg-blue-50 text-blue-700"
@@ -158,14 +159,14 @@ const PartnerSetupContent = () => {
                               <input
                                 type="radio"
                                 name="subOption"
-                                value={subOption.id}
+                                value={subOption?.id}
                                 checked={isSelected}
                                 onChange={() =>
-                                  setSelectedSubOption(subOption.id)
+                                  setSelectedSubOption(subOption?.id)
                                 }
                                 className="hidden"
                               />
-                              {subOption.name}
+                              {subOption?.name}
                             </label>
                           );
                         })}

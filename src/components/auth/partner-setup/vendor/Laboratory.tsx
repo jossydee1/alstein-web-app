@@ -46,20 +46,20 @@ export function Stepper({ currentStep }: { currentStep: number }) {
   return (
     <div className="flex items-center justify-between space-x-6">
       {steps.map(step => (
-        <div key={step.id} className="flex items-center space-x-2">
+        <div key={step?.id} className="flex items-center space-x-2">
           <div
             className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white ${
-              step.id <= currentStep ? "bg-blue-600" : "bg-gray-300"
+              step?.id <= currentStep ? "bg-blue-600" : "bg-gray-300"
             }`}
           >
-            {step.id}
+            {step?.id}
           </div>
           <span
             className={`text-sm font-medium ${
-              step.id <= currentStep ? "text-black" : "text-gray-400"
+              step?.id <= currentStep ? "text-black" : "text-gray-400"
             }`}
           >
-            {step.label}
+            {step?.label}
           </span>
         </div>
       ))}
@@ -112,14 +112,14 @@ const DocumentUpload = ({
       // Create an axios PUT request to the pre-signed URL with the file
       const response = await axios.put(uploadLink, file, {
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": file?.type,
         },
       });
 
-      if (response.status !== 200) {
-        console.error("S3 upload error:", response.status, response.data);
+      if (response?.status !== 200) {
+        console.error("S3 upload error:", response?.status, response?.data);
         throw new Error(
-          `S3 upload failed: ${response.status} ${response.statusText}`,
+          `S3 upload failed: ${response?.status} ${response?.statusText}`,
         );
       }
 
@@ -140,7 +140,7 @@ const DocumentUpload = ({
     setUploadFailed(false);
 
     // Check if file is PDF
-    if (file.type !== "application/pdf") {
+    if (file?.type !== "application/pdf") {
       toast.error("Only PDF files are allowed");
       // Reset the file input value
       if (e.target) e.target.value = "";
@@ -149,16 +149,16 @@ const DocumentUpload = ({
 
     // Check file size (max 3MB)
     const maxSizeInBytes = 3 * 1024 * 1024; // 3MB
-    if (file.size > maxSizeInBytes) {
+    if (file?.size > maxSizeInBytes) {
       toast.error(
-        `File size must be less than 3MB. Current size: ${bytesToMB(file.size).toFixed(2)}MB`,
+        `File size must be less than 3MB. Current size: ${bytesToMB(file?.size).toFixed(2)}MB`,
       );
       // Reset the file input value
       if (e.target) e.target.value = "";
       return;
     }
 
-    setFileName(file.name);
+    setFileName(file?.name);
     setIsUploading(true);
     onUploadStart(document);
 
@@ -180,18 +180,18 @@ const DocumentUpload = ({
         },
       );
 
-      if (!uploadLinkResponse.data?.data?.upload_link) {
+      if (!uploadLinkResponse?.data?.data?.upload_link) {
         throw new Error("Failed to get upload URL");
       }
 
-      const uploadLink = uploadLinkResponse.data.data.upload_link;
+      const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
       // 2. Upload the file directly to S3 using our helper function
       await uploadFileToS3(file, uploadLink);
 
       // 3. Construct the final URL for the file
       const fileUrl =
-        uploadLinkResponse.data.data.file_url || uploadLink.split("?")[0]; // Remove the query parameters to get the base URL
+        uploadLinkResponse?.data?.data?.file_url || uploadLink.split("?")[0]; // Remove the query parameters to get the base URL
 
       // Success handling
       onUploadComplete(document, fileUrl);
@@ -323,16 +323,16 @@ const LaboratoryPageContent = () => {
           },
         );
 
-        if (response.status === 200) {
-          setPartnerId(response.data.data.id);
-          setBusinessProfile(response.data.data);
+        if (response?.status === 200) {
+          setPartnerId(response?.data?.data?.id);
+          setBusinessProfile(response?.data?.data);
           setIsFormDisabled(false);
         }
       } catch (error) {
         if (
           axios.isAxiosError(error) &&
           error.response?.status === 400 &&
-          error.response.data?.message ===
+          error.response?.data?.message ===
             "Partnership type already exists on this profile"
         ) {
           setPartnerId(businessProfile?.id || "");
@@ -369,24 +369,24 @@ const LaboratoryPageContent = () => {
   useEffect(() => {
     if (partnerDetails) {
       setFormData({
-        id: partnerDetails.id || "",
-        name: partnerDetails.name || "",
-        bio: partnerDetails.bio || "",
-        website: partnerDetails.website || "",
-        city: partnerDetails.city || "",
-        state: partnerDetails.state || "",
-        country: partnerDetails.country || "",
-        address: partnerDetails.address || "",
-        longitude: partnerDetails.longitude || "",
-        latitude: partnerDetails.latitude || "",
-        specializations: partnerDetails.specializations || "",
-        mission: partnerDetails.mission || "",
-        support_email: partnerDetails.support_email || "",
+        id: partnerDetails?.id || "",
+        name: partnerDetails?.name || "",
+        bio: partnerDetails?.bio || "",
+        website: partnerDetails?.website || "",
+        city: partnerDetails?.city || "",
+        state: partnerDetails?.state || "",
+        country: partnerDetails?.country || "",
+        address: partnerDetails?.address || "",
+        longitude: partnerDetails?.longitude || "",
+        latitude: partnerDetails?.latitude || "",
+        specializations: partnerDetails?.specializations || "",
+        mission: partnerDetails?.mission || "",
+        support_email: partnerDetails?.support_email || "",
       });
 
       // Prepopulate document status if documents exist
-      if (partnerDetails.partner_doc) {
-        setExistingDocuments(partnerDetails.partner_doc);
+      if (partnerDetails?.partner_doc) {
+        setExistingDocuments(partnerDetails?.partner_doc);
       }
     } else {
       setFormData(prev => ({ ...prev, id: partnerId }));
@@ -470,7 +470,7 @@ const LaboratoryPageContent = () => {
     }
 
     // Don't proceed if documents are still uploading in step 3
-    if (currentStep === 3 && uploadingDocuments.length > 0) {
+    if (currentStep === 3 && uploadingDocuments?.length > 0) {
       toast.info("Please wait for all documents to finish uploading");
       return;
     }
@@ -484,7 +484,7 @@ const LaboratoryPageContent = () => {
     setIsProcessing(true);
 
     // Ensure the `id` exists
-    if (!formData.id) {
+    if (!formData?.id) {
       toast.error("Partner ID is missing. Please try again.");
       setIsProcessing(false);
       return;
@@ -495,29 +495,29 @@ const LaboratoryPageContent = () => {
     switch (currentStep) {
       case 1:
         stepData = {
-          id: formData.id,
-          name: formData.name,
-          support_email: formData.support_email,
-          website: formData.website,
-          bio: formData.bio,
-          specializations: formData.specializations,
-          mission: formData.mission,
+          id: formData?.id,
+          name: formData?.name,
+          support_email: formData?.support_email,
+          website: formData?.website,
+          bio: formData?.bio,
+          specializations: formData?.specializations,
+          mission: formData?.mission,
         };
         break;
       case 2:
         stepData = {
-          id: formData.id,
-          city: formData.city,
-          state: formData.state,
-          country: formData.country,
-          address: formData.address,
-          longitude: formData.longitude,
-          latitude: formData.latitude,
+          id: formData?.id,
+          city: formData?.city,
+          state: formData?.state,
+          country: formData?.country,
+          address: formData?.address,
+          longitude: formData?.longitude,
+          latitude: formData?.latitude,
         };
         break;
       case 3:
         // Just send the partner ID for documents step
-        stepData = { id: formData.id };
+        stepData = { id: formData?.id };
         break;
       default:
         break;
@@ -534,8 +534,8 @@ const LaboratoryPageContent = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to update partner data");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to update partner data");
         return;
       }
 
@@ -543,7 +543,7 @@ const LaboratoryPageContent = () => {
       if (currentStep < steps.length) {
         setCurrentStep(prev => prev + 1);
       } else {
-        router.push(dashboardRoutes.vendor_overview);
+        router.push(dashboardRoutes?.vendor_overview);
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to update partner data"));
@@ -562,7 +562,7 @@ const LaboratoryPageContent = () => {
               <input
                 type="text"
                 id="business_name"
-                value={formData.name}
+                value={formData?.name}
                 onChange={e => handleChange(e, "name")}
                 placeholder="Acme Labs"
                 required
@@ -573,7 +573,7 @@ const LaboratoryPageContent = () => {
               <input
                 type="email"
                 id="support_email"
-                value={formData.support_email}
+                value={formData?.support_email}
                 onChange={e => handleChange(e, "support_email")}
                 placeholder="acme@example.com"
                 required
@@ -584,7 +584,7 @@ const LaboratoryPageContent = () => {
               <input
                 type="url"
                 id="website"
-                value={formData.website}
+                value={formData?.website}
                 onChange={e => handleChange(e, "website")}
                 placeholder="https://acme-labs.com"
                 required
@@ -594,7 +594,7 @@ const LaboratoryPageContent = () => {
               <label htmlFor="business_description">Business Description</label>
               <textarea
                 id="business_description"
-                value={formData.bio}
+                value={formData?.bio}
                 onChange={e => handleChange(e, "bio")}
                 placeholder="We are a medical laboratory that specializes in..."
                 rows={4}
@@ -605,7 +605,7 @@ const LaboratoryPageContent = () => {
               <input
                 type="text"
                 id="specializations"
-                value={formData.specializations}
+                value={formData?.specializations}
                 onChange={e => handleChange(e, "specializations")}
                 placeholder="We offer specialized equipment for Dentist, Optician..."
                 required
@@ -615,7 +615,7 @@ const LaboratoryPageContent = () => {
               <label htmlFor="mission">Mission</label>
               <textarea
                 id="mission"
-                value={formData.mission}
+                value={formData?.mission}
                 onChange={e => handleChange(e, "mission")}
                 placeholder="To empower healthcare professionals with innovative and reliable medical equipment..."
                 rows={4}
@@ -634,7 +634,7 @@ const LaboratoryPageContent = () => {
               <input
                 type="text"
                 id="country"
-                value={formData.country}
+                value={formData?.country}
                 onChange={e => handleChange(e, "country")}
                 placeholder="Ghana"
                 required
@@ -646,7 +646,7 @@ const LaboratoryPageContent = () => {
                 <input
                   type="text"
                   id="city"
-                  value={formData.city}
+                  value={formData?.city}
                   onChange={e => handleChange(e, "city")}
                   placeholder="Ibadan"
                   required
@@ -659,7 +659,7 @@ const LaboratoryPageContent = () => {
                 <input
                   type="text"
                   id="state"
-                  value={formData.state}
+                  value={formData?.state}
                   onChange={e => handleChange(e, "state")}
                   placeholder="Ibadan"
                   required
@@ -706,10 +706,10 @@ const LaboratoryPageContent = () => {
                       isUploaded={!!documentStatusEntry?.isUploaded}
                     />
                     {documentStatusEntry?.isUploaded &&
-                      documentStatusEntry.url && (
+                      documentStatusEntry?.url && (
                         <div className="mt-2 text-sm text-gray-500">
                           <a
-                            href={documentStatusEntry.url}
+                            href={documentStatusEntry?.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 underline"
@@ -723,10 +723,10 @@ const LaboratoryPageContent = () => {
               })}
               <div className="mt-2 text-sm text-gray-500">
                 <p>* Only PDF files are allowed (Max size: 3MB)</p>
-                {uploadingDocuments.length > 0 && (
+                {uploadingDocuments?.length > 0 && (
                   <p className="mt-1 flex items-center text-blue-500">
                     <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                    Uploading {uploadingDocuments.length} document(s)...
+                    Uploading {uploadingDocuments?.length} document(s)...
                   </p>
                 )}
               </div>
@@ -748,7 +748,7 @@ const LaboratoryPageContent = () => {
             <Button
               variant="ghost"
               type="button"
-              onClick={() => router.push(authRoutes.partner_setup)}
+              onClick={() => router.push(authRoutes?.partner_setup)}
               className={style.backButton}
             >
               <ChevronLeft />
@@ -756,7 +756,7 @@ const LaboratoryPageContent = () => {
             </Button>
             <Link
               className={style.logoLink}
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -788,14 +788,14 @@ const LaboratoryPageContent = () => {
                 disabled={
                   isFormDisabled ||
                   (currentStep === 3 &&
-                    (uploadingDocuments.length > 0 ||
+                    (uploadingDocuments?.length > 0 ||
                       (!existingDocuments && !areAllDocumentsUploaded())))
                 }
               >
                 {currentStep === steps.length
                   ? "Submit for Review"
                   : "Save & Continue"}
-                {currentStep === 3 && uploadingDocuments.length > 0 && (
+                {currentStep === 3 && uploadingDocuments?.length > 0 && (
                   <Loader2 className="ml-2 h-4 w-4 animate-spin" />
                 )}
               </Button>

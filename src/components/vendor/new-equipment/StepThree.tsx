@@ -14,7 +14,7 @@ const StepThree = ({
   onBack: () => void;
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
-  const [address, setAddress] = useState(formData.address || "");
+  const [address, setAddress] = useState(formData?.address || "");
   const [error, setError] = useState("");
 
   const handleNext = () => {

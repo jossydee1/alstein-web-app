@@ -51,14 +51,14 @@ const WithdrawFormAndMethods = ({
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to set default account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to set default account");
         return;
       }
 
       refetch();
       toast.success("Default account set successfully");
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to set default account"));
     } finally {
@@ -79,14 +79,14 @@ const WithdrawFormAndMethods = ({
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to remove bank account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to remove bank account");
         return;
       }
 
       refetch();
       toast.success("Bank account removed successfully");
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to remove bank account"));
     } finally {
@@ -112,13 +112,13 @@ const WithdrawFormAndMethods = ({
     //     },
     //   );
 
-    //   if (response.status !== 200 || !response.data) {
-    //     toast.error(response.data.message || "Failed to add new bank account");
+    //   if (response?.status !== 200 || !response?.data) {
+    //     toast.error(response?.data?.message || "Failed to add new bank account");
     //     return;
     //   }
 
-    //   toast.success(response.data.message);
-    //   return response.data.data;
+    //   toast.success(response?.data?.message);
+    //   return response?.data?.data;
     // } catch (error) {
     //   toast.error(formatError(error, "Failed to add new bank account"));
     // } finally {
@@ -218,23 +218,23 @@ const WithdrawFormAndMethods = ({
         </section>
 
         <section className="mt-[50px] space-y-7">
-          {data?.data && data.data.length > 0
-            ? data.data.map(item => (
+          {data?.data && data?.data?.length > 0
+            ? data?.data?.map(item => (
                 <div
-                  key={item.id}
+                  key={item?.id}
                   className="space-y-2.5 rounded-2xl border border-[#E5E7EB] bg-white p-7"
                 >
                   <h2 className="dashboard-section-card-title">
                     Direct to Bank Account - Account ending in{" "}
-                    {item.account_number.slice(-4)}
+                    {item?.account_number.slice(-4)}
                   </h2>
                   <p
-                    className={`${item.is_prefered ? "text-green-600" : "text-orange-600"}`}
+                    className={`${item?.is_prefered ? "text-green-600" : "text-orange-600"}`}
                   >
-                    {item.is_prefered ? "Default" : "Not Default"}
+                    {item?.is_prefered ? "Default" : "Not Default"}
                   </p>
                   <div className="flex flex-row flex-wrap items-center justify-start gap-4">
-                    {!item.is_prefered && (
+                    {!item?.is_prefered && (
                       <Button
                         variant="outline"
                         type="button"

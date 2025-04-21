@@ -26,7 +26,7 @@ const Details = ({
           <p>{listingInfo?.description}</p>
           <ul className="mt-4 list-inside list-disc">
             {listingInfo?.specifications.map(spec => (
-              <li key={spec.id}>{spec.specification}</li>
+              <li key={spec?.id}>{spec?.specification}</li>
             ))}
           </ul>
         </div>
@@ -63,7 +63,7 @@ const Details = ({
             </p>
           )}
           <Link
-            href={`${webRoutes.partners}/${listingInfo?.partner?.id}`}
+            href={`${webRoutes?.partners}/${listingInfo?.partner?.id}`}
             className="p-0 !py-0 text-sm font-medium text-[#8B8B8B] underline transition-all hover:bg-transparent hover:text-neutral-800"
           >
             View Profile

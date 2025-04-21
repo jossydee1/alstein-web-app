@@ -25,7 +25,7 @@ const ResetPasswordContent = () => {
 
   useEffect(() => {
     if (!token) {
-      router.push(authRoutes.login);
+      router.push(authRoutes?.login);
     }
   }, [router, token]);
 
@@ -63,7 +63,7 @@ const ResetPasswordContent = () => {
       );
 
       if (response.status === 200) {
-        router.push(authRoutes.login);
+        router.push(authRoutes?.login);
       }
     } catch (error) {
       const errorMessage = formatError(
@@ -74,7 +74,7 @@ const ResetPasswordContent = () => {
         setError(
           <>
             Your reset link has expired. Please request a new reset link.{" "}
-            <Link className="underline" href={authRoutes.forgot_password}>
+            <Link className="underline" href={authRoutes?.forgot_password}>
               Click here
             </Link>
           </>,
@@ -95,7 +95,7 @@ const ResetPasswordContent = () => {
         <div className={style.topBar}>
           <Link
             className={style.logoLink}
-            href={webRoutes.home}
+            href={webRoutes?.home}
             aria-label="Brand"
           >
             <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
@@ -138,7 +138,7 @@ const ResetPasswordContent = () => {
               />
               <p className={style.info}>
                 Back to{" "}
-                <Link className="text-brandColor" href={authRoutes.login}>
+                <Link className="text-brandColor" href={authRoutes?.login}>
                   Sign In
                 </Link>
               </p>

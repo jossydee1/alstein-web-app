@@ -30,10 +30,10 @@ export const Navbar = () => {
   useEffect(() => {
     if (!data) return;
 
-    if (data.length > 0) {
-      router.push(dashboardRoutes.vendor_overview);
+    if (data?.length > 0) {
+      router.push(dashboardRoutes?.vendor_overview);
     } else {
-      router.push(authRoutes.partner_setup);
+      router.push(authRoutes?.partner_setup);
     }
   }, [data, router]);
 
@@ -51,7 +51,7 @@ export const Navbar = () => {
           <div className="me-1 lg:me-0 lg:hidden">
             <Link
               className="w-[130px] flex-none text-xl font-semibold"
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -80,20 +80,20 @@ export const Navbar = () => {
                   variant="ghost"
                   className="font-Groteskbold h-auto border border-[#7B7B7B] text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0 lg:hover:bg-transparent lg:hover:underline"
                 >
-                  <Link href={webRoutes.partners}>Join as a Partner</Link>
+                  <Link href={webRoutes?.partners}>Join as a Partner</Link>
                 </Button>
                 <Button
                   type="button"
                   className="font-Groteskbold px-12 text-lg font-normal"
                   asChild
                 >
-                  <Link href={authRoutes.register}>Register/Log in</Link>
+                  <Link href={authRoutes?.register}>Register/Log in</Link>
                 </Button>
               </div>
             ) : (
               <div className="ml-auto flex gap-5 py-2">
                 <Link
-                  href={dashboardRoutes.vendor_notifications}
+                  href={dashboardRoutes?.vendor_notifications}
                   className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
                 >
                   <BellDot size="24" strokeWidth={1.5} />
@@ -124,7 +124,7 @@ export const Navbar = () => {
                       style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
                     >
                       <Link
-                        href={dashboardRoutes.vendor_overview}
+                        href={dashboardRoutes?.vendor_overview}
                         className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
                       >
                         <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
@@ -146,7 +146,7 @@ export const Navbar = () => {
                       </Link>
 
                       <Link
-                        href={dashboardRoutes.client_order_history}
+                        href={dashboardRoutes?.client_order_history}
                         className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-brandColor"
                       >
                         <span className="mr-2 inline-block">

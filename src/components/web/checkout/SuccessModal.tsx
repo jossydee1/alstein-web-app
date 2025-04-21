@@ -15,7 +15,7 @@ const SuccessModal = ({
   if (!showSuccessModal) return null;
 
   const handleClose = () => {
-    router.push(dashboardRoutes.client_order_history);
+    router.push(dashboardRoutes?.client_order_history);
     setShowSuccessModal(false);
   };
 
@@ -77,7 +77,7 @@ const SuccessModal = ({
                 You can see the progress of your booking in your
                 <a
                   className="focus:outline-hidden inline-flex items-center gap-x-1.5 font-medium text-blue-600 decoration-2 hover:underline focus:underline"
-                  href={dashboardRoutes.client_order_history}
+                  href={dashboardRoutes?.client_order_history}
                 >
                   personal account.
                 </a>{" "}

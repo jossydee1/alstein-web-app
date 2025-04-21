@@ -11,7 +11,7 @@ import React, { useState, useRef, useEffect } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { BellDot, LogOut, Building2, UserRound } from "lucide-react";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
-import avatar from "@/public/icons/avatar.svg";
+import avatar from "@/public/icons/avatar?.svg";
 import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/common";
@@ -37,10 +37,10 @@ const NavBar = () => {
   useEffect(() => {
     if (!data) return;
 
-    if (data.length > 0) {
-      router.push(dashboardRoutes.vendor_overview);
+    if (data?.length > 0) {
+      router.push(dashboardRoutes?.vendor_overview);
     } else {
-      router.push(authRoutes.partner_setup);
+      router.push(authRoutes?.partner_setup);
     }
   }, [data, router]);
 
@@ -58,7 +58,7 @@ const NavBar = () => {
           <div className="flex items-center justify-between gap-x-1">
             <Link
               className="w-[130px] flex-none text-xl font-semibold"
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -77,20 +77,20 @@ const NavBar = () => {
                 variant="ghost"
                 className="font-Groteskbold h-auto border border-[#7B7B7B] text-lg font-normal lg:mr-7 lg:border-transparent lg:p-0 lg:hover:bg-transparent lg:hover:underline"
               >
-                <Link href={webRoutes.partners}>Join as a Partner</Link>
+                <Link href={webRoutes?.partners}>Join as a Partner</Link>
               </Button>
               <Button
                 type="button"
                 className="font-Groteskbold px-12 text-lg font-normal"
                 asChild
               >
-                <Link href={authRoutes.register}>Register/Log in</Link>
+                <Link href={authRoutes?.register}>Register/Log in</Link>
               </Button>
             </div>
           ) : (
             <div className="flex gap-5 py-2">
               <Link
-                href={dashboardRoutes.client_notifications}
+                href={dashboardRoutes?.client_notifications}
                 className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
               >
                 <BellDot size="24" strokeWidth={1.5} />
@@ -107,7 +107,7 @@ const NavBar = () => {
                     src={
                       user?.user_avatar
                         ? DOCUMENT_URL + user?.user_avatar
-                        : avatar.src
+                        : avatar?.src
                     }
                     width={50}
                     height={50}
@@ -121,7 +121,7 @@ const NavBar = () => {
                     style={{ boxShadow: "1px 1px 16px 2px #00000033" }}
                   >
                     <Link
-                      href={dashboardRoutes.client_order_history}
+                      href={dashboardRoutes?.client_order_history}
                       className="inline-flex w-fit items-center rounded-sm border border-[#E5E7EB] p-1.5 text-sm text-gray-700"
                     >
                       <span className="mr-2 inline-block h-5 w-5 rounded-full border border-gray-200 bg-gray-100">
@@ -130,7 +130,7 @@ const NavBar = () => {
                           src={
                             user?.user_avatar
                               ? DOCUMENT_URL + user?.user_avatar
-                              : avatar.src
+                              : avatar?.src
                           }
                           width={20}
                           height={20}
@@ -143,7 +143,7 @@ const NavBar = () => {
                     </Link>
 
                     <Link
-                      href={dashboardRoutes.client_order_history}
+                      href={dashboardRoutes?.client_order_history}
                       className="inline-flex items-center rounded-sm text-sm text-[#6B7280] hover:text-[#2F2F2F]"
                     >
                       <span className="mr-2 inline-block">

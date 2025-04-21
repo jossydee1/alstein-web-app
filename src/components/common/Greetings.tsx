@@ -3,7 +3,7 @@
 import React from "react";
 import { useAuth } from "@/context";
 import Image from "next/image";
-import avatar from "@/public/icons/avatar.svg";
+import avatar from "@/public/icons/avatar?.svg";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { dashboardRoutes, DOCUMENT_URL } from "@/utils";
@@ -30,13 +30,13 @@ const Greetings = () => {
           <Image
             alt="Avatar"
             src={
-              user?.user_avatar ? DOCUMENT_URL + user?.user_avatar : avatar.src
+              user?.user_avatar ? DOCUMENT_URL + user?.user_avatar : avatar?.src
             }
             width={62}
             height={62}
             className="aspect-square rounded-md object-cover"
           />
-          <Link href={dashboardRoutes.client_account_settings}>
+          <Link href={dashboardRoutes?.client_account_settings}>
             <Edit className="text-white" size={17} />
           </Link>
         </div>

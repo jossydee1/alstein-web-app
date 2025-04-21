@@ -16,7 +16,7 @@ export const ListingImageModal = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
-    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+    setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
   };
 
   const prevSlide = () => {
@@ -27,7 +27,7 @@ export const ListingImageModal = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
-        setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : prev));
+        setCurrentIndex(prev => (prev < images?.length - 1 ? prev + 1 : prev));
       }
       if (e.key === "ArrowLeft") {
         setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
@@ -39,7 +39,7 @@ export const ListingImageModal = ({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [images.length, onClose]);
+  }, [images?.length, onClose]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/30 p-4 py-10" onClick={onClose}>
@@ -58,7 +58,7 @@ export const ListingImageModal = ({
           {/* Image Count */}
           <div className="flex items-center justify-center">
             <p className="text-center">
-              {currentIndex + 1} of {images.length}
+              {currentIndex + 1} of {images?.length}
             </p>
           </div>
 
@@ -75,8 +75,8 @@ export const ListingImageModal = ({
           {/* Full-Screen Image View */}
           <div className="relative h-auto w-full">
             <Image
-              src={DOCUMENT_URL + images[currentIndex].path}
-              alt={DOCUMENT_URL + images[currentIndex].path}
+              src={DOCUMENT_URL + images[currentIndex]?.path}
+              alt={DOCUMENT_URL + images[currentIndex]?.path}
               className="m-auto h-auto max-h-[500px] w-auto flex-1"
               width={1000}
               height={1000}
@@ -97,7 +97,7 @@ export const ListingImageModal = ({
             <button
               className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-[#C3C3C38F] p-1 transition hover:bg-[#dedede] disabled:opacity-50 disabled:hover:bg-[#C3C3C38F]"
               onClick={nextSlide}
-              disabled={currentIndex === images.length - 1}
+              disabled={currentIndex === images?.length - 1}
             >
               <ChevronRight
                 size={20}
@@ -108,7 +108,7 @@ export const ListingImageModal = ({
 
           {/* Thumbnail Preview Row */}
           <div className="flex flex-wrap items-center gap-3 overflow-y-auto bg-neutral-100/50 px-6 py-4">
-            {images.map((img, index) => (
+            {images?.map((img, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
@@ -119,8 +119,8 @@ export const ListingImageModal = ({
                 }`}
               >
                 <Image
-                  src={DOCUMENT_URL + img.path}
-                  alt={DOCUMENT_URL + img.path}
+                  src={DOCUMENT_URL + img?.path}
+                  alt={DOCUMENT_URL + img?.path}
                   className="aspect-square max-h-16 max-w-16 rounded-md object-cover"
                   width={64}
                   height={64}

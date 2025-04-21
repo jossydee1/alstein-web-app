@@ -12,7 +12,7 @@ export const useGetBusinessProfiles = () => {
     queryKey: ["getBusinessProfiles"],
     queryFn: async () => {
       const response = await api.get<ApiResponseProps<PartnerProps[]>>(
-        "/partner/api/v1/get-my-business-profiles",
+        "//partner/api/v1/get-my-business-profiles",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -20,16 +20,16 @@ export const useGetBusinessProfiles = () => {
         },
       );
 
-      if (response.status !== 200 || !response.data) {
+      if (response?.status !== 200 || !response?.data) {
         throw new Error(
-          response.data?.message || "Failed to fetch business profiles",
+          response?.data?.message || "Failed to fetch business profiles",
         );
       }
 
-      const firstProfile = response.data.data[0];
+      const firstProfile = response?.data?.data[0];
       setBusinessProfile(firstProfile);
 
-      return response.data.data;
+      return response?.data?.data;
     },
     enabled: false, // Disable automatic fetching
   });

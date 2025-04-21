@@ -36,10 +36,10 @@ const Listings = ({
           )}
         </div>
 
-        {listings.length > 0 && (
+        {listings?.length > 0 && (
           <div className="mt-[64px] flex justify-center">
             <Link
-              href={webRoutes.listings || "#"}
+              href={webRoutes?.listings || "#"}
               className="font-Groteskbold rounded-md bg-brandColor px-[74px] py-2.5 text-lg font-normal text-white hover:bg-brandColor/80"
             >
               View All

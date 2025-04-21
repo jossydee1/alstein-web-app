@@ -52,7 +52,7 @@ const ConfirmationModal = ({
 
         {status === "success" ? (
           <Button className="buttonBlue mx-auto" asChild>
-            <Link href={dashboardRoutes.vendor_equipments}>View Listing</Link>
+            <Link href={dashboardRoutes?.vendor_equipments}>View Listing</Link>
           </Button>
         ) : (
           <Button

@@ -69,8 +69,10 @@ const AddWithdrawalMethod = ({
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to add new bank account");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(
+          response?.data?.message || "Failed to add new bank account",
+        );
         return;
       }
 
@@ -82,7 +84,7 @@ const AddWithdrawalMethod = ({
       });
       // setDefaultMethod(false);
       toast.success("Bank account added successfully");
-      return response.data.data;
+      return response?.data?.data;
     } catch (error) {
       toast.error(formatError(error, "Failed to add new bank account"));
     } finally {
@@ -125,7 +127,7 @@ const AddWithdrawalMethod = ({
                 type="text"
                 id="account_name"
                 name="account_name"
-                value={formData.account_name}
+                value={formData?.account_name}
                 onChange={handleChange}
                 placeholder="Enter account name"
                 required
@@ -140,10 +142,10 @@ const AddWithdrawalMethod = ({
                   id="bank_name"
                   name="bank_name"
                   className="w-full rounded-md border border-[#E5E7EB] shadow-sm focus-within:border-brandColor"
-                  value={formData.bank_name}
+                  value={formData?.bank_name}
                   onChange={e => {
                     const selectedBank = bankList?.find(
-                      b => b.code === e.target.value,
+                      b => b?.code === e.target.value,
                     );
                     setFormData(prevData => ({
                       ...prevData,
@@ -160,13 +162,13 @@ const AddWithdrawalMethod = ({
                     <option>Loading...</option>
                   ) : loadingBanksError ? (
                     <option disabled>
-                      {formatError(loadingBanksError.message) ||
+                      {formatError(loadingBanksError?.message) ||
                         "Failed to load banks"}
                     </option>
                   ) : (
                     bankList?.map(b => (
-                      <option key={b.code} value={b.code}>
-                        {b.name}
+                      <option key={b?.code} value={b?.code}>
+                        {b?.name}
                       </option>
                     ))
                   )}
@@ -182,7 +184,7 @@ const AddWithdrawalMethod = ({
                 type="tel"
                 id="account_number"
                 name="account_number"
-                value={formData.account_number}
+                value={formData?.account_number}
                 onChange={handleChange}
                 placeholder="Enter account number"
                 minLength={10}

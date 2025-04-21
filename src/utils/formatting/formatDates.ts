@@ -101,5 +101,5 @@ export const formatDateTime = (
   time: { hours: string; minutes: string },
 ) => {
   if (!date) return "";
-  return `${date.toLocaleDateString()} at ${time.hours}:${time.minutes}`;
+  return `${date.toLocaleDateString()} at ${time?.hours}:${time?.minutes}`;
 };

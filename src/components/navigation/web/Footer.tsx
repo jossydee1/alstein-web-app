@@ -22,12 +22,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 
 const quickLinks = [
-  { name: "About Us", href: webRoutes.about },
+  { name: "About Us", href: webRoutes?.about },
   {
     name: "Listings",
-    href: webRoutes.listings,
+    href: webRoutes?.listings,
   },
-  { name: "Blog", href: webRoutes.blog },
+  { name: "Blog", href: webRoutes?.blog },
 ];
 
 export const Footer = () => {
@@ -58,12 +58,12 @@ export const Footer = () => {
       },
     );
 
-    if (response.status === 200) {
+    if (response?.status === 200) {
       toast.success("You have successfully subscribed to our newsletter");
       setEmail("");
       setIsLoading(false);
     } else {
-      toast.error("Failed to submit review");
+      toast.error("Failed to submit email");
       setIsLoading(false);
     }
   };
@@ -77,7 +77,7 @@ export const Footer = () => {
           <div className="col-span-6 lg:col-span-2">
             <Link
               className="w-[130px] flex-none text-xl font-semibold"
-              href={webRoutes.home}
+              href={webRoutes?.home}
               aria-label="Brand"
             >
               <Image
@@ -94,8 +94,8 @@ export const Footer = () => {
             <ul className="space-y-4">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <Link href={link.href} className={itemStyle}>
-                    {link.name}
+                  <Link href={link?.href} className={itemStyle}>
+                    {link?.name}
                   </Link>
                 </li>
               ))}
@@ -109,29 +109,29 @@ export const Footer = () => {
                 <span>
                   <MapPin size="14" />
                 </span>
-                <span>{site.contacts.address}</span>
+                <span>{site?.contacts?.address}</span>
               </li>
               <li className={contactItemStyle}>
                 <span>
                   <PhoneCall size="14" />
                 </span>
-                <Link href={`tel:${site.contacts.phone}`}>
-                  {site.contacts.phone}
+                <Link href={`tel:${site?.contacts?.phone}`}>
+                  {site?.contacts?.phone}
                 </Link>
               </li>
               <li className={contactItemStyle}>
                 <span>
                   <Mail size="14" />
                 </span>
-                <Link href={`mailto:${site.contacts.email}`}>
-                  {site.contacts.email}
+                <Link href={`mailto:${site?.contacts?.email}`}>
+                  {site?.contacts?.email}
                 </Link>
               </li>
               <li className={contactItemStyle}>
                 <span>
                   <Earth size="14" />
                 </span>
-                <Link href={site.url}>{site.url}</Link>
+                <Link href={site?.url}>{site?.url}</Link>
               </li>
             </ul>
           </div>
@@ -139,16 +139,19 @@ export const Footer = () => {
           <div className="col-span-6 md:col-span-2 lg:col-span-2">
             <p className={titleStyle}>Follow Us</p>
             <div className="mb-12 flex gap-4">
-              <Link href={site.social_handles.instagram} className={iconStyle}>
+              <Link
+                href={site?.social_handles?.instagram}
+                className={iconStyle}
+              >
                 <Instagram size={24} />
               </Link>
-              <Link href={site.social_handles.facebook} className={iconStyle}>
+              <Link href={site?.social_handles?.facebook} className={iconStyle}>
                 <Facebook size={24} />
               </Link>
-              <Link href={site.social_handles.twitter} className={iconStyle}>
+              <Link href={site?.social_handles?.twitter} className={iconStyle}>
                 <Twitter size={24} />
               </Link>
-              <Link href={site.social_handles.linkedin} className={iconStyle}>
+              <Link href={site?.social_handles?.linkedin} className={iconStyle}>
                 <Linkedin size={24} />
               </Link>
             </div>
@@ -194,11 +197,11 @@ export const Footer = () => {
         <section className="flex flex-wrap items-center justify-between text-sm">
           <p> © {currentYear} ALSTEIN All rights reserved.</p>
           <div>
-            <Link href={webRoutes.terms} className={itemStyle}>
+            <Link href={webRoutes?.terms} className={itemStyle}>
               Terms and Conditions
             </Link>{" "}
             |{" "}
-            <Link href={webRoutes.privacy} className={itemStyle}>
+            <Link href={webRoutes?.privacy} className={itemStyle}>
               Privacy
             </Link>
           </div>

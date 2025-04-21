@@ -53,7 +53,7 @@ const FormStepsWithContext = ({
 
     const updatedFormData = {
       ...formData,
-      partner_id: businessProfile.id,
+      partner_id: businessProfile?.id,
     };
 
     setIsProcessing(true);
@@ -68,12 +68,12 @@ const FormStepsWithContext = ({
         },
       );
 
-      if (response.status !== 200 || !response.data) {
-        toast.error(response.data.message || "Failed to create equipment");
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(response?.data?.message || "Failed to create equipment");
         return null;
       }
 
-      return response.data.data.id; // Return the created equipment ID
+      return response?.data?.data?.id; // Return the created equipment ID
     } catch (error) {
       toast.error(formatError(error, "Failed to create equipment"));
       return null;
