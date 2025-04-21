@@ -35,6 +35,13 @@ const ListingDetailsContent = () => {
       endpoint: `partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
     });
 
+  // Get partner approved listing count
+  const { data: listingCount } = useClientFetch<{
+    total_approved_listing: number;
+  }>({
+    endpoint: `client/public/api/v1/equipments/get-partner-approved-listing?partner_id=${listingInfo?.partner?.id}`,
+  });
+
   const links = [
     {
       title: "Listings",
@@ -82,7 +89,10 @@ const ListingDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <div className="flex flex-col justify-between gap-7 lg:flex-row">
           <div className="w-full flex-1 lg:max-w-[540px]">
-            <Details listingInfo={listingInfo} />
+            <Details
+              listingInfo={listingInfo}
+              listingCount={listingCount?.total_approved_listing || 0}
+            />
           </div>
 
           <div className="min-w-[340px] max-w-[340px]">

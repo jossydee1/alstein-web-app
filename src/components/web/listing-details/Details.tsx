@@ -8,7 +8,13 @@ import { ListingInfoProps } from "@/types";
 import DateTimePicker from "@/components/common/DateTimePicker";
 import { useDateTime } from "@/context/DateTimeContext";
 
-const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
+const Details = ({
+  listingInfo,
+  listingCount,
+}: {
+  listingInfo: ListingInfoProps;
+  listingCount: number;
+}) => {
   const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
     useDateTime();
 
@@ -43,7 +49,9 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             <h3 className="mb-2 text-xl font-semibold text-[#161616]">
               {listingInfo?.partner?.name}
             </h3>
-            <p className="font-medium text-[#8B8B8B]">0 Listings</p>
+            <p className="font-medium text-[#8B8B8B]">
+              {listingCount} Listings
+            </p>
           </div>
         </div>
 
