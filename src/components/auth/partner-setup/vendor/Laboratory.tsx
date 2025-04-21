@@ -195,7 +195,6 @@ const DocumentUpload = ({
 
       // Success handling
       onUploadComplete(document, fileUrl);
-      toast.success(`${document} uploaded successfully`);
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(formatError(error, `Failed to upload ${document}`));
@@ -300,9 +299,6 @@ const LaboratoryPageContent = () => {
     null,
   );
 
-  console.log("Partner ID:", partnerId);
-  console.log("businessProfile:", businessProfile);
-
   useEffect(() => {
     if (!type || !subType) {
       router.push("/partner-setup");
@@ -351,7 +347,7 @@ const LaboratoryPageContent = () => {
     };
 
     handleCreatePartnerType();
-  }, [businessProfile, router, subType, token, type]);
+  }, [businessProfile, router, setBusinessProfile, subType, token, type]);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<UpdatePartnerProps>({
@@ -547,7 +543,6 @@ const LaboratoryPageContent = () => {
       if (currentStep < steps.length) {
         setCurrentStep(prev => prev + 1);
       } else {
-        toast.success("All steps completed!");
         router.push(dashboardRoutes.vendor_overview);
       }
     } catch (error) {

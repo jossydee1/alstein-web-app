@@ -11,6 +11,7 @@ import {
   api,
   dashboardRoutes,
   authRoutes,
+  DOCUMENT_URL,
 } from "@/utils";
 import { Button } from "../../../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +19,12 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
-import { ApiResponseProps, UpdatePartnerProps } from "@/types";
+import {
+  ApiResponseProps,
+  DocumentProps,
+  PartnerProps,
+  UpdatePartnerProps,
+} from "@/types";
 import { useAuth } from "@/context";
 import axios from "axios";
 
@@ -188,7 +194,6 @@ const DocumentUpload = ({
 
       // Success handling
       onUploadComplete(document, fileUrl);
-      toast.success(`${document} uploaded successfully`);
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(formatError(error, `Failed to upload ${document}`));
@@ -282,21 +287,73 @@ const ProfessionalPageContent = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("partner_type");
   const subType = searchParams.get("sub_type");
-  const id = searchParams.get("partner_id");
 
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, businessProfile, setBusinessProfile } = useAuth();
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [partnerId, setPartnerId] = useState("");
+  const [partnerDetails, setPartnerDetails] = useState<PartnerProps | null>(
+    null,
+  );
+
+  console.log("Partner ID:", partnerId);
+  console.log("businessProfile:", businessProfile);
 
   useEffect(() => {
-    if (!type || !subType || !id) {
+    if (!type || !subType) {
       router.push("/partner-setup");
       return;
     }
-  }, [id, router, subType, type]);
+
+    const handleCreatePartnerType = async () => {
+      if (!token) {
+        toast.error("Token is missing. Please log in again.");
+        return;
+      }
+
+      setIsProcessing(true);
+      try {
+        const response = await api.post(
+          "/partner/api/v1/create-partner",
+          { type },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (response.status === 200) {
+          setPartnerId(response.data.data.id);
+          setBusinessProfile(response.data.data);
+          setIsFormDisabled(false);
+        }
+      } catch (error) {
+        if (
+          axios.isAxiosError(error) &&
+          error.response?.status === 400 &&
+          error.response.data?.message ===
+            "Partnership type already exists on this profile"
+        ) {
+          setPartnerId(businessProfile?.id || "");
+          setPartnerDetails(businessProfile);
+          setIsFormDisabled(false);
+        } else {
+          console.error("Failed to create partner type: " + error);
+        }
+      } finally {
+        setIsProcessing(false);
+      }
+    };
+
+    handleCreatePartnerType();
+  }, [businessProfile, router, setBusinessProfile, subType, token, type]);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<UpdatePartnerProps>({
-    id: id || "",
+    id: partnerId || "",
     name: "",
     institution: "",
     institutional_email: "",
@@ -304,12 +361,34 @@ const ProfessionalPageContent = () => {
     department_head_email: "",
   });
 
+  useEffect(() => {
+    if (partnerDetails) {
+      setFormData({
+        id: partnerDetails.id || "",
+        name: partnerDetails.name || "",
+        institution: partnerDetails.institution || "",
+        institutional_email: partnerDetails.institutional_email || "",
+        department: partnerDetails.department || "",
+        department_head_email: partnerDetails.department_head_email || "",
+      });
+
+      // Prepopulate document status if documents exist
+      if (partnerDetails.partner_doc) {
+        setExistingDocuments(partnerDetails.partner_doc);
+      }
+    } else {
+      setFormData(prev => ({ ...prev, id: partnerId }));
+    }
+  }, [partnerDetails, partnerId]);
+
   // Separate state for tracking document uploads
+  const [existingDocuments, setExistingDocuments] = useState<DocumentProps[]>(
+    [],
+  );
   const [documentStatus, setDocumentStatus] = useState<
     Record<string, DocumentStatus>
   >({});
   const [uploadingDocuments, setUploadingDocuments] = useState<string[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -368,14 +447,19 @@ const ProfessionalPageContent = () => {
   };
 
   const handleSaveAndContinue = async () => {
+    if (isFormDisabled) {
+      toast.error("Form submission is disabled. Please try again later.");
+      return;
+    }
+
     // Don't proceed if documents are still uploading in step 2
     if (currentStep === 2 && uploadingDocuments.length > 0) {
       toast.info("Please wait for all documents to finish uploading");
       return;
     }
 
-    // If on last step, check if all documents are uploaded
-    if (currentStep === 2 && !areAllDocumentsUploaded()) {
+    // If on last step, if no documents exist, check if all required documents are uploaded
+    if (currentStep === 2 && !existingDocuments && !areAllDocumentsUploaded()) {
       toast.error("Please upload all required documents before submitting");
       return;
     }
@@ -426,13 +510,10 @@ const ProfessionalPageContent = () => {
         return;
       }
 
-      toast.success("Step data saved successfully!");
-
       // Move to the next step if not the last step
       if (currentStep < steps.length) {
         setCurrentStep(prev => prev + 1);
       } else {
-        toast.success("All steps completed!");
         router.push(dashboardRoutes.vendor_overview);
       }
     } catch (error) {
@@ -508,27 +589,66 @@ const ProfessionalPageContent = () => {
         );
       case 2:
         return (
-          <div className="space-y-3">
-            {requiredDocuments.map((doc, index) => (
-              <DocumentUpload
-                key={index}
-                document={doc}
-                partnerId={id || ""}
-                token={token || ""}
-                onUploadComplete={handleDocumentUploadComplete}
-                onUploadStart={handleDocumentUploadStart}
-                onUploadFail={handleDocumentUploadFail}
-                isUploaded={!!documentStatus[doc]?.isUploaded}
-              />
-            ))}
-            <div className="mt-2 text-sm text-gray-500">
-              <p>* Only PDF files are allowed (Max size: 3MB)</p>
-              {uploadingDocuments.length > 0 && (
-                <p className="mt-1 flex items-center text-blue-500">
-                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                  Uploading {uploadingDocuments.length} document(s)...
-                </p>
-              )}
+          <div>
+            {existingDocuments.length > 0 && (
+              <div>
+                <h3 className="mb-2">Existing Documents</h3>
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {existingDocuments.map((doc, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Link
+                        href={DOCUMENT_URL + doc.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs text-blue-600 hover:underline"
+                      >
+                        {doc.name || "Download Document"}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+                <h3 className="mb-2">Upload/Update Documents</h3>
+              </div>
+            )}
+            <div className="space-y-3">
+              {requiredDocuments.map((doc, index) => {
+                const documentStatusEntry = documentStatus[doc];
+                return (
+                  <div key={index}>
+                    <DocumentUpload
+                      document={doc}
+                      partnerId={partnerId || ""}
+                      token={token || ""}
+                      onUploadComplete={handleDocumentUploadComplete}
+                      onUploadStart={handleDocumentUploadStart}
+                      onUploadFail={handleDocumentUploadFail}
+                      isUploaded={!!documentStatusEntry?.isUploaded}
+                    />
+                    {documentStatusEntry?.isUploaded &&
+                      documentStatusEntry.url && (
+                        <div className="mt-2 text-sm text-gray-500">
+                          <a
+                            href={documentStatusEntry.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline"
+                          >
+                            View Uploaded Document
+                          </a>
+                        </div>
+                      )}
+                  </div>
+                );
+              })}
+              <div className="mt-2 text-sm text-gray-500">
+                <p>* Only PDF files are allowed (Max size: 3MB)</p>
+                {uploadingDocuments.length > 0 && (
+                  <p className="mt-1 flex items-center text-blue-500">
+                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                    Uploading {uploadingDocuments.length} document(s)...
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -585,8 +705,10 @@ const ProfessionalPageContent = () => {
                 onClick={handleSaveAndContinue}
                 className={style.inputGroup}
                 disabled={
-                  currentStep === 2 &&
-                  (uploadingDocuments.length > 0 || !areAllDocumentsUploaded())
+                  isFormDisabled ||
+                  (currentStep === 2 &&
+                    (uploadingDocuments.length > 0 ||
+                      (!existingDocuments && !areAllDocumentsUploaded())))
                 }
               >
                 {currentStep === steps.length
