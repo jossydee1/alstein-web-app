@@ -8,6 +8,7 @@ import { api, formatError } from "@/utils";
 import { ApiResponseProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
+import { useClientFetch } from "@/hooks";
 
 const AddWithdrawalMethod = ({
   setShowForm,
@@ -25,9 +26,24 @@ const AddWithdrawalMethod = ({
     bank_name: "",
     account_name: "",
     account_number: "",
-    cbn_code: "56464",
+    cbn_code: "",
   });
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const url = "/partner/api/v1/payment/get-banks-list";
+
+  const {
+    data: bankData,
+    isLoading: loadingBanks,
+    error: loadingBanksError,
+  } = useClientFetch<{
+    data: { data: { code: string; name: string }[] };
+  }>({
+    endpoint: url,
+    token,
+  });
+
+  const bankList = bankData?.data?.data;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,7 +78,7 @@ const AddWithdrawalMethod = ({
         bank_name: "",
         account_name: "",
         account_number: "",
-        cbn_code: "56464",
+        cbn_code: "",
       });
       // setDefaultMethod(false);
       toast.success("Bank account added successfully");
@@ -119,16 +135,43 @@ const AddWithdrawalMethod = ({
               <Label htmlFor="bank_name" className="mb-2">
                 Bank Name
               </Label>
-              <Input
-                className="border border-[#E5E7EB] p-5"
-                type="text"
-                id="bank_name"
-                name="bank_name"
-                value={formData.bank_name}
-                onChange={handleChange}
-                placeholder="Enter bank name"
-                required
-              />
+              <div>
+                <select
+                  id="bank_name"
+                  name="bank_name"
+                  className="w-full rounded-md border border-[#E5E7EB] shadow-sm focus-within:border-brandColor"
+                  value={formData.bank_name}
+                  onChange={e => {
+                    const selectedBank = bankList?.find(
+                      b => b.code === e.target.value,
+                    );
+                    setFormData(prevData => ({
+                      ...prevData,
+                      bank_name: selectedBank?.name || "",
+                      cbn_code: e.target.value,
+                    }));
+                  }}
+                  required
+                >
+                  <option value="" disabled>
+                    Enter bank name
+                  </option>
+                  {loadingBanks ? (
+                    <option>Loading...</option>
+                  ) : loadingBanksError ? (
+                    <option disabled>
+                      {formatError(loadingBanksError.message) ||
+                        "Failed to load banks"}
+                    </option>
+                  ) : (
+                    bankList?.map(b => (
+                      <option key={b.code} value={b.code}>
+                        {b.name}
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
             </div>
             <div className="">
               <Label htmlFor="account_number" className="mb-2">
