@@ -9,13 +9,15 @@ import { ApiResponseProps, BankDetailsHistoryProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { Check, X } from "lucide-react";
-import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
 
 const WithdrawFormAndMethods = ({
   setShowForm,
+  data,
+  refetch,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  data: BankDetailsHistoryProps | undefined;
+  refetch: () => void;
 }) => {
   const { token, businessProfile } = useAuth();
 
@@ -23,19 +25,6 @@ const WithdrawFormAndMethods = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  const getBankAccUrl = `/partner/api/v1/payment/get-bank-account?skip=0&take=10&partner_id=${businessProfile?.id}`;
-
-  const { data, isLoading, error, refetch } =
-    useClientFetch<BankDetailsHistoryProps>({
-      endpoint: getBankAccUrl,
-      token,
-      enabled: !!token && !!businessProfile?.id,
-    });
-
-  if (error) {
-    toast.error(formatError(error, "Failed to fetch bank account details"));
-  }
 
   const handleSetDefault = async (bankId: string, partnerId: string) => {
     setIsProcessing(true);
@@ -135,7 +124,6 @@ const WithdrawFormAndMethods = ({
 
   return (
     <>
-      {isLoading && <LoadingState />}
       <main className="dashboard-section-card">
         <header className="flex flex-row flex-wrap items-center justify-between gap-2">
           <div className="dashboard-section-card-header">
