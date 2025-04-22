@@ -70,7 +70,7 @@ const EquipmentListings = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   useEffect(() => {
     if (listingError) {
