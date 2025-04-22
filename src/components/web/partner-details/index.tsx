@@ -24,6 +24,7 @@ const PartnerDetailsContent = () => {
     error: errorPartner,
   } = useClientFetch<PartnerProps>({
     endpoint: `/partner/public/api/v1/get-partner?id=${id}`,
+    enabled: !!id,
   });
 
   const {
@@ -32,15 +33,18 @@ const PartnerDetailsContent = () => {
     error: errorListings,
   } = useClientFetch<ListingsProps>({
     endpoint: `/client/public/api/v1/equipments/get-partner-equipments?skip=0&take=50&partner_id=${id}`,
+    enabled: !!id,
   });
 
   const { data: rating, refetch: refetchRating } =
     useClientFetch<AverageRatingProps>({
       endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
+      enabled: !!partnerData?.id,
     });
 
   const { data: reviews } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
+    enabled: !!partnerData?.id,
   });
 
   const links = [

@@ -14,6 +14,7 @@ const Metrics = () => {
   }>({
     endpoint: `/partner/api/v1/booking/get-partner-booking-statistics?partner_id=${businessProfile?.id}`,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
 
   return (

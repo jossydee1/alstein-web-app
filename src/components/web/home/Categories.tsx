@@ -10,6 +10,7 @@ import { useClientFetch } from "@/hooks";
 const CategoryItem = ({ category }: { category: CategoryProps }) => {
   const { data, isLoading } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/equipments/get-partners-number-per-category?category_slug=${category?.title_slug}`,
+    enabled: !!category?.title_slug,
   });
 
   const partnerCount = data?.count || 0;

@@ -17,6 +17,7 @@ const PaymentMethodContent = () => {
   const { data } = useClientFetch<PaymentMethodsHistoryProps>({
     endpoint: url,
     token,
+    enabled: !!token,
   });
 
   console.log(data);

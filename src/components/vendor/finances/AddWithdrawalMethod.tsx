@@ -41,6 +41,7 @@ const AddWithdrawalMethod = ({
   }>({
     endpoint: url,
     token,
+    enabled: !!token,
   });
 
   const bankList = bankData?.data?.data;

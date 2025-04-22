@@ -31,6 +31,7 @@ const WithdrawFormAndMethods = ({
     useClientFetch<BankDetailsHistoryProps>({
       endpoint: getBankAccUrl,
       token,
+      enabled: !!token && !!businessProfile?.id,
     });
 
   if (error) {

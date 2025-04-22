@@ -22,6 +22,7 @@ const AccountSettingsContent = () => {
   const { refetch: refetchUserDetails } = useClientFetch<UserDetailsProps>({
     endpoint: url,
     token,
+    enabled: !!token,
   });
 
   const [showForm, setShowForm] = useState(false);

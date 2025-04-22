@@ -65,6 +65,7 @@ const EquipmentListings = () => {
   } = useClientFetch<ListingsProps>({
     endpoint: url,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
 
   useEffect(() => {

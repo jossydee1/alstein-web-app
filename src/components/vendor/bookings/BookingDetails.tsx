@@ -77,6 +77,7 @@ const BookingDetails = () => {
   const { data, isLoading } = useClientFetch<OrderProps>({
     endpoint: `/partner/api/v1/booking/booking-details?booking_id=${bookingId}`,
     token,
+    enabled: !!bookingId && !!token,
   });
 
   const showButtons = data?.status === "initiated";
