@@ -21,10 +21,9 @@ import {
   formatError,
   webRoutes,
 } from "@/utils";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
-import { useSearchParams } from "next/navigation";
 import { CommentProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 
@@ -62,8 +61,7 @@ export const Reviews = ({
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
-  // Pagination state
-  const itemsPerPage = 50;
+  const itemsPerPage = showAllReviews ? 5 : 2;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
@@ -79,7 +77,6 @@ export const Reviews = ({
     endpoint: url,
   });
 
-  // Update comments and total pages when data changes
   useEffect(() => {
     if (comments) {
       setCommentsData(comments?.data);
@@ -87,16 +84,15 @@ export const Reviews = ({
     }
   }, [comments]);
 
-  const filteredReviews = Array.isArray(commentsData)
-    ? showAllReviews
-      ? commentsData
-      : commentsData.slice(0, 2)
-    : [];
-
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleShowAllReviews = () => {
+    setCurrentPage(1); // reset to page 1
+    setShowAllReviews(prev => !prev);
   };
 
   const renderPaginationItems = () => {
@@ -131,10 +127,6 @@ export const Reviews = ({
 
   const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
-  const handleShowAllReviews = () => {
-    setShowAllReviews(prev => !prev);
-  };
-
   const handleRatingSubmit = async (score: number) => {
     if (!userId) {
       redirect(redirectUrl);
@@ -147,7 +139,7 @@ export const Reviews = ({
       const response = await api.post(
         "/partner/public/api/v1/ratings/submit-rating-score",
         {
-          score: score,
+          score,
           partner_id: partnerId,
           equipment_id: listingId,
           profile_id: userId,
@@ -205,13 +197,10 @@ export const Reviews = ({
       if (response?.status === 200) {
         toast.success("Comment submitted successfully");
         setComment("");
-        setIsCommentSubmitting(false);
         refetchComments();
-        return;
       }
     } catch (error) {
       toast.error(formatError(error));
-      setIsCommentSubmitting(false);
     } finally {
       setIsCommentSubmitting(false);
     }
@@ -230,10 +219,7 @@ export const Reviews = ({
             alt="Average Rating"
             className="object-fit h-[54px] w-[54px]"
           />
-          <p
-            className="text-5xl font-[500] text-[#5D5D5D]"
-            aria-label="Average Rating"
-          >
+          <p className="text-5xl font-[500] text-[#5D5D5D]">
             {averageRating?.toFixed(1)}
           </p>
         </div>
@@ -241,13 +227,13 @@ export const Reviews = ({
 
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row">
         <div>
-          {!filteredReviews || filteredReviews?.length === 0 ? (
+          {commentsData?.length === 0 ? (
             <p className="text-center text-gray-500">
               No reviews yet, be the first one!
             </p>
           ) : (
             <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
-              {filteredReviews.map(r => (
+              {commentsData.map(r => (
                 <div key={r?.id}>
                   <div className="flex items-center gap-3">
                     <Image
@@ -283,8 +269,8 @@ export const Reviews = ({
                 </PaginationItem>
                 {renderPaginationItems()}
                 <PaginationItem
-                  className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
                   onClick={() => handlePageChange(currentPage + 1)}
+                  className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
                 >
                   <ChevronRight />
                 </PaginationItem>
@@ -292,7 +278,7 @@ export const Reviews = ({
             </Pagination>
           )}
 
-          {commentsData?.length > 2 && (
+          {comments && comments?.item_count > 2 && (
             <Button
               type="button"
               variant="outline"
