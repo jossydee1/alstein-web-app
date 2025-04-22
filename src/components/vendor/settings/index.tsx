@@ -5,14 +5,13 @@ import { Check, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { api, authRoutes, DOCUMENT_URL, formatError } from "@/utils";
+import { api, DOCUMENT_URL, formatError } from "@/utils";
 import { DocumentProps, PartnerProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import Image from "next/image";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
-import Link from "next/link";
 
 const VendorSettingsContent = () => {
   const { token, businessProfile, setBusinessProfile } = useAuth();
@@ -301,35 +300,27 @@ const VendorSettingsContent = () => {
               </Label>
               <div className="my-2 flex flex-wrap gap-2">
                 {formData?.documents?.length > 0 ? (
-                  formData?.documents?.map((doc, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <a
-                        href={doc?.path}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs text-blue-600 hover:underline"
-                      >
-                        {doc?.name || "Download Document"}
-                      </a>
-                    </div>
-                  ))
+                  formData?.documents?.map(
+                    (doc, index) =>
+                      doc?.name !== "logo" && (
+                        <div key={index} className="flex items-center gap-2">
+                          <a
+                            href={doc?.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs capitalize text-blue-600 hover:underline"
+                          >
+                            {doc?.name?.replace(/-/g, " ") ||
+                              "Download Document"}
+                          </a>
+                        </div>
+                      ),
+                  )
                 ) : (
                   <div className="text-gray-500">No documents uploaded yet</div>
                 )}
               </div>
             </div>
-
-            <Button
-              variant="outline"
-              type="submit"
-              disabled={isProcessing}
-              className="buttonBlue2"
-              asChild
-            >
-              <Link href={authRoutes?.partner_setup_vendor}>
-                Update Profile
-              </Link>
-            </Button>
           </form>
 
           <div className="flex items-start gap-5 py-4">
