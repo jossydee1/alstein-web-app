@@ -22,7 +22,7 @@ import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { ListingProps } from "@/types";
+import { ListingsProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -57,21 +57,12 @@ const EquipmentListings = () => {
 
   const url = `/partner/api/v1/equipments/get-equipments?partner_id=${businessProfile?.id}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
-  // const {
-  //   data: equipments,
-  //   isLoading,
-  //   error: listingError,
-  //   refetch,
-  // } = useClientFetch<ListingsProps>({
-  //   endpoint: url,
-  //   token,
-  // });
   const {
     data: equipments,
     isLoading,
     error: listingError,
     refetch,
-  } = useClientFetch<ListingProps[]>({
+  } = useClientFetch<ListingsProps>({
     endpoint: url,
     token,
   });
@@ -80,19 +71,13 @@ const EquipmentListings = () => {
     refetch();
   }, []);
 
-  // useEffect(() => {
-  //   if (listingError) {
-  //     toast.error(listingError?.message);
-  //   }
-  //   if (equipments?.total_count) {
-  //     setTotalPages(Math.ceil(equipments?.total_count / itemsPerPage));
-  //   }
-  // }, [listingError, equipments]);
   useEffect(() => {
     if (listingError) {
       toast.error(listingError?.message);
     }
-    setTotalPages(10);
+    if (equipments?.total_count) {
+      setTotalPages(Math.ceil(equipments?.total_count / itemsPerPage));
+    }
   }, [listingError, equipments]);
 
   const handlePageChange = (page: number) => {
@@ -163,8 +148,8 @@ const EquipmentListings = () => {
             </TableHeader>
 
             <TableBody>
-              {equipments && equipments?.length > 0 ? (
-                equipments?.map(e => (
+              {equipments && equipments?.data?.length > 0 ? (
+                equipments?.data.map(e => (
                   <TableRow key={e?.id} className="py-10">
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {e?.name}
