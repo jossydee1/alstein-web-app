@@ -1,51 +1,28 @@
-import {
-  authRoutes,
-  dashboardRoutes,
-  DOCUMENT_URL,
-  formatError,
-  webRoutes,
-} from "@/utils";
+import { authRoutes, dashboardRoutes, DOCUMENT_URL, webRoutes } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import { BellDot, Building2, LogOut, UserRound } from "lucide-react";
+import { BellDot, LogOut, UserRound } from "lucide-react";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
-import { useGetBusinessProfiles } from "@/hooks/useGetBusinessProfiles";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { LoadingState } from "@/components/common";
+import { useCloseMenuWhenClickedOutside } from "@/hooks";
 
 export const Navbar = () => {
-  const router = useRouter();
-
   const { logout, user } = useAuth();
-  const { refetch, isLoading, data, error } = useGetBusinessProfiles();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!data) return;
-
-    if (data?.length > 0) {
-      router.push(dashboardRoutes?.vendor_overview);
-    } else {
-      router.push(authRoutes?.partner_setup);
-    }
-  }, [data, router]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(formatError(error));
-    }
-  }, [error]);
+  useCloseMenuWhenClickedOutside({
+    showMenu: showDropdown,
+    showMenuRef: dropdownRef,
+    setShowMenu: setShowDropdown,
+  });
 
   return (
     <>
-      {isLoading && <LoadingState />}
       <header className="text-sm0 sticky inset-x-0 top-0 z-[48] flex w-full flex-wrap border-b bg-white py-2.5 md:flex-nowrap md:justify-start lg:ps-[260px]">
         <nav className="mx-auto flex w-full basis-full items-center px-4 sm:px-6">
           <div className="me-1 lg:me-0 lg:hidden">
@@ -156,22 +133,6 @@ export const Navbar = () => {
                           My Account
                         </span>
                       </Link>
-
-                      <Button
-                        variant="ghost"
-                        onClick={e => {
-                          e.preventDefault();
-                          refetch();
-                        }}
-                        className="inline-flex items-center justify-start rounded-sm p-0 text-sm text-[#6B7280] hover:text-[#2F2F2F]"
-                      >
-                        <span className="mr-2 inline-block">
-                          <Building2 size={20} />
-                        </span>
-                        <span className="font-medium leading-6">
-                          Business Profile
-                        </span>
-                      </Button>
 
                       <Button
                         type="button"

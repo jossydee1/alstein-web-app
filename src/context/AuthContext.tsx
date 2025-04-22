@@ -4,6 +4,7 @@ import { UserDetailsProps } from "@/types/user";
 import { PartnerProps } from "@/types";
 import { useRouter } from "next/navigation";
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { api, authRoutes } from "@/utils";
 
 interface UserContextProps {
   id: string;
@@ -16,16 +17,22 @@ interface AuthContextType {
   userId: string | null;
   token: string | null;
   businessProfile: PartnerProps | null;
-  login: (user: UserContextProps) => void;
+  canAccessVendor: boolean;
+  isProfileVerified: boolean;
+  isAuthLoading: boolean;
+  login: (user: UserContextProps) => Promise<void>;
   logout: () => void;
   setUser: (user: UserDetailsProps) => void;
   setBusinessProfile: (profile: PartnerProps) => void;
+  fetchBusinessProfiles: () => Promise<PartnerProps[]>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+
+  // Auth state
   const [user, setUser] = useState<UserContextProps["user"] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -33,33 +40,97 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     null,
   );
 
+  // Permission flags
+  const [canAccessVendor, setCanAccessVendor] = useState<boolean>(false);
+  const [isProfileVerified, setIsProfileVerified] = useState<boolean>(false);
+
+  // Loading state
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
+
+  // Initialize auth state from localStorage
   useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    const storedToken = localStorage.getItem("userToken");
-    const storedUser = localStorage.getItem("user");
-    const storedBusinessProfile = localStorage.getItem("businessProfile");
+    const initializeAuth = async () => {
+      setIsAuthLoading(true);
 
-    if (storedUserId && storedToken) {
-      setUserId(storedUserId);
-      setToken(storedToken);
+      const storedUserId = localStorage.getItem("userId");
+      const storedToken = localStorage.getItem("userToken");
+      const storedUser = localStorage.getItem("user");
+      const storedBusinessProfile = localStorage.getItem("businessProfile");
 
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      if (storedUserId && storedToken) {
+        setUserId(storedUserId);
+        setToken(storedToken);
+
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+
+        if (storedBusinessProfile) {
+          const profile = JSON.parse(storedBusinessProfile);
+          setBusinessProfile(profile);
+          setCanAccessVendor(!!profile);
+          setIsProfileVerified(profile?.is_verified !== false);
+        }
       }
 
-      if (storedBusinessProfile) {
-        setBusinessProfile(JSON.parse(storedBusinessProfile));
-      }
-    }
+      setIsAuthLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
-  const login = ({ id, token, user }: UserContextProps) => {
+  // Fetch business profiles
+  const fetchBusinessProfiles = async (): Promise<PartnerProps[]> => {
+    if (!token) {
+      return [];
+    }
+
+    try {
+      const response = await api.get(
+        "/partner/api/v1/get-my-business-profiles",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response?.status !== 200 || !response?.data) {
+        return [];
+      }
+
+      const profiles = response?.data?.data || [];
+
+      if (profiles.length > 0) {
+        const firstProfile = profiles[0];
+        setBusinessProfileHandler(firstProfile);
+      }
+
+      return profiles;
+    } catch (error) {
+      console.error("Error fetching business profiles:", error);
+      return [];
+    }
+  };
+
+  const login = async ({ id, token, user }: UserContextProps) => {
+    setIsAuthLoading(true);
+
     setUserId(id);
     setUser(user);
     setToken(token);
     localStorage.setItem("userId", id);
     localStorage.setItem("userToken", token);
     localStorage.setItem("user", JSON.stringify(user));
+
+    // Fetch business profiles immediately after login
+    try {
+      await fetchBusinessProfiles();
+    } catch (error) {
+      console.error("Error fetching business profiles after login:", error);
+    } finally {
+      setIsAuthLoading(false);
+    }
   };
 
   const logout = () => {
@@ -67,11 +138,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     setToken(null);
     setBusinessProfile(null);
+    setCanAccessVendor(false);
+    setIsProfileVerified(false);
     localStorage.removeItem("userId");
     localStorage.removeItem("userToken");
     localStorage.removeItem("user");
     localStorage.removeItem("businessProfile");
-    router.push("/login");
+    router.push(authRoutes.login);
   };
 
   const setUserProfileHandler = (user: UserDetailsProps) => {
@@ -81,6 +154,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const setBusinessProfileHandler = (profile: PartnerProps) => {
     setBusinessProfile(profile);
+    setCanAccessVendor(!!profile);
+    // TODO: Uncomment this line when admin verification is implemented
+    // setIsProfileVerified(profile?.is_verified !== false);
+    setIsProfileVerified(true);
     localStorage.setItem("businessProfile", JSON.stringify(profile));
   };
 
@@ -91,10 +168,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userId,
         token,
         businessProfile,
+        canAccessVendor,
+        isProfileVerified,
+        isAuthLoading,
         login,
         logout,
         setUser: setUserProfileHandler,
         setBusinessProfile: setBusinessProfileHandler,
+        fetchBusinessProfiles,
       }}
     >
       {children}

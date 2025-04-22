@@ -3,7 +3,8 @@
 import Greetings from "@/components/common/Greetings";
 import { LinkTab } from "@/components/common/LinkTab";
 import NavBar from "@/components/navigation/dashboard/client/NavBar";
-import { dashboardRoutes, withAuth } from "@/utils";
+import { dashboardRoutes } from "@/utils";
+import { useAuthGuard } from "@/hooks";
 import {
   BellDot,
   Receipt,
@@ -13,6 +14,16 @@ import {
 } from "lucide-react";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { isAuthorized, LoadingComponent } = useAuthGuard();
+
+  if (LoadingComponent) {
+    return LoadingComponent;
+  }
+
+  if (!isAuthorized) {
+    return null; // The guard will handle redirection
+  }
+
   // Define tab items with titles, links and icons
   const tabItems = [
     {
@@ -56,4 +67,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(DashboardLayout);
+export default DashboardLayout;

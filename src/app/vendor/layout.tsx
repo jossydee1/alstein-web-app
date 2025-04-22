@@ -6,7 +6,7 @@ import {
   Navbar,
   Sidebar,
 } from "@/components/navigation/dashboard/partner";
-import { isPartner } from "@/utils";
+import { useAuthGuard } from "@/hooks";
 
 interface DashboardLayoutProps {
   children: ReactElement<
@@ -16,11 +16,21 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+  // Require vendor access for this layout
+  const { isAuthorized, LoadingComponent } = useAuthGuard(true);
+
+  if (LoadingComponent) {
+    return LoadingComponent;
+  }
+
+  if (!isAuthorized) {
+    return null; // The guard will handle redirection
+  }
+
   return (
     <>
       <div className="min-h-svh bg-[#fff] font-visbymedium antialiased">
         <Navbar />
-        {/* <MobileNavigation breadcrumbs={breadcrumbs} /> */}
         <MobileNavigation />
         <Sidebar />
 
@@ -33,4 +43,4 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   );
 };
 
-export default isPartner(DashboardLayout);
+export default DashboardLayout;
