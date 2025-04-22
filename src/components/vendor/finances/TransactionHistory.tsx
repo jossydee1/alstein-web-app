@@ -69,6 +69,7 @@ const TransactionHistory = () => {
   } = useClientFetch<OrderHistoryProps>({
     endpoint: url,
     token,
+    enabled: !!token && activeFilter !== "",
   });
 
   useEffect(() => {

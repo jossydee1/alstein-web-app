@@ -16,6 +16,7 @@ const NotificationsContent = () => {
   const { data, isLoading, error } = useClientFetch<NotificationsHistoryProps>({
     endpoint: url,
     token,
+    enabled: !!token,
   });
 
   return (

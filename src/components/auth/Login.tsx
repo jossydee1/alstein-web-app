@@ -68,34 +68,43 @@ const LoginContent = () => {
   };
 
   const handleSuccessfulLogin = async (id: string, token: string) => {
-    const response = await api.get("/client/api/v1/get-user-info", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      // Get user info
+      const response = await api.get("/client/api/v1/get-user-info", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    login({ id, token, user: response?.data?.data });
-    setEmail("");
-    setPassword("");
+      // Log in with auth context - this will fetch business profiles internally
+      await login({ id, token, user: response?.data?.data });
 
-    if (type === "client") {
-      router.push(dashboardRoutes?.client_order_history);
-      return;
-    }
+      setEmail("");
+      setPassword("");
 
-    if (type === "partner") {
-      router.push(authRoutes?.partner_setup);
-      return;
-    }
+      // After successful login and business profile check (which happens in login()),
+      // redirect based on type or redirectUrl
+      if (type === "client") {
+        router.push(dashboardRoutes?.client_order_history);
+        return;
+      }
 
-    if (redirectUrl) {
-      const url = decodeURIComponent(redirectUrl);
-      const redirectWithParams = comment
-        ? `${url}?comment=${encodeURIComponent(comment)}${idParam ? `#${idParam}` : ""}`
-        : `${url}${idParam ? `#${idParam}` : ""}`;
-      router.push(redirectWithParams);
-    } else {
-      router.push(dashboardRoutes?.client_order_history);
+      if (type === "partner") {
+        router.push(authRoutes?.partner_setup);
+        return;
+      }
+
+      if (redirectUrl) {
+        const url = decodeURIComponent(redirectUrl);
+        const redirectWithParams = comment
+          ? `${url}?comment=${encodeURIComponent(comment)}${idParam ? `#${idParam}` : ""}`
+          : `${url}${idParam ? `#${idParam}` : ""}`;
+        router.push(redirectWithParams);
+      } else {
+        router.push(dashboardRoutes?.client_order_history);
+      }
+    } catch (error) {
+      handleLoginError(error);
     }
   };
 

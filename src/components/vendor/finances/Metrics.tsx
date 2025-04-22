@@ -1,24 +1,39 @@
+"use client";
+
+import { useAuth } from "@/context";
+import { useClientFetch } from "@/hooks";
 import { formatPrice } from "@/utils";
 import React from "react";
 
 const Metrics = () => {
+  const { token, businessProfile } = useAuth();
+
+  const url = `/partner/api/v1/payment/get-partner-payment-stat?partner_id=${businessProfile?.id}`;
+
+  const { data } = useClientFetch<{
+    total_revenue: number;
+    available_balance: number;
+    potential_earnings: number;
+  }>({
+    endpoint: url,
+    token,
+    enabled: !!token && !!businessProfile?.id,
+  });
+
   return (
     <section className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
       <SimpleCard
-        title="Available to Payout"
-        value={formatPrice(500000000, "NGN")}
-        subText="Payout"
+        title="Available for Payout"
+        value={formatPrice(data?.available_balance || 0, "NGN")}
         className="!bg-brandColor !text-white"
       />
       <SimpleCard
-        title="Total Revenue"
-        value={formatPrice(500000000, "NGN")}
-        subText={205 + " Orders"}
+        title="Pending Bookings"
+        value={formatPrice(data?.potential_earnings || 0, "NGN")}
       />
       <SimpleCard
-        title="Pending Bookings"
-        value={formatPrice(500000000, "NGN")}
-        subText={205 + " Bookings"}
+        title="Total Revenue"
+        value={formatPrice(data?.total_revenue || 0, "NGN")}
       />
     </section>
   );

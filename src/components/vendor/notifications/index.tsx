@@ -16,6 +16,7 @@ const VendorNotificationsContent = () => {
   const { data, isLoading, error } = useClientFetch<NotificationsHistoryProps>({
     endpoint: url,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
   return (
     <>

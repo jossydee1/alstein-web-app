@@ -61,6 +61,7 @@ const BookingHistory = () => {
   } = useClientFetch<OrderProps[]>({
     endpoint: url,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
 
   useEffect(() => {

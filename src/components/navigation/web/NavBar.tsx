@@ -11,24 +11,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { usePathname } from "next/navigation";
-import {
-  authRoutes,
-  dashboardRoutes,
-  DOCUMENT_URL,
-  formatError,
-  webRoutes,
-} from "@/utils";
+import { authRoutes, dashboardRoutes, DOCUMENT_URL, webRoutes } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { LoadingState } from "@/components/common";
-import { useGetBusinessProfiles } from "@/hooks/useGetBusinessProfiles";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 
 // CSS Classes
 const STYLES = {
@@ -84,10 +76,10 @@ const NavBar = () => {
   const router = useRouter();
   const path = usePathname() || "";
 
-  const { userId, logout, user } = useAuth();
-  const { refetch, isLoading, data, error } = useGetBusinessProfiles();
+  const { logout, user, fetchBusinessProfiles, businessProfile } = useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useCloseMenuWhenClickedOutside({
@@ -96,21 +88,25 @@ const NavBar = () => {
     setShowMenu: setShowDropdown,
   });
 
-  useEffect(() => {
-    if (!data) return;
+  const handleBusinessProfileClick = async () => {
+    setIsLoading(true);
+    try {
+      const profiles = await fetchBusinessProfiles();
 
-    if (data.length > 0) {
-      router.push(dashboardRoutes?.vendor_overview);
-    } else {
-      router.push(authRoutes?.partner_setup);
+      if (profiles.length > 0) {
+        // If we have profiles, navigate to vendor dashboard
+        router.push(dashboardRoutes?.vendor_overview);
+      } else {
+        // If no profiles, go to partner setup
+        router.push(authRoutes?.partner_setup);
+      }
+    } catch (error) {
+      console.error("Error fetching business profiles:", error);
+    } finally {
+      setIsLoading(false);
+      setShowDropdown(false);
     }
-  }, [data, router]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(formatError(error));
-    }
-  }, [error]);
+  };
 
   const renderNavItem = (item: (typeof NAV_ITEMS)[0]) => {
     if (item?.isDropdown) {
@@ -207,7 +203,7 @@ const NavBar = () => {
                     {NAV_ITEMS?.map(renderNavItem)}
                   </div>
 
-                  {!userId ? (
+                  {!user ? (
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                       <Button
                         type="button"
@@ -294,17 +290,16 @@ const NavBar = () => {
 
                             <Button
                               variant="ghost"
-                              onClick={e => {
-                                e.preventDefault();
-                                refetch();
-                              }}
+                              onClick={handleBusinessProfileClick}
                               className="inline-flex items-center justify-start rounded-sm p-0 text-sm text-[#6B7280] hover:text-[#2F2F2F]"
                             >
                               <span className="mr-2 inline-block">
                                 <Building2 size={20} />
                               </span>
                               <span className="font-medium leading-6">
-                                Business Profile
+                                {businessProfile
+                                  ? "Partner Dashboard"
+                                  : "Business Profile"}
                               </span>
                             </Button>
 

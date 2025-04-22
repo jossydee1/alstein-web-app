@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getAPIBaseURL } from "../others";
-import { useAuth } from "@/context";
 
 // Create an Axios instance with default settings
 const api = axios.create({
@@ -14,7 +13,8 @@ const api = axios.create({
 // Request Interceptor: Attach Authorization Token
 api.interceptors.request.use(
   config => {
-    const token = null; // Adjust based on auth strategy
+    // Get token from localStorage for each request
+    const token = localStorage.getItem("userToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -23,18 +23,21 @@ api.interceptors.request.use(
   error => Promise.reject(error),
 );
 
-// Response Interceptor: Handle 403 status code
+// Response Interceptor: Handle 403/401 status codes
 api.interceptors.response.use(
   response => response,
   error => {
-    if (
-      error?.response?.status === 403 ||
-      error?.response?.status === 401 ||
-      error?.response?.code === 403 ||
-      error?.response?.code === 401
-    ) {
-      const { logout } = useAuth(); // Access logout function
-      logout(); // Log out the user
+    if (error?.response?.status === 403 || error?.response?.status === 401) {
+      // Clear localStorage on auth errors
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("businessProfile");
+
+      // Redirect to login page if not already there
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   },

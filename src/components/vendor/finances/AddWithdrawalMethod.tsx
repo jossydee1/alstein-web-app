@@ -12,8 +12,10 @@ import { useClientFetch } from "@/hooks";
 
 const AddWithdrawalMethod = ({
   setShowForm,
+  refetch,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
 }) => {
   const { token, businessProfile } = useAuth();
 
@@ -41,6 +43,7 @@ const AddWithdrawalMethod = ({
   }>({
     endpoint: url,
     token,
+    enabled: !!token,
   });
 
   const bankList = bankData?.data?.data;
@@ -76,13 +79,15 @@ const AddWithdrawalMethod = ({
         return;
       }
 
+      refetch();
+      setShowForm(false);
+
       setFormData({
         bank_name: "",
         account_name: "",
         account_number: "",
         cbn_code: "",
       });
-      // setDefaultMethod(false);
       toast.success("Bank account added successfully");
       return response?.data?.data;
     } catch (error) {

@@ -84,6 +84,7 @@ const RequestHistory = () => {
   } = useClientFetch<OrderHistoryProps>({
     endpoint: url,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
 
   useEffect(() => {

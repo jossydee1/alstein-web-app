@@ -25,6 +25,7 @@ const VendorSettingsContent = () => {
   } = useClientFetch<PartnerProps>({
     endpoint: url,
     token,
+    enabled: !!token && !!businessProfile?.id,
   });
 
   const [isProcessing, setIsProcessing] = useState(false);

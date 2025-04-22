@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState } from "react";
@@ -10,13 +9,15 @@ import { ApiResponseProps, BankDetailsHistoryProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { Check, X } from "lucide-react";
-import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
 
 const WithdrawFormAndMethods = ({
   setShowForm,
+  data,
+  refetch,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  data: BankDetailsHistoryProps | undefined;
+  refetch: () => void;
 }) => {
   const { token, businessProfile } = useAuth();
 
@@ -24,18 +25,6 @@ const WithdrawFormAndMethods = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  const getBankAccUrl = `/partner/api/v1/payment/get-bank-account?skip=0&take=10&partner_id=${businessProfile?.id}`;
-
-  const { data, isLoading, error, refetch } =
-    useClientFetch<BankDetailsHistoryProps>({
-      endpoint: getBankAccUrl,
-      token,
-    });
-
-  if (error) {
-    toast.error(formatError(error, "Failed to fetch bank account details"));
-  }
 
   const handleSetDefault = async (bankId: string, partnerId: string) => {
     setIsProcessing(true);
@@ -96,39 +85,45 @@ const WithdrawFormAndMethods = ({
 
   const handleRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Withdraw request submitted");
-    // setIsSuccess(false);
-    // setIsError(false);
-    // setIsProcessing(true);
+    setIsSuccess(false);
+    setIsError(false);
+    setIsProcessing(true);
 
-    // try {
-    //   const response = await api.post<ApiResponseProps<unknown>>(
-    //     "/client/api/v1/update-bank-account-info",
-    //     amount,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     },
-    //   );
+    try {
+      const response = await api.post<ApiResponseProps<unknown>>(
+        "/partner/api/v1/payment/initiate-debit-request",
+        {
+          amount: amount * 100,
+          partner_id: businessProfile?.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-    //   if (response?.status !== 200 || !response?.data) {
-    //     toast.error(response?.data?.message || "Failed to add new bank account");
-    //     return;
-    //   }
+      if (response?.status !== 200 || !response?.data) {
+        toast.error(
+          response?.data?.message || "Failed to initiate withdrawal request",
+        );
+        setIsError(true);
+        return;
+      }
 
-    //   toast.success(response?.data?.message);
-    //   return response?.data?.data;
-    // } catch (error) {
-    //   toast.error(formatError(error, "Failed to add new bank account"));
-    // } finally {
-    //   setIsProcessing(false);
-    // }
+      toast.success("Withdrawal request submitted successfully");
+      setIsSuccess(true);
+      return response?.data?.data;
+    } catch (error) {
+      toast.error(formatError(error, "Failed to initiate withdrawal request"));
+      setIsError(true);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
     <>
-      {isLoading && <LoadingState />}
       <main className="dashboard-section-card">
         <header className="flex flex-row flex-wrap items-center justify-between gap-2">
           <div className="dashboard-section-card-header">
@@ -158,7 +153,6 @@ const WithdrawFormAndMethods = ({
               Your withdrawal request has been processed successfully. Funds
               will be deposited into your account shortly
             </p>
-            <X className="absolute right-3 top-3 size-5" />
           </div>
         )}
 
@@ -172,7 +166,6 @@ const WithdrawFormAndMethods = ({
               details and try again. If the issue persists, contact support for
               assistance.
             </p>
-            <X className="absolute right-3 top-3 size-5" />
           </div>
         )}
 

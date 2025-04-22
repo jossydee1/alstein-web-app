@@ -27,12 +27,14 @@ const ListingDetailsContent = () => {
     error,
   } = useClientFetch<ListingInfoProps>({
     endpoint: `/client/public/api/v1/equipments/get-equipment?equipment_id=${id}`,
+    enabled: !!id,
   });
 
   // Get rating info
   // const { data: rating, refetch: refetchRating } =
   //   useClientFetch<AverageRatingProps>({
   //     endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+  //     enabled: !!listingInfo?.partner?.id,
   //   });
 
   // Get partner approved listing count
@@ -40,6 +42,7 @@ const ListingDetailsContent = () => {
     total_approved_listing: number;
   }>({
     endpoint: `/client/public/api/v1/equipments/get-partner-approved-listing?partner_id=${listingInfo?.partner?.id}`,
+    enabled: !!listingInfo?.partner?.id,
   });
 
   const links = [
