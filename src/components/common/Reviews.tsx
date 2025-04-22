@@ -87,9 +87,11 @@ export const Reviews = ({
     }
   }, [comments]);
 
-  const filteredReviews = showAllReviews
-    ? commentsData
-    : commentsData?.slice(0, 2);
+  const filteredReviews = Array.isArray(commentsData)
+    ? showAllReviews
+      ? commentsData
+      : commentsData.slice(0, 2)
+    : [];
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
