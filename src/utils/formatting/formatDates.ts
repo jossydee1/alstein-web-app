@@ -101,5 +101,9 @@ export const formatDateTime = (
   time: { hours: string; minutes: string },
 ) => {
   if (!date) return "";
-  return `${date.toLocaleDateString()} at ${time?.hours}:${time?.minutes}`;
+
+  const period = Number(time.hours) >= 12 ? "PM" : "AM";
+  const formattedHour = Number(time.hours) % 12 || 12;
+
+  return `${date.toLocaleDateString()} at ${formattedHour}:${time?.minutes} ${period}`;
 };

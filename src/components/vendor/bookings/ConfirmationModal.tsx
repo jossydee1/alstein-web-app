@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { dashboardRoutes, formatPrice } from "@/utils";
+import { OrderProps } from "@/types";
+import {
+  dashboardRoutes,
+  formatIOSToDate,
+  formatPrice,
+  formatTimeTo12Hour,
+} from "@/utils";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -7,9 +13,11 @@ import React from "react";
 const ConfirmationModal = ({
   status,
   open,
+  data,
 }: {
   status: string;
   open: boolean;
+  data: OrderProps;
 }) => {
   const STYLES = {
     section: "dashboard-section-card relative grid gap-6 !p-6 w-full",
@@ -39,7 +47,7 @@ const ConfirmationModal = ({
           className={`dashboard-section-card mb-4 flex w-full items-center ${status === "accept" ? "justify-between" : "justify-center"}`}
         >
           <span className="text-4xl font-semibold text-[#172554]">
-            {formatPrice(4000000, "NGN")}
+            {formatPrice(data?.booking_amount ?? 0, "NGN")}
           </span>
           {status === "accept" && (
             <span className="ml-2 inline-block rounded-full bg-green-500 p-1 text-white">
@@ -53,19 +61,27 @@ const ConfirmationModal = ({
 
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Equipment Name</span>
-            <span className={STYLES.itemValue}>Portable X-Ray Machine</span>
+            <span className={STYLES.itemValue}>{data?.equipment?.name}</span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Rental Type</span>
-            <span className={STYLES.itemValue}>Daily Rental</span>
+            <span className={STYLES.itemValue}>
+              {data?.equipment.service_type}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Booking Start Date</span>
-            <span className={STYLES.itemValue}>March 20, 2025</span>
+            <span className={STYLES.itemValue}>
+              {formatIOSToDate(data?.start_date || "")},{" "}
+              {formatTimeTo12Hour(data?.start_time || "")}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Due Date</span>
-            <span className={STYLES.itemValue}>March 22, 2025</span>
+            <span className={STYLES.itemValue}>
+              {formatIOSToDate(data?.end_date || "")}{" "}
+              {formatTimeTo12Hour(data?.end_time || "")}
+            </span>
           </p>
         </section>
 

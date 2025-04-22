@@ -1,7 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { api, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
+import {
+  api,
+  dashboardRoutes,
+  formatError,
+  formatIOSToDate,
+  formatPrice,
+  formatTimeTo12Hour,
+} from "@/utils";
 import { X } from "lucide-react";
 import Link from "next/link";
 import ConfirmationModal from "./ConfirmationModal";
@@ -10,6 +17,7 @@ import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { OrderProps } from "@/types";
 import { LoadingState } from "@/components/common";
+import { toast } from "react-toastify";
 
 const STYLES = {
   section: "dashboard-section-card relative grid gap-6 !p-6 max-w-screen-sm",
@@ -29,12 +37,10 @@ const BookingDetails = () => {
   const [loading, setLoading] = useState(false);
 
   const handleAccept = async () => {
-    setStatus("accept");
-    setOpen(true);
     setLoading(true);
 
     try {
-      await api.post(
+      const res = await api.post(
         "/partner/api/v1/booking/booking-process",
         {
           booking_id: bookingId,
@@ -46,18 +52,23 @@ const BookingDetails = () => {
           },
         },
       );
+
+      if (res.status === 200) {
+        setStatus("accept");
+        setOpen(true);
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Failed to accept booking"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDecline = async () => {
-    setStatus("decline");
-    setOpen(true);
     setLoading(true);
 
     try {
-      await api.post(
+      const res = await api.post(
         "/partner/api/v1/booking/booking-process",
         {
           booking_id: bookingId,
@@ -69,6 +80,13 @@ const BookingDetails = () => {
           },
         },
       );
+
+      if (res.status === 200) {
+        setStatus("decline");
+        setOpen(true);
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Failed to decline booking"));
     } finally {
       setLoading(false);
     }
@@ -86,7 +104,7 @@ const BookingDetails = () => {
     <>
       {(loading || isLoading) && <LoadingState />}{" "}
       {/* Show loading state when loading */}
-      <ConfirmationModal status={status} open={open} />
+      {data && <ConfirmationModal status={status} open={open} data={data} />}
       <main className="dashboard-section-card relative grid gap-7">
         <h1 className="text-2xl font-semibold text-[#172554]">
           Booking Detail Page
@@ -121,12 +139,8 @@ const BookingDetails = () => {
             <span className={STYLES.itemValue}>Lagos</span>
           </p>
           <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>Distance</span>
-            <span className={STYLES.itemValue}>46km away</span>
-          </p>
-          <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Email</span>
-            <span className={STYLES.itemValue}>Johndoe@.com</span>
+            <span className={STYLES.itemValue}>{data?.client?.email}</span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}></span>
@@ -150,13 +164,15 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Booking Start Date</span>
             <span className={STYLES.itemValue}>
-              {formatIOSToDate(data?.start_date || "")}, {data?.start_time}
+              {formatIOSToDate(data?.start_date || "")},{" "}
+              {data?.start_time && formatTimeTo12Hour(data?.start_time || "")}
             </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Due Date</span>
             <span className={STYLES.itemValue}>
-              {formatIOSToDate(data?.end_date || "")} {data?.end_time}
+              {formatIOSToDate(data?.end_date || "")}{" "}
+              {data?.end_time && formatTimeTo12Hour(data?.end_time || "")}
             </span>
           </p>
         </section>
