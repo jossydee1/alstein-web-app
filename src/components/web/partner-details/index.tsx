@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs } from "@/components/common";
+import { Breadcrumbs, Reviews } from "@/components/common";
 import { formatError } from "@/utils";
 import Profile from "./Profile";
 import PartnerListings from "./Listings";
 import {
-  // AverageRatingProps,
+  AverageRatingProps,
   CountProps,
   ListingsProps,
   PartnerProps,
@@ -36,11 +36,11 @@ const PartnerDetailsContent = () => {
     enabled: !!id,
   });
 
-  // const { data: rating, refetch: refetchRating } =
-  //   useClientFetch<AverageRatingProps>({
-  //     endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
-  //     enabled: !!partnerData?.id,
-  //   });
+  const { data: rating, refetch: refetchRating } =
+    useClientFetch<AverageRatingProps>({
+      endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${partnerData?.id}`,
+      enabled: !!partnerData?.id,
+    });
 
   const { data: reviews } = useClientFetch<CountProps>({
     endpoint: `/client/public/api/v1/meta/get-comments-count?partner_id=${partnerData?.id}`,
@@ -95,8 +95,7 @@ const PartnerDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <Profile
           partnerData={partnerData}
-          // rating={rating?._avg?.score || 0}
-          rating={0}
+          rating={rating?._avg?.score || 0}
           reviews={reviews?.count || 0}
         />
 
@@ -104,11 +103,11 @@ const PartnerDetailsContent = () => {
 
         <PartnerListings listings={listingsData?.data || []} />
 
-        {/* <Reviews
+        <Reviews
           partnerId={partnerData?.id}
           averageRating={rating?._avg?.score || 0}
           refetchRating={refetchRating}
-        /> */}
+        />
       </main>
     </div>
   );
