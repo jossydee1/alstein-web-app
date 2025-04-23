@@ -13,5 +13,4 @@ export * from "./LoadingState";
 export * from "./DateTimePicker";
 export * from "./StatusPill";
 export * from "./CustomSelect";
-export * from "./Map";
 export * from "./Reviews";
