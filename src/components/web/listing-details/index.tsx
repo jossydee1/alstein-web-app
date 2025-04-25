@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs } from "@/components/common";
+import { Breadcrumbs, Reviews } from "@/components/common";
 import Header from "./Header";
 import Details from "./Details";
 import Summary from "./Summary";
 import Location from "./Location";
 import { formatError, webRoutes } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { ListingInfoProps } from "@/types";
+import { AverageRatingProps, ListingInfoProps } from "@/types";
 import { useParams } from "next/navigation";
 import ListingDetailsSkeleton from "./Skeleton";
 
@@ -31,11 +31,11 @@ const ListingDetailsContent = () => {
   });
 
   // Get rating info
-  // const { data: rating, refetch: refetchRating } =
-  //   useClientFetch<AverageRatingProps>({
-  //     endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
-  //     enabled: !!listingInfo?.partner?.id,
-  //   });
+  const { data: rating, refetch: refetchRating } =
+    useClientFetch<AverageRatingProps>({
+      endpoint: `/partner/public/api/v1/ratings/get-average-rating?partner_id=${listingInfo?.partner?.id}`,
+      enabled: !!listingInfo?.partner?.id,
+    });
 
   // Get partner approved listing count
   const { data: listingCount } = useClientFetch<{
@@ -105,12 +105,12 @@ const ListingDetailsContent = () => {
 
         <Location listingInfo={listingInfo} />
 
-        {/* <Reviews
+        <Reviews
           partnerId={listingInfo?.partner_id}
           listingId={listingInfo?.id}
           averageRating={rating?._avg?.score || 0}
           refetchRating={refetchRating}
-        /> */}
+        />
       </main>
     </div>
   );
