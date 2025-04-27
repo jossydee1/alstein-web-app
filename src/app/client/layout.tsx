@@ -32,6 +32,16 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       icon: <ShoppingBasket size="16" />,
     },
     {
+      title: "Notifications",
+      link: dashboardRoutes?.client_notifications,
+      icon: <BellDot size="16" />,
+    },
+    {
+      title: "Favourites",
+      link: dashboardRoutes?.client_favourites,
+      icon: <Receipt size="16" />,
+    },
+    {
       title: "Account Settings",
       link: dashboardRoutes?.client_account_settings,
       icon: <Settings2 size="16" />,
@@ -40,16 +50,6 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       title: "Manage Password",
       link: dashboardRoutes?.client_manage_password,
       icon: <Unplug size="16" />,
-    },
-    {
-      title: "Notification",
-      link: dashboardRoutes?.client_notifications,
-      icon: <BellDot size="16" />,
-    },
-    {
-      title: "Payment Method",
-      link: dashboardRoutes?.client_payment_methods,
-      icon: <Receipt size="16" />,
     },
   ];
 
