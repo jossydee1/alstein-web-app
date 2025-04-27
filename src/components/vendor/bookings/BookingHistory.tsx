@@ -32,13 +32,13 @@ import Link from "next/link";
 
 const tableHeads = [
   {
+    label: "ORDER ID",
+  },
+  {
     label: "EQUIPMENT name",
   },
   {
     label: "SERVICE TYPE",
-  },
-  {
-    label: "ORDER ID",
   },
   {
     label: "ORDER DATE",
@@ -87,8 +87,13 @@ const BookingHistory = () => {
     if (listingError) {
       toast.error(listingError.message);
     }
-    if (orderHistory?.total_item) {
-      setTotalPages(Math.ceil(orderHistory.total_item / itemsPerPage));
+    if (orderHistory?.total_items || orderHistory?.total_count) {
+      setTotalPages(
+        Math.ceil(
+          (orderHistory?.total_items || orderHistory?.total_count) /
+            itemsPerPage,
+        ),
+      );
     }
   }, [listingError, orderHistory]);
 
@@ -238,7 +243,7 @@ const BookingHistory = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -248,7 +253,7 @@ const BookingHistory = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

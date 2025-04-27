@@ -42,6 +42,6 @@ export interface OrderProps {
 
 export interface OrderHistoryProps {
   total_count: number;
-  total_item?: number;
+  total_items?: number;
   data: OrderProps[];
 }

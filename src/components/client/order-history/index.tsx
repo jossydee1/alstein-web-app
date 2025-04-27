@@ -30,13 +30,13 @@ import { OrderHistoryProps } from "@/types";
 
 const tableHeads = [
   {
+    label: "ORDER ID",
+  },
+  {
     label: "EQUIPMENT name",
   },
   {
     label: "SERVICE TYPE",
-  },
-  {
-    label: "ORDER ID",
   },
   {
     label: "ORDER DATE",
@@ -89,8 +89,13 @@ const OrderHistoryContent = () => {
     if (listingError) {
       toast.error(listingError?.message);
     }
-    if (orderHistory?.total_count) {
-      setTotalPages(Math.ceil(orderHistory?.total_count / itemsPerPage));
+    if (orderHistory?.total_items || orderHistory?.total_count) {
+      setTotalPages(
+        Math.ceil(
+          (orderHistory?.total_items || orderHistory?.total_count) /
+            itemsPerPage,
+        ),
+      );
     }
   }, [listingError, orderHistory]);
 
@@ -184,14 +189,14 @@ const OrderHistoryContent = () => {
               {orderHistory && orderHistory?.data?.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order?.id} className="py-10">
+                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
+                      {order?.id}
+                    </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order?.equipment?.name}
                     </TableCell>
                     <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
                       {order?.equipment?.service_type}
-                    </TableCell>
-                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {order?.id}
                     </TableCell>
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
                       {formatIOSToDate(order?.created_at)}
@@ -226,7 +231,7 @@ const OrderHistoryContent = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -236,7 +241,7 @@ const OrderHistoryContent = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }
