@@ -16,12 +16,23 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const [isUsingSearchResults, setIsUsingSearchResults] =
     useState<boolean>(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Filter options
+  const ratings = [5, 4, 3, 2, 1];
+  // const distances = [5, 10, 15, 20, 50, 100];
+
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
-  const [filterQueryParams, setFilterQueryParams] = useState<string>("");
+  const [filterQueryParams, setFilterQueryParams] = useState<string>(
+    `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
+  );
   // const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
   // const [availability, setAvailability] = useState(false);
   // const [lease, setLease] = useState(false);
@@ -32,15 +43,6 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     searchParams.get("search_text") || "",
   );
   const [region, setRegion] = useState<string>(searchParams.get("city") || "");
-
-  // Filter options
-  const ratings = [5, 4, 3, 2, 1];
-  // const distances = [5, 10, 15, 20, 50, 100];
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
-  const [totalPages, setTotalPages] = useState(1);
 
   // Check for category in URL params on load
   useEffect(() => {
@@ -63,8 +65,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         `/client/public/api/v1/equipments/search-equipments`,
         {
           params: {
-            skip: 0,
-            take: 50,
+            skip: (currentPage - 1) * itemsPerPage,
+            take: itemsPerPage,
             search_text: equipment,
             city: region,
           },
@@ -90,6 +92,8 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   useEffect(() => {
     if (equipment || region) {
       handleSearch();
+    } else {
+      refetchListings();
     }
   }, []); // Empty dependency array to only run once on mount
 
@@ -99,7 +103,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     setIsUsingSearchResults(false);
 
     const queryParams = new URLSearchParams({
-      skip: "0",
+      skip: ((currentPage - 1) * itemsPerPage).toString(),
       take: itemsPerPage.toString(),
       ...(selectedCategory && { category: selectedCategory }),
       ...(selectedRatings.length > 0 && {
@@ -130,7 +134,9 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     setSelectedRatings([]);
     setSelectedCountry("");
     setSelectedState("");
-    setFilterQueryParams(`skip=0&take=${itemsPerPage}`);
+    setFilterQueryParams(
+      `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
+    );
     setIsUsingSearchResults(false); // Switch back to filter mode
     // setSelectedDistance(null);
     // setSelectedInsurance([]);
@@ -155,12 +161,23 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [listings, isUsingSearchResults]);
 
-  // Refetch listings when currentPage changes (only for filter results)
+  // Update filterQueryParams when currentPage changes
   useEffect(() => {
-    if (!isUsingSearchResults && filterQueryParams) {
-      refetchListings();
-    }
-  }, [currentPage, refetchListings, isUsingSearchResults, filterQueryParams]);
+    setFilterQueryParams(
+      `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}${
+        selectedCategory ? `&category=${selectedCategory}` : ""
+      }${selectedRatings.length > 0 ? `&rating=${selectedRatings[0]}` : ""}${
+        selectedState ? `&city=${selectedState}` : ""
+      }${selectedCountry ? `&country=${selectedCountry}` : ""}`,
+    );
+  }, [
+    currentPage,
+    selectedCategory,
+    selectedRatings,
+    selectedState,
+    selectedCountry,
+    itemsPerPage,
+  ]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
