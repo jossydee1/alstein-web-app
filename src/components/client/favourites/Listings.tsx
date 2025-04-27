@@ -30,11 +30,6 @@ const Listings = ({
     isActive: "bg-[#2C2C2C] border-[#303030] text-white",
   };
 
-  const CONTAINER_STYLES = {
-    bg: "bg-white",
-    pt: "section-container md:pt-[40px] xl:py-[64px]",
-  };
-
   const renderPaginationItems = () => {
     const items = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -67,43 +62,39 @@ const Listings = ({
 
   if (isLoading)
     return (
-      <div className={CONTAINER_STYLES.bg}>
-        <main className={CONTAINER_STYLES.pt}>
-          <ListingSkeleton />
-        </main>
-      </div>
+      <main className="">
+        <ListingSkeleton />
+      </main>
     );
 
   return (
-    <div className={CONTAINER_STYLES.bg}>
-      <section className={CONTAINER_STYLES.pt}>
-        <ListingsList listings={listings} />
+    <section className="">
+      <ListingsList listings={listings} />
 
-        {totalPages > 1 && (
-          <Pagination className="mt-[70px]">
-            <PaginationContent className={PAGINATION_STYLES.content}>
-              <PaginationItem
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                className={`${PAGINATION_STYLES.button} ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
-              >
-                <ChevronLeft />
-              </PaginationItem>
-              {renderPaginationItems()}
-              <PaginationItem
-                className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
-                onClick={() =>
-                  currentPage < totalPages && handlePageChange(currentPage + 1)
-                }
-              >
-                <ChevronRight />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
-      </section>
-    </div>
+      {totalPages > 1 && (
+        <Pagination className="mt-[70px]">
+          <PaginationContent className={PAGINATION_STYLES.content}>
+            <PaginationItem
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              className={`${PAGINATION_STYLES.button} ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
+            >
+              <ChevronLeft />
+            </PaginationItem>
+            {renderPaginationItems()}
+            <PaginationItem
+              className={`${PAGINATION_STYLES.button} ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+            >
+              <ChevronRight />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
+    </section>
   );
 };
 

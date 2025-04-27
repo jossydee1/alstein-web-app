@@ -1,51 +1,52 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
 
-interface FormData {
-  name: string;
-  description: string;
+// Define the shape of the equipment form data
+interface EquipmentFormData {
+  id?: string;
+  name?: string;
+  description?: string;
+  price?: number;
   address?: string;
-  longitude?: string;
-  latitude?: string;
+  service_type?: string;
+  category_id?: string;
+  partner_id?: string;
   city?: string;
   country?: string;
-  service_type: string;
-  price: number;
-  partner_id: string;
-  category_id: string;
+  latitude?: string;
+  longitude?: string;
 }
 
+// Define the shape of the context
 interface EquipmentFormContextProps {
-  formData: FormData;
-  updateFormData: (data: Partial<FormData>) => void;
+  formData: EquipmentFormData;
+  updateFormData: (data: Partial<EquipmentFormData>) => void;
 }
 
+// Define the provider props type
+interface EquipmentFormProviderProps {
+  children: ReactNode;
+  initialData?: EquipmentFormData;
+}
+
+// Create the context
 const EquipmentFormContext = createContext<
   EquipmentFormContextProps | undefined
 >(undefined);
 
+// Create the provider component
 export const EquipmentFormDataProvider = ({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    description: "",
-    address: "",
-    longitude: "",
-    latitude: "",
-    city: "",
-    country: "",
-    service_type: "",
-    price: 0,
-    partner_id: "",
-    category_id: "",
-  });
+  initialData = {},
+}: EquipmentFormProviderProps) => {
+  const [formData, setFormData] = useState<EquipmentFormData>(initialData);
 
-  const updateFormData = (data: Partial<FormData>) => {
-    setFormData(prev => ({ ...prev, ...data }));
+  const updateFormData = (data: Partial<EquipmentFormData>) => {
+    setFormData(prevData => ({
+      ...prevData,
+      ...data,
+    }));
   };
 
   return (
@@ -55,9 +56,10 @@ export const EquipmentFormDataProvider = ({
   );
 };
 
+// Create and export the hook
 export const useEquipmentForm = () => {
   const context = useContext(EquipmentFormContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error(
       "useEquipmentForm must be used within a EquipmentFormDataProvider",
     );

@@ -229,7 +229,7 @@ const TransactionHistory = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -239,7 +239,7 @@ const TransactionHistory = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

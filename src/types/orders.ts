@@ -23,6 +23,7 @@ export interface OrderProps {
     user_avatar: string | null;
     id: string;
     email: string;
+    address: string;
   };
   equipment: {
     name: string;
@@ -41,6 +42,6 @@ export interface OrderProps {
 
 export interface OrderHistoryProps {
   total_count: number;
-  total_item?: number;
+  total_items?: number;
   data: OrderProps[];
 }

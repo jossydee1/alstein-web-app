@@ -6,39 +6,43 @@ import SearchForm from "./SearchForm";
 import { CategoryProps, ListingProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
+import { api, formatError } from "@/utils";
+import { toast } from "react-toastify";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const searchParams = useSearchParams();
   const [filteredListings, setFilteredListings] = useState<ListingProps[]>([]);
-
-  // Filters state
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
-  const [selectedInsurance, setSelectedInsurance] = useState<string[]>([]);
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  const [availability, setAvailability] = useState(false);
-  const [lease, setLease] = useState(false);
-  const [onSite, setOnSite] = useState(false);
-
-  // Search form state
-  const [equipment, setEquipment] = useState("");
-  const [region, setRegion] = useState("");
-
-  // Filter options
-  const distances = [5, 10, 15, 20, 50, 100];
-  const ratings = [5, 4, 3, 2, 1];
-  const insuranceOptions = [
-    "Insurance 1",
-    "Insurance 2",
-    "Insurance 3",
-    "Insurance 4",
-    "Insurance 5",
-  ];
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isUsingSearchResults, setIsUsingSearchResults] =
+    useState<boolean>(false);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
+
+  // Filter options
+  const ratings = [5, 4, 3, 2, 1];
+  // const distances = [5, 10, 15, 20, 50, 100];
+
+  // Filters state
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [filterQueryParams, setFilterQueryParams] = useState<string>(
+    `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
+  );
+  // const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
+  // const [availability, setAvailability] = useState(false);
+  // const [lease, setLease] = useState(false);
+  // const [onSite, setOnSite] = useState(false);
+
+  // Search form state
+  const [equipment, setEquipment] = useState<string>(
+    searchParams.get("search_text") || "",
+  );
+  const [region, setRegion] = useState<string>(searchParams.get("city") || "");
 
   // Check for category in URL params on load
   useEffect(() => {
@@ -48,105 +52,132 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     }
   }, [searchParams]);
 
+  // Handle search
+  const handleSearch = async () => {
+    if (!equipment && !region) {
+      toast.error("Please provide search text or region to search.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await api.get(
+        `/client/public/api/v1/equipments/search-equipments`,
+        {
+          params: {
+            skip: (currentPage - 1) * itemsPerPage,
+            take: itemsPerPage,
+            search_text: equipment,
+            city: region,
+          },
+        },
+      );
+
+      if (response?.status === 200) {
+        setFilteredListings(response?.data?.data?.data || []);
+        setTotalPages(
+          Math.ceil(response?.data?.data?.total_count / itemsPerPage),
+        );
+        setCurrentPage(1);
+        setIsUsingSearchResults(true); // Mark that we're using search results
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Error fetching search results"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Call handleSearch on page load if city and search_text are in the URL
+  useEffect(() => {
+    if (equipment || region) {
+      handleSearch();
+    } else {
+      refetchListings();
+    }
+  }, []); // Empty dependency array to only run once on mount
+
+  // Handle filtering
+  const handleFiltering = () => {
+    // Switch to filter mode when user explicitly filters
+    setIsUsingSearchResults(false);
+
+    const queryParams = new URLSearchParams({
+      skip: ((currentPage - 1) * itemsPerPage).toString(),
+      take: itemsPerPage.toString(),
+      ...(selectedCategory && { category: selectedCategory }),
+      ...(selectedRatings.length > 0 && {
+        rating: selectedRatings[0].toString(),
+      }),
+      ...(selectedState && { city: selectedState }),
+      ...(selectedCountry && { country: selectedCountry }),
+    });
+
+    setFilterQueryParams(queryParams.toString());
+  };
+
   // Fetch all listings
   const {
     data: listings,
     isLoading: fetchingListings,
     refetch: refetchListings,
   } = useClientFetch<ListingsProps>({
-    endpoint: `/client/public/api/v1/equipments/get-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
+    endpoint: `/client/public/api/v1/equipments/filter-equipments?${filterQueryParams}`,
+    enabled: !!filterQueryParams && !isUsingSearchResults, // Only enable if not using search results
   });
-
-  // Fetch listings by category if a category is selected
-  const {
-    data: listingsByCategory,
-    isLoading: fetchingListingsByCategory,
-    refetch: refetchListingsByCategory,
-  } = useClientFetch<ListingsProps>({
-    endpoint: `/client/public/api/v1/equipments/get-equipment-by-category?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&category_slug=${selectedCategory}`,
-    enabled: !!selectedCategory,
-  });
-
-  // Refetch listings when currentPage changes
-  useEffect(() => {
-    // setCurrentPage(1);
-    refetchListings();
-  }, [currentPage, refetchListings]);
-
-  // Refetch listingsByCategory when currentPage or selectedCategory changes
-  useEffect(() => {
-    if (selectedCategory) {
-      setCurrentPage(1);
-      refetchListingsByCategory();
-    }
-  }, [selectedCategory, refetchListingsByCategory]);
-
-  // Update listings and total pages when data changes
-  useEffect(() => {
-    if (listings && listings?.data && !selectedCategory) {
-      setFilteredListings(listings?.data);
-      setTotalPages(Math.ceil(listings?.total_count / itemsPerPage));
-    }
-  }, [listings, selectedCategory]);
-
-  useEffect(() => {
-    if (selectedCategory && listingsByCategory) {
-      setFilteredListings(listingsByCategory?.data);
-      setTotalPages(Math.ceil(listingsByCategory?.total_count / itemsPerPage));
-    }
-  }, [selectedCategory, listingsByCategory]);
-
-  // Handle search
-  const handleSearch = () => {
-    if (!listings) return;
-
-    let filtered = [...listings?.data];
-
-    if (equipment) {
-      filtered = filtered.filter(item =>
-        item?.name.toLowerCase().includes(equipment?.toLowerCase()),
-      );
-    }
-
-    if (region) {
-      filtered = filtered.filter(item =>
-        item?.address.toLowerCase().includes(region?.toLowerCase()),
-      );
-    }
-
-    setFilteredListings(filtered);
-    setCurrentPage(1);
-  };
-
-  // Handle filtering
-  const handleFiltering = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    if (!listings) return;
-
-    const filtered =
-      selectedCategory && listingsByCategory
-        ? [...listingsByCategory.data]
-        : [...listings?.data];
-
-    setFilteredListings(filtered);
-    setCurrentPage(1);
-  };
 
   // Reset filters
   const resetFilter = () => {
+    setEquipment("");
+    setRegion("");
     setSelectedCategory("");
-    setSelectedDistance(null);
-    setSelectedInsurance([]);
     setSelectedRatings([]);
-    setAvailability(false);
-    setLease(false);
-    setOnSite(false);
+    setSelectedCountry("");
+    setSelectedState("");
+    setFilterQueryParams(
+      `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
+    );
+    setIsUsingSearchResults(false); // Switch back to filter mode
+    // setSelectedDistance(null);
+    // setSelectedInsurance([]);
+    // setAvailability(false);
+    // setLease(false);
+    // setOnSite(false);
     setCurrentPage(1);
-    if (listings) {
-      setFilteredListings(listings?.data);
-    }
   };
+
+  // Trigger refetch when filterQueryParams changes
+  useEffect(() => {
+    if (filterQueryParams && !isUsingSearchResults) {
+      refetchListings();
+    }
+  }, [filterQueryParams, refetchListings, isUsingSearchResults]);
+
+  // Update listings and total pages when data changes
+  useEffect(() => {
+    if (listings && listings?.data && !isUsingSearchResults) {
+      setFilteredListings(listings?.data);
+      setTotalPages(Math.ceil(listings?.total_count / itemsPerPage));
+    }
+  }, [listings, isUsingSearchResults]);
+
+  // Update filterQueryParams when currentPage changes
+  useEffect(() => {
+    setFilterQueryParams(
+      `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}${
+        selectedCategory ? `&category=${selectedCategory}` : ""
+      }${selectedRatings.length > 0 ? `&rating=${selectedRatings[0]}` : ""}${
+        selectedState ? `&city=${selectedState}` : ""
+      }${selectedCountry ? `&country=${selectedCountry}` : ""}`,
+    );
+  }, [
+    currentPage,
+    selectedCategory,
+    selectedRatings,
+    selectedState,
+    selectedCountry,
+    itemsPerPage,
+  ]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -157,32 +188,33 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   return (
     <main>
       <SearchForm
-        categories={categories}
         equipment={equipment}
         setEquipment={setEquipment}
         region={region}
         setRegion={setRegion}
         handleSearch={handleSearch}
-        distances={distances}
-        ratings={ratings}
-        insuranceOptions={insuranceOptions}
+        categories={categories}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        selectedDistance={selectedDistance}
-        setSelectedDistance={setSelectedDistance}
-        selectedInsurance={selectedInsurance}
-        setSelectedInsurance={setSelectedInsurance}
+        ratings={ratings}
         selectedRatings={selectedRatings}
         setSelectedRatings={setSelectedRatings}
-        availability={availability}
-        setAvailability={setAvailability}
-        lease={lease}
-        setLease={setLease}
-        onSite={onSite}
-        setOnSite={setOnSite}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        selectedState={selectedState}
+        setSelectedState={setSelectedState}
         handleFiltering={handleFiltering}
         resetFilter={resetFilter}
-        isFiltering={fetchingListings || fetchingListingsByCategory}
+        isFiltering={fetchingListings || isLoading}
+        // distances={distances}
+        // selectedDistance={selectedDistance}
+        // setSelectedDistance={setSelectedDistance}
+        // availability={availability}
+        // setAvailability={setAvailability}
+        // lease={lease}
+        // setLease={setLease}
+        // onSite={onSite}
+        // setOnSite={setOnSite}
       />
 
       <Listings
@@ -191,7 +223,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         totalPages={totalPages}
         handlePageChange={handlePageChange}
         listings={filteredListings || []}
-        isLoading={fetchingListings || fetchingListingsByCategory}
+        isLoading={fetchingListings || isLoading}
       />
     </main>
   );

@@ -95,8 +95,7 @@ const PartnerDetailsContent = () => {
       <main className={CONTAINER_STYLES.pt}>
         <Profile
           partnerData={partnerData}
-          // rating={rating?._avg?.score || 0}
-          rating={0}
+          rating={rating?._avg?.score || 0}
           reviews={reviews?.count || 0}
         />
 

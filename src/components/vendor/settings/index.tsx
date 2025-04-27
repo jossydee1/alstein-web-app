@@ -14,7 +14,7 @@ import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
 
 const VendorSettingsContent = () => {
-  const { token, businessProfile, setBusinessProfile } = useAuth();
+  const { token, businessProfile, setBusinessProfile, logout } = useAuth();
 
   const url = `/partner/public/api/v1/get-partner?id=${businessProfile?.id}`;
 
@@ -165,7 +165,7 @@ const VendorSettingsContent = () => {
 
     try {
       const response = await api.delete(
-        `/partner/api/v1/deactivate-account${businessProfile?.id}`,
+        `/partner/api/v1/deactivate-account?partner_id=${businessProfile?.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -179,7 +179,7 @@ const VendorSettingsContent = () => {
       }
 
       toast.success(response?.data?.message);
-      return response?.data?.data;
+      logout();
     } catch (error) {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {

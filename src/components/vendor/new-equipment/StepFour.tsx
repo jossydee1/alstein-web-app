@@ -177,7 +177,7 @@ const StepFour = ({
             <form className="mb-8 grid grid-cols-1 gap-x-8 gap-y-4">
               <div className="w-full">
                 <Label htmlFor="feature" className="mb-4">
-                  Key Features
+                  Key Features (Press Enter to add)
                 </Label>
                 <Input
                   className="max-w-[420px] border border-[#E5E7EB] p-5"
@@ -190,7 +190,7 @@ const StepFour = ({
                   onKeyPress={handleFeatureKeyPress}
                   required
                 />
-                <sup className="mt-4 block">Min of 5 Features</sup>
+                <sup className="mt-4 block text-red-500">Min of 5 Features</sup>
 
                 <div className="mt-4 flex flex-wrap gap-4">
                   {specifications.map((feature, index) => (
@@ -226,7 +226,10 @@ const StepFour = ({
               </h1>
               <p className="dashboard-section-card-description">
                 Upload images of your equipment to showcase its specifications
-                and condition. Minimum of 5 images required.
+                and condition.{" "}
+                <span className="text-sm text-red-500">
+                  Minimum of 5 images required.
+                </span>
               </p>
             </div>
           </header>

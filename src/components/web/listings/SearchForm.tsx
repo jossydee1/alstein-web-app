@@ -8,59 +8,61 @@ import {
 import { CategoryProps } from "@/types";
 
 const Header = ({
-  categories,
   equipment,
   setEquipment,
   region,
   setRegion,
   handleSearch,
-  distances,
-  ratings,
-  insuranceOptions,
+  categories,
   selectedCategory,
   setSelectedCategory,
-  selectedDistance,
-  setSelectedDistance,
-  selectedInsurance,
-  setSelectedInsurance,
+  selectedCountry,
+  setSelectedCountry,
+  selectedState,
+  setSelectedState,
+  ratings,
   selectedRatings,
   setSelectedRatings,
-  availability,
-  setAvailability,
-  lease,
-  setLease,
-  onSite,
-  setOnSite,
   handleFiltering,
   resetFilter,
   isFiltering,
+  // distances,
+  // selectedDistance,
+  // setSelectedDistance,
+  // availability,
+  // setAvailability,
+  // lease,
+  // setLease,
+  // onSite,
+  // setOnSite,
 }: {
-  categories: CategoryProps[];
   equipment: string;
   setEquipment: (value: string) => void;
   region: string;
   setRegion: (value: string) => void;
   handleSearch: () => void;
-  distances: number[];
-  ratings: number[];
-  insuranceOptions: string[];
+  categories: CategoryProps[];
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
-  selectedDistance: number | null;
-  setSelectedDistance: (distance: number | null) => void;
-  selectedInsurance: string[];
-  setSelectedInsurance: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedCountry: string;
+  setSelectedCountry: (country: string) => void;
+  selectedState: string;
+  setSelectedState: (state: string) => void;
+  ratings: number[];
   selectedRatings: number[];
   setSelectedRatings: React.Dispatch<React.SetStateAction<number[]>>;
-  availability: boolean;
-  setAvailability: (availability: boolean) => void;
-  lease: boolean;
-  setLease: (lease: boolean) => void;
-  onSite: boolean;
-  setOnSite: (onSite: boolean) => void;
-  handleFiltering: (e: { preventDefault: () => void }) => void;
+  handleFiltering: () => void;
   resetFilter: () => void;
   isFiltering: boolean;
+  // distances: number[];
+  // selectedDistance: number | null;
+  // setSelectedDistance: (distance: number | null) => void;
+  // availability: boolean;
+  // setAvailability: (availability: boolean) => void;
+  // lease: boolean;
+  // setLease: (lease: boolean) => void;
+  // onSite: boolean;
+  // setOnSite: (onSite: boolean) => void;
 }) => {
   return (
     <div className="bg-white">
@@ -97,27 +99,30 @@ const Header = ({
           </div>
         </div>
         <FilterMenu
+          equipment={equipment}
+          region={region}
           categories={categories}
-          distances={distances}
-          ratings={ratings}
-          insuranceOptions={insuranceOptions}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
-          selectedDistance={selectedDistance}
-          setSelectedDistance={setSelectedDistance}
-          selectedInsurance={selectedInsurance}
-          setSelectedInsurance={setSelectedInsurance}
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          selectedState={selectedState}
+          setSelectedState={setSelectedState}
+          ratings={ratings}
           selectedRatings={selectedRatings}
           setSelectedRatings={setSelectedRatings}
-          availability={availability}
-          setAvailability={setAvailability}
-          lease={lease}
-          setLease={setLease}
-          onSite={onSite}
-          setOnSite={setOnSite}
           handleFiltering={handleFiltering}
           resetFilter={resetFilter}
           isFiltering={isFiltering}
+          // distances={distances}
+          // selectedDistance={selectedDistance}
+          // setSelectedDistance={setSelectedDistance}
+          // availability={availability}
+          // setAvailability={setAvailability}
+          // lease={lease}
+          // setLease={setLease}
+          // onSite={onSite}
+          // setOnSite={setOnSite}
         />
       </header>
     </div>

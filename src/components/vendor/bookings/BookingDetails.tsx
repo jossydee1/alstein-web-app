@@ -123,28 +123,19 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Full Name</span>
             <span className={STYLES.itemValue}>
-              {data?.client?.first_name} {data?.client?.last_name}
+              {data?.client?.first_name || "N/A"}{" "}
+              {data?.client?.last_name || "N/A"}
             </span>
-          </p>
-          <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>Address</span>
-            <span className={STYLES.itemValue}>No 19, Ikorodu Street</span>
-          </p>
-          <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>City</span>
-            <span className={STYLES.itemValue}>Ikeja</span>
-          </p>
-          <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>State</span>
-            <span className={STYLES.itemValue}>Lagos</span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Email</span>
             <span className={STYLES.itemValue}>{data?.client?.email}</span>
           </p>
           <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}></span>
-            <span className={STYLES.itemValue}></span>
+            <span className={STYLES.itemLabel}>Address</span>
+            <span className={STYLES.itemValue}>
+              {data?.client?.address || "N/A"}
+            </span>
           </p>
         </section>
 
@@ -153,12 +144,14 @@ const BookingDetails = () => {
 
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Equipment Name</span>
-            <span className={STYLES.itemValue}>{data?.equipment?.name}</span>
+            <span className={STYLES.itemValue}>
+              {data?.equipment?.name || "N/A"}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Rental Type</span>
             <span className={STYLES.itemValue}>
-              {data?.equipment?.service_type}
+              {data?.equipment?.service_type || "N/A"}
             </span>
           </p>
           <p className={STYLES.item}>

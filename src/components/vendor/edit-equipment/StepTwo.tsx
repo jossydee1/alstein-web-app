@@ -5,18 +5,23 @@ import { useEquipmentForm } from "@/context";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { acceptedCurrencies, formatCurrencySymbol } from "@/utils";
+import { ListingInfoProps } from "@/types";
 
-const StepTwo = ({
-  onNext,
-  onBack,
-}: {
+interface StepTwoProps {
   onNext: () => void;
   onBack: () => void;
-}) => {
+  equipmentData: ListingInfoProps;
+}
+
+const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
   const { formData, updateFormData } = useEquipmentForm();
-  const [name, setName] = useState(formData?.name || "");
-  const [description, setDescription] = useState(formData?.description || "");
-  const [price, setPrice] = useState(formData?.price || 0);
+  const [name, setName] = useState(formData?.name || equipmentData.name || "");
+  const [description, setDescription] = useState(
+    formData?.description || equipmentData.description || "",
+  );
+  const [price, setPrice] = useState(
+    formData?.price || equipmentData.price / 100 || 0,
+  );
   const [error, setError] = useState("");
 
   const handleNext = () => {
@@ -36,11 +41,11 @@ const StepTwo = ({
         <header className="flex flex-row flex-wrap items-start justify-between gap-4">
           <div className="dashboard-section-card-header">
             <h1 className="dashboard-section-card-title text-[#172554]">
-              Equipment Details
+              Edit Equipment Details
             </h1>
             <p className="dashboard-section-card-description">
-              Add a name, description, and key features to help customers
-              understand your equipment better.
+              Update the name, description, and price to help customers better
+              understand your equipment.
             </p>
           </div>
           <p className="text-3xl font-semibold text-[#172554]">Step 2</p>

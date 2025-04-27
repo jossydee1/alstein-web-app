@@ -2,65 +2,62 @@
 "use client";
 
 import React, { Dispatch, SetStateAction, useState } from "react";
-import Intro from "./Intro";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import StepFour from "./StepFour";
-import {
-  EquipmentFormDataProvider,
-  useAuth,
-  useEquipmentForm,
-} from "@/context";
+import { useAuth, useEquipmentForm } from "@/context";
 import { toast } from "react-toastify";
 import { api, formatError } from "@/utils";
 import { LoadingState } from "@/components/common";
+import { ListingInfoProps } from "@/types";
 
-const NewEquipmentContent = () => {
+interface EditEquipmentFormProps {
+  equipmentData: ListingInfoProps;
+}
+
+const EditEquipmentForm = ({ equipmentData }: EditEquipmentFormProps) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   return (
-    <EquipmentFormDataProvider>
-      <FormStepsWithContext
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-      />
-    </EquipmentFormDataProvider>
+    <FormStepsWithContext
+      currentStep={currentStep}
+      setCurrentStep={setCurrentStep}
+      equipmentData={equipmentData}
+    />
   );
 };
 
 const FormStepsWithContext = ({
   currentStep,
   setCurrentStep,
+  equipmentData,
 }: {
   currentStep: number;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  equipmentData: ListingInfoProps;
 }) => {
   const { token, businessProfile } = useAuth();
   const { formData } = useEquipmentForm();
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [equipmentId, setEquipmentId] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    console.log("Form Data:", formData);
-
     if (!businessProfile?.id) {
       toast.error("Business Profile ID is missing. Please try again.");
-      setIsProcessing(false);
       return null;
     }
 
     const updatedFormData = {
       ...formData,
-      price: (formData?.price || 0) * 100,
+      price: (formData?.price || 0) * 100, // Convert to cents
       partner_id: businessProfile?.id,
     };
 
     setIsProcessing(true);
     try {
       const response = await api.post(
-        "/partner/api/v1/equipments/create-equipment",
+        "/partner/api/v1/equipments/update-equipment",
         updatedFormData,
         {
           headers: {
@@ -70,13 +67,13 @@ const FormStepsWithContext = ({
       );
 
       if (response?.status !== 200 || !response?.data) {
-        toast.error(response?.data?.message || "Failed to create equipment");
+        toast.error(response?.data?.message || "Failed to update equipment");
         return null;
       }
 
-      return response?.data?.data?.id; // Return the created equipment ID
+      return equipmentData.id;
     } catch (error) {
-      toast.error(formatError(error, "Failed to create equipment"));
+      toast.error(formatError(error, "Failed to update equipment"));
       return null;
     } finally {
       setIsProcessing(false);
@@ -84,26 +81,27 @@ const FormStepsWithContext = ({
   };
 
   const steps = [
-    <Intro onNext={() => setCurrentStep(1)} />,
-    <StepOne
+    <StepOne onNext={() => setCurrentStep(1)} equipmentData={equipmentData} />,
+    <StepTwo
       onNext={() => setCurrentStep(2)}
       onBack={() => setCurrentStep(0)}
-    />,
-    <StepTwo
-      onNext={() => setCurrentStep(3)}
-      onBack={() => setCurrentStep(1)}
+      equipmentData={equipmentData}
     />,
     <StepThree
       onNext={async () => {
         const id = await handleSubmit();
         if (id) {
-          setEquipmentId(id);
-          setCurrentStep(4);
+          setCurrentStep(3);
         }
       }}
-      onBack={() => setCurrentStep(2)}
+      onBack={() => setCurrentStep(1)}
+      equipmentData={equipmentData}
     />,
-    <StepFour equipmentId={equipmentId} onBack={() => setCurrentStep(3)} />,
+    <StepFour
+      equipmentId={equipmentData.id}
+      onBack={() => setCurrentStep(2)}
+      equipmentData={equipmentData}
+    />,
   ];
 
   return (
@@ -114,4 +112,4 @@ const FormStepsWithContext = ({
   );
 };
 
-export default NewEquipmentContent;
+export default EditEquipmentForm;

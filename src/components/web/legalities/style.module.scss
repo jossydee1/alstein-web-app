@@ -1,0 +1,39 @@
+.wrapper {
+  @apply text-gray-500;
+
+  .date {
+    @apply mb-3 text-center font-bold text-brandColor;
+  }
+
+  .title {
+    @apply text-center text-[36px] font-bold leading-[60px] text-[#101828] md:text-[48px];
+  }
+
+  .summary {
+    @apply mt-6 text-center font-semibold text-neutral-800 md:font-semibold;
+  }
+
+  .article {
+    @apply mt-16;
+  }
+
+  .pTags {
+    @apply mb-4 text-lg;
+  }
+
+  .h2Tags {
+    @apply mb-7 mt-12 text-3xl font-bold text-[#101828];
+  }
+
+  .h3Tags {
+    @apply mb-4 mt-12 text-2xl font-bold text-[#101828];
+  }
+
+  .olTags {
+    @apply ml-6 mt-4 list-decimal space-y-2;
+  }
+
+  .links {
+    @apply text-inherit underline;
+  }
+}

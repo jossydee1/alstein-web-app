@@ -16,7 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, Eye } from "lucide-react";
 import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
@@ -43,9 +43,9 @@ const tableHeads = [
   {
     label: "STATUS",
   },
-  // {
-  //   label: "ACTIONS",
-  // },
+  {
+    label: "ACTIONS",
+  },
 ];
 
 const EquipmentListings = () => {
@@ -167,12 +167,11 @@ const EquipmentListings = () => {
                     <TableCell className="px-5 py-3">
                       {GetListingStatusPill(e?.listing_status)}
                     </TableCell>
-                    {/* <TableCell className="px-5 py-3">
+                    <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes?.vendor_equipments}/view?equipment=0112455`}
-                            href="#"
+                            href={`${dashboardRoutes?.vendor_equipments}/${e?.id}`}
                           >
                             <Eye className="size-4 text-[#6B7280]" />
                             View
@@ -180,23 +179,22 @@ const EquipmentListings = () => {
                         </Button>
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
-                            href="#"
+                            href={`${dashboardRoutes?.vendor_equipments}/${e?.id}/edit`}
                           >
                             <Edit className="size-4 text-[#6B7280]" />
                             Edit
                           </Link>
                         </Button>
-                        <Button asChild variant="ghost" className="!p-0">
+                        {/* <Button asChild variant="ghost" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                           >
                             <Trash className="size-4 text-[#6B7280]" />
                             Delete
                           </Link>
-                        </Button>
+                        </Button> */}
                       </div>
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -213,7 +211,7 @@ const EquipmentListings = () => {
         <Pagination className="mx-auto mt-9 justify-end">
           <PaginationContent>
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
@@ -223,7 +221,7 @@ const EquipmentListings = () => {
             </PaginationItem>
             {renderPaginationItems()}
             <PaginationItem
-              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[#6B7280] disabled:opacity-50"
+              className="flex items-center gap-2 rounded-3xl border border-[#E5E7EB] bg-white px-4 py-2.5 hover:cursor-pointer disabled:text-[#6B7280] disabled:opacity-50"
               onClick={() =>
                 currentPage < totalPages && handlePageChange(currentPage + 1)
               }

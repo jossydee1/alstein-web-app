@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarCheck, FlaskConical } from "lucide-react";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SearchForm } from "@/components/common";
 
@@ -17,12 +17,10 @@ const Hero = ({
   const [equipment, setEquipment] = useState("");
   const [region, setRegion] = useState("");
 
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSearch = () => {
     const queryParams = new URLSearchParams({
-      equipment,
-      region,
+      search_text: equipment,
+      city: region,
     }).toString();
 
     router.push(`/listings?${queryParams}`);
@@ -38,10 +36,7 @@ const Hero = ({
         backgroundRepeat: "no-repeat",
       }}
     >
-      <header
-        className="section-container"
-        // className="mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[50px] md:py-[40px] lg:px-[100px] lg:py-[66px] xl:px-[150px] xl:py-[88px]"
-      >
+      <header className="section-container">
         <div className="w-full max-w-[700px]">
           <section className="mb-20">
             <h1 className="leading-[72px mb-[30px] text-[57px] font-bold">
