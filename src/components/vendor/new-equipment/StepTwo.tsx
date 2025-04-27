@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEquipmentForm } from "@/context";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { acceptedCurrencies, formatCurrencySymbol } from "@/utils";
 
 const StepTwo = ({
   onNext,
@@ -78,7 +79,7 @@ const StepTwo = ({
             </div>
             <div className="w-full max-w-[420px]">
               <Label htmlFor="price" className="mb-2">
-                Price
+                Price ({formatCurrencySymbol[acceptedCurrencies[0]]})
               </Label>
               <Input
                 className="border border-[#E5E7EB] p-5"
