@@ -6,6 +6,8 @@ import SearchForm from "./SearchForm";
 import { CategoryProps, ListingProps, ListingsProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
+import { api, formatError } from "@/utils";
+import { toast } from "react-toastify";
 
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const searchParams = useSearchParams();
@@ -44,25 +46,30 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   }, [searchParams]);
 
   // Handle search
-  const handleSearch = () => {
-    if (!listings) return;
-
-    let filtered = [...listings?.data];
-
-    if (equipment) {
-      filtered = filtered.filter(item =>
-        item?.name.toLowerCase().includes(equipment?.toLowerCase()),
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(
+        `/client/public/api/v1/equipments/search-equipments`,
+        {
+          params: {
+            skip: 0,
+            take: 50,
+            search_text: equipment,
+            city: region,
+          },
+        },
       );
-    }
 
-    if (region) {
-      filtered = filtered.filter(item =>
-        item?.address.toLowerCase().includes(region?.toLowerCase()),
-      );
+      if (response?.status === 200) {
+        setFilteredListings(response?.data?.data?.data || []);
+        setTotalPages(
+          Math.ceil(response?.data?.data?.total_count / itemsPerPage),
+        );
+        setCurrentPage(1);
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Error fetching search results:"));
     }
-
-    setFilteredListings(filtered);
-    setCurrentPage(1);
   };
 
   // Handle filtering
@@ -88,6 +95,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     refetch: refetchListings,
   } = useClientFetch<ListingsProps>({
     endpoint: `/client/public/api/v1/equipments/filter-equipments?${filterQueryParams}`,
+    enabled: !!filterQueryParams,
   });
 
   // Reset filters
@@ -147,8 +155,6 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
       setCurrentPage(page);
     }
   };
-
-  console.log(filterQueryParams);
 
   return (
     <main>

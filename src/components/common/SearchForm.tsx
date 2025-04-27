@@ -9,7 +9,7 @@ interface SearchFormProps {
   region: string;
   setEquipment: (value: string) => void;
   setRegion: (value: string) => void;
-  handleSearch: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleSearch: () => void;
 }
 
 export const SearchForm = ({
@@ -20,10 +20,7 @@ export const SearchForm = ({
   handleSearch,
 }: SearchFormProps) => {
   return (
-    <form
-      onSubmit={handleSearch}
-      className="flex w-full flex-col items-center justify-between gap-1 rounded-md bg-white p-1 text-[#454545] lg:flex-row lg:gap-0"
-    >
+    <form className="flex w-full flex-col items-center justify-between gap-1 rounded-md bg-white p-1 text-[#454545] lg:flex-row lg:gap-0">
       <label
         htmlFor="equipment"
         className="flex min-h-[54px] w-full flex-1 items-center gap-3 rounded-sm border border-[#909090] pl-6 lg:rounded-none lg:border-y-0 lg:border-l-0 lg:border-r lg:border-r-[#909090]"
@@ -37,7 +34,7 @@ export const SearchForm = ({
           value={equipment}
           onChange={e => setEquipment(e.target.value)}
           required
-          placeholder="Equipment/Analysis Name"
+          placeholder="Equipment or analysis name"
         />
       </label>
       <label
@@ -53,12 +50,13 @@ export const SearchForm = ({
           value={region}
           onChange={e => setRegion(e.target.value)}
           required
-          placeholder="Any Region"
+          placeholder="Any city or state"
         />
       </label>
 
       <Button
         type="button"
+        onClick={handleSearch}
         className="flex min-h-[54px] w-full items-center justify-center bg-brandColor px-6 py-4 lg:w-auto"
       >
         <Search size="40" className="" />

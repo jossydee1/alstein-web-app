@@ -17,41 +17,43 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
 
 export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
-  if (listings?.length === 0) return <p>No listings found</p>;
+  if (!listings || listings?.length === 0) return <p>No listings found</p>;
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {listings?.map((l, index) => (
-        <article
-          key={index}
-          className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
-        >
-          <ImageSlider images={l?.equipment_file} equipmentId={l?.id} />
+      {listings &&
+        listings?.length > 0 &&
+        listings?.map((l, index) => (
+          <article
+            key={index}
+            className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
+          >
+            <ImageSlider images={l?.equipment_file} equipmentId={l?.id} />
 
-          <div>
-            <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
-              {l?.name}
-            </h3>
-            <p className="mb-1 text-xs text-[#474747]">
-              {l?.description.slice(0, 100)}...
-            </p>
-            <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
-              <MapPin size="12" /> {l?.address}
-            </p>
+            <div>
+              <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
+                {l?.name}
+              </h3>
+              <p className="mb-1 text-xs text-[#474747]">
+                {l?.description.slice(0, 100)}...
+              </p>
+              <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
+                <MapPin size="12" /> {l?.address}
+              </p>
 
-            <p className="mb-4 text-[#161616]">
-              {formatPrice(l?.price, "NGN")}
-            </p>
+              <p className="mb-4 text-[#161616]">
+                {formatPrice(l?.price, "NGN")}
+              </p>
 
-            <Link
-              href={`${webRoutes?.listings}/${l?.id}`}
-              className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
-            >
-              View Details
-            </Link>
-          </div>
-        </article>
-      ))}
+              <Link
+                href={`${webRoutes?.listings}/${l?.id}`}
+                className="rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-brandColor group-hover:text-white"
+              >
+                View Details
+              </Link>
+            </div>
+          </article>
+        ))}
     </div>
   );
 };
