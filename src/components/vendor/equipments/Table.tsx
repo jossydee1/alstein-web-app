@@ -16,7 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, Eye } from "lucide-react";
 import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
@@ -177,15 +177,14 @@ const EquipmentListings = () => {
                             View
                           </Link>
                         </Button>
-                        {/* <Button asChild variant="ghost" className="!p-0">
+                        <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
-                            href="#"
+                            href={`${dashboardRoutes?.vendor_equipments}/${e?.id}/edit`}
                           >
                             <Edit className="size-4 text-[#6B7280]" />
                             Edit
                           </Link>
-                        </Button> */}
+                        </Button>
                         {/* <Button asChild variant="ghost" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
