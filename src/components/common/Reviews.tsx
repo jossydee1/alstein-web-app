@@ -61,7 +61,7 @@ export const Reviews = ({
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
-  const itemsPerPage = showAllReviews ? 5 : 2;
+  const itemsPerPage = showAllReviews ? 50 : 2;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
@@ -75,6 +75,7 @@ export const Reviews = ({
     item_count: number;
   }>({
     endpoint: url,
+    enabled: !!partnerId && listingId !== "",
   });
 
   useEffect(() => {
@@ -82,7 +83,7 @@ export const Reviews = ({
       setCommentsData(comments?.data);
       setTotalPages(Math.ceil(comments?.item_count / itemsPerPage));
     }
-  }, [comments]);
+  }, [comments, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
