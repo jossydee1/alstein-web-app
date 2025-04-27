@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import { BellDot, LogOut, Building2, UserRound } from "lucide-react";
+import { BellDot, LogOut, Building2, UserRound, Menu } from "lucide-react";
 import { useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
@@ -83,10 +83,10 @@ const NavBar = () => {
               </Button>
             </div>
           ) : (
-            <div className="flex gap-5 py-2">
+            <div className="flex py-2">
               <Link
                 href={dashboardRoutes?.client_notifications}
-                className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md border-[0.2px] border-gray-400 text-gray-400 transition-colors hover:bg-gray-100/50"
+                className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
               >
                 <BellDot size="24" strokeWidth={1.5} />
               </Link>
@@ -94,22 +94,10 @@ const NavBar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
-                  className="aspect-square h-[50px] w-[50px] overflow-hidden rounded-md border-[0.2px] border-transparent transition-all hover:border-gray-400"
+                  className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
-                  <Image
-                    alt="Avatar"
-                    src={
-                      user?.user_avatar
-                        ? DOCUMENT_URL + user?.user_avatar
-                        : user?.profile_photo
-                          ? DOCUMENT_URL + user?.profile_photo
-                          : avatar?.src
-                    }
-                    width={50}
-                    height={50}
-                    className="aspect-square rounded-md object-cover"
-                  />
+                  <Menu size="24" strokeWidth={1.5} />
                 </button>
 
                 {showDropdown && (
@@ -133,7 +121,7 @@ const NavBar = () => {
                           }
                           width={20}
                           height={20}
-                          className="aspect-square rounded-full object-cover"
+                          className="aspect-square rounded-full bg-neutral-100 object-cover"
                         />
                       </span>
                       <span className="text-lg font-medium leading-4 text-[#2F2F2F]">

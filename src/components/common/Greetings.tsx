@@ -38,7 +38,7 @@ const Greetings = () => {
             }
             width={62}
             height={62}
-            className="aspect-square rounded-md object-cover"
+            className="aspect-square rounded-md bg-neutral-50 object-cover"
           />
           <Link href={dashboardRoutes?.client_account_settings}>
             <Edit className="text-white" size={17} />
