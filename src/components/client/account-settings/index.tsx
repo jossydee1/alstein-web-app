@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Check, Edit } from "lucide-react";
+import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ const AccountSettingsContent = () => {
         phone_number: user?.phone_number || "",
         address: user?.address || "",
       });
-      setProfilePhoto(user?.user_avatar || null);
+      setProfilePhoto(user?.user_avatar || user?.profile_photo || null);
     }
   }, [user]);
 
@@ -194,11 +194,16 @@ const AccountSettingsContent = () => {
               Edit your name, email, and contact details to keep your profile up
               to date.
             </p>
+            <div className="mt-6 flex gap-2.5">
+              <Button
+                variant="default"
+                type="button"
+                onClick={() => setShowForm(!showForm)}
+              >
+                Edit Profile
+              </Button>
+            </div>
           </div>
-
-          <button type="button" onClick={() => setShowForm(!showForm)}>
-            <Edit className="text-[#9CA3AF]" size={17} />
-          </button>
         </div>
 
         {showForm && (
@@ -206,7 +211,11 @@ const AccountSettingsContent = () => {
             <div className="mb-8 flex items-center gap-4">
               <Image
                 src={
-                  tempPhoto ? tempPhoto : DOCUMENT_URL + profilePhoto || avatar
+                  tempPhoto
+                    ? tempPhoto
+                    : profilePhoto
+                      ? DOCUMENT_URL + profilePhoto
+                      : avatar
                 }
                 alt="Current Avatar"
                 className="aspect-square rounded-md border-2 border-[#E5E7EB] object-cover"

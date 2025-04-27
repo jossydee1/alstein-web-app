@@ -87,7 +87,9 @@ export const Navbar = () => {
                       src={
                         user?.user_avatar
                           ? DOCUMENT_URL + user?.user_avatar
-                          : avatar.src
+                          : user?.profile_photo
+                            ? DOCUMENT_URL + user?.profile_photo
+                            : avatar?.src
                       }
                       width={50}
                       height={50}
@@ -110,7 +112,9 @@ export const Navbar = () => {
                             src={
                               user?.user_avatar
                                 ? DOCUMENT_URL + user?.user_avatar
-                                : avatar.src
+                                : user?.profile_photo
+                                  ? DOCUMENT_URL + user?.profile_photo
+                                  : avatar?.src
                             }
                             width={20}
                             height={20}

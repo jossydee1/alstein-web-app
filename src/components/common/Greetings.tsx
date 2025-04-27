@@ -30,7 +30,11 @@ const Greetings = () => {
           <Image
             alt="Avatar"
             src={
-              user?.user_avatar ? DOCUMENT_URL + user?.user_avatar : avatar?.src
+              user?.user_avatar
+                ? DOCUMENT_URL + user?.user_avatar
+                : user?.profile_photo
+                  ? DOCUMENT_URL + user?.profile_photo
+                  : avatar?.src
             }
             width={62}
             height={62}
