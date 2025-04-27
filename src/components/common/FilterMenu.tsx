@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { X } from "lucide-react";
@@ -20,52 +19,55 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CategoryProps } from "@/types";
+import { NIGERIAN_STATES_CITIES } from "@/utils";
 // import { Switch } from "@/components/ui/switch";
 
 export const FilterMenu = ({
   categories,
-  distances,
-  ratings,
   selectedCategory,
-  // insuranceOptions,
   setSelectedCategory,
-  selectedDistance,
-  setSelectedDistance,
-  // selectedInsurance,
-  // setSelectedInsurance,
+  ratings,
   selectedRatings,
   setSelectedRatings,
+  selectedCountry,
+  setSelectedCountry,
+  selectedState,
+  setSelectedState,
+  handleFiltering,
+  resetFilter,
+  isFiltering,
+  // distances,
+  // selectedDistance,
+  // setSelectedDistance,
   // availability,
   // setAvailability,
   // lease,
   // setLease,
   // onSite,
   // setOnSite,
-  handleFiltering,
-  resetFilter,
-  isFiltering,
 }: {
   categories: CategoryProps[];
-  distances: number[];
-  ratings: number[];
-  insuranceOptions: string[];
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
-  selectedDistance: number | null;
-  setSelectedDistance: (distance: number | null) => void;
-  selectedInsurance: string[];
-  setSelectedInsurance: React.Dispatch<React.SetStateAction<string[]>>;
+  ratings: number[];
   selectedRatings: number[];
   setSelectedRatings: React.Dispatch<React.SetStateAction<number[]>>;
-  availability: boolean;
-  setAvailability: (availability: boolean) => void;
-  lease: boolean;
-  setLease: (lease: boolean) => void;
-  onSite: boolean;
-  setOnSite: (onSite: boolean) => void;
-  handleFiltering: (e: { preventDefault: () => void }) => void;
+  selectedCountry: string;
+  setSelectedCountry: (country: string) => void;
+  selectedState: string;
+  setSelectedState: (state: string) => void;
+  handleFiltering: () => void;
   resetFilter: () => void;
   isFiltering: boolean;
+  // distances: number[];
+  // selectedDistance: number | null;
+  // setSelectedDistance: (distance: number | null) => void;
+  // availability: boolean;
+  // setAvailability: (availability: boolean) => void;
+  // lease: boolean;
+  // setLease: (lease: boolean) => void;
+  // onSite: boolean;
+  // setOnSite: (onSite: boolean) => void;
 }) => {
   const STYLES = {
     dropdownStyles:
@@ -81,31 +83,22 @@ export const FilterMenu = ({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // toggle selection for insurance
-  // const toggleSelection = (item: string) => {
-  //   setSelectedInsurance(prev =>
-  //     prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item],
-  //   );
-  // };
-
-  // toggle rating
-  const toggleRating = (rating: number) => {
-    setSelectedRatings(prev =>
-      prev.includes(rating)
-        ? prev.filter(r => r !== rating)
-        : [...prev, rating],
-    );
-  };
-
   const handleFilterSubmit = (e: { preventDefault: () => void }) => {
-    handleFiltering(e);
+    e.preventDefault();
+    handleFiltering();
     setIsOpen(false);
   };
 
   const handleResetFilter = () => {
     resetFilter();
-    setIsOpen(false);
   };
+
+  const hasActiveFilters = !!(
+    selectedCategory ||
+    selectedRatings.length > 0 ||
+    selectedCountry ||
+    selectedState
+  );
 
   return (
     <>
@@ -183,6 +176,98 @@ export const FilterMenu = ({
                   </AccordionItem>
 
                   <AccordionItem
+                    value="country"
+                    className={STYLES.accordionItem}
+                  >
+                    <AccordionTrigger className={STYLES.accordionTrigger}>
+                      Country
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <RadioGroup
+                        className={STYLES.accordionContentGrid}
+                        onValueChange={value => setSelectedCountry(value)}
+                        value={selectedCountry || ""}
+                      >
+                        {["Nigeria"].map(country => (
+                          <div key={country} className={STYLES.optionWrapper}>
+                            <RadioGroupItem
+                              value={country}
+                              id={`country-${country}`}
+                            />
+                            <Label
+                              htmlFor={`country-${country}`}
+                              className={STYLES.optionLabel}
+                            >
+                              {country}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="state" className={STYLES.accordionItem}>
+                    <AccordionTrigger className={STYLES.accordionTrigger}>
+                      State
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <RadioGroup
+                        className={STYLES.accordionContentGrid}
+                        onValueChange={value => setSelectedState(value)}
+                        value={selectedState || ""}
+                      >
+                        {Object.keys(NIGERIAN_STATES_CITIES).map(state => (
+                          <div key={state} className={STYLES.optionWrapper}>
+                            <RadioGroupItem
+                              value={state}
+                              id={`state-${state}`}
+                            />
+                            <Label
+                              htmlFor={`state-${state}`}
+                              className={STYLES.optionLabel}
+                            >
+                              {state}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem
+                    value="ratings"
+                    className={`${STYLES.accordionItem} !border-none`}
+                  >
+                    <AccordionTrigger className={STYLES.accordionTrigger}>
+                      Ratings
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <RadioGroup
+                        className={STYLES.accordionContentGrid}
+                        onValueChange={value =>
+                          setSelectedRatings([Number(value)])
+                        }
+                        value={selectedRatings[0]?.toString() || ""}
+                      >
+                        {ratings.map(rating => (
+                          <div key={rating} className={STYLES.optionWrapper}>
+                            <RadioGroupItem
+                              value={rating?.toString()}
+                              id={`rating-${rating}`}
+                            />
+                            <Label
+                              htmlFor={`rating-${rating}`}
+                              className={STYLES.optionLabel}
+                            >
+                              <Ratings ratings={rating} size={16} />
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* <AccordionItem
                     value="distance"
                     className={STYLES.accordionItem}
                   >
@@ -213,56 +298,7 @@ export const FilterMenu = ({
                         ))}
                       </RadioGroup>
                     </AccordionContent>
-                  </AccordionItem>
-
-                  {/* <AccordionItem
-                    value="insurance"
-                    className={STYLES.accordionItem}
-                  >
-                    <AccordionTrigger className={STYLES.accordionTrigger}>
-                      Health Insurance
-                    </AccordionTrigger>
-                    <AccordionContent className={STYLES.accordionContent}>
-                      {insuranceOptions.map(ins => (
-                        <div key={ins} className={STYLES.optionWrapper}>
-                          <Checkbox
-                            id={ins}
-                            checked={selectedInsurance.includes(ins)}
-                            onCheckedChange={() => toggleSelection(ins)}
-                          />
-                          <label htmlFor={ins} className={STYLES.optionLabel}>
-                            {ins}
-                          </label>
-                        </div>
-                      ))}
-                    </AccordionContent>
                   </AccordionItem> */}
-
-                  <AccordionItem
-                    value="ratings"
-                    className={`${STYLES.accordionItem} !border-none`}
-                  >
-                    <AccordionTrigger className={STYLES.accordionTrigger}>
-                      Ratings
-                    </AccordionTrigger>
-                    <AccordionContent className={STYLES.accordionContent}>
-                      {ratings.map(rating => (
-                        <div key={rating} className={STYLES.optionWrapper}>
-                          <Checkbox
-                            id={rating?.toString()}
-                            checked={selectedRatings.includes(rating)}
-                            onCheckedChange={() => toggleRating(rating)}
-                          />
-                          <label
-                            htmlFor={rating?.toString()}
-                            className={STYLES.optionLabel}
-                          >
-                            <Ratings ratings={rating} size={16} />
-                          </label>
-                        </div>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
                 </Accordion>
 
                 <footer
@@ -276,6 +312,7 @@ export const FilterMenu = ({
                     variant="ghost"
                     type="button"
                     onClick={handleResetFilter}
+                    disabled={!hasActiveFilters}
                   >
                     Clear All
                   </Button>
