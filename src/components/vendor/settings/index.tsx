@@ -165,7 +165,7 @@ const VendorSettingsContent = () => {
 
     try {
       const response = await api.delete(
-        `/partner/api/v1/deactivate-account${businessProfile?.id}`,
+        `/partner/api/v1/deactivate-account?partner_id=${businessProfile?.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
