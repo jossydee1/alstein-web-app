@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useClientFetch } from "@/hooks";
 
 const AccountSettingsContent = () => {
-  const { user, userId, token, setUser } = useAuth();
+  const { user, userId, token, setUser, logout } = useAuth();
 
   const url = "/client/api/v1/get-user-info";
 
@@ -164,7 +164,7 @@ const AccountSettingsContent = () => {
       }
 
       toast.success(response?.data?.message);
-      return response?.data?.data;
+      logout();
     } catch (error) {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {
