@@ -23,6 +23,8 @@ import { NIGERIAN_STATES_CITIES } from "@/utils";
 // import { Switch } from "@/components/ui/switch";
 
 export const FilterMenu = ({
+  equipment,
+  region,
   categories,
   selectedCategory,
   setSelectedCategory,
@@ -46,6 +48,8 @@ export const FilterMenu = ({
   // onSite,
   // setOnSite,
 }: {
+  equipment: string;
+  region: string;
   categories: CategoryProps[];
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
@@ -94,6 +98,8 @@ export const FilterMenu = ({
   };
 
   const hasActiveFilters = !!(
+    equipment ||
+    region ||
     selectedCategory ||
     selectedRatings.length > 0 ||
     selectedCountry ||

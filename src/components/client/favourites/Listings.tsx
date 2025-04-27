@@ -67,18 +67,6 @@ const Listings = ({
       </main>
     );
 
-  if (!listings || listings?.length === 0)
-    return (
-      <main className="">
-        <div className="rounded-md bg-red-50 p-4 text-red-500">
-          <p>
-            No listings found. Please check back later or try a different
-            search.
-          </p>
-        </div>
-      </main>
-    );
-
   return (
     <section className="">
       <ListingsList listings={listings} />

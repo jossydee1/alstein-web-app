@@ -99,6 +99,8 @@ const Header = ({
           </div>
         </div>
         <FilterMenu
+          equipment={equipment}
+          region={region}
           categories={categories}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

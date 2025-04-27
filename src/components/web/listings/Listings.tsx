@@ -74,20 +74,6 @@ const Listings = ({
       </div>
     );
 
-  if (!listings || listings?.length === 0)
-    return (
-      <div className={CONTAINER_STYLES.bg}>
-        <main className={CONTAINER_STYLES.pt}>
-          <div className="rounded-md bg-red-50 p-4 text-red-500">
-            <p>
-              No listings found. Please check back later or try a different
-              search.
-            </p>
-          </div>
-        </main>
-      </div>
-    );
-
   return (
     <div className={CONTAINER_STYLES.bg}>
       <section className={CONTAINER_STYLES.pt}>

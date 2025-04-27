@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   const searchParams = useSearchParams();
   const [filteredListings, setFilteredListings] = useState<ListingProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isUsingSearchResults, setIsUsingSearchResults] =
+    useState<boolean>(false);
 
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -25,8 +28,10 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   // const [onSite, setOnSite] = useState(false);
 
   // Search form state
-  const [equipment, setEquipment] = useState("");
-  const [region, setRegion] = useState("");
+  const [equipment, setEquipment] = useState<string>(
+    searchParams.get("search_text") || "",
+  );
+  const [region, setRegion] = useState<string>(searchParams.get("city") || "");
 
   // Filter options
   const ratings = [5, 4, 3, 2, 1];
@@ -47,6 +52,12 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
 
   // Handle search
   const handleSearch = async () => {
+    if (!equipment && !region) {
+      toast.error("Please provide search text or region to search.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const response = await api.get(
         `/client/public/api/v1/equipments/search-equipments`,
@@ -66,14 +77,27 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
           Math.ceil(response?.data?.data?.total_count / itemsPerPage),
         );
         setCurrentPage(1);
+        setIsUsingSearchResults(true); // Mark that we're using search results
       }
     } catch (error) {
-      toast.error(formatError(error, "Error fetching search results:"));
+      toast.error(formatError(error, "Error fetching search results"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Call handleSearch on page load if city and search_text are in the URL
+  useEffect(() => {
+    if (equipment || region) {
+      handleSearch();
+    }
+  }, []); // Empty dependency array to only run once on mount
+
   // Handle filtering
   const handleFiltering = () => {
+    // Switch to filter mode when user explicitly filters
+    setIsUsingSearchResults(false);
+
     const queryParams = new URLSearchParams({
       skip: "0",
       take: itemsPerPage.toString(),
@@ -95,17 +119,19 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     refetch: refetchListings,
   } = useClientFetch<ListingsProps>({
     endpoint: `/client/public/api/v1/equipments/filter-equipments?${filterQueryParams}`,
-    enabled: !!filterQueryParams,
+    enabled: !!filterQueryParams && !isUsingSearchResults, // Only enable if not using search results
   });
 
   // Reset filters
   const resetFilter = () => {
+    setEquipment("");
+    setRegion("");
     setSelectedCategory("");
     setSelectedRatings([]);
     setSelectedCountry("");
     setSelectedState("");
     setFilterQueryParams(`skip=0&take=${itemsPerPage}`);
-    setFilteredListings([]);
+    setIsUsingSearchResults(false); // Switch back to filter mode
     // setSelectedDistance(null);
     // setSelectedInsurance([]);
     // setAvailability(false);
@@ -116,39 +142,25 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
 
   // Trigger refetch when filterQueryParams changes
   useEffect(() => {
-    if (filterQueryParams) {
+    if (filterQueryParams && !isUsingSearchResults) {
       refetchListings();
     }
-  }, [filterQueryParams, refetchListings]);
+  }, [filterQueryParams, refetchListings, isUsingSearchResults]);
 
   // Update listings and total pages when data changes
   useEffect(() => {
-    if (listings && listings?.data && !selectedCategory) {
+    if (listings && listings?.data && !isUsingSearchResults) {
       setFilteredListings(listings?.data);
       setTotalPages(Math.ceil(listings?.total_count / itemsPerPage));
     }
-  }, [listings, selectedCategory]);
+  }, [listings, isUsingSearchResults]);
 
+  // Refetch listings when currentPage changes (only for filter results)
   useEffect(() => {
-    if (selectedCategory && listings) {
-      setFilteredListings(listings?.data);
-      setTotalPages(Math.ceil(listings?.total_count / itemsPerPage));
-    }
-  }, [selectedCategory, listings]);
-
-  // Refetch listings when currentPage changes
-  useEffect(() => {
-    setCurrentPage(1);
-    refetchListings();
-  }, [currentPage, refetchListings]);
-
-  // Refetch listingsByCategory when currentPage or selectedCategory changes
-  useEffect(() => {
-    if (selectedCategory) {
-      setCurrentPage(1);
+    if (!isUsingSearchResults && filterQueryParams) {
       refetchListings();
     }
-  }, [selectedCategory, refetchListings]);
+  }, [currentPage, refetchListings, isUsingSearchResults, filterQueryParams]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -176,7 +188,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         setSelectedState={setSelectedState}
         handleFiltering={handleFiltering}
         resetFilter={resetFilter}
-        isFiltering={fetchingListings}
+        isFiltering={fetchingListings || isLoading}
         // distances={distances}
         // selectedDistance={selectedDistance}
         // setSelectedDistance={setSelectedDistance}
@@ -194,7 +206,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         totalPages={totalPages}
         handlePageChange={handlePageChange}
         listings={filteredListings || []}
-        isLoading={fetchingListings}
+        isLoading={fetchingListings || isLoading}
       />
     </main>
   );
