@@ -16,7 +16,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
@@ -43,9 +43,9 @@ const tableHeads = [
   {
     label: "STATUS",
   },
-  // {
-  //   label: "ACTIONS",
-  // },
+  {
+    label: "ACTIONS",
+  },
 ];
 
 const EquipmentListings = () => {
@@ -167,18 +167,17 @@ const EquipmentListings = () => {
                     <TableCell className="px-5 py-3">
                       {GetListingStatusPill(e?.listing_status)}
                     </TableCell>
-                    {/* <TableCell className="px-5 py-3">
+                    <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" className="!p-0">
                           <Link
-                            // href={`${dashboardRoutes?.vendor_equipments}/view?equipment=0112455`}
-                            href="#"
+                            href={`${dashboardRoutes?.vendor_equipments}/${e?.id}`}
                           >
                             <Eye className="size-4 text-[#6B7280]" />
                             View
                           </Link>
                         </Button>
-                        <Button asChild variant="ghost" className="!p-0">
+                        {/* <Button asChild variant="ghost" className="!p-0">
                           <Link
                             // href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                             href="#"
@@ -186,17 +185,17 @@ const EquipmentListings = () => {
                             <Edit className="size-4 text-[#6B7280]" />
                             Edit
                           </Link>
-                        </Button>
-                        <Button asChild variant="ghost" className="!p-0">
+                        </Button> */}
+                        {/* <Button asChild variant="ghost" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                           >
                             <Trash className="size-4 text-[#6B7280]" />
                             Delete
                           </Link>
-                        </Button>
+                        </Button> */}
                       </div>
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
