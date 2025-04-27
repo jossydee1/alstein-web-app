@@ -23,6 +23,7 @@ export interface OrderProps {
     user_avatar: string | null;
     id: string;
     email: string;
+    address: string;
   };
   equipment: {
     name: string;
