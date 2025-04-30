@@ -20,7 +20,7 @@ import style from "./style.module.scss";
 import google from "@/public/images/logos/google.svg";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { useScrollToID } from "@/hooks";
-import { signIn } from "@/auth";
+import { signIn } from "next-auth/react";
 
 // Main component
 const SignupContent = () => {
@@ -223,7 +223,6 @@ const PersonalDetails = ({
   };
 
   const handleGoogleLogin = async () => {
-    // "use server";
     await signIn("google");
   };
 

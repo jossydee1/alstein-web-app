@@ -19,7 +19,7 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { useAuth } from "@/context";
 import { useScrollToID } from "@/hooks";
-import { signIn } from "@/auth";
+import { signIn } from "next-auth/react";
 
 const LoginContent = () => {
   const router = useRouter();
@@ -121,7 +121,6 @@ const LoginContent = () => {
   };
 
   const handleGoogleLogin = async () => {
-    // "use server";
     await signIn("google");
   };
 
