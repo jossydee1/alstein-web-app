@@ -19,6 +19,7 @@ import Image from "next/image";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { useAuth } from "@/context";
 import { useScrollToID } from "@/hooks";
+import { signIn } from "@/auth";
 
 const LoginContent = () => {
   const router = useRouter();
@@ -119,6 +120,11 @@ const LoginContent = () => {
     setError(formatError(error, "An error occurred during login"));
   };
 
+  const handleGoogleLogin = async () => {
+    // "use server";
+    await signIn("google");
+  };
+
   return (
     <div className={style.wrapper}>
       <Banner />
@@ -192,7 +198,11 @@ const LoginContent = () => {
             </div>
 
             <div className={style.altBtns}>
-              <button type="button" className={style.altBtn}>
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className={style.altBtn}
+              >
                 <Image src={google} alt="Google Logo" width={24} height={24} />
                 Continue with Google
               </button>
