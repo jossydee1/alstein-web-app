@@ -205,6 +205,14 @@ const PersonalDetails = ({
       if (response.status === 200) {
         setUserId(response.data.id);
         nextStep();
+        setFormData({
+          firstName: "",
+          lastName: "",
+          phone: "",
+          countryCode: "",
+          email: "",
+        });
+        setError("");
       }
     } catch (error) {
       setError(formatError(error, "An error occurred during signup"));

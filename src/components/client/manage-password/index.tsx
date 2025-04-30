@@ -56,6 +56,9 @@ const ManagePasswordContent = () => {
 
       if (response.status === 200) {
         toast.success("Password updated succesfully");
+        setPassword("");
+        setConfirmPassword("");
+        setError("");
       }
     } catch (error) {
       toast.error(formatError(error, "Failed to update password"));

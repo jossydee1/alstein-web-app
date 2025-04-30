@@ -63,6 +63,9 @@ const ResetPasswordContent = () => {
       );
 
       if (response.status === 200) {
+        setError("Password reset successfully");
+        setPassword("");
+        setConfirmPassword("");
         router.push(authRoutes?.login);
       }
     } catch (error) {

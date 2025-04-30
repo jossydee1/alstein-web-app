@@ -56,6 +56,8 @@ const ForgotPasswordContent = () => {
       if (response?.status === 200) {
         setSuccess(response?.data?.message);
         setCountdown(90);
+        setEmail("");
+        setError("");
       }
     } catch (error) {
       setError(
