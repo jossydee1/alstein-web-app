@@ -4,7 +4,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEquipmentForm } from "@/context";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { acceptedCurrencies, formatCurrencySymbol } from "@/utils";
+import {
+  acceptedCurrencies,
+  formatCurrencySymbol,
+  sanitizeLeadingZero,
+} from "@/utils";
 
 const StepTwo = ({
   onNext,
@@ -86,8 +90,10 @@ const StepTwo = ({
                 type="number"
                 id="price"
                 name="price"
-                value={price}
-                onChange={e => setPrice(parseFloat(e.target.value) || 0)}
+                value={sanitizeLeadingZero(String(price))}
+                onChange={e =>
+                  setPrice(parseFloat(sanitizeLeadingZero(e.target.value)) || 0)
+                }
                 placeholder="10000"
                 min={0}
                 required

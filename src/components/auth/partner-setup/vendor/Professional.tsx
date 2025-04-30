@@ -514,6 +514,17 @@ const ProfessionalPageContent = () => {
       if (currentStep < steps?.length) {
         setCurrentStep(prev => prev + 1);
       } else {
+        // Reset form data and document states on successful final submission
+        setFormData({
+          id: "",
+          name: "",
+          institution: "",
+          institutional_email: "",
+          department: "",
+          department_head_email: "",
+        });
+        setDocumentStatus({});
+        setExistingDocuments([]);
         router.push(dashboardRoutes?.vendor_overview);
       }
     } catch (error) {

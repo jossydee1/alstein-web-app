@@ -81,6 +81,7 @@ const LoginContent = () => {
 
       setEmail("");
       setPassword("");
+      setError("");
 
       // After successful login and business profile check (which happens in login()),
       // redirect based on type or redirectUrl

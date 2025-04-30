@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { api, formatError } from "@/utils";
+import { api, formatError, sanitizeLeadingZero } from "@/utils";
 import { ApiResponseProps, BankDetailsHistoryProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
@@ -112,6 +112,7 @@ const WithdrawFormAndMethods = ({
       }
 
       toast.success("Withdrawal request submitted successfully");
+      setAmount(0);
       setIsSuccess(true);
       return response?.data?.data;
     } catch (error) {
@@ -191,8 +192,10 @@ const WithdrawFormAndMethods = ({
                   type="number"
                   id="amount"
                   name="amount"
-                  value={amount}
-                  onChange={e => setAmount(Number(e.target.value))}
+                  value={sanitizeLeadingZero(String(amount))}
+                  onChange={e =>
+                    setAmount(Number(sanitizeLeadingZero(e.target.value)))
+                  }
                   placeholder="Enter amount to withdraw"
                   min={0}
                   required

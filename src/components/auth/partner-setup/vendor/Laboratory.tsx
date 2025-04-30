@@ -543,6 +543,24 @@ const LaboratoryPageContent = () => {
       if (currentStep < steps.length) {
         setCurrentStep(prev => prev + 1);
       } else {
+        // Reset form data and document states on successful final submission
+        setFormData({
+          id: "",
+          name: "",
+          bio: "",
+          website: "",
+          city: "",
+          state: "",
+          country: "",
+          address: "",
+          longitude: "",
+          latitude: "",
+          specializations: "",
+          mission: "",
+          support_email: "",
+        });
+        setDocumentStatus({});
+        setExistingDocuments([]);
         router.push(dashboardRoutes?.vendor_overview);
       }
     } catch (error) {
