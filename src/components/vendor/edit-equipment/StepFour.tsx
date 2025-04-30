@@ -240,14 +240,14 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
     // Refresh specifications to ensure we have the latest data
     await refreshSpecifications();
 
-    if (specifications.length < 5) {
-      setError("Please add at least 5 specifications.");
+    if (specifications.length < 3) {
+      setError("Please add at least 3 specifications.");
       return;
     }
 
-    if (existingImages.length + images.length < 5) {
+    if (existingImages.length + images.length < 3) {
       setError(
-        "Please ensure you have at least 5 images (existing + new uploads).",
+        "Please ensure you have at least 3 images (existing + new uploads).",
       );
       return;
     }
@@ -332,7 +332,7 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
                     <Plus size={16} />
                   </Button>
                 </div>
-                <sup className="mt-4 block text-red-500">Min of 5 Features</sup>
+                <sup className="mt-4 block text-red-500">Min of 3 Features</sup>
 
                 {/* Pending specifications */}
                 {pendingSpecs.length > 0 && (
@@ -464,7 +464,7 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
                 Upload additional images or keep the existing ones to showcase
                 your equipment.{" "}
                 <span className="text-sm text-red-500">
-                  Minimum of 5 images required in total.
+                  Minimum of 3 images required in total.
                 </span>
               </p>
             </div>

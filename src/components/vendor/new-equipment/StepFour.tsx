@@ -52,12 +52,12 @@ const StepFour = ({
   };
 
   const handleComplete = async () => {
-    if (specifications.length < 5) {
-      setError("Please add at least 5 specifications.");
+    if (specifications.length < 3) {
+      setError("Please add at least 3 specifications.");
       return;
     }
-    if (images.length < 5) {
-      setError("Please upload at least 5 images.");
+    if (images.length < 3) {
+      setError("Please upload at least 3 images.");
       return;
     }
 
@@ -190,7 +190,7 @@ const StepFour = ({
                   onKeyPress={handleFeatureKeyPress}
                   required
                 />
-                <sup className="mt-4 block text-red-500">Min of 5 Features</sup>
+                <sup className="mt-4 block text-red-500">Min of 3 Features</sup>
 
                 <div className="mt-4 flex flex-wrap gap-4">
                   {specifications.map((feature, index) => (
@@ -228,7 +228,7 @@ const StepFour = ({
                 Upload images of your equipment to showcase its specifications
                 and condition.{" "}
                 <span className="text-sm text-red-500">
-                  Minimum of 5 images required.
+                  Minimum of 3 images required.
                 </span>
               </p>
             </div>
