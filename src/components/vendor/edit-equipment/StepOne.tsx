@@ -97,15 +97,15 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
                 >
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="rent" id="rent" />
-                    <Label htmlFor="rent">Rent</Label>
+                    <Label htmlFor="rent">Rent (Billed per Day)</Label>
                   </div>
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="on_site" id="on_site" />
-                    <Label htmlFor="on_site">Onsite</Label>
+                    <Label htmlFor="on_site">Onsite (Billed per Sample)</Label>
                   </div>
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="lease" id="lease" />
-                    <Label htmlFor="lease">Lease</Label>
+                    <Label htmlFor="lease">Lease (Billed per Day)</Label>
                   </div>
                 </RadioGroup>
               </div>

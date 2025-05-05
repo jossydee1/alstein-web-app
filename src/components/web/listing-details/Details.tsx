@@ -25,6 +25,7 @@ const Details = ({
         <div className="text-[#343434]">
           <p>{listingInfo?.description}</p>
           <ul className="mt-4 list-inside list-disc">
+            <li>Brand: {listingInfo?.brand || "N/A"}</li>
             {listingInfo?.specifications.map(spec => (
               <li key={spec?.id}>{spec?.specification}</li>
             ))}

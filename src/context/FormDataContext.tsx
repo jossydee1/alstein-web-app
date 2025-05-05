@@ -6,6 +6,7 @@ import { createContext, useState, useContext, ReactNode } from "react";
 interface EquipmentFormData {
   id?: string;
   name?: string;
+  brand?: string;
   description?: string;
   price?: number;
   address?: string;

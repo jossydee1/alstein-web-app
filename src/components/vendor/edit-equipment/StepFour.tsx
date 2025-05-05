@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState, useEffect } from "react";
-import { Images, X, Plus } from "lucide-react";
+import { Images, X, Plus, Loader2 } from "lucide-react";
 import { useAuth, useEquipmentForm } from "@/context";
 import { api, DOCUMENT_URL, formatError } from "@/utils";
 import { toast } from "react-toastify";
@@ -436,10 +436,20 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
                                   onClick={() =>
                                     handleDeleteSpecification(feature.id)
                                   }
-                                  className="ml-2 text-red-500 hover:text-red-700"
+                                  className="ml-2"
                                   disabled={isDeleting || isProcessing}
                                 >
-                                  <X size={15} />
+                                  {isDeleting ? (
+                                    <Loader2
+                                      className="animate-spin"
+                                      size={15}
+                                    />
+                                  ) : (
+                                    <X
+                                      size={15}
+                                      className="text-red-500 hover:text-red-700"
+                                    />
+                                  )}
                                 </button>
                               </div>
                             </>
