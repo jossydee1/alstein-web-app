@@ -59,6 +59,7 @@ const EditEquipmentContent = () => {
       initialData={{
         id: equipmentData.id,
         name: equipmentData.name,
+        brand: equipmentData.brand,
         description: equipmentData.description,
         price: equipmentData.price / 100, // Convert from cents to actual amount
         address: equipmentData.address,

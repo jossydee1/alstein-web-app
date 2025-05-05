@@ -19,18 +19,19 @@ const StepTwo = ({
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
   const [name, setName] = useState(formData?.name || "");
+  const [brand, setBrand] = useState(formData?.brand || "");
   const [description, setDescription] = useState(formData?.description || "");
   const [price, setPrice] = useState(formData?.price || 0);
   const [error, setError] = useState("");
 
   const handleNext = () => {
-    if (!name || !description) {
-      setError("Please enter a name and description option.");
+    if (!name || !brand || !description) {
+      setError("Please enter a name, brand, and description option.");
       return;
     }
     setError("");
 
-    updateFormData({ name, description, price });
+    updateFormData({ name, brand, description, price });
     onNext();
   };
 
@@ -64,6 +65,21 @@ const StepTwo = ({
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="e.g High-Precision PCR Machine"
+                required
+              />
+            </div>
+            <div className="w-full max-w-[420px]">
+              <Label htmlFor="equipment-brand" className="mb-2">
+                Brand of Equipment
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="equipment-brand"
+                name="equipment-brand"
+                value={brand}
+                onChange={e => setBrand(e.target.value)}
+                placeholder="e.g Thermo Fisher Scientific"
                 required
               />
             </div>

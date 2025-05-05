@@ -18,6 +18,7 @@ export interface ListingProps {
   service_type: string;
   updated_at: string;
   equipment_file: DocumentProps[];
+  brand: string;
 }
 
 export interface ListingsProps {

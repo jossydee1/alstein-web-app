@@ -86,10 +86,21 @@ const AccountSettingsContent = () => {
 
       const uploadLink = uploadLinkResponse?.data?.data?.upload_link;
 
+      // FIX: Remove any authorization headers for the S3 upload
       await api.put(uploadLink, file, {
         headers: {
           "Content-Type": file?.type,
         },
+        // This ensures no auth headers are sent with this specific request
+        transformRequest: [
+          (data, headers) => {
+            // Remove Authorization header if it exists
+            if (headers && "Authorization" in headers) {
+              delete headers.Authorization;
+            }
+            return data;
+          },
+        ],
       });
 
       // Refetch user details and update state
