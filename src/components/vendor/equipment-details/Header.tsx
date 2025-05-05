@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Grid3x3 } from "lucide-react";
 import Image from "next/image";
 import { ListingImageModal } from "@/components/common/modals";
-import { DefaultSlide } from "@/components/common";
+import { DefaultSlide, GetListingStatusPill } from "@/components/common";
 import { ListingInfoProps } from "@/types";
 import { DOCUMENT_URL } from "@/utils";
 
@@ -15,8 +15,9 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
   return (
     <div className="bg-white">
       <header className="">
-        <div className="mb-[22px] flex flex-wrap items-center justify-between">
+        <div className="mb-[22px] flex flex-wrap items-center justify-between gap-2">
           <h1 className="font-500 text-2xl">{listingInfo?.name}</h1>
+          {GetListingStatusPill(listingInfo?.listing_status) || "N/A"}
         </div>
 
         <div className="relative">

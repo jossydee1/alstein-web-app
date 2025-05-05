@@ -20,6 +20,9 @@ interface StepTwoProps {
 const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
   const { formData, updateFormData } = useEquipmentForm();
   const [name, setName] = useState(formData?.name || equipmentData.name || "");
+  const [brand, setBrand] = useState(
+    formData?.brand || equipmentData.brand || "",
+  );
   const [description, setDescription] = useState(
     formData?.description || equipmentData.description || "",
   );
@@ -35,7 +38,7 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
     }
     setError("");
 
-    updateFormData({ name, description, price });
+    updateFormData({ name, description, price, brand });
     onNext();
   };
 
@@ -69,6 +72,21 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="e.g High-Precision PCR Machine"
+                required
+              />
+            </div>
+            <div className="w-full max-w-[420px]">
+              <Label htmlFor="equipment-brand" className="mb-2">
+                Brand of Equipment
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="equipment-brand"
+                name="equipment-brand"
+                value={brand}
+                onChange={e => setBrand(e.target.value)}
+                placeholder="e.g Thermo Fisher Scientific"
                 required
               />
             </div>

@@ -7,9 +7,10 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
     <article>
       <section className="description">
         <h2 className="font-500 mb-4 text-2xl">Equipment Specifications:</h2>
+        <p>{listingInfo?.description}</p>
         <div className="text-[#343434]">
-          <p>{listingInfo?.description}</p>
           <ul className="mt-4 list-inside list-disc">
+            <li>Brand: {listingInfo?.brand || "N/A"}</li>
             {listingInfo?.specifications.map(spec => (
               <li key={spec?.id}>{spec?.specification}</li>
             ))}
