@@ -3,6 +3,7 @@
 import { api, formatError } from "@/utils";
 import { QueryOptions, useQuery } from "@tanstack/react-query";
 import { ApiResponseProps } from "@/types";
+import { useAuth } from "@/context";
 
 export function useClientFetch<T>({
   endpoint,
@@ -17,6 +18,8 @@ export function useClientFetch<T>({
   options?: Partial<QueryOptions<T>>;
   token?: string | null;
 }) {
+  const { logout } = useAuth();
+
   return useQuery({
     queryKey: [endpoint, params],
     queryFn: async (): Promise<T> => {
@@ -35,7 +38,12 @@ export function useClientFetch<T>({
         }
 
         return response?.data?.data;
-      } catch (error) {
+      } catch (error: unknown) {
+        const axiosError = error as { response?: { status: number } };
+        if (axiosError.response?.status === 403) {
+          logout();
+          throw new Error("Unauthorized access");
+        }
         throw new Error(formatError(error, "Failed to fetch data"));
       }
     },
