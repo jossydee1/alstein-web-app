@@ -36,14 +36,14 @@ api.interceptors.response.use(
         localStorage.removeItem("userToken");
         localStorage.removeItem("user");
         localStorage.removeItem("businessProfile");
-      }
 
-      // Redirect to login page if not already there
-      if (
-        typeof window !== "undefined" &&
-        !window.location.pathname.includes("/login")
-      ) {
-        window.location.href = "/login";
+        // Redirect to login page if token is invalid
+        if (
+          typeof window !== "undefined" &&
+          !window.location.pathname.includes("/login")
+        ) {
+          window.location.href = "/login";
+        }
       }
     }
     return Promise.reject(error);
