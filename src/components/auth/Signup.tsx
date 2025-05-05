@@ -20,6 +20,7 @@ import style from "./style.module.scss";
 import google from "@/public/images/logos/google.svg";
 import logoLight from "@/public/logo-rectangle-light.svg";
 import { useScrollToID } from "@/hooks";
+import { signIn } from "next-auth/react";
 
 // Main component
 const SignupContent = () => {
@@ -221,6 +222,10 @@ const PersonalDetails = ({
     }
   };
 
+  const handleGoogleLogin = async () => {
+    await signIn("google", { redirectTo: "/login" });
+  };
+
   return (
     <FormLayout step={1} title="Personal Information">
       <form onSubmit={handleSubmit}>
@@ -334,7 +339,11 @@ const PersonalDetails = ({
         </div>
 
         <div className={style.altBtns}>
-          <button type="button" className={style.altBtn}>
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className={style.altBtn}
+          >
             <Image src={google} alt="Google Logo" width={24} height={24} />
             Continue with Google
           </button>

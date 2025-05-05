@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppProviders } from "@/context";
 import { Suspense } from "react";
 import { LoadingState } from "@/components/common";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,14 +24,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <Suspense fallback={<LoadingState />}>
-          <ReactQueryProvider>
-            <AppProviders>
-              <ToastContainer />
-              {children}
-            </AppProviders>
-            <PrelineScript />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </ReactQueryProvider>
+          <SessionProvider>
+            <ReactQueryProvider>
+              <AppProviders>
+                <ToastContainer />
+                {children}
+              </AppProviders>
+              <PrelineScript />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </ReactQueryProvider>
+          </SessionProvider>
         </Suspense>
       </body>
     </html>
