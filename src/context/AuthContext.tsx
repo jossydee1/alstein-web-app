@@ -11,6 +11,7 @@ import React, {
   useCallback,
 } from "react";
 import { api, authRoutes } from "@/utils";
+import { signOut } from "next-auth/react";
 
 interface UserContextProps {
   id: string;
@@ -150,6 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("user");
     localStorage.removeItem("businessProfile");
+    signOut();
     router.push(authRoutes.login);
   }, [router]);
 

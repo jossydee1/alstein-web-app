@@ -223,7 +223,7 @@ const PersonalDetails = ({
   };
 
   const handleGoogleLogin = async () => {
-    await signIn("google");
+    await signIn("google", { redirectTo: "/login" });
   };
 
   return (

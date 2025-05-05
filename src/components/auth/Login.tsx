@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Banner from "./Banner";
 import style from "./style.module.scss";
 import Link from "next/link";
@@ -20,6 +20,8 @@ import logoLight from "@/public/logo-rectangle-light.svg";
 import { useAuth } from "@/context";
 import { useScrollToID } from "@/hooks";
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { LoadingState } from "../common";
 
 const LoginContent = () => {
   const router = useRouter();
@@ -30,6 +32,7 @@ const LoginContent = () => {
   const comment = searchParams.get("comment");
 
   const { login } = useAuth();
+  const { data: session } = useSession();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +40,43 @@ const LoginContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useScrollToID(error, "error");
+
+  useEffect(() => {
+    const handleSessionLogin = async () => {
+      if (session?.user) {
+        setIsSubmitting(true); // Show loading state
+        try {
+          const user = session.user;
+          const payload = {
+            email: user.email,
+            first_name: user.name?.split(" ")[0] || "",
+            last_name: user.name?.split(" ")[1] || "",
+            auth_type: "google",
+          };
+
+          const response = await api.post(
+            "/client/public/api/v1/oauth-handler",
+            payload,
+          );
+
+          if (response?.status === 200) {
+            const { id, token } = response.data;
+
+            handleSuccessfulLogin(id, token);
+
+            // Log in with auth context
+            // await login({ id, token, user: userInfo });
+          }
+        } catch (error) {
+          setError(formatError(error, "An error occurred during google login"));
+        } finally {
+          setIsSubmitting(false); // Hide loading state
+        }
+      }
+    };
+
+    handleSessionLogin();
+  }, [session]);
 
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,102 +161,115 @@ const LoginContent = () => {
   };
 
   const handleGoogleLogin = async () => {
-    await signIn("google");
+    await signIn("google", { redirectTo: "/login" });
   };
 
   return (
-    <div className={style.wrapper}>
-      <Banner />
+    <>
+      {isSubmitting && <LoadingState />}
+      <div className={style.wrapper}>
+        <Banner />
 
-      <div className={style.container}>
-        <div className={style.topBar}>
-          <Link
-            className={style.logoLink}
-            href={webRoutes?.home}
-            aria-label="Brand"
-          >
-            <Image alt="Alstein Logo" src={logoLight} width={130} height={48} />
-          </Link>
-        </div>
-
-        <main className={style.formWrapper}>
-          <header className={style.header}>
-            <h1 className={style.title}>Welcome Back!</h1>
-            <hr className={style.hr} />
-          </header>
-
-          <form onSubmit={handleSubmit}>
-            {error && <p className={style.error}>{error}</p>}
-
-            <div className={style.inputGroup}>
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+        <div className={style.container}>
+          <div className={style.topBar}>
+            <Link
+              className={style.logoLink}
+              href={webRoutes?.home}
+              aria-label="Brand"
+            >
+              <Image
+                alt="Alstein Logo"
+                src={logoLight}
+                width={130}
+                height={48}
               />
-            </div>
+            </Link>
+          </div>
 
-            <div className={style.inputGroup}>
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-              <p className={style.info}>
-                <Link
-                  className="text-[#FF7D31]"
-                  href={authRoutes?.forgot_password}
+          <main className={style.formWrapper}>
+            <header className={style.header}>
+              <h1 className={style.title}>Welcome Back!</h1>
+              <hr className={style.hr} />
+            </header>
+
+            <form onSubmit={handleSubmit}>
+              {error && <p className={style.error}>{error}</p>}
+
+              <div className={style.inputGroup}>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className={style.inputGroup}>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+                <p className={style.info}>
+                  <Link
+                    className="text-[#FF7D31]"
+                    href={authRoutes?.forgot_password}
+                  >
+                    Forgotten Password?
+                  </Link>
+                </p>
+              </div>
+
+              <div className={style.inputGroup}>
+                <Button
+                  type="submit"
+                  className={style.submitButton}
+                  disabled={isSubmitting}
                 >
-                  Forgotten Password?
+                  {isSubmitting ? "Signing In..." : "Sign In"}
+                </Button>
+              </div>
+            </form>
+
+            <footer className={style.footer}>
+              <div className={style.or}>
+                <hr className={style.hr} /> Or <hr className={style.hr} />
+              </div>
+
+              <div className={style.altBtns}>
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className={style.altBtn}
+                >
+                  <Image
+                    src={google}
+                    alt="Google Logo"
+                    width={24}
+                    height={24}
+                  />
+                  Continue with Google
+                </button>
+              </div>
+
+              <p className={style.cta}>
+                Don&apos;t have an account?{" "}
+                <Link className={style.link} href={authRoutes?.register}>
+                  Sign Up
                 </Link>
               </p>
-            </div>
-
-            <div className={style.inputGroup}>
-              <Button
-                type="submit"
-                className={style.submitButton}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Signing In..." : "Sign In"}
-              </Button>
-            </div>
-          </form>
-
-          <footer className={style.footer}>
-            <div className={style.or}>
-              <hr className={style.hr} /> Or <hr className={style.hr} />
-            </div>
-
-            <div className={style.altBtns}>
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className={style.altBtn}
-              >
-                <Image src={google} alt="Google Logo" width={24} height={24} />
-                Continue with Google
-              </button>
-            </div>
-
-            <p className={style.cta}>
-              Don&apos;t have an account?{" "}
-              <Link className={style.link} href={authRoutes?.register}>
-                Sign Up
-              </Link>
-            </p>
-          </footer>
-        </main>
+            </footer>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
