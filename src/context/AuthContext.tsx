@@ -3,7 +3,13 @@
 import { UserDetailsProps } from "@/types/user";
 import { PartnerProps } from "@/types";
 import { useRouter } from "next/navigation";
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { api, authRoutes } from "@/utils";
 
 interface UserContextProps {
@@ -133,7 +139,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUserId(null);
     setUser(null);
     setToken(null);
@@ -145,7 +151,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("businessProfile");
     router.push(authRoutes.login);
-  };
+  }, [router]);
+
+  // Check token expiration and log out user
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const token = localStorage.getItem("userToken");
+      if (!token) {
+        logout();
+        return;
+      }
+
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      const tokenExpiry = tokenPayload.exp * 1000; // Convert to milliseconds
+      const currentTime = Date.now();
+
+      if (currentTime >= tokenExpiry) {
+        logout();
+      }
+    };
+
+    const interval = setInterval(checkTokenExpiration, 60 * 1000); // Check every minute
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [logout]);
 
   const setUserProfileHandler = (user: UserDetailsProps) => {
     setUser(user);
