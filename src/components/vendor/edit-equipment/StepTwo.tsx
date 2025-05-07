@@ -32,10 +32,16 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
   const [error, setError] = useState("");
 
   const handleNext = () => {
-    if (!name || !description) {
-      setError("Please enter a name and description option.");
+    if (!name || !description || !brand) {
+      setError("Please enter a name, description, and brand option.");
       return;
     }
+
+    if (price === 0) {
+      setError("Price must be greater than zero.");
+      return;
+    }
+
     setError("");
 
     updateFormData({ name, description, price, brand });

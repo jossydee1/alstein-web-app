@@ -11,6 +11,7 @@ interface EquipmentFormData {
   price?: number;
   address?: string;
   service_type?: string;
+  bill_type?: string;
   category_id?: string;
   partner_id?: string;
   city?: string;
