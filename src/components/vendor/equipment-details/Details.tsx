@@ -21,10 +21,15 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
       <hr className="my-[57px] border border-[#EBEBEB]" />
 
       <section>
-        <h2 className="font-500 mb-4 text-2xl">Service Type</h2>
-        <p className="w-fit rounded-md border border-[#676767] px-6 py-1.5 capitalize text-[#7A7A7A]">
-          <span>{listingInfo?.service_type}</span>
-        </p>
+        <h2 className="font-500 mb-4 text-2xl">Service And Billing Type</h2>
+        <div className="flex flex-wrap gap-4">
+          <p className="w-fit rounded-md border border-[#676767] px-6 py-1.5 capitalize text-[#7A7A7A]">
+            <span>{listingInfo?.service_type?.replace(/_/g, " ")}</span>
+          </p>
+          <p className="w-fit rounded-md border border-[#676767] px-6 py-1.5 capitalize text-[#7A7A7A]">
+            <span>Billed {listingInfo?.bill_type?.replace(/_/g, " ")}</span>
+          </p>
+        </div>
       </section>
     </article>
   );
