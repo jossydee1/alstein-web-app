@@ -29,6 +29,12 @@ const StepTwo = ({
       setError("Please enter a name, brand, and description option.");
       return;
     }
+
+    if (price === 0) {
+      setError("Price must be greater than zero.");
+      return;
+    }
+
     setError("");
 
     updateFormData({ name, brand, description, price });

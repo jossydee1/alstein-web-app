@@ -27,16 +27,23 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
   const [serviceType, setServiceType] = useState(
     formData?.service_type || equipmentData.service_type || "",
   );
+  const [billType, setBilType] = useState(
+    formData?.bill_type || equipmentData.bill_type || "",
+  );
   const [error, setError] = useState("");
 
   const handleNext = () => {
-    if (!category || !serviceType) {
-      setError("Please select a category and service type.");
+    if (!category || !serviceType || !billType) {
+      setError("Please select a category, service type, and bill type.");
       return;
     }
     setError("");
 
-    updateFormData({ category_id: category, service_type: serviceType });
+    updateFormData({
+      category_id: category,
+      service_type: serviceType,
+      bill_type: billType,
+    });
     onNext();
   };
 
@@ -97,15 +104,36 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
                 >
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="rent" id="rent" />
-                    <Label htmlFor="rent">Rent (Billed per Day)</Label>
+                    <Label htmlFor="rent">Rent</Label>
                   </div>
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="on_site" id="on_site" />
-                    <Label htmlFor="on_site">Onsite (Billed per Sample)</Label>
+                    <Label htmlFor="on_site">Onsite</Label>
                   </div>
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="lease" id="lease" />
-                    <Label htmlFor="lease">Lease (Billed per Day)</Label>
+                    <Label htmlFor="lease">Lease</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <div className="">
+                <Label htmlFor="billingType" className="mb-2">
+                  Billing Method
+                </Label>
+                <RadioGroup
+                  value={billType}
+                  onValueChange={setBilType}
+                  className="flex flex-wrap gap-3"
+                  id="billingType"
+                  name="billingType"
+                >
+                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                    <RadioGroupItem value="per_day" id="per_day" />
+                    <Label htmlFor="per_day">Per Day</Label>
+                  </div>
+                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                    <RadioGroupItem value="per_Sample" id="per_Sample" />
+                    <Label htmlFor="per_Sample">Per Sample</Label>
                   </div>
                 </RadioGroup>
               </div>

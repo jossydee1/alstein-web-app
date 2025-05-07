@@ -16,6 +16,7 @@ export interface ListingProps {
   partner_id: string;
   price: number;
   service_type: string;
+  bill_type: string;
   updated_at: string;
   equipment_file: DocumentProps[];
   brand: string;
