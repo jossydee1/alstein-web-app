@@ -72,7 +72,7 @@ const OrderHistoryContent = () => {
   const url =
     activeFilter === "all"
       ? `/client/api/v1/booking/get-bookings?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`
-      : `/client/api/v1/booking/get-bookings-by-status?status=${activeFilter}`;
+      : `/client/api/v1/booking/get-bookings-by-status?status=${activeFilter}&skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
   const {
     data: orderHistory,

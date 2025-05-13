@@ -6,7 +6,7 @@ import {
   LayoutDashboard,
   KeyRound,
   LogOut,
-  MessagesSquare,
+  Bell,
   Receipt,
   FlaskConical,
 } from "lucide-react";
@@ -122,7 +122,7 @@ export const Sidebar = () => {
     {
       id: "notifications",
       label: "Notifications",
-      icon: <MessagesSquare className={commonStyles.iconSize} />,
+      icon: <Bell className={commonStyles.iconSize} />,
       href: dashboardRoutes?.vendor_notifications,
       isActive: pathname?.includes(dashboardRoutes?.vendor_notifications),
     },
