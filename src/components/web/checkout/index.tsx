@@ -153,7 +153,7 @@ const CheckoutContent = () => {
         {
           display_name: "Client Id",
           variable_name: "client_id",
-          value: user?.id,
+          value: userId,
         },
         {
           display_name: "Listing Id",
@@ -232,6 +232,9 @@ const CheckoutContent = () => {
     !toTime?.hours ||
     !toTime?.minutes ||
     Object.values(formData).some(value => value === "") ||
+    !userId ||
+    !listingInfo?.id ||
+    !listingInfo?.partner?.id ||
     totalCost <= 0;
 
   if (isLoading) return <ListingDetailsSkeleton />;
