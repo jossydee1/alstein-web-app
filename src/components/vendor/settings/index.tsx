@@ -12,6 +12,7 @@ import { useAuth } from "@/context";
 import Image from "next/image";
 import { useClientFetch } from "@/hooks";
 import { LoadingState } from "@/components/common";
+import Link from "next/link";
 
 const VendorSettingsContent = () => {
   const { token, businessProfile, setBusinessProfile, logout } = useAuth();
@@ -316,15 +317,15 @@ const VendorSettingsContent = () => {
                     (doc, index) =>
                       doc?.name !== "logo" && (
                         <div key={index} className="flex items-center gap-2">
-                          <a
-                            href={doc?.path}
+                          <Link
+                            href={DOCUMENT_URL + doc?.path}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="rounded-md border border-[#E5E7EB] px-4 py-2 text-xs capitalize text-blue-600 hover:underline"
                           >
                             {doc?.name?.replace(/-/g, " ") ||
                               "Download Document"}
-                          </a>
+                          </Link>
                         </div>
                       ),
                   )
