@@ -38,9 +38,9 @@ export function useClientFetch<T>({
         }
 
         return response?.data?.data;
-      } catch (error: unknown) {
-        const axiosError = error as { response?: { status: number } };
-        if (axiosError.response?.status === 403) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error?.response?.status === 403) {
           logout();
           throw new Error("Unauthorized access");
         }
