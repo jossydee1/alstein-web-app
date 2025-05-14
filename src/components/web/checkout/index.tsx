@@ -146,7 +146,7 @@ const CheckoutContent = () => {
 
   const paystackProps = {
     email: formData?.email,
-    amount: 5000,
+    amount: totalCost,
     channels: ["card"],
     metadata: {
       custom_fields: [

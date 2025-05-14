@@ -79,14 +79,16 @@ const OrderDetails = ({
         </h2>
 
         <div className="flex gap-5">
-          <Image
-            src={DOCUMENT_URL + listingInfo?.equipment_file[0]?.path}
-            alt={listingInfo?.name}
-            width={100}
-            height={100}
-            className="h-auto w-full rounded-l-lg object-cover"
-          />
-          <div>
+          <div className="w-1/2 rounded-l-lg">
+            <Image
+              src={DOCUMENT_URL + listingInfo?.equipment_file[0]?.path}
+              alt={listingInfo?.name}
+              width={100}
+              height={100}
+              className="max-h-[150px] w-full rounded-l-lg object-cover"
+            />
+          </div>
+          <div className="w-1/2">
             <h3 className="mb-4 font-semibold uppercase text-[#172554]">
               {listingInfo?.name}
             </h3>
@@ -148,12 +150,12 @@ const OrderDetails = ({
         </p>
       </div>
 
-      <div className="rounded-md bg-orange-50 p-4 font-medium text-orange-600">
+      {/* <div className="rounded-md bg-orange-50 p-4 font-medium text-orange-600">
         <p>
           Note: A refundable ₦50 will be charged to verify your card. Payment is
           only deducted upon booking completion.
         </p>
-      </div>
+      </div> */}
       {user ? (
         <PaystackButton
           {...paystackProps}
