@@ -25,6 +25,18 @@ const Greetings = () => {
           background:
             "radial-gradient(75.44% 75.44% at 15.32% 13.69%, #3352BA 11.52%, #172554 68.02%), radial-gradient(85.18% 85.18% at 14.82% 50%, #3352BA 0%, #172554 68.02%)",
         }}
+        // style={{
+        //   background:
+        //     "url(https://images.unsplash.com/photo-1595154038281-4beb9195415b?q=80&w=2944&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) center/cover",
+        // }}
+        // style={{
+        //   background:
+        //     "url(https://images.unsplash.com/photo-1614308456595-a59d48697ea8?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) center/cover",
+        // }}
+        // style={{
+        //   background:
+        //     "url(https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) center/cover",
+        // }}
       >
         <div className="flex items-start gap-x-1.5">
           <Image
