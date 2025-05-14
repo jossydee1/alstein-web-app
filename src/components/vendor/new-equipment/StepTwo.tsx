@@ -120,6 +120,20 @@ const StepTwo = ({
                 min={0}
                 required
               />
+              <p className="mt-2 text-sm text-gray-600">
+                <span className="font-medium">Note:</span> A service charge of{" "}
+                <span className="font-semibold text-red-500">5%</span> will be
+                deducted.
+                <br />
+                You will receive:{" "}
+                <span className="font-semibold text-brandColor">
+                  {formatCurrencySymbol[acceptedCurrencies[0]]}{" "}
+                  {(price * 0.95).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </p>
             </div>
           </form>
 
