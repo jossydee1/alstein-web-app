@@ -14,7 +14,6 @@ const Page = () => {
     return <LoadingState />;
   }
 
-  // TODO: Confirm if this check works, once admin is set up
   if (isProfileVerified && canAccessVendor) {
     return (
       <div className="m-8 h-screen space-y-4 text-center">
