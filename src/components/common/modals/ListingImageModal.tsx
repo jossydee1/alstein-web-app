@@ -77,7 +77,7 @@ export const ListingImageModal = ({
             <Image
               src={DOCUMENT_URL + images[currentIndex]?.path}
               alt={DOCUMENT_URL + images[currentIndex]?.path}
-              className="m-auto h-auto max-h-[500px] w-auto flex-1"
+              className="m-auto h-auto max-h-[500px] w-auto flex-1 bg-neutral-50"
               width={1000}
               height={1000}
             />
@@ -121,7 +121,7 @@ export const ListingImageModal = ({
                 <Image
                   src={DOCUMENT_URL + img?.path}
                   alt={DOCUMENT_URL + img?.path}
-                  className="aspect-square max-h-16 max-w-16 rounded-md object-cover"
+                  className="aspect-square max-h-16 max-w-16 rounded-md bg-neutral-50 object-cover"
                   width={64}
                   height={64}
                 />

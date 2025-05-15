@@ -102,7 +102,7 @@ export const Reviews = ({
           <Image
             src={reviewImg}
             alt="Average Rating"
-            className="object-fit h-[54px] w-[54px]"
+            className="object-fit h-[54px] w-[54px] bg-neutral-50"
           />
           <p className="text-5xl font-[500] text-[#5D5D5D]">
             {averageRating?.toFixed(1)}

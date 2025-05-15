@@ -174,7 +174,7 @@ const ImageSlider = ({
             <Image
               src={DOCUMENT_URL + img?.path}
               alt={DOCUMENT_URL + img?.path}
-              className="aspect-square h-auto w-full rounded-md object-cover"
+              className="aspect-square h-auto w-full rounded-md bg-neutral-50 object-cover"
               width={500}
               height={500}
             />

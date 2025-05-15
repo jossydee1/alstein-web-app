@@ -242,7 +242,7 @@ export const Reviews = ({
                       alt={r?.profiles?.user_avatar || "User Avatar"}
                       width={58}
                       height={58}
-                      className="h-[58px] w-[58px] rounded-md bg-[#ddd] object-cover"
+                      className="h-[58px] w-[58px] rounded-md bg-[#ddd] bg-neutral-50 object-cover"
                     />
                     <div>
                       <h3 className="font-semibold text-[#404040]">

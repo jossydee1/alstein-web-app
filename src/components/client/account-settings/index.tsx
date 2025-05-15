@@ -229,7 +229,7 @@ const AccountSettingsContent = () => {
                       : avatar
                 }
                 alt="Current Avatar"
-                className="aspect-square rounded-md border-2 border-[#E5E7EB] object-cover"
+                className="aspect-square rounded-md border-2 border-[#E5E7EB] bg-gray-50 object-cover"
                 width={64}
                 height={64}
                 objectFit="contain"

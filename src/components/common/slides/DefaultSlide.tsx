@@ -50,7 +50,7 @@ export const DefaultSlide = ({
             <Image
               src={img}
               alt=""
-              className="aspect-video h-auto w-full rounded-md object-cover"
+              className="aspect-video h-auto w-full rounded-md bg-neutral-50 object-cover"
               width={1000}
               height={1000}
               onClick={onClick}

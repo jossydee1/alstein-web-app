@@ -85,7 +85,7 @@ const OrderDetails = ({
               alt={listingInfo?.name}
               width={100}
               height={100}
-              className="max-h-[150px] w-full rounded-l-lg object-cover"
+              className="max-h-[150px] w-full rounded-l-lg bg-neutral-50 object-cover"
             />
           </div>
           <div className="w-1/2">
