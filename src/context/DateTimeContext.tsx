@@ -18,6 +18,8 @@ interface DateTimeContextProps {
   setToTime: React.Dispatch<React.SetStateAction<Time>>;
   numberOfDays: number;
   resetDateTime: () => void;
+  isPerSample: boolean;
+  setIsPerSample: (val: boolean) => void;
 }
 
 const DateTimeContext = createContext<DateTimeContextProps | undefined>(
@@ -29,11 +31,12 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [date, setDate] = useState<DateRange | undefined>();
   const [fromTime, setFromTime] = useState<Time>({
-    hours: "",
-    minutes: "",
+    hours: "00",
+    minutes: "00",
   });
-  const [toTime, setToTime] = useState<Time>({ hours: "", minutes: "" });
+  const [toTime, setToTime] = useState<Time>({ hours: "00", minutes: "00" });
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
+  const [isPerSample, setIsPerSample] = useState<boolean>(false);
 
   useEffect(() => {
     if (date?.from && date?.to) {
@@ -45,10 +48,17 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [date]);
 
+  // Reset date/time when isPerSample changes
+  useEffect(() => {
+    setDate(undefined);
+    setFromTime({ hours: "00", minutes: "00" });
+    setToTime({ hours: "00", minutes: "00" });
+  }, [isPerSample]);
+
   const resetDateTime = () => {
     setDate(undefined);
-    setFromTime({ hours: "", minutes: "" });
-    setToTime({ hours: "", minutes: "" });
+    setFromTime({ hours: "00", minutes: "00" });
+    setToTime({ hours: "00", minutes: "00" });
   };
 
   return (
@@ -62,6 +72,8 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
         setToTime,
         numberOfDays,
         resetDateTime,
+        isPerSample,
+        setIsPerSample,
       }}
     >
       {children}

@@ -8,29 +8,47 @@ type Time = {
   minutes: string;
 };
 
-interface DateTimePickerProps {
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-  fromTime: Time;
-  setFromTime: React.Dispatch<React.SetStateAction<Time>>;
-  toTime: Time;
-  setToTime: React.Dispatch<React.SetStateAction<Time>>;
-}
+type DateTimePickerProps =
+  | {
+      isSingleDate: true;
+      date: Date | undefined;
+      setDate: (date: Date | undefined) => void;
+      fromTime: Time;
+      setFromTime: React.Dispatch<React.SetStateAction<Time>>;
+      toTime: Time;
+      setToTime: React.Dispatch<React.SetStateAction<Time>>;
+    }
+  | {
+      isSingleDate: false;
+      date: DateRange | undefined;
+      setDate: (date: DateRange | undefined) => void;
+      fromTime: Time;
+      setFromTime: React.Dispatch<React.SetStateAction<Time>>;
+      toTime: Time;
+      setToTime: React.Dispatch<React.SetStateAction<Time>>;
+    };
 
-const DateTimePicker: React.FC<DateTimePickerProps> = ({
-  date,
-  setDate,
-  fromTime,
-  setFromTime,
-  toTime,
-  setToTime,
-}) => {
+const DateTimePicker: React.FC<DateTimePickerProps> = props => {
   const hours = Array.from({ length: 24 }, (_, i) =>
     i.toString().padStart(2, "0"),
   );
   const minutes = Array.from({ length: 60 }, (_, i) =>
     i.toString().padStart(2, "0"),
   );
+
+  if (props.isSingleDate) {
+    return (
+      <div className="rounded-md border">
+        <Calendar
+          mode="single"
+          selected={props.date}
+          onSelect={props.setDate}
+          numberOfMonths={2}
+          disabled={{ before: new Date() }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-md border">
@@ -40,9 +58,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           <div className="flex items-center gap-1 p-1">
             <Clock size={16} className="text-[#676767]" />
             <select
-              value={fromTime?.hours}
+              value={props.fromTime?.hours}
               onChange={e =>
-                setFromTime(prev => ({ ...prev, hours: e.target.value }))
+                props.setFromTime(prev => ({ ...prev, hours: e.target.value }))
               }
               className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
             >
@@ -54,9 +72,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             </select>
             <span>:</span>
             <select
-              value={fromTime?.minutes}
+              value={props.fromTime?.minutes}
               onChange={e =>
-                setFromTime(prev => ({ ...prev, minutes: e.target.value }))
+                props.setFromTime(prev => ({
+                  ...prev,
+                  minutes: e.target.value,
+                }))
               }
               className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
             >
@@ -74,9 +95,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           <div className="flex items-center gap-1 p-1">
             <Clock size={16} className="text-[#676767]" />
             <select
-              value={toTime?.hours}
+              value={props.toTime?.hours}
               onChange={e =>
-                setToTime(prev => ({ ...prev, hours: e.target.value }))
+                props.setToTime(prev => ({ ...prev, hours: e.target.value }))
               }
               className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
             >
@@ -88,9 +109,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             </select>
             <span>:</span>
             <select
-              value={toTime?.minutes}
+              value={props.toTime?.minutes}
               onChange={e =>
-                setToTime(prev => ({ ...prev, minutes: e.target.value }))
+                props.setToTime(prev => ({
+                  ...prev,
+                  minutes: e.target.value,
+                }))
               }
               className="w-14 rounded-md border-gray-300 px-1 py-0.5 text-sm outline-none"
             >
@@ -103,13 +127,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           </div>
         </div>
       </div>
-
       <Calendar
         mode="range"
-        selected={date}
-        onSelect={setDate}
+        selected={props.date}
+        onSelect={props.setDate}
         numberOfMonths={2}
-        disabled={{ before: new Date() }} // Disable past dates
+        disabled={{ before: new Date() }}
       />
     </div>
   );

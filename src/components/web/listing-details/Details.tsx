@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { BadgeCheck, Building2 } from "lucide-react";
 import Link from "next/link";
@@ -15,8 +15,35 @@ const Details = ({
   listingInfo: ListingInfoProps;
   listingCount: number;
 }) => {
-  const { date, setDate, fromTime, setFromTime, toTime, setToTime } =
-    useDateTime();
+  const {
+    date,
+    setDate,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    isPerSample,
+    setIsPerSample,
+  } = useDateTime();
+
+  useEffect(() => {
+    setIsPerSample(listingInfo?.bill_type === "per_Sample");
+  }, [listingInfo?.bill_type, setIsPerSample]);
+
+  // Fix: Ensure correct date/setDate types for DateTimePicker
+  const singleDate = isPerSample
+    ? date && "from" in date
+      ? date.from
+      : (date as Date | undefined)
+    : undefined;
+  const singleSetDate = (d: Date | undefined) => {
+    // Always store as DateRange for context
+    if (d) {
+      setDate({ from: d, to: d });
+    } else {
+      setDate(undefined);
+    }
+  };
 
   return (
     <article>
@@ -93,21 +120,46 @@ const Details = ({
           {!date ? "Select Booking Date" : "Booking Date"}
         </h2>
         <div className="flex flex-col gap-2">
-          <p className="text-[#343434]">
-            From: {formatDateTime(date?.from, fromTime)} - To:{" "}
-            {formatDateTime(date?.to, toTime)}
-          </p>
+          {isPerSample ? (
+            <>
+              <p className="text-[#343434]">
+                Date:{" "}
+                {singleDate
+                  ? formatDateTime(singleDate as Date).replace(/ at .*/i, "")
+                  : "Not selected"}
+              </p>
+              <div className="rounded-md border">
+                <DateTimePicker
+                  date={singleDate}
+                  setDate={singleSetDate}
+                  fromTime={fromTime}
+                  setFromTime={setFromTime}
+                  toTime={toTime}
+                  setToTime={setToTime}
+                  isSingleDate={true}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-[#343434]">
+                From: {formatDateTime(date?.from, fromTime)} - To:{" "}
+                {formatDateTime(date?.to, toTime)}
+              </p>
 
-          <div className="rounded-md border">
-            <DateTimePicker
-              date={date}
-              setDate={setDate}
-              fromTime={fromTime}
-              setFromTime={setFromTime}
-              toTime={toTime}
-              setToTime={setToTime}
-            />
-          </div>
+              <div className="rounded-md border">
+                <DateTimePicker
+                  date={date}
+                  setDate={setDate}
+                  fromTime={fromTime}
+                  setFromTime={setFromTime}
+                  toTime={toTime}
+                  setToTime={setToTime}
+                  isSingleDate={false}
+                />
+              </div>
+            </>
+          )}
         </div>
       </section>
     </article>
