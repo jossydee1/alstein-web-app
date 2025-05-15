@@ -28,6 +28,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  // TODO: set default to country Nigeria
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [filterQueryParams, setFilterQueryParams] = useState<string>(

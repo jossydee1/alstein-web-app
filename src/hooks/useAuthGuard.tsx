@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
-import { authRoutes } from "@/utils";
+import { authRoutes, webRoutes } from "@/utils";
 import { LoadingState } from "@/components/common";
 
 export const useAuthGuard = (requireVendor = false) => {
@@ -43,13 +43,12 @@ export const useAuthGuard = (requireVendor = false) => {
           return;
         }
 
-        // TODO: Uncomment this when the profile verification is implemented
-        // if (!isProfileVerified) {
-        //   router.push(webRoutes.partner_status);
-        //   setIsAuthorized(false);
-        //   setIsChecking(false);
-        //   return;
-        // }
+        if (!isProfileVerified) {
+          router.push(webRoutes.partner_status);
+          setIsAuthorized(false);
+          setIsChecking(false);
+          return;
+        }
       }
 
       // All checks passed

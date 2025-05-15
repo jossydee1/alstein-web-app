@@ -185,9 +185,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const setBusinessProfileHandler = (profile: PartnerProps) => {
     setBusinessProfile(profile);
     setCanAccessVendor(!!profile);
-    // TODO: Uncomment this line when admin verification is implemented
-    // setIsProfileVerified(profile?.is_verified !== false);
-    setIsProfileVerified(true);
+    setIsProfileVerified(profile?.is_verified !== false);
     localStorage.setItem("businessProfile", JSON.stringify(profile));
   };
 

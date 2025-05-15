@@ -486,7 +486,7 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
                 <label htmlFor="images" className="mb-2">
                   Upload Images
                   <div className="flex w-full cursor-pointer flex-col items-center justify-center rounded-md border border-[#E5E7EB] bg-[#F8FAFC] p-5 py-10 text-center">
-                    <Images className="h-10 w-10 text-[#2563EB]" />
+                    <Images className="h-10 w-10 bg-neutral-50 text-[#2563EB]" />
                     <p className="mt-4 text-sm text-[#1F2937]">
                       Drop your images here or{" "}
                       <span className="text-blue-600 underline">browse</span>

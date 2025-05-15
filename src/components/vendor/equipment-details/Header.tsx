@@ -39,7 +39,7 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
                     key={index}
                     src={DOCUMENT_URL + img?.path}
                     alt={DOCUMENT_URL + img?.path}
-                    className="h-full max-h-[400px] w-full cursor-pointer object-cover md:col-span-2 md:row-span-2"
+                    className="h-full max-h-[400px] w-full cursor-pointer bg-neutral-50 object-cover md:col-span-2 md:row-span-2"
                     width={1000}
                     height={1000}
                     onClick={() => setIsModalOpen(true)}
@@ -49,7 +49,7 @@ const Header = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
                     key={index}
                     src={DOCUMENT_URL + img?.path}
                     alt={DOCUMENT_URL + img?.path}
-                    className="hidden aspect-square h-full max-h-[186px] w-full cursor-pointer object-cover md:block"
+                    className="hidden aspect-square h-full max-h-[186px] w-full cursor-pointer bg-neutral-50 object-cover md:block"
                     width={1000}
                     height={1000}
                     onClick={() => setIsModalOpen(true)}

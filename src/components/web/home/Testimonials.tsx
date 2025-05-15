@@ -108,7 +108,7 @@ const Testimonials = ({ reviews }: { reviews: ReviewProps[] }) => {
                         alt={slide?.user?.first_name}
                         width={50}
                         height={50}
-                        className="aspect-square min-h-[50px] min-w-[50px] max-w-[50px] rounded-full object-cover"
+                        className="aspect-square min-h-[50px] min-w-[50px] max-w-[50px] rounded-full bg-neutral-50 object-cover"
                       />
                     ) : (
                       <div className="flex aspect-square min-h-[50px] min-w-[50px] max-w-[50px] items-center justify-center rounded-full bg-gray-400 text-center text-2xl font-semibold text-gray-800">
