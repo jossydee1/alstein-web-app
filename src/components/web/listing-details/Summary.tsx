@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatDateTime, formatPrice, webRoutes, authRoutes } from "@/utils";
 import { ListingInfoProps } from "@/types";
@@ -23,13 +23,40 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
     toTime,
     setToTime,
     numberOfDays,
+    isPerSample,
+    setIsPerSample,
   } = useDateTime();
   const { user } = useAuth();
   const router = useRouter();
   const costPerDay = listingInfo?.price;
   const serviceFee = 0;
-  const totalCost = costPerDay * numberOfDays + serviceFee;
+
+  useEffect(() => {
+    setIsPerSample(listingInfo?.bill_type === "per_Sample");
+  }, [listingInfo?.bill_type, setIsPerSample]);
+
+  const [numberOfSamples, setNumberOfSamples] = useState(1);
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  // Fix: Ensure correct date/setDate types for DateTimePicker
+  const singleDate = isPerSample
+    ? date && "from" in date
+      ? date.from
+      : (date as Date | undefined)
+    : undefined;
+  const singleSetDate = (d: Date | undefined) => {
+    // Always store as DateRange for context
+    if (d) {
+      setDate({ from: d, to: d });
+    } else {
+      setDate(undefined);
+    }
+  };
+
+  // Calculate total cost
+  const totalCost = isPerSample
+    ? costPerDay * numberOfSamples + serviceFee
+    : costPerDay * numberOfDays + serviceFee;
 
   const handleCheckout = () => {
     if (!user) {
@@ -50,7 +77,7 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
         <span className="text-xl font-semibold text-[#343434]">
           {formatPrice(costPerDay, "NGN")}
         </span>{" "}
-        per Day
+        {listingInfo?.bill_type?.replace(/_/g, " ").slice(0).toLowerCase()}
       </p>
 
       <div className="flex w-full">
@@ -58,37 +85,73 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
           <PopoverTrigger asChild>
             <button className="grid flex-1 rounded-l-md border border-[#DEDEDE] p-2 text-left">
               <span className="text-[10px] font-semibold uppercase text-[#343434]">
-                Start Date
+                {isPerSample ? "Date" : "Start Date"}
               </span>
               <span className="text-sm font-semibold uppercase">
-                {formatDateTime(date?.from, fromTime)}
+                {isPerSample
+                  ? singleDate
+                    ? formatDateTime(singleDate as Date).replace(/ at .*/i, "")
+                    : "Select date"
+                  : formatDateTime(date?.from, fromTime)}
               </span>
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <DateTimePicker
-              date={date}
-              setDate={setDate}
-              fromTime={fromTime}
-              setFromTime={setFromTime}
-              toTime={toTime}
-              setToTime={setToTime}
-            />
+            {isPerSample ? (
+              <DateTimePicker
+                date={singleDate}
+                setDate={singleSetDate}
+                fromTime={fromTime}
+                setFromTime={setFromTime}
+                toTime={toTime}
+                setToTime={setToTime}
+                isSingleDate={true}
+              />
+            ) : (
+              <DateTimePicker
+                date={date}
+                setDate={setDate}
+                fromTime={fromTime}
+                setFromTime={setFromTime}
+                toTime={toTime}
+                setToTime={setToTime}
+                isSingleDate={false}
+              />
+            )}
           </PopoverContent>
         </Popover>
-        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger asChild>
-            <button className="grid flex-1 rounded-r-md border border-[#DEDEDE] p-2 text-left">
-              <span className="text-[10px] font-semibold uppercase text-[#343434]">
-                End Date
-              </span>
-              <span className="text-sm font-semibold uppercase">
-                {formatDateTime(date?.to, toTime)}
-              </span>
-            </button>
-          </PopoverTrigger>
-        </Popover>
+        {!isPerSample && (
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger asChild>
+              <button className="grid flex-1 rounded-r-md border border-[#DEDEDE] p-2 text-left">
+                <span className="text-[10px] font-semibold uppercase text-[#343434]">
+                  End Date
+                </span>
+                <span className="text-sm font-semibold uppercase">
+                  {formatDateTime(date?.to, toTime)}
+                </span>
+              </button>
+            </PopoverTrigger>
+          </Popover>
+        )}
       </div>
+
+      {isPerSample && (
+        <div>
+          <span className="mb-2 block text-sm font-medium text-[#676767]">
+            Number of Samples:
+          </span>
+          <input
+            type="number"
+            min={1}
+            value={numberOfSamples}
+            onChange={e =>
+              setNumberOfSamples(Math.max(1, Number(e.target.value)))
+            }
+            className="w-full rounded-md border border-gray-300 px-2 py-2 text-sm outline-none"
+          />
+        </div>
+      )}
 
       <div>
         <Button
@@ -98,12 +161,14 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
             background: "linear-gradient(90deg, #1045E4 0%, #09267E 100%)",
           }}
           disabled={
-            !date?.from ||
-            !fromTime?.hours ||
-            !fromTime?.minutes ||
-            !date?.to ||
-            !toTime?.hours ||
-            !toTime?.minutes
+            isPerSample
+              ? !date || !numberOfSamples
+              : !date?.from ||
+                !fromTime?.hours ||
+                !fromTime?.minutes ||
+                !date?.to ||
+                !toTime?.hours ||
+                !toTime?.minutes
           }
           onClick={handleCheckout}
         >
@@ -117,12 +182,12 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
       <div className="mt-10 space-y-4">
         <p className="flex justify-between space-x-4 text-[#454545]">
           <span>
-            {formatPrice(costPerDay, "NGN")} x {numberOfDays} days
+            {formatPrice(costPerDay, "NGN")} x{" "}
+            {isPerSample
+              ? `${numberOfSamples} samples`
+              : `${numberOfDays} days`}
           </span>{" "}
           <span>{formatPrice(totalCost, "NGN")}</span>
-        </p>
-        <p className="flex justify-between space-x-4 text-[#454545]">
-          <span>Service Fee</span> <span>{formatPrice(serviceFee, "NGN")}</span>
         </p>
 
         <hr className="my-6 border border-[#EBEBEB]" />

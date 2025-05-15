@@ -97,13 +97,28 @@ export const formatDateToRelativeTimeYearWithTime = (date: string): string => {
 // takes in date and time and returns a formatted string
 // e.g. 2023-08-21T09:00:00.322Z and { hours: "09", minutes: "00" } returns 21st Aug, 2023 at 09:00 AM
 export const formatDateTime = (
-  date: Date | undefined,
-  time: { hours: string; minutes: string },
+  date: Date | string | undefined,
+  time?: { hours: string; minutes: string },
 ) => {
   if (!date) return "";
 
-  const period = Number(time.hours) >= 12 ? "PM" : "AM";
-  const formattedHour = Number(time.hours) % 12 || 12;
+  const dateObj = typeof date === "string" ? new Date(date) : date;
 
-  return `${date.toLocaleDateString()} at ${formattedHour}:${time?.minutes} ${period}`;
+  // If no time is provided, just return the date in a readable format
+  if (!time || !time.hours || !time.minutes) {
+    return dateObj.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+
+  const period = Number(time?.hours) >= 12 ? "PM" : "AM";
+  const formattedHour = Number(time?.hours) % 12 || 12;
+
+  return `${dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })} at ${formattedHour}:${time?.minutes} ${period}`;
 };

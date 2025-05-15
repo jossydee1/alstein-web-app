@@ -42,7 +42,8 @@ const CheckoutContent = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { date, numberOfDays, resetDateTime, fromTime, toTime } = useDateTime();
+  const { date, numberOfDays, resetDateTime, fromTime, toTime, isPerSample } =
+    useDateTime();
 
   const { user, token, userId } = useAuth();
   const [error] = useState("");
@@ -52,6 +53,9 @@ const CheckoutContent = () => {
     email: "",
     address: "",
   });
+
+  // Add numberOfSamples state for per sample
+  const [numberOfSamples, setNumberOfSamples] = useState(1);
 
   // set form data from user
   useEffect(() => {
@@ -98,7 +102,10 @@ const CheckoutContent = () => {
 
   const costPerDay = listingInfo?.price || 0;
   const serviceFee = 0;
-  const totalCost = costPerDay * numberOfDays + serviceFee;
+  // Calculate total cost based on mode
+  const totalCost = isPerSample
+    ? costPerDay * numberOfSamples + serviceFee
+    : costPerDay * numberOfDays + serviceFee;
 
   // paystack
   const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
@@ -183,22 +190,26 @@ const CheckoutContent = () => {
         {
           display_name: "Start Date",
           variable_name: "start_date",
-          value: date?.from?.toLocaleDateString(),
+          value: isPerSample
+            ? date?.from?.toLocaleDateString()
+            : date?.from?.toLocaleDateString(),
         },
         {
           display_name: "Start Time",
           variable_name: "start_time",
-          value: `${fromTime?.hours}:${fromTime?.minutes}`,
+          value: isPerSample ? "" : `${fromTime?.hours}:${fromTime?.minutes}`,
         },
         {
           display_name: "End Date",
           variable_name: "end_date",
-          value: date?.to?.toLocaleDateString(),
+          value: isPerSample
+            ? date?.from?.toLocaleDateString()
+            : date?.to?.toLocaleDateString(),
         },
         {
           display_name: "End Time",
           variable_name: "end_time",
-          value: `${toTime?.hours}:${toTime?.minutes}`,
+          value: isPerSample ? "" : `${toTime?.hours}:${toTime?.minutes}`,
         },
         {
           display_name: "Cost per day",
@@ -211,9 +222,9 @@ const CheckoutContent = () => {
           value: totalCost,
         },
         {
-          display_name: "Number of Days",
-          variable_name: "number_of_days",
-          value: numberOfDays,
+          display_name: isPerSample ? "Number of Samples" : "Number of Days",
+          variable_name: isPerSample ? "number_of_samples" : "number_of_days",
+          value: isPerSample ? numberOfSamples : numberOfDays,
         },
       ],
     },
@@ -223,19 +234,22 @@ const CheckoutContent = () => {
     onSuccess: handlePaymentSuccess,
   };
 
-  // disable paystack button if no start and end date is selected, any formdata value is empty or total cost is 0
-  const isPaystackDisabled =
-    !date?.from ||
-    !fromTime?.hours ||
-    !fromTime?.minutes ||
-    !date?.to ||
-    !toTime?.hours ||
-    !toTime?.minutes ||
-    Object.values(formData).some(value => value === "") ||
-    !userId ||
-    !listingInfo?.id ||
-    !listingInfo?.partner?.id ||
-    totalCost <= 0;
+  // disable paystack button if required fields are missing
+  const isPaystackDisabled = isPerSample
+    ? !date?.from ||
+      Object.values(formData).some(value => value === "") ||
+      !userId ||
+      !listingInfo?.id ||
+      !listingInfo?.partner?.id ||
+      totalCost <= 0 ||
+      !numberOfSamples
+    : !date?.from ||
+      !date?.to ||
+      Object.values(formData).some(value => value === "") ||
+      !userId ||
+      !listingInfo?.id ||
+      !listingInfo?.partner?.id ||
+      totalCost <= 0;
 
   if (isLoading) return <ListingDetailsSkeleton />;
 
@@ -282,6 +296,8 @@ const CheckoutContent = () => {
               paystackProps={paystackProps}
               isPaystackDisabled={isPaystackDisabled}
               user={user === null ? false : true}
+              numberOfSamples={numberOfSamples}
+              setNumberOfSamples={setNumberOfSamples}
             />
           </div>
         </main>
