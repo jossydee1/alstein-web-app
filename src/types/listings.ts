@@ -20,6 +20,11 @@ export interface ListingProps {
   updated_at: string;
   equipment_file: DocumentProps[];
   brand: string;
+  favorite_equipment: {
+    id: string;
+    user_id: string;
+    equipment_id: string;
+  }[];
 }
 
 export interface ListingsProps {
