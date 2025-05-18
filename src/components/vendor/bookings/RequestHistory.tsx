@@ -32,19 +32,13 @@ import Link from "next/link";
 
 const tableHeads = [
   {
-    label: "EQUIPMENT name",
+    label: "LISTED DATE",
   },
   {
-    label: "SERVICE TYPE",
+    label: "SERVICE/EQUIPMENT",
   },
   {
-    label: "ORDER ID",
-  },
-  {
-    label: "ORDER DATE",
-  },
-  {
-    label: "TOTAL AMOUNT",
+    label: "PRICE",
     className: "text-right",
   },
   {
@@ -187,24 +181,18 @@ const RequestHistory = () => {
               {orderHistory && orderHistory?.data?.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order?.id} className="py-10">
-                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.name}
-                    </TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.service_type}
-                    </TableCell>
-                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {order?.id}
-                    </TableCell>
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
                       {formatIOSToDate(order?.created_at)}
+                    </TableCell>
+                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
+                      {order?.equipment?.name}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
                       {formatPrice(order?.booking_amount, "NGN")}
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       {GetOrderStatusPill(order?.status)}
-                    </TableCell>{" "}
+                    </TableCell>
                     <TableCell className="px-5 py-3">
                       {GetPaymentStatusPill(
                         order?.payment_status as
