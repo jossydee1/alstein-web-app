@@ -51,6 +51,19 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
     endpoint: "/client/public/api/v1/equipments/get-equipment-category",
   });
 
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    updateFormData({ category_id: value });
+  };
+  const handleServiceTypeChange = (value: string) => {
+    setServiceType(value);
+    updateFormData({ service_type: value });
+  };
+  const handleBillTypeChange = (value: string) => {
+    setBilType(value);
+    updateFormData({ bill_type: value });
+  };
+
   return (
     <>
       {isLoading && <LoadingState />}
@@ -74,7 +87,7 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
                 <Label htmlFor="category" className="mb-2">
                   Category
                 </Label>
-                <Select value={category} onValueChange={setCategory}>
+                <Select value={category} onValueChange={handleCategoryChange}>
                   <SelectTrigger
                     className="w-full"
                     id="category"
@@ -97,7 +110,7 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
                 </Label>
                 <RadioGroup
                   value={serviceType}
-                  onValueChange={setServiceType}
+                  onValueChange={handleServiceTypeChange}
                   className="flex flex-wrap gap-3"
                   id="serviceType"
                   name="serviceType"
@@ -122,7 +135,7 @@ const StepOne = ({ onNext, equipmentData }: StepOneProps) => {
                 </Label>
                 <RadioGroup
                   value={billType}
-                  onValueChange={setBilType}
+                  onValueChange={handleBillTypeChange}
                   className="flex flex-wrap gap-3"
                   id="billingType"
                   name="billingType"

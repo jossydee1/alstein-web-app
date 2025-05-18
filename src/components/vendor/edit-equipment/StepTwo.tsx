@@ -31,9 +31,29 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
   );
   const [error, setError] = useState("");
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    updateFormData({ name: e.target.value });
+  };
+  const handleBrandChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBrand(e.target.value);
+    updateFormData({ brand: e.target.value });
+  };
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setDescription(e.target.value);
+    updateFormData({ description: e.target.value });
+  };
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(sanitizeLeadingZero(e.target.value)) || 0;
+    setPrice(val);
+    updateFormData({ price: val });
+  };
+
   const handleNext = () => {
-    if (!name || !description || !brand) {
-      setError("Please enter a name, description, and brand option.");
+    if (!name || !brand || !description) {
+      setError("Please enter a name, brand, and description option.");
       return;
     }
 
@@ -44,7 +64,7 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
 
     setError("");
 
-    updateFormData({ name, description, price, brand });
+    updateFormData({ name, brand, description, price });
     onNext();
   };
 
@@ -54,11 +74,11 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
         <header className="flex flex-row flex-wrap items-start justify-between gap-4">
           <div className="dashboard-section-card-header">
             <h1 className="dashboard-section-card-title text-[#172554]">
-              Edit Equipment Details
+              Equipment Details
             </h1>
             <p className="dashboard-section-card-description">
-              Update the name, description, and price to help customers better
-              understand your equipment.
+              Add a name, description, and key features to help customers
+              understand your equipment better.
             </p>
           </div>
           <p className="text-3xl font-semibold text-[#172554]">Step 2</p>
@@ -76,7 +96,7 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
                 id="equipment-name"
                 name="equipment-name"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={handleNameChange}
                 placeholder="e.g High-Precision PCR Machine"
                 required
               />
@@ -91,7 +111,7 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
                 id="equipment-brand"
                 name="equipment-brand"
                 value={brand}
-                onChange={e => setBrand(e.target.value)}
+                onChange={handleBrandChange}
                 placeholder="e.g Thermo Fisher Scientific"
                 required
               />
@@ -106,41 +126,50 @@ const StepTwo = ({ onNext, onBack, equipmentData }: StepTwoProps) => {
                 placeholder="e.g This PCR machine offers high precision and accuracy for all your laboratory needs. It is equipped with advanced features to ensure reliable results."
                 className="h-[150px]"
                 value={description}
-                onChange={e => setDescription(e.target.value)}
+                onChange={handleDescriptionChange}
                 required
               />
             </div>
-            <div className="w-full max-w-[420px]">
-              <Label htmlFor="price" className="mb-2">
-                Price ({formatCurrencySymbol[acceptedCurrencies[0]]})
-              </Label>
-              <Input
-                className="border border-[#E5E7EB] p-5"
-                type="number"
-                id="price"
-                name="price"
-                value={sanitizeLeadingZero(String(price))}
-                onChange={e =>
-                  setPrice(parseFloat(sanitizeLeadingZero(e.target.value)) || 0)
-                }
-                placeholder="10000"
-                min={0}
-                required
-              />
-              <p className="mt-2 text-sm text-gray-600">
-                <span className="font-medium">Note:</span> A service charge of{" "}
-                <span className="font-semibold text-red-500">5%</span> will be
-                deducted.
-                <br />
-                You will receive:{" "}
-                <span className="font-semibold text-brandColor">
+            <div className="grid w-full max-w-[900px] grid-cols-1 items-end gap-4 md:grid-cols-3">
+              {/* Price Input */}
+              <div>
+                <Label htmlFor="price" className="mb-2">
+                  Price ({formatCurrencySymbol[acceptedCurrencies[0]]})
+                </Label>
+                <Input
+                  className="border border-[#E5E7EB] p-5"
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={sanitizeLeadingZero(String(price))}
+                  onChange={handlePriceChange}
+                  placeholder="10000"
+                  min={0}
+                  required
+                />
+              </div>
+              {/* Service Fee */}
+              <div>
+                <Label className="mb-2 block">Service Fee (5%)</Label>
+                <div className="rounded-md border border-[#E5E7EB] bg-gray-50 p-2 px-5 text-gray-700">
+                  {formatCurrencySymbol[acceptedCurrencies[0]]}{" "}
+                  {(price * 0.05).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
+              </div>
+              {/* Partner Gets */}
+              <div>
+                <Label className="mb-2 block">You Will Receive</Label>
+                <div className="rounded-md border border-[#E5E7EB] bg-gray-50 p-2 px-5 font-semibold text-brandColor">
                   {formatCurrencySymbol[acceptedCurrencies[0]]}{" "}
                   {(price * 0.95).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </span>
-              </p>
+                </div>
+              </div>
             </div>
           </form>
 

@@ -23,7 +23,7 @@ const StepOne = ({
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
   const [category, setCategory] = useState(formData?.category_id || "");
-  const [serviceType, setAvailability] = useState(formData?.service_type || "");
+  const [serviceType, setServiceType] = useState(formData?.service_type || "");
   const [billType, setBilType] = useState(formData?.bill_type || "");
   const [error, setError] = useState("");
 
@@ -45,6 +45,19 @@ const StepOne = ({
   const { data, isLoading } = useClientFetch<CategoryProps[]>({
     endpoint: "/client/public/api/v1/equipments/get-equipment-category",
   });
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    updateFormData({ category_id: value });
+  };
+  const handleServiceTypeChange = (value: string) => {
+    setServiceType(value);
+    updateFormData({ service_type: value });
+  };
+  const handleBillTypeChange = (value: string) => {
+    setBilType(value);
+    updateFormData({ bill_type: value });
+  };
 
   return (
     <>
@@ -70,7 +83,7 @@ const StepOne = ({
                 <Label htmlFor="category" className="mb-2">
                   Category
                 </Label>
-                <Select value={category} onValueChange={setCategory}>
+                <Select value={category} onValueChange={handleCategoryChange}>
                   <SelectTrigger
                     className="w-full"
                     id="category"
@@ -93,7 +106,7 @@ const StepOne = ({
                 </Label>
                 <RadioGroup
                   value={serviceType}
-                  onValueChange={setAvailability}
+                  onValueChange={handleServiceTypeChange}
                   className="flex flex-wrap gap-3"
                   id="serviceType"
                   name="serviceType"
@@ -118,7 +131,7 @@ const StepOne = ({
                 </Label>
                 <RadioGroup
                   value={billType}
-                  onValueChange={setBilType}
+                  onValueChange={handleBillTypeChange}
                   className="flex flex-wrap gap-3"
                   id="billingType"
                   name="billingType"

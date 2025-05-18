@@ -15,6 +15,10 @@ const StepThree = ({
 }) => {
   const { formData, updateFormData } = useEquipmentForm();
   const [address, setAddress] = useState(formData?.address || "");
+  // const [city, setCity] = useState(formData?.city || "");
+  // const [country, setCountry] = useState(formData?.country || "");
+  // const [latitude, setLatitude] = useState(formData?.latitude || "");
+  // const [longitude, setLongitude] = useState(formData?.longitude || "");
   const [error, setError] = useState("");
 
   const handleNext = () => {
@@ -23,10 +27,46 @@ const StepThree = ({
       return;
     }
     setError("");
-
-    updateFormData({ address });
+    updateFormData({
+      address,
+      city: "Lagos",
+      country: "Nigeria",
+      latitude: "6.5244",
+      longitude: "3.3792",
+    });
     onNext();
   };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+    updateFormData({
+      address: e.target.value,
+    });
+  };
+  // const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCity(e.target.value);
+  //   updateFormData({
+  //     city: e.target.value,
+  //   });
+  // };
+  // const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCountry(e.target.value);
+  //   updateFormData({
+  //     country: e.target.value,
+  //   });
+  // };
+  // const handleLatitudeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLatitude(e.target.value);
+  //   updateFormData({
+  //     latitude: e.target.value,
+  //   });
+  // };
+  // const handleLongitudeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLongitude(e.target.value);
+  //   updateFormData({
+  //     longitude: e.target.value,
+  //   });
+  // };
 
   return (
     <div className="space-y-9">
@@ -55,12 +95,67 @@ const StepThree = ({
                 id="address"
                 name="address"
                 value={address}
-                onChange={e => setAddress(e.target.value)}
+                onChange={handleAddressChange}
                 placeholder="e.g 123 Main St, City, Country"
                 required
               />
             </div>
-
+            {/* <div className="max-w-[420px]">
+              <Label htmlFor="city" className="mb-2">
+                City
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="city"
+                name="city"
+                value={city}
+                onChange={handleCityChange}
+                placeholder="e.g Lagos"
+              />
+            </div>
+           <div className="max-w-[420px]">
+              <Label htmlFor="country" className="mb-2">
+                Country
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="country"
+                name="country"
+                value={country}
+                onChange={handleCountryChange}
+                placeholder="e.g Nigeria"
+              />
+            </div>
+            <div className="max-w-[420px]">
+              <Label htmlFor="latitude" className="mb-2">
+                Latitude
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="latitude"
+                name="latitude"
+                value={latitude}
+                onChange={handleLatitudeChange}
+                placeholder="e.g 6.5244"
+              />
+            </div>
+            <div className="max-w-[420px]">
+              <Label htmlFor="longitude" className="mb-2">
+                Longitude
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="longitude"
+                name="longitude"
+                value={longitude}
+                onChange={handleLongitudeChange}
+                placeholder="e.g 3.3792"
+              />
+            </div> */}
             <Image
               src={map}
               alt="Google Map"

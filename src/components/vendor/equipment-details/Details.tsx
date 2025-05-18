@@ -42,7 +42,8 @@ const Details = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
           <h2 className="font-500 text-2xl">Location & Direction</h2>
           <div className="flex flex-wrap gap-4">
             <p className="text-[#7A7A7A]] mb-4 space-y-2">
-              {listingInfo?.city}, {listingInfo?.country}
+              {listingInfo?.address}, {listingInfo?.city},{" "}
+              {listingInfo?.country}
             </p>
           </div>
         </div>

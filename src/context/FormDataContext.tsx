@@ -9,11 +9,11 @@ interface EquipmentFormData {
   brand?: string;
   description?: string;
   price?: number;
-  address?: string;
   service_type?: string;
   bill_type?: string;
   category_id?: string;
   partner_id?: string;
+  address?: string;
   city?: string;
   country?: string;
   latitude?: string;
