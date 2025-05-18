@@ -1,8 +1,9 @@
 import React from "react";
 import Metrics from "./Metrics";
-import TransactionHistory from "./TransactionHistory";
+import PayoutRequests from "./PayoutRequests";
 import { Tab } from "@/components/common";
-import WithdrawEarnings from "./WithdrawEarnings";
+import WithdrawalMethods from "./WithdrawalMethods";
+import WithdrawalHistory from "./WithdrawalHistory";
 
 const VendorFinances = () => {
   return (
@@ -12,14 +13,19 @@ const VendorFinances = () => {
       <Tab
         tabs={[
           {
-            key: "transactions",
-            title: "Transaction History",
-            content: <TransactionHistory />,
+            key: "payout-requests",
+            title: "Payout Requests",
+            content: <PayoutRequests />,
+          },
+          {
+            key: "withdrawal-history",
+            title: "Withdrawal History",
+            content: <WithdrawalHistory />,
           },
           {
             key: "withdraw",
-            title: "Withdraw Earnings",
-            content: <WithdrawEarnings />,
+            title: "Withdrawal Methods",
+            content: <WithdrawalMethods />,
           },
         ]}
         queryParam="tab"
