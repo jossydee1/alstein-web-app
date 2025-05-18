@@ -177,7 +177,7 @@ const WithdrawFormAndMethods = ({
               Withdrawal will be made directly to your preferred account
             </p>
             <p className="text-orange-600">
-              NB. Withdrawal might take few hours to reflect in your account
+              NB. Withdrawal takes 5 working days to reflect in your account
             </p>
           </div>
 
