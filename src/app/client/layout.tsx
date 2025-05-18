@@ -12,17 +12,6 @@ import {
   ShoppingBasket,
   Unplug,
 } from "lucide-react";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Alstein | Book Scientific and Diagnostic Laboratory Services",
-  description:
-    "Simplifying access to medical diagnostics and research tools. Find Laboratories, and Research Equipment Near You.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isAuthorized, LoadingComponent } = useAuthGuard();

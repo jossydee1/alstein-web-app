@@ -6,20 +6,6 @@ import { useAuth } from "@/context";
 import { dashboardRoutes } from "@/utils";
 import Link from "next/link";
 import React from "react";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Alstein | Book Scientific and Diagnostic Laboratory Services",
-  description:
-    "Simplifying access to medical diagnostics and research tools. Find Laboratories, and Research Equipment Near You.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
 
 const Page = () => {
   const { canAccessVendor, isProfileVerified, isAuthLoading } = useAuth();
