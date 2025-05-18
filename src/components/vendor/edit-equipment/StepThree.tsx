@@ -18,6 +18,11 @@ const StepThree = ({ onNext, onBack, equipmentData }: StepThreeProps) => {
   const [address, setAddress] = useState(
     formData?.address || equipmentData.address || "",
   );
+  // const [city, setCity] = useState(formData?.city || equipmentData.city || "");
+  // const [country, setCountry] = useState(formData?.country || equipmentData.country || "");
+  // const [latitude, setLatitude] = useState(formData?.latitude || equipmentData.latitude || "");
+  // const [longitude, setLongitude] = useState(formData?.longitude || equipmentData.longitude || "");
+
   const [error, setError] = useState("");
 
   const handleNext = () => {
@@ -26,16 +31,46 @@ const StepThree = ({ onNext, onBack, equipmentData }: StepThreeProps) => {
       return;
     }
     setError("");
-
     updateFormData({
-      address,
-      city: equipmentData.city,
-      country: equipmentData.country,
-      latitude: equipmentData.latitude,
-      longitude: equipmentData.longitude,
+      address: equipmentData.address || "",
+      city: equipmentData.city || "",
+      country: equipmentData.country || "",
+      latitude: equipmentData.latitude || "",
+      longitude: equipmentData.longitude || "",
     });
     onNext();
   };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+    updateFormData({
+      address: e.target.value,
+    });
+  };
+  // const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCity(e.target.value);
+  //   updateFormData({
+  //     city: e.target.value,
+  //   });
+  // };
+  // const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCountry(e.target.value);
+  //   updateFormData({
+  //     country: e.target.value,
+  //   });
+  // };
+  // const handleLatitudeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLatitude(e.target.value);
+  //   updateFormData({
+  //     latitude: e.target.value,
+  //   });
+  // };
+  // const handleLongitudeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLongitude(e.target.value);
+  //   updateFormData({
+  //     longitude: e.target.value,
+  //   });
+  // };
 
   return (
     <div className="space-y-9">
@@ -64,12 +99,67 @@ const StepThree = ({ onNext, onBack, equipmentData }: StepThreeProps) => {
                 id="address"
                 name="address"
                 value={address}
-                onChange={e => setAddress(e.target.value)}
+                onChange={handleAddressChange}
                 placeholder="e.g 123 Main St, City, Country"
                 required
               />
             </div>
-
+            {/* <div className="max-w-[420px]">
+              <Label htmlFor="city" className="mb-2">
+                City
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="city"
+                name="city"
+                value={city}
+                onChange={handleCityChange}
+                placeholder="e.g Lagos"
+              />
+            </div>
+           <div className="max-w-[420px]">
+              <Label htmlFor="country" className="mb-2">
+                Country
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="country"
+                name="country"
+                value={country}
+                onChange={handleCountryChange}
+                placeholder="e.g Nigeria"
+              />
+            </div>
+            <div className="max-w-[420px]">
+              <Label htmlFor="latitude" className="mb-2">
+                Latitude
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="latitude"
+                name="latitude"
+                value={latitude}
+                onChange={handleLatitudeChange}
+                placeholder="e.g 6.5244"
+              />
+            </div>
+            <div className="max-w-[420px]">
+              <Label htmlFor="longitude" className="mb-2">
+                Longitude
+              </Label>
+              <Input
+                className="border border-[#E5E7EB] p-5"
+                type="text"
+                id="longitude"
+                name="longitude"
+                value={longitude}
+                onChange={handleLongitudeChange}
+                placeholder="e.g 3.3792"
+              />
+            </div> */}
             <Image
               src={map}
               alt="Google Map"

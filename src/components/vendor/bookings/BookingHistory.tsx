@@ -32,19 +32,13 @@ import Link from "next/link";
 
 const tableHeads = [
   {
-    label: "ORDER ID",
+    label: "LISTED DATE",
   },
   {
-    label: "EQUIPMENT name",
+    label: "SERVICE/EQUIPMENT",
   },
   {
-    label: "SERVICE TYPE",
-  },
-  {
-    label: "ORDER DATE",
-  },
-  {
-    label: "TOTAL AMOUNT",
+    label: "PRICE",
     className: "text-right",
   },
   {
@@ -53,7 +47,9 @@ const tableHeads = [
   {
     label: "Payment STATUS",
   },
-  { label: "ACTIONS" },
+  {
+    label: "ACTIONS",
+  },
 ];
 
 const BookingHistory = () => {
@@ -189,17 +185,11 @@ const BookingHistory = () => {
               {orderHistory && orderHistory?.data?.length > 0 ? (
                 orderHistory?.data?.map(order => (
                   <TableRow key={order?.id} className="py-10">
-                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.name}
-                    </TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.service_type}
-                    </TableCell>
-                    <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {order?.id}
-                    </TableCell>
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
                       {formatIOSToDate(order?.created_at)}
+                    </TableCell>
+                    <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
+                      {order?.equipment?.name}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
                       {formatPrice(order?.booking_amount, "NGN")}

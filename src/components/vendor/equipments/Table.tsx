@@ -28,13 +28,19 @@ import Link from "next/link";
 
 const tableHeads = [
   {
+    label: "LISTED DATE",
+  },
+  {
     label: "SERVICE/EQUIPMENT",
   },
   {
-    label: "ID",
+    label: "Category",
   },
   {
-    label: "LISTED DATE",
+    label: "Service Type",
+  },
+  {
+    label: "Billing Method",
   },
   {
     label: "PRICE",
@@ -152,14 +158,20 @@ const EquipmentListings = () => {
               {equipments && equipments?.data?.length > 0 ? (
                 equipments?.data.map(e => (
                   <TableRow key={e?.id} className="py-10">
+                    <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                      {formatIOSToDate(e?.created_at)}
+                    </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {e?.name}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 text-[#6B7280]">
-                      {e?.id}
+                      {e?.category_id}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {formatIOSToDate(e?.created_at)}
+                    <TableCell className="min-w-[200px] px-5 py-3 capitalize text-[#6B7280]">
+                      {e?.service_type?.replace(/_/g, " ")}
+                    </TableCell>
+                    <TableCell className="min-w-[200px] px-5 py-3 capitalize text-[#6B7280]">
+                      {e?.bill_type?.replace(/_/g, " ")}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
                       {formatPrice(e?.price, "NGN")}

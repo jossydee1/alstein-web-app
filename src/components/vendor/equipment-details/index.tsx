@@ -4,7 +4,6 @@ import React from "react";
 import { Reviews } from "./Reviews";
 import Header from "./Header";
 import Details from "./Details";
-import Location from "./Location";
 import { formatError } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import { AverageRatingProps, ListingInfoProps } from "@/types";
@@ -50,8 +49,6 @@ const ViewEquipmentContent = () => {
     <main className="space-y-9">
       <Header listingInfo={listingInfo} />
       <Details listingInfo={listingInfo} />
-
-      <Location listingInfo={listingInfo} />
 
       <Reviews
         partnerId={listingInfo?.partner_id}

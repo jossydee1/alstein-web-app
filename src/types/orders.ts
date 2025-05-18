@@ -1,3 +1,5 @@
+import { ListingProps } from "./listings";
+
 export interface OrderProps {
   id: string;
   partner_id: string;
@@ -25,19 +27,7 @@ export interface OrderProps {
     email: string;
     address: string;
   };
-  equipment: {
-    name: string;
-    description: string;
-    address: string;
-    price: number;
-    longitude: string;
-    latitude: string;
-    city: string;
-    country: string;
-    service_type: string;
-    created_at: string;
-    equipment_file: unknown[];
-  };
+  equipment: ListingProps;
 }
 
 export interface OrderHistoryProps {

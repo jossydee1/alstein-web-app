@@ -11,12 +11,14 @@ import {
 import { ChevronLeft, ChevronRight, Heart, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
 
 export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
+  const { user } = useAuth();
+
   if (!listings || listings?.length === 0)
     return (
       <p>
@@ -33,7 +35,12 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
             key={index}
             className="group grid gap-2 overflow-hidden rounded-md bg-[#F5F5F5] p-3 transition-shadow hover:bg-[#F5F5F5] hover:shadow-[0px_0px_16px_2px_#00000033]"
           >
-            <ImageSlider images={l?.equipment_file} equipmentId={l?.id} />
+            <ImageSlider
+              images={l?.equipment_file}
+              equipmentId={l?.id}
+              favoriteEquipment={l?.favorite_equipment}
+              userId={user?.id}
+            />
 
             <div>
               <h3 className="pb-0.5 font-medium leading-[20px] text-[#161616]">
@@ -66,12 +73,19 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
 const ImageSlider = ({
   images,
   equipmentId,
+  favoriteEquipment,
+  userId,
 }: {
   images: DocumentProps[];
   equipmentId: string;
+  favoriteEquipment?: { user_id: string }[];
+  userId?: string;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false); // Track favorite state
+  // Set initial favorite state based on userId in favoriteEquipment
+  const [isFavorite, setIsFavorite] = useState(
+    !!(userId && favoriteEquipment?.some(fav => fav.user_id === userId)),
+  );
   const slideRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -143,6 +157,13 @@ const ImageSlider = ({
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  useEffect(() => {
+    // Update favorite state if userId or favoriteEquipment changes
+    setIsFavorite(
+      !!(userId && favoriteEquipment?.some(fav => fav.user_id === userId)),
+    );
+  }, [userId, favoriteEquipment]);
 
   if (!images || images?.length === 0) return null;
 

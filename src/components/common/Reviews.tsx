@@ -5,7 +5,12 @@ import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronLeft, ChevronRight, Loader, Star } from "lucide-react";
+import {
+  // Check,
+  ChevronLeft,
+  ChevronRight,
+  // Loader, Star
+} from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -14,16 +19,16 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import {
-  api,
-  authRoutes,
+  // api,
+  // authRoutes,
   DOCUMENT_URL,
   formatDateToRelativeTime,
-  formatError,
-  webRoutes,
+  // formatError,
+  // webRoutes,
 } from "@/utils";
-import { redirect, useSearchParams } from "next/navigation";
-import { useAuth } from "@/context";
-import { toast } from "react-toastify";
+// import { redirect, useSearchParams } from "next/navigation";
+// import { useAuth } from "@/context";
+// import { toast } from "react-toastify";
 import { CommentProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 
@@ -37,28 +42,28 @@ export const Reviews = ({
   partnerId,
   averageRating,
   listingId,
-  refetchRating,
+  // refetchRating,
 }: {
   partnerId: string;
   averageRating: number;
   listingId?: string;
   refetchRating: () => void;
 }) => {
-  const { userId, token } = useAuth();
-  const searchParams = useSearchParams();
-  const savedComment = searchParams.get("comment");
+  // const { userId, token } = useAuth();
+  // const searchParams = useSearchParams();
+  // const savedComment = searchParams.get("comment");
 
-  useEffect(() => {
-    if (savedComment) {
-      setComment(savedComment);
-    }
-  }, [savedComment]);
+  // useEffect(() => {
+  //   if (savedComment) {
+  //     setComment(savedComment);
+  //   }
+  // }, [savedComment]);
 
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
-  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
-  const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+  // const [rating, setRating] = useState(0);
+  // const [comment, setComment] = useState("");
+  // const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
+  // const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
+  // const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const itemsPerPage = showAllReviews ? 50 : 2;
@@ -70,7 +75,10 @@ export const Reviews = ({
     ? `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
     : `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
 
-  const { data: comments, refetch: refetchComments } = useClientFetch<{
+  const {
+    data: comments,
+    // refetch: refetchComments
+  } = useClientFetch<{
     data: CommentProps[];
     item_count: number;
   }>({
@@ -126,86 +134,86 @@ export const Reviews = ({
     return items;
   };
 
-  const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
+  // const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
-  const handleRatingSubmit = async (score: number) => {
-    if (!userId) {
-      redirect(redirectUrl);
-    }
+  // const handleRatingSubmit = async (score: number) => {
+  //   if (!userId) {
+  //     redirect(redirectUrl);
+  //   }
 
-    try {
-      setIsRatingSubmitting(true);
-      setRating(score);
+  //   try {
+  //     setIsRatingSubmitting(true);
+  //     setRating(score);
 
-      const response = await api.post(
-        "/partner/public/api/v1/ratings/submit-rating-score",
-        {
-          score,
-          partner_id: partnerId,
-          equipment_id: listingId,
-          profile_id: userId,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+  //     const response = await api.post(
+  //       "/partner/public/api/v1/ratings/submit-rating-score",
+  //       {
+  //         score,
+  //         partner_id: partnerId,
+  //         equipment_id: listingId,
+  //         profile_id: userId,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       },
+  //     );
 
-      if (response?.status === 200) {
-        toast.success("Rating submitted successfully");
-        setIsRatingSubmitted(true);
-        refetchRating();
-      } else {
-        toast.error(
-          formatError(response?.data?.message) || "Failed to submit rating",
-        );
-        setIsRatingSubmitted(false);
-      }
-    } catch (error) {
-      toast.error(formatError(error));
-      setIsRatingSubmitted(false);
-    } finally {
-      setIsRatingSubmitting(false);
-    }
-  };
+  //     if (response?.status === 200) {
+  //       toast.success("Rating submitted successfully");
+  //       setIsRatingSubmitted(true);
+  //       refetchRating();
+  //     } else {
+  //       toast.error(
+  //         formatError(response?.data?.message) || "Failed to submit rating",
+  //       );
+  //       setIsRatingSubmitted(false);
+  //     }
+  //   } catch (error) {
+  //     toast.error(formatError(error));
+  //     setIsRatingSubmitted(false);
+  //   } finally {
+  //     setIsRatingSubmitting(false);
+  //   }
+  // };
 
-  const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (!comment) {
-      toast.error("Please write a comment");
-      return;
-    }
+  //   if (!comment) {
+  //     toast.error("Please write a comment");
+  //     return;
+  //   }
 
-    if (!userId) {
-      redirect(redirectUrl);
-    }
+  //   if (!userId) {
+  //     redirect(redirectUrl);
+  //   }
 
-    try {
-      setIsCommentSubmitting(true);
-      const response = await api.post(
-        `/partner/api/v1/comments/create-comment`,
-        {
-          comments: comment,
-          partner_id: partnerId,
-          equipment_id: listingId,
-          profile_id: userId,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+  //   try {
+  //     setIsCommentSubmitting(true);
+  //     const response = await api.post(
+  //       `/partner/api/v1/comments/create-comment`,
+  //       {
+  //         comments: comment,
+  //         partner_id: partnerId,
+  //         equipment_id: listingId,
+  //         profile_id: userId,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       },
+  //     );
 
-      if (response?.status === 200) {
-        toast.success("Comment submitted successfully");
-        setComment("");
-        refetchComments();
-      }
-    } catch (error) {
-      toast.error(formatError(error));
-    } finally {
-      setIsCommentSubmitting(false);
-    }
-  };
+  //     if (response?.status === 200) {
+  //       toast.success("Comment submitted successfully");
+  //       setComment("");
+  //       refetchComments();
+  //     }
+  //   } catch (error) {
+  //     toast.error(formatError(error));
+  //   } finally {
+  //     setIsCommentSubmitting(false);
+  //   }
+  // };
 
   return (
     <section>
@@ -233,7 +241,7 @@ export const Reviews = ({
               No reviews yet, be the first one!
             </p>
           ) : (
-            <div className="grid w-full max-w-[580px] gap-8 lg:gap-16">
+            <div className="grid w-full gap-8 lg:gap-16">
               {commentsData.map(r => (
                 <div key={r?.id}>
                   <div className="flex items-center gap-3">
@@ -242,7 +250,7 @@ export const Reviews = ({
                       alt={r?.profiles?.user_avatar || "User Avatar"}
                       width={58}
                       height={58}
-                      className="h-[58px] w-[58px] rounded-md bg-[#ddd] bg-neutral-50 object-cover"
+                      className="bg-[#ddd]object-cover h-[58px] w-[58px] rounded-md"
                     />
                     <div>
                       <h3 className="font-semibold text-[#404040]">
@@ -291,7 +299,7 @@ export const Reviews = ({
           )}
         </div>
 
-        <div
+        {/* <div
           id="review-form"
           className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
         >
@@ -369,7 +377,7 @@ export const Reviews = ({
               </Button>
             </div>
           </form>
-        </div>
+        </div> */}
       </div>
     </section>
   );

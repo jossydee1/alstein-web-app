@@ -42,7 +42,10 @@ export const ListingImageModal = ({
   }, [images?.length, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/30 p-4 py-10" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-[100] bg-black/30 p-4 py-10"
+      onClick={onClose}
+    >
       <section
         className="relative m-auto overflow-auto rounded-2xl bg-white"
         style={{

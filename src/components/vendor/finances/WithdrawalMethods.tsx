@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { formatError } from "@/utils";
 import { LoadingState } from "@/components/common";
 
-const WithdrawEarnings = () => {
+const WithdrawalMethods = () => {
   const { token, businessProfile } = useAuth();
 
   const [showForm, setShowForm] = useState(false);
@@ -45,4 +45,4 @@ const WithdrawEarnings = () => {
   );
 };
 
-export default WithdrawEarnings;
+export default WithdrawalMethods;
