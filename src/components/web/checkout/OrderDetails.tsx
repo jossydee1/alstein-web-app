@@ -29,8 +29,6 @@ const OrderDetails = ({
   paystackProps,
   isPaystackDisabled,
   user,
-  numberOfSamples,
-  setNumberOfSamples,
 }: {
   listingInfo: ListingProps;
   costPerDay: number;
@@ -39,8 +37,6 @@ const OrderDetails = ({
   paystackProps: PaystackProps;
   isPaystackDisabled: boolean;
   user: boolean;
-  numberOfSamples?: number;
-  setNumberOfSamples?: (n: number) => void;
 }) => {
   const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -54,6 +50,8 @@ const OrderDetails = ({
     numberOfDays,
     isPerSample,
     setIsPerSample,
+    numberOfSamples,
+    setNumberOfSamples,
   } = useDateTime();
 
   // Set isPerSample based on listingInfo

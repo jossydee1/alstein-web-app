@@ -17,6 +17,8 @@ interface DateTimeContextProps {
   toTime: Time;
   setToTime: React.Dispatch<React.SetStateAction<Time>>;
   numberOfDays: number;
+  numberOfSamples: number;
+  setNumberOfSamples: React.Dispatch<React.SetStateAction<number>>;
   resetDateTime: () => void;
   isPerSample: boolean;
   setIsPerSample: (val: boolean) => void;
@@ -36,6 +38,7 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
   const [toTime, setToTime] = useState<Time>({ hours: "00", minutes: "00" });
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
+  const [numberOfSamples, setNumberOfSamples] = useState<number>(1);
   const [isPerSample, setIsPerSample] = useState<boolean>(false);
 
   useEffect(() => {
@@ -71,6 +74,8 @@ export const DateTimeProvider: React.FC<{ children: React.ReactNode }> = ({
         toTime,
         setToTime,
         numberOfDays,
+        numberOfSamples,
+        setNumberOfSamples,
         resetDateTime,
         isPerSample,
         setIsPerSample,

@@ -99,8 +99,8 @@ export const Sidebar = () => {
 
   const mainNavItems: NavItem[] = [
     {
-      id: "manage-equipment",
-      label: "Manage Equipments",
+      id: "listings",
+      label: "Listings",
       icon: <FlaskConical className={commonStyles.iconSize} />,
       href: dashboardRoutes?.vendor_equipments,
       isActive: pathname?.includes(dashboardRoutes?.vendor_equipments),

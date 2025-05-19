@@ -42,8 +42,15 @@ const CheckoutContent = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { date, numberOfDays, resetDateTime, fromTime, toTime, isPerSample } =
-    useDateTime();
+  const {
+    date,
+    numberOfDays,
+    resetDateTime,
+    fromTime,
+    toTime,
+    isPerSample,
+    numberOfSamples,
+  } = useDateTime();
 
   const { user, token, userId } = useAuth();
   const [error] = useState("");
@@ -53,9 +60,6 @@ const CheckoutContent = () => {
     email: "",
     address: "",
   });
-
-  // Add numberOfSamples state for per sample
-  const [numberOfSamples, setNumberOfSamples] = useState(1);
 
   // set form data from user
   useEffect(() => {
@@ -188,11 +192,14 @@ const CheckoutContent = () => {
           value: formData?.address,
         },
         {
+          display_name: "Billing Method",
+          variable_name: "billing_method",
+          value: isPerSample ? "per_Sample" : "per_day",
+        },
+        {
           display_name: "Start Date",
           variable_name: "start_date",
-          value: isPerSample
-            ? date?.from?.toLocaleDateString()
-            : date?.from?.toLocaleDateString(),
+          value: date?.from?.toLocaleDateString(),
         },
         {
           display_name: "Start Time",
@@ -212,14 +219,9 @@ const CheckoutContent = () => {
           value: isPerSample ? "" : `${toTime?.hours}:${toTime?.minutes}`,
         },
         {
-          display_name: "Cost per day",
-          variable_name: "cost_per_day",
-          value: costPerDay,
-        },
-        {
-          display_name: "Total Cost",
-          variable_name: "total_cost",
-          value: totalCost,
+          display_name: isPerSample ? "Cost per Sample" : "Cost per Day",
+          variable_name: isPerSample ? "cost_per_sample" : "cost_per_day",
+          value: isPerSample ? costPerDay : costPerDay,
         },
         {
           display_name: isPerSample ? "Number of Samples" : "Number of Days",
@@ -296,8 +298,6 @@ const CheckoutContent = () => {
               paystackProps={paystackProps}
               isPaystackDisabled={isPaystackDisabled}
               user={user === null ? false : true}
-              numberOfSamples={numberOfSamples}
-              setNumberOfSamples={setNumberOfSamples}
             />
           </div>
         </main>
