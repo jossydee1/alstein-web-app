@@ -23,6 +23,8 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
     toTime,
     setToTime,
     numberOfDays,
+    numberOfSamples,
+    setNumberOfSamples,
     isPerSample,
     setIsPerSample,
   } = useDateTime();
@@ -35,7 +37,6 @@ const Summary = ({ listingInfo }: { listingInfo: ListingInfoProps }) => {
     setIsPerSample(listingInfo?.bill_type === "per_Sample");
   }, [listingInfo?.bill_type, setIsPerSample]);
 
-  const [numberOfSamples, setNumberOfSamples] = useState(1);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Fix: Ensure correct date/setDate types for DateTimePicker

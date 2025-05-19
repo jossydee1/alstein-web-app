@@ -24,7 +24,7 @@ const Metrics = () => {
         value={(data?.approved_booking ?? 0).toString()}
       />
       <SimpleCard
-        title="Potential Earningss"
+        title="Potential Bookings"
         value={(data?.pending_booking ?? 0).toString()}
       />
       <SimpleCard
