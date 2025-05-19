@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import ConfirmationModal from "./ConfirmationModal";
 import { LoadingState } from "@/components/common";
 import { ListingInfoProps } from "@/types";
-import { useRouter } from "next/navigation";
 
 interface StepFourProps {
   equipmentId: string;
@@ -21,8 +20,7 @@ interface StepFourProps {
 }
 
 const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
-  const router = useRouter();
-  const { token } = useAuth();
+  const { token, businessProfile } = useAuth();
   const { updateFormData } = useEquipmentForm();
 
   const [specifications, setSpecifications] = useState<
@@ -257,7 +255,61 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
 
     try {
       // Upload any new images if there are any
-      // ... existing code for image upload ...
+      // Step 2: Upload all images
+      let allImagesUploaded = true;
+
+      for (const image of images) {
+        try {
+          // 1. Get the upload link from the API
+          const uploadLinkResponse = await api.post(
+            "/partner/api/v1/equipments/create-equipment-img-upload-link",
+            {
+              equipment_id: equipmentId,
+              partner_id: businessProfile?.id,
+              file_type: image?.type,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          if (!uploadLinkResponse?.data?.data?.upload_link) {
+            throw new Error("Failed to get upload URL");
+          }
+
+          const uploadLink = uploadLinkResponse?.data.data.upload_link;
+
+          // 2. Upload the file directly to S3
+          const response = await fetch(uploadLink, {
+            method: "PUT",
+            body: image,
+            headers: {
+              "Content-Type": image?.type,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to upload image to S3");
+          }
+        } catch (error) {
+          console.error(`Failed to upload image: ${image?.name}`, error);
+          toast.error(
+            formatError(error, `Failed to upload image: ${image?.name}`),
+          );
+          allImagesUploaded = false;
+          break;
+        }
+      }
+
+      // Only show success if both specifications and all images were uploaded
+      if (allImagesUploaded) {
+        setOpen(true);
+        setStatus("success");
+      } else {
+        toast.error("Some images failed to upload. Please try again.");
+      }
 
       // Clear form context
       updateFormData({
@@ -278,11 +330,9 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
       // Show success message
       setOpen(true);
       setStatus("success");
-      setTimeout(() => {
-        router.push("/vendor/equipment");
-      }, 3000);
     } catch (error) {
       toast.error(formatError(error, "Failed to complete equipment update"));
+    } finally {
       setIsProcessing(false);
     }
   };
@@ -500,7 +550,7 @@ const StepFour = ({ equipmentId, onBack, equipmentData }: StepFourProps) => {
                       id="images"
                       name="images"
                       multiple
-                      accept="image/*"
+                      accept=".png,.jpg,.jpeg,.heic"
                       onChange={handleImageChange}
                     />
                   </div>{" "}

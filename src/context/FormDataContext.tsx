@@ -40,7 +40,21 @@ const EquipmentFormContext = createContext<
 // Create the provider component
 export const EquipmentFormDataProvider = ({
   children,
-  initialData = {},
+  initialData = {
+    name: "",
+    brand: "",
+    description: "",
+    price: 0,
+    service_type: "",
+    bill_type: "",
+    category_id: "",
+    partner_id: "",
+    address: "",
+    city: "",
+    country: "",
+    latitude: "",
+    longitude: "",
+  },
 }: EquipmentFormProviderProps) => {
   const [formData, setFormData] = useState<EquipmentFormData>(initialData);
 

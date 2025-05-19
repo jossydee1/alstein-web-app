@@ -62,14 +62,14 @@ const EditEquipmentContent = () => {
         brand: equipmentData.brand,
         description: equipmentData.description,
         price: equipmentData.price / 100, // Convert from cents to actual amount
-        address: equipmentData.address,
+        address: equipmentData.address || "",
         service_type: equipmentData.service_type,
         category_id: equipmentData.category_id,
         partner_id: equipmentData.partner_id,
-        city: equipmentData.city,
-        country: equipmentData.country,
-        latitude: equipmentData.latitude,
-        longitude: equipmentData.longitude,
+        city: equipmentData.city || "",
+        country: equipmentData.country || "",
+        latitude: equipmentData.latitude || "",
+        longitude: equipmentData.longitude || "",
       }}
     >
       <EditEquipmentForm equipmentData={equipmentData} />

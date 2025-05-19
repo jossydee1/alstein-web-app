@@ -254,7 +254,7 @@ const StepFour = ({
                       id="images"
                       name="images"
                       multiple
-                      accept="image/*"
+                      accept=".png,.jpg,.jpeg,.heic"
                       onChange={handleImageChange}
                     />
                   </div>{" "}
