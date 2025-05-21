@@ -186,7 +186,7 @@ const BookingHistory = () => {
                 orderHistory?.data?.map(order => (
                   <TableRow key={order?.id} className="py-10">
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {formatIOSToDate(order?.created_at)}
+                      {formatIOSToDate(order?.updated_at)}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order?.equipment?.name}

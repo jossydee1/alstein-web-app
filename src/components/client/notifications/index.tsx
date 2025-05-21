@@ -48,7 +48,7 @@ const NotificationsContent = () => {
                     {n?.title}
                   </p>
                   <p className="dashboard-section-card-description">
-                    {formatDateToRelativeTime(n?.created_at)} • {n?.message}
+                    {formatDateToRelativeTime(n?.updated_at)} • {n?.message}
                   </p>
                 </div>
               </li>

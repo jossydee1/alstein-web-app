@@ -133,7 +133,7 @@ export const Reviews = ({
                         {r?.profiles?.first_name} {r?.profiles?.last_name}
                       </h3>
                       <p className="font-medium text-[#404040]">
-                        {formatDateToRelativeTime(r?.created_at)}
+                        {formatDateToRelativeTime(r?.updated_at)}
                       </p>
                     </div>
                   </div>

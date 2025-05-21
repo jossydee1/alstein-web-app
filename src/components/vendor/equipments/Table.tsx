@@ -159,7 +159,7 @@ const EquipmentListings = () => {
                 equipments?.data.map(e => (
                   <TableRow key={e?.id} className="py-10">
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {formatIOSToDate(e?.created_at)}
+                      {formatIOSToDate(e?.updated_at)}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {e?.name}
