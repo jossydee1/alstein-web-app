@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
 
 export default {
@@ -6,11 +7,20 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "node_modules/preline/dist/*.js",
   ],
   theme: {
     extend: {
       fontFamily: {
-        Groteskbold: ["Neue Haas Grotesk Display Pro", "sans-serif"],
+        visbysemibold: ["visbysemibold", "sans-serif"],
+        visbythin: ["visbythin", "sans-serif"],
+        visbybold: ["visbybold", "sans-serif"],
+        visbyextrabold: ["visbyextrabold", "sans-serif"],
+        visbyheavy: ["visbyheavy", "sans-serif"],
+        visbylight: ["visbylight", "sans-serif"],
+        visbymedium: ["visbymedium", "sans-serif"],
+        visbyregular: ["visbyregular", "sans-serif"],
         serif: ["Merriweather", "serif"],
       },
       colors: {
@@ -67,9 +77,9 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "12px",
+        md: "10px",
+        sm: "4px",
       },
       keyframes: {
         "accordion-down": {
@@ -88,12 +98,21 @@ export default {
             height: "0",
           },
         },
+        pulseScale: {
+          "0%, 100%": { transform: "scale(0.95)", opacity: "0.7" },
+          "50%": { transform: "scale(1.05)", opacity: "0.9" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-scale": "pulseScale 1.5s ease-in-out infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/forms"),
+    require("preline/plugin"),
+  ],
 } satisfies Config;

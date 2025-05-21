@@ -1,0 +1,70 @@
+import { DocumentProps } from "./others";
+
+export interface ListingProps {
+  address: string;
+  availability: string;
+  category_id: string;
+  city: string;
+  country: string;
+  created_at: string;
+  description: string;
+  id: string;
+  latitude: string;
+  listing_status: string;
+  longitude: string;
+  name: string;
+  partner_id: string;
+  price: number;
+  service_type: string;
+  bill_type: string;
+  updated_at: string;
+  equipment_file: DocumentProps[];
+  brand: string;
+  favorite_equipment: {
+    id: string;
+    user_id: string;
+    equipment_id: string;
+  }[];
+}
+
+export interface ListingHistoryProps {
+  data: ListingProps[];
+  total_count: number;
+}
+
+export interface ListingPartnerProps {
+  id: string;
+  logo: string;
+  name: string;
+  is_verified: boolean;
+}
+
+export interface ListingSpecificationProps {
+  id: string;
+  specification: string;
+}
+
+export interface ListingInfoProps extends ListingProps {
+  category: CategoryProps;
+  partner: ListingPartnerProps;
+  specifications: ListingSpecificationProps[];
+}
+
+export interface SubcategoryProps {
+  id: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  category_id: string;
+}
+
+export interface CategoryProps {
+  id: string;
+  title: string;
+  title_slug: string;
+  image_url: string | null;
+  is_publish: boolean;
+  created_at: string;
+  updated_at: string;
+  subcategory: SubcategoryProps[];
+}

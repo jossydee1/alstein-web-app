@@ -1,0 +1,137 @@
+.wrapper {
+  @apply grid h-screen grid-cols-1 overflow-hidden lg:grid-cols-6 xl:grid-cols-5;
+}
+
+.banner {
+  background-image: url("/images/auth-image.png");
+  @apply relative col-span-3 hidden overflow-hidden bg-cover bg-center px-[36px] py-8 lg:block lg:py-12 xl:col-span-2 xl:px-[72px];
+}
+
+.container {
+  @apply col-span-5 h-screen w-full overflow-auto overflow-y-auto bg-white px-[36px] py-8 lg:col-span-3 lg:py-12 xl:px-[72px];
+
+  .topBar {
+    @apply mb-6 flex flex-wrap items-center justify-between lg:mb-0;
+    .backButton {
+      @apply mb-4 space-x-2.5 text-[#8692A6];
+    }
+    .logoLink {
+      @apply lg:hidden;
+    }
+  }
+
+  .formWrapper {
+    @apply relative mx-auto flex max-w-[477px] flex-col items-center justify-center overflow-auto px-1;
+
+    .header {
+      @apply mb-6 w-full;
+      .step {
+        @apply mb-4 text-right text-sm uppercase text-[#0A0A0A];
+      }
+      .logo {
+        @apply m-auto mb-6 flex items-center justify-center;
+      }
+      .title {
+        @apply mt-[50px] text-xl font-medium;
+      }
+      .hr {
+        @apply mt-3 border-[#E5E5E5];
+      }
+      .subtitle {
+        @apply mt-1 text-[#696F79];
+      }
+    }
+
+    .error {
+      @apply w-full rounded-md bg-red-100 p-4 text-center text-red-700;
+    }
+
+    .success {
+      @apply w-full rounded-md bg-green-100 p-4 text-center text-green-700;
+    }
+
+    form {
+      @apply flex w-full flex-col items-center justify-center gap-4;
+
+      .inputGroup {
+        @apply w-full space-y-1;
+        label {
+          @apply block font-visbysemibold text-sm text-gray-800;
+        }
+        input,
+        textarea,
+        select {
+          @apply w-full rounded-md border border-[#BCC0C7] p-2.5;
+        }
+      }
+
+      .inputGroupPhone {
+        @apply flex w-full items-center space-x-2.5 rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79] focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-500;
+        select,
+        input {
+          @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
+        }
+        input {
+          @apply border-r-0;
+        }
+        select {
+          @apply inline-block w-[120px] !border-r border-[#BCC0C7];
+        }
+
+        .customSelect {
+          @apply relative h-full w-[100px];
+
+          select {
+            @apply absolute inset-0 z-10 w-full cursor-pointer appearance-none opacity-0;
+          }
+
+          .selectedFlag {
+            @apply inline-block w-full border-r border-[#BCC0C7] pr-2;
+          }
+        }
+      }
+
+      .inputGroupCheckbox {
+        @apply flex w-full items-center space-x-2.5;
+        label {
+          @apply text-[#696F79];
+        }
+      }
+
+      .info {
+        @apply mt-2 text-sm font-medium;
+      }
+
+      .submitButton {
+        @apply mt-4 w-full rounded-md text-center text-base font-semibold;
+      }
+    }
+
+    .footer {
+      @apply mt-8 w-full;
+
+      .or {
+        @apply flex w-full items-center gap-8;
+
+        .hr {
+          @apply w-full border border-[#BCC0C7];
+        }
+      }
+
+      .altBtns {
+        @apply mt-4 flex w-full items-center justify-between gap-3;
+
+        .altBtn {
+          @apply flex w-full items-center justify-center gap-3 rounded-md border border-[#D5D7DA] bg-white px-8 py-3 font-semibold text-[#414651] hover:bg-[#F7F8FA];
+        }
+      }
+
+      .cta {
+        @apply mt-8 text-center text-sm font-medium;
+        a {
+          @apply text-brandColor;
+        }
+      }
+    }
+  }
+}

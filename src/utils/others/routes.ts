@@ -1,0 +1,43 @@
+export const webRoutes = {
+  home: "/",
+  about: "/about",
+  categories: "/#categories",
+  listings: "/listings",
+  partners: "/partners",
+  checkout: "/checkout",
+  confirmation: "/confirmation",
+  contact: "/contact",
+  blog: "/blog",
+  terms: "/terms",
+  privacy: "/privacy",
+  partner_status: "/partner-status",
+};
+
+export const authRoutes = {
+  register: "/register",
+  signup: "/signup",
+  partner_setup: "/partner-setup",
+  partner_setup_vendor: "/partner-setup/vendor",
+  login: "/login",
+  forgot_password: "/forgot-password",
+  reset_password: "/reset-password",
+};
+
+export const dashboardRoutes = {
+  client_overview: "/client",
+  client_order_history: "/client/order-history",
+  client_account_settings: "/client/account-settings",
+  client_manage_password: "/client/manage-password",
+  client_notifications: "/client/notifications",
+  // client_payment_methods: "/client/payment-method",
+  client_favourites: "/client/favourites",
+  vendor_overview: "/vendor",
+  vendor_equipments: "/vendor/equipment",
+  vendor_new_equipment: "/vendor/equipment/new",
+  vendor_view_equipment: "/vendor/equipment/view",
+  vendor_edit_equipment: "/vendor/equipment/edit",
+  vendor_bookings: "/vendor/bookings",
+  vendor_finances: "/vendor/finances",
+  vendor_notifications: "/vendor/notifications",
+  vendor_settings: "/vendor/settings",
+};

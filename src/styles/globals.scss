@@ -1,0 +1,319 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+@font-face {
+  font-family: "visbysemibold_italic";
+  src:
+    url("../../public/fonts/visbysemibold_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbysemibold_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbysemibold";
+  src:
+    url("../../public/fonts/visbysemibold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbysemibold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbythin_italic";
+  src:
+    url("../../public/fonts/visbythin_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbythin_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbythin";
+  src:
+    url("../../public/fonts/visbythin-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbythin-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbybold";
+  src:
+    url("../../public/fonts/visbybold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbybold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyextrabold_italic";
+  src:
+    url("../../public/fonts/visbyextrabold_italic-webfont.woff2")
+      format("woff2"),
+    url("../../public/fonts/visbyextrabold_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyextrabold";
+  src:
+    url("../../public/fonts/visbyextrabold-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyextrabold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyheavy_italic";
+  src:
+    url("../../public/fonts/visbyheavy_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyheavy_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyheavy";
+  src:
+    url("../../public/fonts/visbyheavy-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyheavy-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyitalic";
+  src:
+    url("../../public/fonts/visbyitalic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyitalic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbylight_italic";
+  src:
+    url("../../public/fonts/visbylight_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbylight_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbylight";
+  src:
+    url("../../public/fonts/visbylight-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbylight-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbymedium_italic";
+  src:
+    url("../../public/fonts/visbymedium_italic-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbymedium_italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbymedium";
+  src:
+    url("../../public/fonts/visbymedium-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbymedium-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "visbyregular";
+  src:
+    url("../../public/fonts/visbyregular-webfont.woff2") format("woff2"),
+    url("../../public/fonts/visbyregular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+// * to ensure that when you click on an id link, the header will not cover the beginning of the content the id is pointing to
+[id] {
+  scroll-margin-top: 7rem;
+}
+
+// to set padding margin, and max width for the container
+.section-container {
+  @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[100px] md:py-[50px] xl:px-[150px] xl:py-[100px];
+}
+.section-container-dashboard {
+  @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[24px] md:px-[100px] xl:px-[150px];
+}
+
+.dashboard-section-card {
+  @apply rounded-3xl border-[0.2px] border-gray-300 px-8 py-6;
+}
+
+.dashboard-section-card-header {
+  @apply grid max-w-[570px] gap-2;
+}
+
+.dashboard-section-card-title {
+  @apply text-xl font-semibold leading-none text-[#1F2937];
+}
+
+.dashboard-section-card-description {
+  @apply text-[#6B7280];
+}
+
+// to style the inputs, labels, and buttons in forms
+.inputGroup {
+  @apply w-full space-y-2.5;
+  label {
+    @apply block font-semibold text-[#696F79];
+  }
+  input {
+    @apply w-full rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79] placeholder:text-[#9CA3AF] disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:bg-[#F3F4F6] disabled:text-[#9CA3AF];
+  }
+}
+
+.inputGroupPhone {
+  @apply flex w-full items-center space-x-2.5 rounded-md border border-[#BCC0C7] p-2.5 text-[#696F79] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 disabled:cursor-not-allowed disabled:border-[#F3F4F6] disabled:text-[#9CA3AF];
+  select,
+  input {
+    @apply rounded-none border-y-0 border-l-0 p-0 focus:outline-none focus:ring-0;
+  }
+  input {
+    @apply border-r-0;
+  }
+  select {
+    @apply inline-block w-[120px] !border-r border-[#BCC0C7];
+  }
+
+  .customSelect {
+    @apply relative h-full w-[100px];
+
+    select {
+      @apply absolute inset-0 z-10 w-full cursor-pointer appearance-none opacity-0;
+    }
+
+    .selectedFlag {
+      @apply inline-block w-full border-r border-[#BCC0C7] pr-2;
+    }
+  }
+}
+
+.inputGroupCheckbox {
+  @apply flex w-full items-center space-x-2.5;
+  label {
+    @apply text-[#696F79];
+  }
+}
+
+.submitButton {
+  @apply h-auto w-full rounded-md bg-brandColor text-center text-base font-semibold text-white hover:bg-brandColor/80;
+}
+
+.buttonBlue {
+  @apply h-auto bg-brandColor text-white hover:!bg-brandColor/80 hover:text-white;
+}
+.buttonBlue2 {
+  @apply h-auto border border-[#E5E7EB] bg-brandColor text-white hover:!bg-brandColor/80 hover:!text-white;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
