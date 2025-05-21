@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
 import { CategoryProps } from "@/types";
 import { NIGERIAN_STATES_CITIES } from "@/utils";
+import { useCloseMenuWhenClickedOutside } from "@/hooks";
 // import { Switch } from "@/components/ui/switch";
 
 export const FilterMenu = ({
@@ -123,6 +124,12 @@ export const FilterMenu = ({
     selectedCountry ||
     selectedState
   );
+
+  useCloseMenuWhenClickedOutside({
+    showMenu: isOpen,
+    showMenuRef: buttonRef,
+    setShowMenu: setIsOpen,
+  });
 
   return (
     <>
