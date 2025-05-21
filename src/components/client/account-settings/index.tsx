@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { UserDetailsProps } from "@/types/user";
+import { UserProfileProps } from "@/types/user";
 import { useAuth } from "@/context";
 import { api, DOCUMENT_URL, formatError } from "@/utils";
 import { ApiResponseProps } from "@/types";
@@ -19,7 +19,7 @@ const AccountSettingsContent = () => {
 
   const url = "/client/api/v1/get-user-info";
 
-  const { refetch: refetchUserDetails } = useClientFetch<UserDetailsProps>({
+  const { refetch: refetchUserDetails } = useClientFetch<UserProfileProps>({
     endpoint: url,
     token,
     enabled: !!token,
@@ -30,7 +30,7 @@ const AccountSettingsContent = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [tempPhoto, setTempPhoto] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<UserDetailsProps>({
+  const [formData, setFormData] = useState<UserProfileProps>({
     first_name: "",
     last_name: "",
     email: "",

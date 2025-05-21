@@ -5,13 +5,6 @@ export interface ApiResponseProps<T> {
   message?: string;
 }
 
-export interface SampleProps {
-  userId?: string;
-  email: string;
-  name: string;
-  timestamp: string;
-}
-
 export interface ReviewProps {
   id: string;
   reviews: string;
@@ -90,7 +83,7 @@ export interface NotificationProps {
   };
 }
 
-export interface NotificationsHistoryProps {
+export interface NotificationHistoryProps {
   total_count: number;
   data: NotificationProps[];
 }

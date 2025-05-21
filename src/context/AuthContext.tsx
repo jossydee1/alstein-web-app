@@ -1,6 +1,6 @@
 "use client";
 
-import { UserDetailsProps } from "@/types/user";
+import { UserProfileProps } from "@/types/user";
 import { PartnerProps } from "@/types";
 import { useRouter } from "next/navigation";
 import React, {
@@ -16,11 +16,11 @@ import { signOut } from "next-auth/react";
 interface UserContextProps {
   id: string;
   token: string;
-  user: UserDetailsProps;
+  user: UserProfileProps;
 }
 
 interface AuthContextType {
-  user: UserDetailsProps | null;
+  user: UserProfileProps | null;
   userId: string | null;
   token: string | null;
   businessProfile: PartnerProps | null;
@@ -29,7 +29,7 @@ interface AuthContextType {
   isAuthLoading: boolean;
   login: (user: UserContextProps) => Promise<void>;
   logout: () => void;
-  setUser: (user: UserDetailsProps) => void;
+  setUser: (user: UserProfileProps) => void;
   setBusinessProfile: (profile: PartnerProps) => void;
   fetchBusinessProfiles: () => Promise<PartnerProps[]>;
 }
@@ -177,7 +177,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => clearInterval(interval); // Cleanup on unmount
   }, [logout]);
 
-  const setUserProfileHandler = (user: UserDetailsProps) => {
+  const setUserProfileHandler = (user: UserProfileProps) => {
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
   };

@@ -4,7 +4,7 @@ import React from "react";
 import { Bell } from "lucide-react";
 import { useClientFetch } from "@/hooks";
 import { useAuth } from "@/context";
-import { NotificationsHistoryProps } from "@/types";
+import { NotificationHistoryProps } from "@/types";
 import { LoadingState } from "@/components/common";
 import { formatDateToRelativeTime } from "@/utils";
 
@@ -13,7 +13,7 @@ const NotificationsContent = () => {
 
   const url = `/client/api/v1/notifications/get-notifications?skip=0&take=10`;
 
-  const { data, isLoading, error } = useClientFetch<NotificationsHistoryProps>({
+  const { data, isLoading, error } = useClientFetch<NotificationHistoryProps>({
     endpoint: url,
     token,
     enabled: !!token,
@@ -48,7 +48,7 @@ const NotificationsContent = () => {
                     {n?.title}
                   </p>
                   <p className="dashboard-section-card-description">
-                    {formatDateToRelativeTime(n?.created_at)} • {n?.message}
+                    {formatDateToRelativeTime(n?.updated_at)} • {n?.message}
                   </p>
                 </div>
               </li>

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Listings from "./Listings";
 import SearchForm from "./SearchForm";
-import { CategoryProps, ListingProps, ListingsProps } from "@/types";
+import { CategoryProps, ListingProps, ListingHistoryProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { api, formatError } from "@/utils";
@@ -28,8 +28,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  // TODO: set default to country Nigeria
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("Nigeria");
   const [selectedState, setSelectedState] = useState<string>("");
   const [filterQueryParams, setFilterQueryParams] = useState<string>(
     `skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`,
@@ -122,7 +121,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     data: listings,
     isLoading: fetchingListings,
     refetch: refetchListings,
-  } = useClientFetch<ListingsProps>({
+  } = useClientFetch<ListingHistoryProps>({
     endpoint: `/client/public/api/v1/equipments/filter-equipments?${filterQueryParams}`,
     enabled: !!filterQueryParams && !isUsingSearchResults, // Only enable if not using search results
   });

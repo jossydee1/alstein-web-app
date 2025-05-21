@@ -8,7 +8,12 @@ import Listings from "./Listings";
 import Testimonials from "./Testimonials";
 import Partners from "./Partners";
 import { useClientFetch } from "@/hooks";
-import { CategoryProps, CountProps, ListingsProps, ReviewProps } from "@/types";
+import {
+  CategoryProps,
+  CountProps,
+  ListingHistoryProps,
+  ReviewProps,
+} from "@/types";
 
 const HomeContent = ({
   categories,
@@ -17,7 +22,7 @@ const HomeContent = ({
   categories: CategoryProps[];
   reviews: ReviewProps[];
 }) => {
-  const { data: listings, isLoading } = useClientFetch<ListingsProps>({
+  const { data: listings, isLoading } = useClientFetch<ListingHistoryProps>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   });
 

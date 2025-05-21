@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import AddWithdrawalMethod from "./AddWithdrawalMethod";
 import WithdrawFormAndMethods from "./WithdrawFormAndMethods";
 import { useClientFetch } from "@/hooks";
-import { BankDetailsHistoryProps } from "@/types";
+import { PaymentMethodHistoryProps } from "@/types";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
 import { formatError } from "@/utils";
@@ -18,7 +18,7 @@ const WithdrawalMethods = () => {
   const getBankAccUrl = `/partner/api/v1/payment/get-bank-account?skip=0&take=10&partner_id=${businessProfile?.id}`;
 
   const { data, isLoading, error, refetch } =
-    useClientFetch<BankDetailsHistoryProps>({
+    useClientFetch<PaymentMethodHistoryProps>({
       endpoint: getBankAccUrl,
       token,
       enabled: !!token && !!businessProfile?.id,

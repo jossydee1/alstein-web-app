@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context";
 import { useClientFetch } from "@/hooks";
-import { ListingProps, ListingsProps } from "@/types";
+import { ListingProps, ListingHistoryProps } from "@/types";
 import Listings from "./Listings";
 import { LoadingState } from "@/components/common";
 
@@ -19,7 +19,7 @@ const FavouritesPageContent = () => {
   const url = `/client/public/api/v1/equipments/get-favourite-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
   // Fetch all listings
-  const { data, isLoading, error } = useClientFetch<ListingsProps>({
+  const { data, isLoading, error } = useClientFetch<ListingHistoryProps>({
     endpoint: url,
     token,
   });

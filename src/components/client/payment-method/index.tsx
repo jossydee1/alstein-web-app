@@ -7,14 +7,14 @@ import { useAuth } from "@/context";
 import { useClientFetch } from "@/hooks";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PaymentMethodsHistoryProps } from "@/types";
+import { PaymentMethodHistoryProps } from "@/types";
 
 const PaymentMethodContent = () => {
   const { token } = useAuth();
 
   const url = `/client/api/v1/payments/get-payment-methods`;
 
-  const { data } = useClientFetch<PaymentMethodsHistoryProps>({
+  const { data } = useClientFetch<PaymentMethodHistoryProps>({
     endpoint: url,
     token,
     enabled: !!token,

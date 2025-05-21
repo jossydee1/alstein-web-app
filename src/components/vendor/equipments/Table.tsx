@@ -22,7 +22,7 @@ import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { ListingsProps } from "@/types";
+import { ListingHistoryProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -68,7 +68,7 @@ const EquipmentListings = () => {
     isLoading,
     error: listingError,
     refetch,
-  } = useClientFetch<ListingsProps>({
+  } = useClientFetch<ListingHistoryProps>({
     endpoint: url,
     token,
     enabled: !!token && !!businessProfile?.id,
@@ -159,7 +159,7 @@ const EquipmentListings = () => {
                 equipments?.data.map(e => (
                   <TableRow key={e?.id} className="py-10">
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
-                      {formatIOSToDate(e?.created_at)}
+                      {formatIOSToDate(e?.updated_at)}
                     </TableCell>
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {e?.name}

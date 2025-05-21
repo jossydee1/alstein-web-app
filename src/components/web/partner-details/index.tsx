@@ -8,7 +8,7 @@ import PartnerListings from "./Listings";
 import {
   AverageRatingProps,
   CountProps,
-  ListingsProps,
+  ListingHistoryProps,
   PartnerProps,
 } from "@/types";
 import { useClientFetch } from "@/hooks";
@@ -31,7 +31,7 @@ const PartnerDetailsContent = () => {
     data: listingsData,
     isLoading: loadingListings,
     error: errorListings,
-  } = useClientFetch<ListingsProps>({
+  } = useClientFetch<ListingHistoryProps>({
     endpoint: `/client/public/api/v1/equipments/get-partner-equipments?skip=0&take=50&partner_id=${id}`,
     enabled: !!id,
   });
