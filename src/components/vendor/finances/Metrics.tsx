@@ -28,7 +28,7 @@ const Metrics = () => {
         className="!bg-brandColor !text-white"
       />
       <SimpleCard
-        title="Potential Earnings"
+        title="Pending Payout"
         value={formatPrice(data?.potential_earnings || 0, "NGN")}
       />
       <SimpleCard

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { api, formatError } from "@/utils";
-import { ApiResponseProps, BankDetailsHistoryProps } from "@/types";
+import { ApiResponseProps, PaymentMethodHistoryProps } from "@/types";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 
@@ -13,7 +13,7 @@ const WithdrawFormAndMethods = ({
   refetch,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
-  data: BankDetailsHistoryProps | undefined;
+  data: PaymentMethodHistoryProps | undefined;
   refetch: () => void;
 }) => {
   const { token } = useAuth();

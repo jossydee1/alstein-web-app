@@ -1,4 +1,4 @@
-export interface UserDetailsProps {
+export interface UserProfileProps {
   id?: string;
   first_name: string;
   last_name: string;
@@ -13,7 +13,7 @@ export interface UserDetailsProps {
   gender?: string;
 }
 
-export interface BusinessProps {
+export interface BusinessProfileProps {
   name: string;
   address: string;
   email: string;

@@ -22,7 +22,7 @@ import { useClientFetch } from "@/hooks";
 import { GetListingStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { ListingsProps } from "@/types";
+import { ListingHistoryProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -68,7 +68,7 @@ const EquipmentListings = () => {
     isLoading,
     error: listingError,
     refetch,
-  } = useClientFetch<ListingsProps>({
+  } = useClientFetch<ListingHistoryProps>({
     endpoint: url,
     token,
     enabled: !!token && !!businessProfile?.id,

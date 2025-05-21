@@ -27,7 +27,7 @@ export interface ListingProps {
   }[];
 }
 
-export interface ListingsProps {
+export interface ListingHistoryProps {
   data: ListingProps[];
   total_count: number;
 }
