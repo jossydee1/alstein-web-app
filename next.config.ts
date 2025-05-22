@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       "picsum.photos",
       "randomuser.me",
       "alstein-dev-storage.s3.us-east-1.amazonaws.com",
+      "alstein-website-files.s3.us-east-1.amazonaws.com",
     ],
   },
 };

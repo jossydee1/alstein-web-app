@@ -3,7 +3,7 @@ import React from "react";
 import arrow from "@/public/icons/long-arrow.svg";
 import users from "@/public/icons/user-group-03.svg";
 import Link from "next/link";
-import { webRoutes } from "@/utils";
+import { CATEGORY_URL, webRoutes } from "@/utils";
 import { CategoryProps, CountProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 
@@ -14,35 +14,39 @@ const CategoryItem = ({ category }: { category: CategoryProps }) => {
   });
 
   const partnerCount = data?.count || 0;
-
   return (
     <article
       className="group relative min-w-[260px] max-w-[260px] overflow-hidden rounded-2xl px-4 py-7 text-white shadow-lg hover:shadow-none"
       style={{
-        backgroundImage: category?.image_url || 'url("/images/doctor.png")',
+        backgroundImage: category?.image_url
+          ? `url('${CATEGORY_URL + category?.image_url}')`
+          : `url('/images/doctor.png')`,
         backgroundColor: "#181818",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
-        {category?.title}
-      </h3>
-      <ul className="list-inside list-disc">
-        {category?.subcategory?.map(sub => (
-          <li key={sub?.id}>{sub?.description}</li>
-        ))}
-      </ul>
-
-      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-[#00000080] p-3">
+      {/* Overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-black/50" />
+      {/* Content */}
+      <div className="relative z-10">
+        <h3 className="mb-4 mt-3 text-[32px] leading-[40px]">
+          {category?.title}
+        </h3>
+        <ul className="list-inside list-disc">
+          {category?.subcategory?.map(sub => (
+            <li key={sub?.id}>{sub?.description}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between bg-[#00000080] p-3">
         <span className="flex items-center gap-1 text-[12px] leading-[13px] text-white">
           <Image src={users} alt="arrow right" />
           {isLoading
             ? "Loading..."
             : `${partnerCount} Partner${partnerCount !== 1 ? "s" : ""}`}
         </span>
-
         <Link
           href={`${webRoutes?.listings}?category=${category?.title_slug}`}
           className="block rounded-md bg-[#7F7F7F] px-7 py-1.5 text-sm leading-[16px] text-white transition-colors group-hover:bg-white group-hover:text-[#0F0F0F]"

@@ -307,7 +307,7 @@ const PayoutRequests = () => {
                         <span>{p?.account_number}</span>
                       </TableCell>
                       <TableCell className="px-5 py-3 text-right">
-                        {formatPrice(p?.amount, "NGN")}
+                        {formatPrice(Math.abs(p?.amount), "NGN")}
                       </TableCell>
                       <TableCell className="px-5 py-3">
                         <div

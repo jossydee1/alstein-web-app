@@ -115,6 +115,11 @@ const AccountSettingsContent = () => {
     } catch (error) {
       toast.error(formatError(error, "Failed to upload user photo"));
       setTempPhoto(null);
+      // Clear the file input if upload fails
+      const input = document.getElementById(
+        "user_avatar",
+      ) as HTMLInputElement | null;
+      if (input) input.value = "";
     } finally {
       setIsUploading(false);
     }
@@ -262,6 +267,8 @@ const AccountSettingsContent = () => {
                         toast.error(
                           `File size must be less than 3MB. Current size: ${(file?.size / (1024 * 1024)).toFixed(2)}MB`,
                         );
+                        // Clear the file input
+                        e.target.value = "";
                         return;
                       }
 
@@ -274,10 +281,17 @@ const AccountSettingsContent = () => {
                         toast.error(
                           "Only PNG, JPEG, and JPG files are allowed",
                         );
+                        // Clear the file input
+                        e.target.value = "";
                         return;
                       }
 
-                      await uploadAvatarToS3(file);
+                      try {
+                        await uploadAvatarToS3(file);
+                      } catch {
+                        // Clear the file input if upload fails
+                        e.target.value = "";
+                      }
                     }
                   }}
                 />

@@ -141,6 +141,9 @@ const VendorSettingsContent = () => {
     } catch (error) {
       toast.error(formatError(error, "Failed to upload logo"));
       setTempPhoto(null);
+      // Clear the file input if upload fails
+      const input = document.getElementById("logo") as HTMLInputElement | null;
+      if (input) input.value = "";
     } finally {
       setIsUploading(false);
     }

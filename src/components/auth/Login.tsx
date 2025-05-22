@@ -192,7 +192,7 @@ const LoginContent = () => {
               <hr className={style.hr} />
             </header>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={style.form}>
               {error && <p className={style.error}>{error}</p>}
 
               <div className={style.inputGroup}>
