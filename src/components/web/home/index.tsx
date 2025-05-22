@@ -15,13 +15,7 @@ import {
   ReviewProps,
 } from "@/types";
 
-const HomeContent = ({
-  categories,
-  reviews,
-}: {
-  categories: CategoryProps[];
-  reviews: ReviewProps[];
-}) => {
+const HomeContent = () => {
   const { data: listings, isLoading } = useClientFetch<ListingHistoryProps>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   });
@@ -32,6 +26,15 @@ const HomeContent = ({
 
   const { data: bookingsCount } = useClientFetch<CountProps>({
     endpoint: "/client/public/api/v1/booking/get-bookings-count",
+  });
+
+  const { data: categories } = useClientFetch<CategoryProps[]>({
+    endpoint:
+      "/client/public/api/v1/equipments/get-equipment-category?skip=0&take=4",
+  });
+
+  const { data: reviews } = useClientFetch<ReviewProps[]>({
+    endpoint: "/client/public/api/v1/reviews/get-reviews?skip=0&take=6",
   });
 
   return (
