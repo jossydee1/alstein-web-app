@@ -709,7 +709,7 @@ const ProfessionalPageContent = () => {
                 {steps[currentStep - 1].body}
               </p>
             </header>
-            <form>
+            <form className={style.form}>
               {renderStepContent()}
               <Button
                 type="button"

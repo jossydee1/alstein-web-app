@@ -228,7 +228,7 @@ const PersonalDetails = ({
 
   return (
     <FormLayout step={1} title="Personal Information">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={style.form}>
         <ErrorMessage error={error} />
 
         <div className={style.inputGroup}>
@@ -422,7 +422,7 @@ const OTP = ({
 
   return (
     <FormLayout step={2} title="Verify OTP">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={style.form}>
         <ErrorMessage error={redirectErrorMessage} />
         <ErrorMessage error={error} />
 
@@ -543,7 +543,7 @@ const Security = ({
 
   return (
     <FormLayout step={3} title="Create Password">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={style.form}>
         <ErrorMessage error={error} />
 
         <div className={style.inputGroup}>

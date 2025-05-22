@@ -92,7 +92,7 @@ const ForgotPasswordContent = () => {
             </p>
           </header>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={style.form}>
             {error && (
               <p id="error" className={style.error}>
                 {error}
