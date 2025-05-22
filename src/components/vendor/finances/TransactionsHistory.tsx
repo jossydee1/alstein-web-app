@@ -196,18 +196,18 @@ const TransactionsHistory = () => {
                         className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
                           t?.status === "withheld"
                             ? "bg-orange-50"
-                            : t?.status === "confirmed"
+                            : t?.status === "successful"
                               ? "bg-green-50"
-                              : "bg-red-50"
+                              : "bg-nutral-50"
                         }`}
                       >
                         <span
                           className={`size-2 rounded-full ${
                             t?.status === "withheld"
                               ? "bg-orange-600"
-                              : t?.status === "confirmed"
+                              : t?.status === "successful"
                                 ? "bg-green-600"
-                                : "bg-red-600"
+                                : "bg-nutral-600"
                           }`}
                         />
                         <span>{t?.status}</span>

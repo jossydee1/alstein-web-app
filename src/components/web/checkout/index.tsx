@@ -129,6 +129,7 @@ const CheckoutContent = () => {
           start_time: `${fromTime?.hours}:${fromTime?.minutes}`,
           end_time: `${toTime?.hours}:${toTime?.minutes}`,
           client_id: userId,
+          number_of_samples: numberOfSamples,
         },
         {
           headers: {
