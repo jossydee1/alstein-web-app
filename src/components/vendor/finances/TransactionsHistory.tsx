@@ -19,7 +19,7 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
+import { GetTransactionStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { TransactionHistoryProps } from "@/types";
@@ -188,30 +188,13 @@ const TransactionsHistory = () => {
                     <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
                       {formatPrice(t?.available_amount, "NGN")}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap px-5 py-3 text-[#6B7280]">
+                    <TableCell
+                      className={`whitespace-nowrap px-5 py-3 text-[#6B7280] ${t?.type === "debit" ? "text-red-500" : "text-green-700"}`}
+                    >
                       {t?.type}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      <div
-                        className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                          t?.status === "withheld"
-                            ? "bg-orange-50"
-                            : t?.status === "successful"
-                              ? "bg-green-50"
-                              : "bg-nutral-50"
-                        }`}
-                      >
-                        <span
-                          className={`size-2 rounded-full ${
-                            t?.status === "withheld"
-                              ? "bg-orange-600"
-                              : t?.status === "successful"
-                                ? "bg-green-600"
-                                : "bg-nutral-600"
-                          }`}
-                        />
-                        <span>{t?.status}</span>
-                      </div>
+                      {GetTransactionStatusPill(t?.status)}
                     </TableCell>
                   </TableRow>
                 ))

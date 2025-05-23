@@ -26,7 +26,7 @@ import {
   sanitizeLeadingZero,
 } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import { LoadingState } from "@/components/common";
+import { GetPayoutRequestStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { ApiResponseProps, PayoutRequestHistoryProps } from "@/types";
@@ -310,26 +310,7 @@ const PayoutRequests = () => {
                         {formatPrice(Math.abs(p?.amount), "NGN")}
                       </TableCell>
                       <TableCell className="px-5 py-3">
-                        <div
-                          className={`inline-flex items-center gap-2.5 rounded-3xl border border-[#E5E7EB] px-6 py-1.5 capitalize ${
-                            p?.status === "pending"
-                              ? "bg-orange-50"
-                              : p?.status === "confirmed"
-                                ? "bg-green-50"
-                                : "bg-red-50"
-                          }`}
-                        >
-                          <span
-                            className={`size-2 rounded-full ${
-                              p?.status === "pending"
-                                ? "bg-orange-600"
-                                : p?.status === "confirmed"
-                                  ? "bg-green-600"
-                                  : "bg-red-600"
-                            }`}
-                          />
-                          <span>{p?.status}</span>
-                        </div>
+                        {GetPayoutRequestStatusPill(p?.status)}
                       </TableCell>
                     </TableRow>
                   ))
