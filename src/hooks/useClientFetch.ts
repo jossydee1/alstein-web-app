@@ -1,7 +1,7 @@
 "use client";
 
 import { api, formatError } from "@/utils";
-import { QueryOptions, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ApiResponseProps } from "@/types";
 import { useAuth } from "@/context";
 
@@ -9,14 +9,14 @@ export function useClientFetch<T>({
   endpoint,
   params,
   enabled = true,
-  options,
   token,
+  ...options
 }: {
   endpoint: string;
   params?: Record<string, string | number | boolean | null>;
   enabled?: boolean;
-  options?: Partial<QueryOptions<T>>;
   token?: string | null;
+  [key: string]: unknown;
 }) {
   const { logout } = useAuth();
 
