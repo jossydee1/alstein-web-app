@@ -29,7 +29,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   return (
     <>
-      <div className="min-h-svh bg-[#fff] font-visbymedium antialiased">
+      <div className="relative min-h-svh bg-[#fff] font-visbymedium antialiased">
         <Navbar />
         <MobileNavigation />
         <Sidebar />

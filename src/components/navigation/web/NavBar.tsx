@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  BellDot,
+  Bell,
   Building2,
   ChevronDown,
   LogOut,
@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import { authRoutes, dashboardRoutes, DOCUMENT_URL, webRoutes } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context";
-import { useCloseMenuWhenClickedOutside } from "@/hooks";
+import { useClientFetch, useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { LoadingState } from "@/components/common";
 import { useRouter } from "next/navigation";
@@ -71,12 +71,30 @@ const NAV_ITEMS: NavItem[] = [
     isActive: path => path === webRoutes?.contact,
   },
 ];
+const MOBILE_ITEMS: NavItem[] = [
+  {
+    name: "My Account",
+    href: dashboardRoutes?.client_order_history,
+    isActive: path => path === dashboardRoutes?.client_order_history,
+  },
+  {
+    name: "Business Dashboard",
+    href: dashboardRoutes?.vendor_overview,
+    isActive: (path: string) => path === dashboardRoutes?.vendor_overview,
+  },
+  {
+    name: "Notifications",
+    href: dashboardRoutes?.client_notifications,
+    isActive: path => path === dashboardRoutes?.client_notifications,
+  },
+];
 
 const NavBar = () => {
   const router = useRouter();
   const path = usePathname() || "";
 
-  const { logout, user, fetchBusinessProfiles, businessProfile } = useAuth();
+  const { logout, user, fetchBusinessProfiles, businessProfile, token } =
+    useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +104,14 @@ const NavBar = () => {
     showMenu: showDropdown,
     showMenuRef: dropdownRef,
     setShowMenu: setShowDropdown,
+  });
+
+  const { data: isNewNotification } = useClientFetch<{
+    is_new_notification: boolean;
+    last_viewed_date: string;
+  }>({
+    endpoint: "/client/api/v1/notifications/check-new-notification",
+    enabled: !!token,
   });
 
   const handleBusinessProfileClick = async () => {
@@ -176,19 +202,42 @@ const NavBar = () => {
               />
             </Link>
 
-            <button
-              type="button"
-              className="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-md border border-gray-200 text-[12px] font-medium hover:bg-gray-100 focus:bg-gray-100 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 lg:hidden"
-              id="hs-header-base-collapse"
-              aria-expanded="false"
-              aria-controls="hs-header-base"
-              aria-label="Toggle navigation"
-              data-hs-collapse="#hs-header-base"
-            >
-              <Menu className="size-4 hs-collapse-open:hidden" />
-              <X className="hidden size-4 shrink-0 hs-collapse-open:block" />
-              <span className="sr-only">Toggle navigation</span>
-            </button>
+            <div className="flex items-center justify-between gap-1 lg:hidden">
+              {user && (
+                <div>
+                  <Link
+                    href={dashboardRoutes?.client_notifications}
+                    className="relative flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
+                  >
+                    {isNewNotification?.is_new_notification && (
+                      <div className="absolute right-3.5 top-4 h-2 w-2 rounded-full bg-brandColor" />
+                    )}
+                    <Bell size="24" strokeWidth={1.5} />
+                  </Link>
+                </div>
+              )}
+              <button
+                type="button"
+                className="hs-collapse-toggle relative flex aspect-square h-[50px] w-[50px] items-center justify-center transition-colors hover:bg-gray-100/50 focus:bg-gray-100/50 disabled:pointer-events-none disabled:opacity-50 lg:hidden"
+                id="hs-header-base-collapse"
+                aria-expanded="false"
+                aria-controls="hs-header-base"
+                aria-label="Toggle navigation"
+                data-hs-collapse="#hs-header-base"
+              >
+                <Menu
+                  size="24"
+                  strokeWidth={1.5}
+                  className="hs-collapse-open:hidden"
+                />
+                <X
+                  size="24"
+                  strokeWidth={1.5}
+                  className="hidden shrink-0 hs-collapse-open:block"
+                />
+                <span className="sr-only">Toggle navigation</span>
+              </button>
+            </div>
           </div>
 
           <div
@@ -201,6 +250,24 @@ const NavBar = () => {
                 <div className="flex grow flex-col gap-9 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                   <div className="m-2 flex flex-col gap-0.5 lg:flex-row lg:items-center lg:justify-between lg:gap-1">
                     {NAV_ITEMS?.map(renderNavItem)}
+                    <hr className="my-4 block lg:hidden" />
+                    {user && (
+                      <div className="lg:hidden">
+                        {MOBILE_ITEMS?.map(renderNavItem)}
+
+                        <Button
+                          type="button"
+                          onClick={logout}
+                          variant="ghost"
+                          className="flex items-center rounded-md p-2 hover:bg-gray-100 focus:bg-gray-100"
+                        >
+                          <span className="mr-2 inline-block">
+                            <LogOut size={20} />
+                          </span>
+                          <span className="font-medium leading-6">Logout</span>
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   {!user ? (
@@ -221,12 +288,15 @@ const NavBar = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="flex py-2">
+                    <div className="hidden py-2 lg:flex">
                       <Link
                         href={dashboardRoutes?.client_notifications}
-                        className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
+                        className="relative flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
                       >
-                        <BellDot size="24" strokeWidth={1.5} />
+                        {isNewNotification?.is_new_notification && (
+                          <div className="absolute right-3.5 top-4 h-2 w-2 rounded-full bg-brandColor" />
+                        )}
+                        <Bell size="24" strokeWidth={1.5} />
                       </Link>
 
                       <div className="static lg:relative" ref={dropdownRef}>

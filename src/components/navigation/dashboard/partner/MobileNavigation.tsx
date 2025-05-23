@@ -26,8 +26,8 @@ export const MobileNavigation = ({
         ];
 
   return (
-    <div className="-mt-px">
-      <div className="sticky inset-x-0 top-0 z-20 border-y bg-white px-4 sm:px-6 lg:hidden lg:px-8">
+    <div className="sticky inset-x-0 top-[85px] z-20">
+      <div className="border-y bg-white px-4 sm:px-6 lg:hidden lg:px-8">
         <div className="flex items-center py-2">
           <button
             type="button"
