@@ -14,6 +14,7 @@ export interface OrderProps {
   created_at: string;
   updated_at: string;
   payment_status: string;
+  number_of_samples: number;
   partners: {
     name: string;
     logo: string;

@@ -79,7 +79,7 @@ export const Navbar = () => {
               <div className="ml-auto flex py-2">
                 <Link
                   href={dashboardRoutes?.vendor_notifications}
-                  className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
+                  className="relative flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
                 >
                   {isNewNotification?.is_new_notification && (
                     <div className="absolute right-3.5 top-4 h-2 w-2 rounded-full bg-brandColor" />
