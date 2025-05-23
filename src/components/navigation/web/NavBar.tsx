@@ -21,6 +21,7 @@ import { useClientFetch, useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { LoadingState } from "@/components/common";
 import { useRouter } from "next/navigation";
+import { useNotificationRefresh } from "@/context";
 
 // CSS Classes
 const STYLES = {
@@ -95,6 +96,7 @@ const NavBar = () => {
 
   const { logout, user, fetchBusinessProfiles, businessProfile, token } =
     useAuth();
+  const { refreshKey } = useNotificationRefresh();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,6 +114,11 @@ const NavBar = () => {
   }>({
     endpoint: "/client/api/v1/notifications/check-new-notification",
     enabled: !!token,
+    // Add refreshKey as a dependency to trigger refetch
+    queryKey: [
+      "/client/api/v1/notifications/check-new-notification",
+      refreshKey,
+    ],
   });
 
   const handleBusinessProfileClick = async () => {

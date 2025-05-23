@@ -7,9 +7,15 @@ import { useAuth } from "@/context";
 import { NotificationHistoryProps } from "@/types";
 import { LoadingState } from "@/components/common";
 import { formatDateToRelativeTime } from "@/utils";
+import { useNotificationRefresh } from "@/context";
 
 const NotificationsContent = () => {
   const { token } = useAuth();
+  const { refreshNotifications } = useNotificationRefresh();
+
+  React.useEffect(() => {
+    refreshNotifications();
+  }, [refreshNotifications]);
 
   const url = `/client/api/v1/notifications/get-notifications?skip=0&take=10`;
 

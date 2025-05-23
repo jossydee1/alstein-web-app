@@ -10,11 +10,13 @@ import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/common";
 import { useRouter } from "next/navigation";
+import { useNotificationRefresh } from "@/context";
 
 const NavBar = () => {
   const router = useRouter();
   const { logout, user, fetchBusinessProfiles, businessProfile, token } =
     useAuth();
+  const { refreshKey } = useNotificationRefresh();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +34,10 @@ const NavBar = () => {
   }>({
     endpoint: "/client/api/v1/notifications/check-new-notification",
     enabled: !!token,
+    queryKey: [
+      "/client/api/v1/notifications/check-new-notification",
+      refreshKey,
+    ],
   });
 
   const handleBusinessProfileClick = async () => {

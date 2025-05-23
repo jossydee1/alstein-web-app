@@ -8,9 +8,11 @@ import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
 import { useClientFetch, useCloseMenuWhenClickedOutside } from "@/hooks";
+import { useNotificationRefresh } from "@/context";
 
 export const Navbar = () => {
   const { logout, user, token, businessProfile } = useAuth();
+  const { refreshKey } = useNotificationRefresh();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -27,6 +29,11 @@ export const Navbar = () => {
   }>({
     endpoint: `/partner/api/v1/notifications/check-new-notification?partner_id=${businessProfile?.id}`,
     enabled: !!token && !!businessProfile?.id,
+    queryKey: [
+      `/partner/api/v1/notifications/check-new-notification`,
+      businessProfile?.id,
+      refreshKey,
+    ],
   });
 
   return (
