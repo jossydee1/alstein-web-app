@@ -15,6 +15,7 @@ const Form = () => {
     countryCode: "",
     message: "",
   });
+  const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,17 +51,35 @@ const Form = () => {
     const params = {
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
-      country_code: formData.countryCode.trim(),
-      phone_number: formData.phone.trim(),
+      phone_number: formData.countryCode.trim() + formData.phone.trim(),
       email: formData.email.trim(),
       message: formData.message.trim(),
     };
 
     try {
-      const response = await api.post("", params);
+      const response = await api.post(
+        "/client/public/api/v1/meta/contact-us",
+        params,
+      );
 
       if (response?.status === 200) {
         await response?.data?.data;
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          countryCode: "",
+          message: "",
+        });
+
+        setError("");
+        setSuccessMessage(
+          "Your message has been sent successfully. We will get back to you soon.",
+        );
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
       }
     } catch (error) {
       setError(formatError(error, "An error occurred during submission."));
@@ -220,6 +239,11 @@ const Form = () => {
           </div>
 
           <div className="w-full space-y-1">
+            {successMessage && (
+              <p className="my-2 rounded-[10px] bg-green-100 p-4 text-green-500">
+                {successMessage}
+              </p>
+            )}
             <Button
               type="submit"
               className="mt-4 w-full rounded-md text-center text-base font-semibold"
