@@ -43,7 +43,7 @@ export interface TransactionProps {
   available_amount: number;
   balance: number;
   payout_balance: number;
-  type: number;
+  type: string;
   status: string;
   account_number: string;
   account_name: string;

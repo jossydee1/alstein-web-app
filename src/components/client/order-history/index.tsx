@@ -27,6 +27,7 @@ import {
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps } from "@/types";
+import { differenceInDays } from "date-fns";
 
 const tableHeads = [
   {
@@ -40,6 +41,10 @@ const tableHeads = [
   },
   {
     label: "Billing method",
+  },
+  {
+    label: "No of days/samples",
+    className: "text-right",
   },
   {
     label: "TOTAL AMOUNT",
@@ -195,11 +200,15 @@ const OrderHistoryContent = () => {
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order?.equipment?.name}
                     </TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.service_type}
+                    <TableCell className="px-5 py-3 font-medium capitalize text-[#1F2937]">
+                      {order?.equipment?.service_type.replace(/_/g, " ")}
                     </TableCell>
-                    <TableCell className="px-5 py-3 font-medium text-[#1F2937]">
-                      {order?.equipment?.bill_type}
+                    <TableCell className="px-5 py-3 font-medium capitalize text-[#1F2937]">
+                      {order?.equipment?.bill_type?.replace(/_/g, " ") || "-"}
+                    </TableCell>
+                    <TableCell className="px-5 py-3 text-right font-medium capitalize text-[#1F2937]">
+                      {order?.number_of_samples ||
+                        differenceInDays(order?.end_date, order?.start_date)}
                     </TableCell>
                     <TableCell className="px-5 py-3 text-right">
                       {formatPrice(order?.booking_amount, "NGN")}

@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import logoLight from "@/public/logo-rectangle-light.svg";
-import { BellDot, LogOut, Building2, UserRound, Menu } from "lucide-react";
-import { useCloseMenuWhenClickedOutside } from "@/hooks";
+import { Bell, LogOut, Building2, UserRound, Menu } from "lucide-react";
+import { useClientFetch, useCloseMenuWhenClickedOutside } from "@/hooks";
 import avatar from "@/public/icons/avatar.svg";
 import { useAuth } from "@/context";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,8 @@ import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   const router = useRouter();
-  const { logout, user, fetchBusinessProfiles, businessProfile } = useAuth();
+  const { logout, user, fetchBusinessProfiles, businessProfile, token } =
+    useAuth();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,14 @@ const NavBar = () => {
     showMenu: showDropdown,
     showMenuRef: dropdownRef,
     setShowMenu: setShowDropdown,
+  });
+
+  const { data: isNewNotification } = useClientFetch<{
+    is_new_notification: boolean;
+    last_viewed_date: string;
+  }>({
+    endpoint: "/client/api/v1/notifications/check-new-notification",
+    enabled: !!token,
   });
 
   const handleBusinessProfileClick = async () => {
@@ -86,9 +95,12 @@ const NavBar = () => {
             <div className="flex py-2">
               <Link
                 href={dashboardRoutes?.client_notifications}
-                className="flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
+                className="relative flex aspect-square h-[50px] w-[50px] items-center justify-center rounded-md transition-colors hover:bg-gray-100/50"
               >
-                <BellDot size="24" strokeWidth={1.5} />
+                {isNewNotification?.is_new_notification && (
+                  <div className="absolute right-3.5 top-4 h-2 w-2 rounded-full bg-brandColor" />
+                )}
+                <Bell size="24" strokeWidth={1.5} />
               </Link>
 
               <div className="relative" ref={dropdownRef}>

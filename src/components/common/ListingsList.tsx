@@ -17,8 +17,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
 
 export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
-  const { user } = useAuth();
-
   if (!listings || listings?.length === 0)
     return (
       <p>
@@ -39,7 +37,6 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
               images={l?.equipment_file}
               equipmentId={l?.id}
               favoriteEquipment={l?.favorite_equipment}
-              userId={user?.id}
             />
 
             <div>
@@ -47,7 +44,7 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
                 {l?.name}
               </h3>
               <p className="mb-1 text-xs text-[#474747]">
-                {l?.description.slice(0, 100)}...
+                {l?.description?.slice(0, 100)}...
               </p>
               <p className="flex items-center gap-2.5 text-xs text-[#8B8B8B] transition-colors group-hover:text-brandColor">
                 <MapPin size="12" /> {l?.address}
@@ -74,47 +71,51 @@ const ImageSlider = ({
   images,
   equipmentId,
   favoriteEquipment,
-  userId,
 }: {
   images: DocumentProps[];
   equipmentId: string;
   favoriteEquipment?: { user_id: string }[];
-  userId?: string;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // Set initial favorite state based on userId in favoriteEquipment
-  const [isFavorite, setIsFavorite] = useState(
-    !!(userId && favoriteEquipment?.some(fav => fav.user_id === userId)),
-  );
+  const [isFavorite, setIsFavorite] = useState(false);
   const slideRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const { user } = useAuth();
+  const { userId } = useAuth();
   const router = useRouter();
 
+  // Always check favorite status from favoriteEquipment and userId
+  useEffect(() => {
+    setIsFavorite(
+      !!(
+        userId &&
+        Array.isArray(favoriteEquipment) &&
+        favoriteEquipment.some(fav => fav.user_id === userId)
+      ),
+    );
+  }, [userId, favoriteEquipment]);
+
   const toggleFavorite = async () => {
-    if (!user) {
+    if (!userId) {
       toast.info("Please log in to add to favorites.");
       router.push("/login");
       return;
     }
 
     try {
-      const response = await api.post(
-        "/client/api/v1/equipments/add-favourite-equipments",
-        {
-          equipment_id: equipmentId,
-        },
-      );
+      await api.post("/client/api/v1/equipments/add-favourite-equipments", {
+        equipment_id: equipmentId,
+      });
 
-      if (response?.data?.data) {
-        setIsFavorite(!isFavorite);
-        toast.success(
-          isFavorite
-            ? "Removed from favorites successfully!"
-            : "Added to favorites successfully!",
-        );
-      }
+      // After toggling, refetch or update favoriteEquipment array if possible
+      // For now, just flip the state locally for immediate feedback
+      setIsFavorite(prev => !prev);
+
+      toast.success(
+        !isFavorite
+          ? "Added to favorites successfully!"
+          : "Removed from favorites successfully!",
+      );
     } catch (error) {
       toast.error(
         formatError(error, "An error occurred while updating favorites."),
@@ -158,13 +159,6 @@ const ImageSlider = ({
     touchEndX.current = null;
   };
 
-  useEffect(() => {
-    // Update favorite state if userId or favoriteEquipment changes
-    setIsFavorite(
-      !!(userId && favoriteEquipment?.some(fav => fav.user_id === userId)),
-    );
-  }, [userId, favoriteEquipment]);
-
   if (!images || images?.length === 0) return null;
 
   return (
@@ -173,7 +167,11 @@ const ImageSlider = ({
         className="absolute right-1.5 top-2.5 z-10 flex cursor-pointer items-center rounded-md p-1 text-white"
         onClick={toggleFavorite}
       >
-        <Heart fill={isFavorite ? "red" : ""} size={24} />
+        <Heart
+          fill={isFavorite ? "red" : "none"}
+          color={isFavorite ? "red" : "white"}
+          size={24}
+        />
       </div>
 
       <div

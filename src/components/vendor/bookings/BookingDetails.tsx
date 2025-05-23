@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { OrderProps } from "@/types";
 import { LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
+import { differenceInDays } from "date-fns";
 
 const STYLES = {
   section: "dashboard-section-card relative grid gap-6 !p-6 max-w-screen-sm",
@@ -123,18 +124,19 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Full Name</span>
             <span className={STYLES.itemValue}>
-              {data?.client?.first_name || "N/A"}{" "}
-              {data?.client?.last_name || "N/A"}
+              {data?.client?.first_name || "-"} {data?.client?.last_name || "-"}
             </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Email</span>
-            <span className={STYLES.itemValue}>{data?.client?.email}</span>
+            <span className={STYLES.itemValue}>
+              {data?.client?.email || "-"}
+            </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Address</span>
             <span className={STYLES.itemValue}>
-              {data?.client?.address || "N/A"}
+              {data?.client?.address || "-"}
             </span>
           </p>
         </section>
@@ -145,27 +147,45 @@ const BookingDetails = () => {
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Equipment Name</span>
             <span className={STYLES.itemValue}>
-              {data?.equipment?.name || "N/A"}
+              {data?.equipment?.name || "-"}
             </span>
           </p>
           <p className={STYLES.item}>
             <span className={STYLES.itemLabel}>Rental Type</span>
-            <span className={STYLES.itemValue}>
-              {data?.equipment?.service_type || "N/A"}
+            <span className={`${STYLES.itemValue} capitalize`}>
+              {data?.equipment?.service_type.replace(/_/g, " ") || "-"}
             </span>
           </p>
           <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>Booking Start Date</span>
-            <span className={STYLES.itemValue}>
-              {formatIOSToDate(data?.start_date || "")},{" "}
-              {data?.start_time && formatTimeTo12Hour(data?.start_time || "")}
+            <span className={STYLES.itemLabel}>Billing Method</span>
+            <span className={`${STYLES.itemValue} capitalize`}>
+              {data?.equipment?.bill_type.replace(/_/g, " ") || "-"}
             </span>
           </p>
           <p className={STYLES.item}>
-            <span className={STYLES.itemLabel}>Due Date</span>
+            <span className={STYLES.itemLabel}>Start Date</span>
             <span className={STYLES.itemValue}>
-              {formatIOSToDate(data?.end_date || "")}{" "}
-              {data?.end_time && formatTimeTo12Hour(data?.end_time || "")}
+              {formatIOSToDate(data?.start_date || "")}
+              {data?.equipment?.bill_type === "per_day" && (
+                <> , {formatTimeTo12Hour(data?.start_time || "")}</>
+              )}
+            </span>
+          </p>
+          {data?.equipment?.bill_type === "per_day" && (
+            <p className={STYLES.item}>
+              <span className={STYLES.itemLabel}>End Date</span>
+              <span className={STYLES.itemValue}>
+                {formatIOSToDate(data?.end_date || "")}{" "}
+                {data?.end_time && formatTimeTo12Hour(data?.end_time || "")}
+              </span>
+            </p>
+          )}
+
+          <p className={STYLES.item}>
+            <span className={STYLES.itemLabel}>No. of Days/Samples</span>
+            <span className={STYLES.itemValue}>
+              {data?.number_of_samples ||
+                differenceInDays(data?.end_date || "", data?.start_date || "")}
             </span>
           </p>
         </section>

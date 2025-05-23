@@ -13,11 +13,22 @@ const NotificationsContent = () => {
 
   const url = `/client/api/v1/notifications/get-notifications?skip=0&take=10`;
 
-  const { data, isLoading, error } = useClientFetch<NotificationHistoryProps>({
+  const {
+    data: notificationsData,
+    isLoading,
+    error,
+  } = useClientFetch<NotificationHistoryProps>({
     endpoint: url,
     token,
     enabled: !!token,
   });
+
+  const { data: notificationTracker } = useClientFetch({
+    endpoint: `/client/api/v1/notifications/update-notifications-tracker`,
+    enabled: !!token,
+  });
+
+  console.log("Notification tracker:", notificationTracker);
 
   return (
     <>
@@ -36,9 +47,9 @@ const NotificationsContent = () => {
           </div>
         )}
 
-        {data && data?.data?.length > 0 ? (
+        {notificationsData && notificationsData?.data?.length > 0 ? (
           <ul className="mt-[50px] grid gap-6">
-            {data?.data?.map(n => (
+            {notificationsData?.data?.map(n => (
               <li key={n?.id} className="flex items-start gap-5 py-4">
                 <div className="p-2">
                   <Bell className="text-brandColor" size={20} />
