@@ -16,7 +16,7 @@ const FavouritesPageContent = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [listings, setListings] = useState<ListingProps[]>([]);
 
-  const url = `/client/public/api/v1/equipments/get-favourite-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
+  const url = `/client/api/v1/equipments/get-favourite-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
   // Fetch all listings
   const { data, isLoading, error } = useClientFetch<ListingHistoryProps>({
