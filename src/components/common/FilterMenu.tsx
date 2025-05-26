@@ -33,7 +33,7 @@ export const FilterMenu = ({
   setSelectedState,
   handleFiltering,
   resetFilter,
-  isFiltering,
+  // isFiltering,
   // distances,
   // selectedDistance,
   // setSelectedDistance,
@@ -78,11 +78,12 @@ export const FilterMenu = ({
     accordionContent: "grid grid-cols-1 gap-2 rounded-sm bg-[#F6F6F6] p-2",
     optionWrapper: "flex items-center space-x-2",
     optionLabel:
-      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap",
+      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
   };
 
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const modalRef = React.useRef<HTMLDivElement>(null); // Add modalRef
   const [modalStyle, setModalStyle] = useState<React.CSSProperties>({});
 
   React.useEffect(() => {
@@ -125,9 +126,10 @@ export const FilterMenu = ({
     selectedState
   );
 
+  // Remove array from showMenuRef, just pass an object with both refs
   useCloseMenuWhenClickedOutside({
     showMenu: isOpen,
-    showMenuRef: buttonRef,
+    showMenuRef: { buttonRef, modalRef },
     setShowMenu: setIsOpen,
   });
 
@@ -149,7 +151,7 @@ export const FilterMenu = ({
             All Filters
           </Button>
           {isOpen && (
-            <div style={modalStyle}>
+            <div style={modalStyle} ref={modalRef}>
               <form
                 className="w-full space-y-5 overflow-hidden rounded-2xl bg-white"
                 style={{
@@ -321,14 +323,14 @@ export const FilterMenu = ({
                   >
                     Clear All
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="secondary"
                     className="rounded-md px-6 py-2 text-sm"
                     type="submit"
                     disabled={isFiltering}
                   >
                     Apply
-                  </Button>
+                  </Button> */}
                 </footer>
               </form>
             </div>
