@@ -307,7 +307,6 @@ const LaboratoryPageContent = () => {
 
     const handleCreatePartnerType = async () => {
       if (!token) {
-        toast.error("Token is missing. Please log in again.");
         return;
       }
 
