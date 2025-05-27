@@ -41,6 +41,8 @@ const CheckoutContent = () => {
   const id = searchParams.get("id");
   const [isBooking, setIsBooking] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [paystackTrigger, setPaystackTrigger] = useState(false);
 
   const {
     date,
@@ -111,13 +113,11 @@ const CheckoutContent = () => {
     ? costPerDay * numberOfSamples + serviceFee
     : costPerDay * numberOfDays + serviceFee;
 
-  // paystack
-  const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
-
-  const handlePaymentSuccess = async () => {
+  // Initiate booking before payment
+  const handleInitiateBooking = async () => {
     setIsBooking(true);
     try {
-      const response = await api.post<ApiResponseProps<unknown>>(
+      const response = await api.post<ApiResponseProps<{ booking_id: string }>>(
         "/client/api/v1/booking/initiate-booking",
         {
           equipment_id: id,
@@ -138,24 +138,32 @@ const CheckoutContent = () => {
         },
       );
 
-      if (response?.status !== 200 || !response?.data) {
+      if (response?.status !== 200 || !response?.data?.data?.booking_id) {
         toast.error(response?.data?.message || "Failed to initiate booking");
+        setIsBooking(false);
         return;
       }
-      if (response?.status === 200) {
-        resetDateTime();
-        setShowSuccessModal(true);
-        return;
-      }
-
-      return response?.data?.data;
+      setBookingId(response.data.data.booking_id);
+      setPaystackTrigger(true); // this will trigger PaystackButton click in OrderDetails
     } catch (error) {
       toast.error(formatError(error, "Failed to initiate booking"));
-    } finally {
       setIsBooking(false);
     }
   };
 
+  // On Paystack payment success
+  const handlePaymentSuccess = () => {
+    resetDateTime();
+    setShowSuccessModal(true);
+    setIsBooking(false);
+    setBookingId(null);
+    setPaystackTrigger(false);
+  };
+
+  // paystack
+  const publicKey = PAYSTACK_PUBLIC_TEST_KEY;
+
+  // Add booking_id to metadata if available
   const paystackProps = {
     email: formData?.email,
     amount: totalCost,
@@ -229,12 +237,26 @@ const CheckoutContent = () => {
           variable_name: isPerSample ? "number_of_samples" : "number_of_days",
           value: isPerSample ? numberOfSamples : numberOfDays,
         },
+        ...(bookingId
+          ? [
+              {
+                display_name: "Booking Id",
+                variable_name: "booking_id",
+                value: bookingId,
+              },
+            ]
+          : []),
       ],
     },
     publicKey,
     text: "Complete Booking",
     type: "button",
     onSuccess: handlePaymentSuccess,
+    trigger: paystackTrigger, // custom prop to trigger payment
+    onClose: () => {
+      setIsBooking(false);
+      setPaystackTrigger(false);
+    },
   };
 
   // disable paystack button if required fields are missing
@@ -295,10 +317,11 @@ const CheckoutContent = () => {
               listingInfo={listingInfo}
               costPerDay={costPerDay}
               serviceFee={serviceFee}
-              totalCost={totalCost}
               paystackProps={paystackProps}
-              isPaystackDisabled={isPaystackDisabled}
+              isPaystackDisabled={isPaystackDisabled || isBooking}
               user={user === null ? false : true}
+              onInitiateBooking={handleInitiateBooking}
+              paystackTrigger={paystackTrigger}
             />
           </div>
         </main>

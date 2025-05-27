@@ -16,7 +16,11 @@ import {
 } from "@/types";
 
 const HomeContent = () => {
-  const { data: listings, isLoading } = useClientFetch<ListingHistoryProps>({
+  const {
+    data: listings,
+    isLoading,
+    refetch,
+  } = useClientFetch<ListingHistoryProps>({
     endpoint: "/client/public/api/v1/equipments/get-equipments?skip=0&take=8",
   });
 
@@ -45,7 +49,11 @@ const HomeContent = () => {
       />
       <WhyUs />
       <Categories categories={categories || []} />
-      <Listings listings={listings?.data || []} isLoading={isLoading} />
+      <Listings
+        listings={listings?.data || []}
+        isLoading={isLoading}
+        refetch={refetch}
+      />
       <Testimonials reviews={reviews || []} />
       <Partners />
     </main>

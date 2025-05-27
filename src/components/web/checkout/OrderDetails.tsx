@@ -2,7 +2,7 @@
 
 import { ListingProps } from "@/types";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   authRoutes,
   webRoutes,
@@ -16,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { PaystackButton } from "react-paystack";
+import { PaystackConsumer } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/navigation";
 import DateTimePicker from "@/components/common/DateTimePicker";
@@ -29,14 +29,17 @@ const OrderDetails = ({
   paystackProps,
   isPaystackDisabled,
   user,
+  onInitiateBooking,
+  paystackTrigger,
 }: {
   listingInfo: ListingProps;
   costPerDay: number;
   serviceFee: number;
-  totalCost: number;
   paystackProps: PaystackProps;
   isPaystackDisabled: boolean;
   user: boolean;
+  onInitiateBooking: () => Promise<void>;
+  paystackTrigger: boolean;
 }) => {
   const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -53,6 +56,7 @@ const OrderDetails = ({
     numberOfSamples,
     setNumberOfSamples,
   } = useDateTime();
+  const initializePaymentRef = useRef<(() => void) | null>(null);
 
   // Set isPerSample based on listingInfo
   useEffect(() => {
@@ -87,6 +91,13 @@ const OrderDetails = ({
       );
     }
   };
+
+  // When paystackTrigger becomes true, call initializePayment
+  useEffect(() => {
+    if (paystackTrigger && initializePaymentRef.current) {
+      initializePaymentRef.current();
+    }
+  }, [paystackTrigger]);
 
   return (
     <div className="dashboard-section-card space-y-8">
@@ -208,11 +219,25 @@ const OrderDetails = ({
       </div>
 
       {user ? (
-        <PaystackButton
-          {...paystackProps}
-          className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
-          disabled={isPaystackDisabled}
-        />
+        <>
+          <button
+            className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"
+            disabled={isPaystackDisabled}
+            onClick={onInitiateBooking}
+            type="button"
+          >
+            Complete Booking
+          </button>
+          {/* Hidden PaystackConsumer, triggers payment programmatically */}
+          <div style={{ display: "none" }}>
+            <PaystackConsumer {...paystackProps}>
+              {({ initializePayment }) => {
+                initializePaymentRef.current = initializePayment;
+                return <span />;
+              }}
+            </PaystackConsumer>
+          </div>
+        </>
       ) : (
         <button
           className="h-auto w-full rounded-[15px] bg-[#2563EB] !p-3 text-white ring-2 ring-[#3B82F640] disabled:cursor-not-allowed disabled:bg-[#3B82F640] disabled:text-[#3B82F6] disabled:opacity-50 disabled:ring-[#3B82F640]"

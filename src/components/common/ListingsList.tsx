@@ -16,7 +16,15 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
 
-export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
+export const ListingsList = ({
+  listings,
+  refetch,
+  isfavPage,
+}: {
+  listings: ListingProps[];
+  refetch: () => void;
+  isfavPage?: boolean;
+}) => {
   if (!listings || listings?.length === 0)
     return (
       <p>
@@ -37,6 +45,8 @@ export const ListingsList = ({ listings }: { listings: ListingProps[] }) => {
               images={l?.equipment_file}
               equipmentId={l?.id}
               favoriteEquipment={l?.favorite_equipment}
+              refetch={refetch}
+              isfavPage={isfavPage}
             />
 
             <div>
@@ -71,10 +81,14 @@ const ImageSlider = ({
   images,
   equipmentId,
   favoriteEquipment,
+  refetch,
+  isfavPage,
 }: {
   images: DocumentProps[];
   equipmentId: string;
   favoriteEquipment?: { user_id: string }[];
+  refetch: () => void;
+  isfavPage?: boolean;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -84,16 +98,19 @@ const ImageSlider = ({
   const { userId } = useAuth();
   const router = useRouter();
 
-  // Always check favorite status from favoriteEquipment and userId
   useEffect(() => {
-    setIsFavorite(
-      !!(
-        userId &&
-        Array.isArray(favoriteEquipment) &&
-        favoriteEquipment.some(fav => fav.user_id === userId)
-      ),
-    );
-  }, [userId, favoriteEquipment]);
+    if (isfavPage) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(
+        !!(
+          userId &&
+          Array.isArray(favoriteEquipment) &&
+          favoriteEquipment.some(fav => fav.user_id === userId)
+        ),
+      );
+    }
+  }, [userId, favoriteEquipment, isfavPage]);
 
   const toggleFavorite = async () => {
     if (!userId) {
@@ -107,9 +124,11 @@ const ImageSlider = ({
         equipment_id: equipmentId,
       });
 
-      // After toggling, refetch or update favoriteEquipment array if possible
-      // For now, just flip the state locally for immediate feedback
-      setIsFavorite(prev => !prev);
+      // Only flip local state for immediate feedback if NOT on fav page
+      if (!isfavPage) {
+        setIsFavorite(prev => !prev);
+      }
+      refetch();
 
       toast.success(
         !isFavorite

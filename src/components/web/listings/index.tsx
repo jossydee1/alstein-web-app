@@ -121,6 +121,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
     data: listings,
     isLoading: fetchingListings,
     refetch: refetchListings,
+    refetch,
   } = useClientFetch<ListingHistoryProps>({
     endpoint: `/client/public/api/v1/equipments/filter-equipments?${filterQueryParams}`,
     enabled: !!filterQueryParams && !isUsingSearchResults, // Only enable if not using search results
@@ -224,6 +225,7 @@ const ListingsContent = ({ categories }: { categories: CategoryProps[] }) => {
         handlePageChange={handlePageChange}
         listings={filteredListings || []}
         isLoading={fetchingListings || isLoading}
+        refetch={refetch}
       />
     </main>
   );

@@ -5,12 +5,7 @@ import reviewImg from "@/public/images/review-image.svg";
 import Image from "next/image";
 import avatar from "@/public/icons/avatar.svg";
 import { Button } from "@/components/ui/button";
-import {
-  // Check,
-  ChevronLeft,
-  ChevronRight,
-  // Loader, Star
-} from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Loader, Star } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -19,16 +14,16 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import {
-  // api,
-  // authRoutes,
+  api,
+  authRoutes,
   DOCUMENT_URL,
   formatDateToRelativeTime,
-  // formatError,
-  // webRoutes,
+  formatError,
+  webRoutes,
 } from "@/utils";
-// import { redirect, useSearchParams } from "next/navigation";
-// import { useAuth } from "@/context";
-// import { toast } from "react-toastify";
+import { redirect, useSearchParams } from "next/navigation";
+import { useAuth } from "@/context";
+import { toast } from "react-toastify";
 import { CommentProps } from "@/types";
 import { useClientFetch } from "@/hooks";
 
@@ -42,28 +37,28 @@ export const Reviews = ({
   partnerId,
   averageRating,
   listingId,
-  // refetchRating,
+  refetchRating,
 }: {
   partnerId: string;
   averageRating: number;
   listingId?: string;
   refetchRating: () => void;
 }) => {
-  // const { userId, token } = useAuth();
-  // const searchParams = useSearchParams();
-  // const savedComment = searchParams.get("comment");
+  const { userId, token } = useAuth();
+  const searchParams = useSearchParams();
+  const savedComment = searchParams.get("comment");
 
-  // useEffect(() => {
-  //   if (savedComment) {
-  //     setComment(savedComment);
-  //   }
-  // }, [savedComment]);
+  useEffect(() => {
+    if (savedComment) {
+      setComment(savedComment);
+    }
+  }, [savedComment]);
 
-  // const [rating, setRating] = useState(0);
-  // const [comment, setComment] = useState("");
-  // const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
-  // const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
-  // const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [isRatingSubmitting, setIsRatingSubmitting] = useState(false);
+  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
+  const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const itemsPerPage = showAllReviews ? 50 : 2;
@@ -71,14 +66,20 @@ export const Reviews = ({
   const [totalPages, setTotalPages] = useState(1);
   const [commentsData, setCommentsData] = useState<CommentProps[]>([]);
 
+  // Check if the user can leave a comment
+  const { data: canComment } = useClientFetch<{
+    can_comment: boolean;
+  }>({
+    endpoint: `/client/api/v1/meta/can-comment?equipment_id=${listingId}`,
+    enabled: !!partnerId && listingId !== "",
+  });
+
+  // Fetch comments for the listing
   const url = listingId
     ? `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&equipment_id=${listingId}&partner_id=${partnerId}`
     : `/partner/public/api/v1/comments/get-comments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}&partner_id=${partnerId}`;
 
-  const {
-    data: comments,
-    // refetch: refetchComments
-  } = useClientFetch<{
+  const { data: comments, refetch: refetchComments } = useClientFetch<{
     data: CommentProps[];
     item_count: number;
   }>({
@@ -134,86 +135,86 @@ export const Reviews = ({
     return items;
   };
 
-  // const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
+  const redirectUrl = `${authRoutes?.login}?redirect=${encodeURIComponent(`${webRoutes?.listings}/${listingId}`)}&id=review-form&comment=${encodeURIComponent(comment)}`;
 
-  // const handleRatingSubmit = async (score: number) => {
-  //   if (!userId) {
-  //     redirect(redirectUrl);
-  //   }
+  const handleRatingSubmit = async (score: number) => {
+    if (!userId) {
+      redirect(redirectUrl);
+    }
 
-  //   try {
-  //     setIsRatingSubmitting(true);
-  //     setRating(score);
+    try {
+      setIsRatingSubmitting(true);
+      setRating(score);
 
-  //     const response = await api.post(
-  //       "/partner/public/api/v1/ratings/submit-rating-score",
-  //       {
-  //         score,
-  //         partner_id: partnerId,
-  //         equipment_id: listingId,
-  //         profile_id: userId,
-  //       },
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       },
-  //     );
+      const response = await api.post(
+        "/partner/public/api/v1/ratings/submit-rating-score",
+        {
+          score,
+          partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-  //     if (response?.status === 200) {
-  //       toast.success("Rating submitted successfully");
-  //       setIsRatingSubmitted(true);
-  //       refetchRating();
-  //     } else {
-  //       toast.error(
-  //         formatError(response?.data?.message) || "Failed to submit rating",
-  //       );
-  //       setIsRatingSubmitted(false);
-  //     }
-  //   } catch (error) {
-  //     toast.error(formatError(error));
-  //     setIsRatingSubmitted(false);
-  //   } finally {
-  //     setIsRatingSubmitting(false);
-  //   }
-  // };
+      if (response?.status === 200) {
+        toast.success("Rating submitted successfully");
+        setIsRatingSubmitted(true);
+        refetchRating();
+      } else {
+        toast.error(
+          formatError(response?.data?.message) || "Failed to submit rating",
+        );
+        setIsRatingSubmitted(false);
+      }
+    } catch (error) {
+      toast.error(formatError(error));
+      setIsRatingSubmitted(false);
+    } finally {
+      setIsRatingSubmitting(false);
+    }
+  };
 
-  // const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
+  const handleWriteReview = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  //   if (!comment) {
-  //     toast.error("Please write a comment");
-  //     return;
-  //   }
+    if (!comment) {
+      toast.error("Please write a comment");
+      return;
+    }
 
-  //   if (!userId) {
-  //     redirect(redirectUrl);
-  //   }
+    if (!userId) {
+      redirect(redirectUrl);
+    }
 
-  //   try {
-  //     setIsCommentSubmitting(true);
-  //     const response = await api.post(
-  //       `/partner/api/v1/comments/create-comment`,
-  //       {
-  //         comments: comment,
-  //         partner_id: partnerId,
-  //         equipment_id: listingId,
-  //         profile_id: userId,
-  //       },
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       },
-  //     );
+    try {
+      setIsCommentSubmitting(true);
+      const response = await api.post(
+        `/partner/api/v1/comments/create-comment`,
+        {
+          comments: comment,
+          partner_id: partnerId,
+          equipment_id: listingId,
+          profile_id: userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-  //     if (response?.status === 200) {
-  //       toast.success("Comment submitted successfully");
-  //       setComment("");
-  //       refetchComments();
-  //     }
-  //   } catch (error) {
-  //     toast.error(formatError(error));
-  //   } finally {
-  //     setIsCommentSubmitting(false);
-  //   }
-  // };
+      if (response?.status === 200) {
+        toast.success("Comment submitted successfully");
+        setComment("");
+        refetchComments();
+      }
+    } catch (error) {
+      toast.error(formatError(error));
+    } finally {
+      setIsCommentSubmitting(false);
+    }
+  };
 
   return (
     <section>
@@ -299,85 +300,87 @@ export const Reviews = ({
           )}
         </div>
 
-        {/* <div
-          id="review-form"
-          className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
-        >
-          <h3 className="text-xl font-semibold text-[#010814]">
-            Share your feedback
-          </h3>
+        {canComment?.can_comment && (
+          <div
+            id="review-form"
+            className="mt-16 w-full max-w-[480px] gap-4 rounded-md border border-[#E6E7EA] p-4 lg:mt-0"
+          >
+            <h3 className="text-xl font-semibold text-[#010814]">
+              Share your feedback
+            </h3>
 
-          <form onSubmit={handleWriteReview}>
-            <div className="mb-4">
-              <label className="mb-16 text-sm text-[#354259]">
-                How was your experience?
-              </label>
-              <div className="mt-2 flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map(star => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() =>
-                      !isRatingSubmitted &&
-                      !isRatingSubmitting &&
-                      handleRatingSubmit(star)
-                    }
-                    className="p-1"
-                    disabled={isRatingSubmitting || isRatingSubmitted}
-                    aria-label={`Rate ${star} stars`}
-                  >
-                    <Star
-                      className={`${
-                        star <= rating
-                          ? "fill-[#FB9506] text-[#FB9506]"
-                          : "fill-[#EBEDEF] text-[#354259]"
-                      } ${isRatingSubmitting || isRatingSubmitted ? "opacity-70" : ""} transition-colors`}
-                      size={24}
-                    />
-                  </button>
-                ))}
-                {isRatingSubmitting && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    <Loader className="animate-spin" />
-                  </span>
-                )}
-                {isRatingSubmitted && (
-                  <span className="ml-2 text-sm text-green-600">
-                    <Check />
-                  </span>
-                )}
+            <form onSubmit={handleWriteReview}>
+              <div className="mb-4">
+                <label className="mb-16 text-sm text-[#354259]">
+                  How was your experience?
+                </label>
+                <div className="mt-2 flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() =>
+                        !isRatingSubmitted &&
+                        !isRatingSubmitting &&
+                        handleRatingSubmit(star)
+                      }
+                      className="p-1"
+                      disabled={isRatingSubmitting || isRatingSubmitted}
+                      aria-label={`Rate ${star} stars`}
+                    >
+                      <Star
+                        className={`${
+                          star <= rating
+                            ? "fill-[#FB9506] text-[#FB9506]"
+                            : "fill-[#EBEDEF] text-[#354259]"
+                        } ${isRatingSubmitting || isRatingSubmitted ? "opacity-70" : ""} transition-colors`}
+                        size={24}
+                      />
+                    </button>
+                  ))}
+                  {isRatingSubmitting && (
+                    <span className="ml-2 text-sm text-gray-500">
+                      <Loader className="animate-spin" />
+                    </span>
+                  )}
+                  {isRatingSubmitted && (
+                    <span className="ml-2 text-sm text-green-600">
+                      <Check />
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="comment" className="text-sm text-[#354259]">
-                Can you tell us more?
-              </label>
+              <div>
+                <label htmlFor="comment" className="text-sm text-[#354259]">
+                  Can you tell us more?
+                </label>
 
-              <textarea
-                id="comment"
-                name="comment"
-                className="block h-[160px] w-full rounded-md border border-[#E6E7EA] p-3"
-                value={comment}
-                onChange={e => setComment(e.target.value)}
-                placeholder="Write your review here..."
-                minLength={10}
-                required
-              ></textarea>
-            </div>
+                <textarea
+                  id="comment"
+                  name="comment"
+                  className="block h-[160px] w-full rounded-md border border-[#E6E7EA] p-3"
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  placeholder="Write your review here..."
+                  minLength={10}
+                  required
+                ></textarea>
+              </div>
 
-            <div className="mt-4 flex gap-4">
-              <Button
-                type="submit"
-                variant="outline"
-                className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white disabled:opacity-50"
-                disabled={isCommentSubmitting}
-              >
-                Submit
-              </Button>
-            </div>
-          </form>
-        </div> */}
+              <div className="mt-4 flex gap-4">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="flex-1 bg-[#2D84F1] px-6 py-2.5 font-medium text-white disabled:opacity-50"
+                  disabled={isCommentSubmitting}
+                >
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -9,9 +9,11 @@ import { ListingProps } from "@/types";
 const Listings = ({
   listings,
   isLoading,
+  refetch,
 }: {
   listings: ListingProps[];
   isLoading: boolean;
+  refetch: () => void;
 }) => {
   return (
     <div className="bg-white">
@@ -32,7 +34,7 @@ const Listings = ({
           {isLoading ? (
             <ListingSkeleton />
           ) : (
-            <ListingsList listings={listings} />
+            <ListingsList listings={listings} refetch={refetch} />
           )}
         </div>
 
