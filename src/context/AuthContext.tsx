@@ -10,8 +10,9 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { api, authRoutes } from "@/utils";
+import { api, authRoutes, COOKIE_OPTIONS } from "@/utils";
 import { signOut } from "next-auth/react";
+import Cookies from "js-cookie";
 
 interface UserContextProps {
   id: string;
@@ -59,10 +60,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const initializeAuth = async () => {
       setIsAuthLoading(true);
 
-      const storedUserId = localStorage.getItem("userId");
-      const storedToken = localStorage.getItem("userToken");
-      const storedUser = localStorage.getItem("user");
-      const storedBusinessProfile = localStorage.getItem("businessProfile");
+      const storedUserId = Cookies.get("userId");
+      const storedToken = Cookies.get("userToken");
+      const storedUser = Cookies.get("user");
+      const storedBusinessProfile = Cookies.get("businessProfile");
 
       if (storedUserId && storedToken) {
         setUserId(storedUserId);
@@ -126,9 +127,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserId(id);
     setUser(user);
     setToken(token);
-    localStorage.setItem("userId", id);
-    localStorage.setItem("userToken", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    Cookies.set("userId", id, COOKIE_OPTIONS);
+    Cookies.set("userToken", token, COOKIE_OPTIONS);
+    Cookies.set("user", JSON.stringify(user), COOKIE_OPTIONS);
 
     // Fetch business profiles immediately after login
     try {
@@ -147,10 +148,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setBusinessProfile(null);
     setCanAccessVendor(false);
     setIsProfileVerified(false);
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("businessProfile");
+    Cookies.remove("userId");
+    Cookies.remove("userToken");
+    Cookies.remove("user");
+    Cookies.remove("businessProfile");
     signOut();
     router.push(authRoutes.login);
   }, [router]);
@@ -158,7 +159,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Check token expiration and log out user
   useEffect(() => {
     const checkTokenExpiration = () => {
-      const token = localStorage.getItem("userToken");
+      const token = Cookies.get("userToken");
       if (!token) {
         logout();
         return;
@@ -179,14 +180,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const setUserProfileHandler = (user: UserProfileProps) => {
     setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
+    Cookies.set("user", JSON.stringify(user), COOKIE_OPTIONS);
   };
 
   const setBusinessProfileHandler = (profile: PartnerProps) => {
     setBusinessProfile(profile);
     setCanAccessVendor(!!profile);
     setIsProfileVerified(profile?.is_verified !== false);
-    localStorage.setItem("businessProfile", JSON.stringify(profile));
+    Cookies.set("businessProfile", JSON.stringify(profile), COOKIE_OPTIONS);
   };
 
   return (
