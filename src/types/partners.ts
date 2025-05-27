@@ -57,3 +57,28 @@ export interface UpdatePartnerProps {
   department?: string;
   department_head_email?: string;
 }
+
+export interface DepartmentProps {
+  id: string;
+  department_name: string;
+  institution_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InstitutionProps {
+  id: string;
+  name: string;
+  address: string;
+  state: string;
+  country: string;
+  is_publish: boolean;
+  department: DepartmentProps[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InstitutionsHistoryProps {
+  total_count: number;
+  data: InstitutionProps[];
+}

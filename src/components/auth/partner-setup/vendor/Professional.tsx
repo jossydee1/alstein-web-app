@@ -22,11 +22,13 @@ import { toast } from "react-toastify";
 import {
   ApiResponseProps,
   DocumentProps,
+  InstitutionsHistoryProps,
   PartnerProps,
   UpdatePartnerProps,
 } from "@/types";
 import { useAuth } from "@/context";
 import axios from "axios";
+import { useClientFetch } from "@/hooks";
 
 const steps = [
   {
@@ -301,6 +303,14 @@ const ProfessionalPageContent = () => {
   console.log("Partner ID:", partnerId);
   console.log("businessProfile:", businessProfile);
 
+  const { data: institutionsData } = useClientFetch<InstitutionsHistoryProps>({
+    endpoint: "/client/public/api/v1/meta/get-publish-institution",
+  });
+
+  // Add state for selected institution id and departments
+  const [selectedInstitutionId, setSelectedInstitutionId] =
+    useState<string>("");
+
   useEffect(() => {
     if (!type || !subType) {
       router.push("/partner-setup");
@@ -309,7 +319,6 @@ const ProfessionalPageContent = () => {
 
     const handleCreatePartnerType = async () => {
       if (!token) {
-        toast.error("Token is missing. Please log in again.");
         return;
       }
 
@@ -372,6 +381,14 @@ const ProfessionalPageContent = () => {
         department_head_email: partnerDetails?.department_head_email || "",
       });
 
+      // Set selectedInstitutionId if institution matches
+      if (institutionsData?.data && partnerDetails?.institution) {
+        const found = institutionsData.data.find(
+          inst => inst.name === partnerDetails.institution,
+        );
+        if (found) setSelectedInstitutionId(found.id);
+      }
+
       // Prepopulate document status if documents exist
       if (partnerDetails?.partner_doc) {
         setExistingDocuments(partnerDetails?.partner_doc);
@@ -379,7 +396,7 @@ const ProfessionalPageContent = () => {
     } else {
       setFormData(prev => ({ ...prev, id: partnerId }));
     }
-  }, [partnerDetails, partnerId]);
+  }, [partnerDetails, partnerId, institutionsData?.data]);
 
   // Separate state for tracking document uploads
   const [existingDocuments, setExistingDocuments] = useState<DocumentProps[]>(
@@ -537,6 +554,23 @@ const ProfessionalPageContent = () => {
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
+        // Prepare institution and department options
+        const institutionOptions =
+          institutionsData?.data?.map(inst => ({
+            id: inst.id,
+            name: inst.name,
+          })) || [];
+
+        const selectedInstitution = institutionsData?.data?.find(
+          inst => inst.id === selectedInstitutionId,
+        );
+
+        const departmentOptions =
+          selectedInstitution?.department?.map(dep => ({
+            id: dep.id,
+            name: dep.department_name,
+          })) || [];
+
         return (
           <>
             <div className={style.inputGroup}>
@@ -552,14 +586,30 @@ const ProfessionalPageContent = () => {
             </div>
             <div className={style.inputGroup}>
               <label htmlFor="institution">Institution</label>
-              <input
-                type="text"
+              <select
                 id="institution"
-                value={formData?.institution}
-                onChange={e => handleChange(e, "institution")}
-                placeholder="Acme University"
+                value={selectedInstitutionId}
+                onChange={e => {
+                  const instId = e.target.value;
+                  setSelectedInstitutionId(instId);
+                  const inst = institutionsData?.data?.find(
+                    i => i.id === instId,
+                  );
+                  setFormData(prev => ({
+                    ...prev,
+                    institution: inst ? inst.name : "",
+                    department: "", // reset department when institution changes
+                  }));
+                }}
                 required
-              />
+              >
+                <option value="">Select Institution</option>
+                {institutionOptions.map(inst => (
+                  <option key={inst.id} value={inst.id}>
+                    {inst.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className={style.inputGroup}>
               <label htmlFor="institutional_email">Institution Email</label>
@@ -574,14 +624,25 @@ const ProfessionalPageContent = () => {
             </div>
             <div className={style.inputGroup}>
               <label htmlFor="department">Department</label>
-              <input
-                type="text"
+              <select
                 id="department"
                 value={formData?.department}
-                onChange={e => handleChange(e, "department")}
-                placeholder="Department of Medicine"
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    department: e.target.value,
+                  }))
+                }
                 required
-              />
+                disabled={!selectedInstitutionId}
+              >
+                <option value="">Select Department</option>
+                {departmentOptions.map(dep => (
+                  <option key={dep.id} value={dep.name}>
+                    {dep.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className={style.inputGroup}>
               <label htmlFor="department_head_email">
