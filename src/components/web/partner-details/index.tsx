@@ -31,6 +31,7 @@ const PartnerDetailsContent = () => {
     data: listingsData,
     isLoading: loadingListings,
     error: errorListings,
+    refetch: refetchListings,
   } = useClientFetch<ListingHistoryProps>({
     endpoint: `/client/public/api/v1/equipments/get-partner-equipments?skip=0&take=50&partner_id=${id}`,
     enabled: !!id,
@@ -101,7 +102,10 @@ const PartnerDetailsContent = () => {
 
         <hr className="my-[57px] border border-[#EBEBEB]" />
 
-        <PartnerListings listings={listingsData?.data || []} />
+        <PartnerListings
+          listings={listingsData?.data || []}
+          refetch={refetchListings}
+        />
 
         <Reviews
           partnerId={partnerData?.id}

@@ -16,6 +16,7 @@ const Listings = ({
   currentPage,
   totalPages,
   handlePageChange,
+  refetch,
 }: {
   itemsPerPage: number;
   listings: ListingProps[];
@@ -23,6 +24,7 @@ const Listings = ({
   currentPage: number;
   totalPages: number;
   handlePageChange: (page: number) => void;
+  refetch: () => void;
 }) => {
   const PAGINATION_STYLES = {
     content: "flex justify-center gap-3",
@@ -69,7 +71,7 @@ const Listings = ({
 
   return (
     <section className="">
-      <ListingsList listings={listings} />
+      <ListingsList listings={listings} refetch={refetch} isfavPage />
 
       {totalPages > 1 && (
         <Pagination className="mt-[70px]">

@@ -19,10 +19,11 @@ const FavouritesPageContent = () => {
   const url = `/client/api/v1/equipments/get-favourite-equipments?skip=${(currentPage - 1) * itemsPerPage}&take=${itemsPerPage}`;
 
   // Fetch all listings
-  const { data, isLoading, error } = useClientFetch<ListingHistoryProps>({
-    endpoint: url,
-    token,
-  });
+  const { data, isLoading, error, refetch } =
+    useClientFetch<ListingHistoryProps>({
+      endpoint: url,
+      token,
+    });
 
   // Update listings and total pages when data changes
   useEffect(() => {
@@ -67,6 +68,7 @@ const FavouritesPageContent = () => {
             handlePageChange={handlePageChange}
             listings={listings || []}
             isLoading={isLoading}
+            refetch={refetch}
           />
         ) : (
           !error && (
