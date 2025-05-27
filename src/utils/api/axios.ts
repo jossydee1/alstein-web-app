@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAPIBaseURL } from "../others";
+import Cookies from "js-cookie";
 
 // Create an Axios instance with default settings
 const api = axios.create({
@@ -13,9 +14,8 @@ const api = axios.create({
 // Request Interceptor: Attach Authorization Token
 api.interceptors.request.use(
   config => {
-    // Ensure localStorage is available
-    if (typeof window !== "undefined" && window.localStorage) {
-      const token = localStorage.getItem("userToken") || "";
+    if (typeof window !== "undefined") {
+      const token = Cookies.get("userToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -30,18 +30,14 @@ api.interceptors.response.use(
   response => response,
   error => {
     if (error?.response?.status === 403 || error?.response?.status === 401) {
-      // Ensure localStorage is available
-      if (typeof window !== "undefined" && window.localStorage) {
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userToken");
-        localStorage.removeItem("user");
-        localStorage.removeItem("businessProfile");
+      if (typeof window !== "undefined") {
+        Cookies.remove("userId");
+        Cookies.remove("userToken");
+        Cookies.remove("user");
+        Cookies.remove("businessProfile");
 
-        // Redirect to login page if token is invalid
-        if (
-          typeof window !== "undefined" &&
-          !window.location.pathname.includes("/login")
-        ) {
+        // Redirect to login if not already there
+        if (!window.location.pathname.includes("/login")) {
           window.location.href = "/login";
         }
       }
