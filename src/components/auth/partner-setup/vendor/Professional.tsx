@@ -304,8 +304,7 @@ const ProfessionalPageContent = () => {
   console.log("businessProfile:", businessProfile);
 
   const { data: institutionsData } = useClientFetch<InstitutionsHistoryProps>({
-    endpoint:
-      "/client/public/api/v1/meta/get-publish-institution?skip=0&take=1000",
+    endpoint: "/client/public/api/v1/meta/get-publish-institution",
   });
 
   // Add state for selected institution id and departments
