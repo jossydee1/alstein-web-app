@@ -143,10 +143,10 @@ const StepTwo = ({
               </div>
               {/* Service Fee */}
               <div>
-                <Label className="mb-2 block">Service Fee (5%)</Label>
+                <Label className="mb-2 block">Service Fee (2%)</Label>
                 <div className="rounded-md border border-[#E5E7EB] bg-gray-50 p-2 px-5 text-gray-700">
                   {formatCurrencySymbol[acceptedCurrencies[0]]}{" "}
-                  {(price * 0.05).toLocaleString(undefined, {
+                  {(price * 0.02).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
@@ -157,7 +157,7 @@ const StepTwo = ({
                 <Label className="mb-2 block">You Will Receive</Label>
                 <div className="rounded-md border border-[#E5E7EB] bg-gray-50 p-2 px-5 font-semibold text-brandColor">
                   {formatCurrencySymbol[acceptedCurrencies[0]]}{" "}
-                  {(price * 0.95).toLocaleString(undefined, {
+                  {(price * 0.98).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
