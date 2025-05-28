@@ -112,16 +112,12 @@ const StepOne = ({
                   name="serviceType"
                 >
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
-                    <RadioGroupItem value="rent" id="rent" />
-                    <Label htmlFor="rent">Rent</Label>
+                    <RadioGroupItem value="lease" id="lease" />
+                    <Label htmlFor="lease">Lease</Label>
                   </div>
                   <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
                     <RadioGroupItem value="on_site" id="on_site" />
                     <Label htmlFor="on_site">Onsite</Label>
-                  </div>
-                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
-                    <RadioGroupItem value="lease" id="lease" />
-                    <Label htmlFor="lease">Lease</Label>
                   </div>
                 </RadioGroup>
               </div>
