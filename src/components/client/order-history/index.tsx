@@ -217,12 +217,7 @@ const OrderHistoryContent = () => {
                       {GetOrderStatusPill(order?.status)}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      {GetPaymentStatusPill(
-                        order?.payment_status as
-                          | "awaiting_payment_confirmation"
-                          | "confirmed"
-                          | "default",
-                      )}
+                      {GetPaymentStatusPill(order?.payment_status)}
                     </TableCell>
                   </TableRow>
                 ))
