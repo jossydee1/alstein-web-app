@@ -45,6 +45,9 @@ const VendorSettingsContent = () => {
     documents: [],
   });
 
+  const [supportMessage, setSupportMessage] = useState("");
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+
   useEffect(() => {
     if (partnerDetails) {
       setFormData({
@@ -199,6 +202,37 @@ const VendorSettingsContent = () => {
       toast.error(formatError(error, "Failed to deactivate account"));
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleSupportSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSendingMessage(true);
+
+    try {
+      const response = await api.post(
+        "/partner/api/v1/notifications/contact-us-by-partner",
+        {
+          partner_id: businessProfile?.id,
+          message: supportMessage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response?.status === 200) {
+        toast.success("Message sent successfully!");
+        setSupportMessage(""); // Clear the form
+      } else {
+        throw new Error(response?.data?.message || "Failed to send message");
+      }
+    } catch (error) {
+      toast.error(formatError(error, "Failed to send message"));
+    } finally {
+      setIsSendingMessage(false);
     }
   };
 
@@ -374,13 +408,7 @@ const VendorSettingsContent = () => {
             <p className="dashboard-section-card-description">
               Reach out to our support team for assistance
             </p>
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                toast.success("Message sent successfully!");
-              }}
-              className="mt-6"
-            >
+            <form onSubmit={handleSupportSubmit} className="mt-6">
               <div className="mb-2">
                 <Label htmlFor="supportMessage" className="mb-2">
                   Your Message
@@ -392,10 +420,16 @@ const VendorSettingsContent = () => {
                   className="w-full rounded-md border border-[#E5E7EB] p-4"
                   placeholder="Type your message here..."
                   required
+                  value={supportMessage}
+                  onChange={e => setSupportMessage(e.target.value)}
                 ></textarea>
               </div>
-              <Button type="submit" className="buttonBlue2">
-                Send Message
+              <Button
+                type="submit"
+                className="buttonBlue2"
+                disabled={isSendingMessage}
+              >
+                {isSendingMessage ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </div>
