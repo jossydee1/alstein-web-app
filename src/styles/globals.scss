@@ -232,7 +232,7 @@ html {
 
 // to set padding margin, and max width for the container
 .section-container {
-  @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[100px] md:py-[50px] xl:px-[150px] xl:py-[100px];
+  @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[40px] md:px-[50px] md:py-[50px] xl:px-[150px] xl:py-[100px];
 }
 .section-container-dashboard {
   @apply mx-auto w-full max-w-screen-2xl px-[24px] py-[24px] md:px-[100px] xl:px-[150px];
