@@ -1,3 +1,4 @@
+import AboutContentComponent from "@/components/web/about";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  return <div>About Page</div>;
+  return <AboutContentComponent />;
 }
