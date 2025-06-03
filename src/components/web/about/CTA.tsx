@@ -15,7 +15,7 @@ const CTA = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-        className="section-container relative rounded-[24px] text-white"
+        className="section-container relative rounded-[25px] text-white"
       >
         <div className="absolute -right-[60px] top-0">
           <Image src={triangles} alt="" width="140" height="84" />

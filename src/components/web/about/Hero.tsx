@@ -29,28 +29,28 @@ const Hero = () => {
               alt=""
               width="276"
               height="276"
-              className="h-auto w-[276px] md:order-1 md:w-full"
+              className="h-auto w-[276px] rounded-[30px] md:order-1 md:w-full"
             />
             <Image
               src={image2}
               alt=""
               width="276"
               height="276"
-              className="h-auto w-[276px] md:order-2 md:w-full"
+              className="h-auto w-[276px] rounded-[30px] md:order-2 md:w-full"
             />
             <Image
               src={image4}
               alt=""
               width="276"
               height="276"
-              className="h-auto w-[276px] md:order-4 md:w-full"
+              className="h-auto w-[276px] rounded-[30px] md:order-4 md:w-full"
             />
             <Image
               src={image3}
               alt=""
               width="276"
               height="276"
-              className="h-auto w-[276px] md:order-3 md:w-full"
+              className="h-auto w-[276px] rounded-[30px] md:order-3 md:w-full"
             />
           </div>
           <Button asChild className="w-full max-w-[270px] rounded-full p-4">
