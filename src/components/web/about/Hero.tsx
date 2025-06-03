@@ -53,8 +53,10 @@ const Hero = () => {
               className="h-auto w-[276px] md:order-3 md:w-full"
             />
           </div>
-          <Button asChild className="rounded-full">
-            <Link href={webRoutes.listings}>Explore our Platform</Link>
+          <Button asChild className="w-full max-w-[270px] rounded-full p-4">
+            <Link href={webRoutes.listings} className="!text-2xl font-semibold">
+              Explore our Platform
+            </Link>
           </Button>
         </section>
       </header>
