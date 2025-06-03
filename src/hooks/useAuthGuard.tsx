@@ -16,7 +16,7 @@ export const useAuthGuard = (requireVendor = false) => {
 
   useEffect(() => {
     // Don't do anything while auth is still initializing
-    if (isAuthLoading || isChecking) {
+    if (isAuthLoading) {
       return;
     }
 
@@ -65,7 +65,6 @@ export const useAuthGuard = (requireVendor = false) => {
     router,
     requireVendor,
     isAuthLoading,
-    isChecking,
   ]);
 
   // Return a LoadingState component along with authorization status
