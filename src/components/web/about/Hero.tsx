@@ -13,14 +13,16 @@ const Hero = () => {
     <div className="min-h-screen">
       <header className="section-container">
         <section className="space-y-7 text-center">
-          <h1 className="text-[57px] font-bold leading-[72px] text-blue-950">
-            Empowering Science, Innovation, and Healthcare Across Africa
-          </h1>
-          <p className="text-2xl leading-8 text-[#6B7280]">
-            We&apos;re building the infrastructure for a science-powered future
-            where ideas transform into real-world solutions and healthcare
-            innovations reach those who need them most
-          </p>
+          <div className="mx-auto max-w-[800px] space-y-7">
+            <h1 className="text-5xl font-bold leading-[72px] text-blue-950">
+              Empowering Science, Innovation, and Healthcare Across Africa
+            </h1>
+            <p className="mx-auto max-w-[700px] text-2xl leading-8 text-[#6B7280]">
+              We&apos;re building the infrastructure for a science-powered
+              future where ideas transform into real-world solutions and
+              healthcare innovations reach those who need them most
+            </p>
+          </div>
           <div className="grid grid-cols-2 items-center justify-center gap-7 md:grid-cols-4">
             <Image
               src={image1}
