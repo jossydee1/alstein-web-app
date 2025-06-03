@@ -174,7 +174,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    const interval = setInterval(checkTokenExpiration, 60 * 1000); // Check every minute
+    const interval = setInterval(checkTokenExpiration, 60 * 1000 * 60 * 5); // Check every minute
     return () => clearInterval(interval); // Cleanup on unmount
   }, [logout]);
 
