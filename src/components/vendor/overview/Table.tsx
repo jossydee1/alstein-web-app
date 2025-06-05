@@ -119,7 +119,7 @@ const BookingHistory = () => {
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
-                        <Button asChild variant="ghost">
+                        <Button asChild variant="outline">
                           <Link
                             href={`${dashboardRoutes?.vendor_bookings}/process?booking=${order?.id}`}
                           >

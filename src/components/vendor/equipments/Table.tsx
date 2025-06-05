@@ -181,7 +181,7 @@ const EquipmentListings = () => {
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" className="!p-0">
+                        <Button asChild variant="outline" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/${e?.id}`}
                           >
@@ -189,7 +189,7 @@ const EquipmentListings = () => {
                             View
                           </Link>
                         </Button>
-                        <Button asChild variant="ghost" className="!p-0">
+                        <Button asChild variant="outline" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/${e?.id}/edit`}
                           >
@@ -197,7 +197,7 @@ const EquipmentListings = () => {
                             Edit
                           </Link>
                         </Button>
-                        {/* <Button asChild variant="ghost" className="!p-0">
+                        {/* <Button asChild variant="outline" className="!p-0">
                           <Link
                             href={`${dashboardRoutes?.vendor_equipments}/edit?equipment=0112455`}
                           >

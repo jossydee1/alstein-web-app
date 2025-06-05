@@ -249,7 +249,7 @@ const OrderHistoryContent = () => {
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => handleViewDetails(order)}
                         >
                           <Eye className="size-4 text-[#6B7280]" />

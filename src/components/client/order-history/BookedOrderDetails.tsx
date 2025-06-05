@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   GetOrderStatusPill,
   GetPaymentStatusPill,
@@ -6,7 +6,7 @@ import {
 } from "@/components/common";
 import { OrderProps, SampleResultProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Download, X } from "lucide-react";
+import { Download, X, Upload } from "lucide-react";
 import {
   api,
   DOCUMENT_URL,
@@ -21,6 +21,8 @@ import { useClientFetch } from "@/hooks";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
 import ConfirmationModal from "@/components/vendor/bookings/ConfirmationModal";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 interface OrderDetailsProps {
   role: "client" | "partner";
@@ -28,19 +30,27 @@ interface OrderDetailsProps {
   onClose: () => void;
 }
 
+interface UploadingState {
+  [key: string]: boolean;
+}
+
 const BookedOrderDetails = ({ order, onClose, role }: OrderDetailsProps) => {
   const { token } = useAuth();
   const [status, setStatus] = useState("accept");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingResults, setUploadingResults] = useState<UploadingState>({});
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   // const isPerSample = order?.equipment?.bill_type === "per_Sample";
   const isPerSample = order?.number_of_samples > 0;
   const showButtons = order?.status === "initiated";
 
-  const { data: sampleResults, isLoading: isLoadingSamples } = useClientFetch<
-    SampleResultProps[]
-  >({
+  const {
+    data: sampleResults,
+    isLoading: isLoadingSamples,
+    refetch,
+  } = useClientFetch<SampleResultProps[]>({
     endpoint: `/${role}/api/v1/booking/get-booking-sample?booking_id=${order?.id}`,
     token,
     enabled: !!token && isPerSample,
@@ -103,6 +113,82 @@ const BookedOrderDetails = ({ order, onClose, role }: OrderDetailsProps) => {
       toast.error(formatError(error, "Failed to decline booking"));
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to convert bytes to MB
+  const bytesToMB = (bytes: number) => bytes / (1024 * 1024);
+
+  // Function to upload file to S3 using pre-signed URL
+  const uploadFileToS3 = async (file: File, uploadLink: string) => {
+    try {
+      const response = await axios.put(uploadLink, file, {
+        headers: { "Content-Type": file.type },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`S3 upload failed: ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      console.error("Upload error details:", error);
+      throw error;
+    }
+  };
+
+  const handleResultUpload = async (
+    sampleId: string,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+
+    // Validate file type
+    if (file.type !== "application/pdf") {
+      toast.error("Only PDF files are allowed");
+      if (e.target) e.target.value = "";
+      return;
+    }
+
+    // Validate file size (3MB max)
+    if (bytesToMB(file.size) > 3) {
+      toast.error(
+        `File size must be less than 3MB. Current size: ${bytesToMB(file.size).toFixed(2)}MB`,
+      );
+      if (e.target) e.target.value = "";
+      return;
+    }
+
+    setUploadingResults(prev => ({ ...prev, [sampleId]: true }));
+
+    try {
+      const uploadLinkResponse = await api.post(
+        "/partner/api/v1/booking/generate-sample-result-link",
+        {
+          document_name: "result",
+          sample_id: sampleId,
+          file_type: "application/pdf",
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const uploadLink = uploadLinkResponse.data.data.upload_link;
+
+      // Upload file to S3
+      await uploadFileToS3(file, uploadLink);
+
+      // Refetch samples to get updated data
+      await refetch();
+      toast.success("Result uploaded successfully");
+    } catch (error) {
+      toast.error(formatError(error, "Failed to upload result"));
+      if (fileInputRefs.current[sampleId]) {
+        fileInputRefs.current[sampleId]!.value = "";
+      }
+    } finally {
+      setUploadingResults(prev => ({ ...prev, [sampleId]: false }));
     }
   };
 
@@ -293,72 +379,164 @@ const BookedOrderDetails = ({ order, onClose, role }: OrderDetailsProps) => {
                 ) : sampleResults?.length ? (
                   sampleResults.map((sample, index) => (
                     <div
-                      key={sample.id}
+                      key={sample?.id}
                       className="space-y-4 rounded-lg border p-4"
                     >
                       <div className="flex items-center justify-between">
                         <h3 className="font-medium">Sample {index + 1}</h3>
-                        {!sample.result_file ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDownload(sample.result_file!)}
-                          >
-                            <Download className="mr-2 size-4" />
-                            Download Result
-                          </Button>
-                        ) : (
-                          <span className="text-sm text-gray-500">
-                            Result not ready
-                          </span>
+                        {role === "client" && (
+                          <>
+                            {sample?.result_file ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleDownload(sample.result_file!)
+                                }
+                              >
+                                <Download className="mr-2 size-4" />
+                                Download Result
+                              </Button>
+                            ) : (
+                              <span className="text-sm text-gray-500">
+                                Result not ready
+                              </span>
+                            )}
+                          </>
                         )}
                       </div>
 
                       <div className="grid gap-3 text-sm md:grid-cols-2">
                         <div className="flex justify-between md:flex-col">
                           <span className="text-gray-500">Sample Name</span>
-                          <span>{sample.sample_name}</span>
+                          <span>{sample?.sample_name}</span>
                         </div>
                         <div className="flex justify-between md:flex-col">
                           <span className="text-gray-500">Sample Type</span>
                           <span className="capitalize">
-                            {sample.sample_type}
+                            {sample?.sample_type}
                           </span>
                         </div>
                         <div className="flex justify-between md:flex-col">
                           <span className="text-gray-500">Sample Weight</span>
-                          <span>{sample.sample_weight}g</span>
+                          <span>{sample?.sample_weight}g</span>
                         </div>
                         <div className="flex justify-between md:flex-col">
                           <span className="text-gray-500">Delivery Type</span>
                           <span className="capitalize">
-                            {sample.delivery_type}
+                            {sample?.delivery_type}
                           </span>
                         </div>
-                        {sample.delivery_type === "pickup" && (
+                        {sample?.delivery_type === "pickup" && (
                           <>
                             <div className="flex justify-between md:flex-col">
                               <span className="text-gray-500">
                                 Pickup Location
                               </span>
-                              <span>{sample.pickup_location}</span>
+                              <span>{sample?.pickup_location}</span>
                             </div>
                             <div className="flex justify-between md:flex-col">
                               <span className="text-gray-500">
                                 Contact Number
                               </span>
-                              <span>{sample.contact_person_phone_number}</span>
+                              <span>{sample?.contact_person_phone_number}</span>
                             </div>
                             <div className="flex justify-between md:flex-col">
                               <span className="text-gray-500">Pickup Date</span>
                               <span>
-                                {formatIOSToDate(sample.pickup_date)},{" "}
-                                {formatTimeTo12Hour(sample.pickup_time)}
+                                {formatIOSToDate(sample?.pickup_date)},{" "}
+                                {formatTimeTo12Hour(sample?.pickup_time)}
                               </span>
                             </div>
                           </>
                         )}
                       </div>
+
+                      {role === "partner" && (
+                        <div className="flex items-center gap-2">
+                          {sample?.result_file ? (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleDownload(sample.result_file!)
+                                }
+                              >
+                                <Download className="mr-2 size-4" />
+                                View Result
+                              </Button>
+                              <input
+                                type="file"
+                                ref={el => {
+                                  if (el) {
+                                    fileInputRefs.current[sample.id] = el;
+                                  }
+                                }}
+                                className="hidden"
+                                onChange={e =>
+                                  handleResultUpload(
+                                    sample.id,
+
+                                    e,
+                                  )
+                                }
+                                accept="application/pdf"
+                              />
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  fileInputRefs.current[sample.id]?.click()
+                                }
+                                disabled={uploadingResults[sample.id]}
+                              >
+                                {uploadingResults[sample.id] ? (
+                                  <Loader2 className="mr-2 size-4 animate-spin" />
+                                ) : (
+                                  <Upload className="mr-2 size-4" />
+                                )}
+                                Update Result
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <input
+                                type="file"
+                                ref={el => {
+                                  if (el) {
+                                    fileInputRefs.current[sample.id] = el;
+                                  }
+                                }}
+                                className="hidden"
+                                onChange={e =>
+                                  handleResultUpload(
+                                    sample.id,
+
+                                    e,
+                                  )
+                                }
+                                accept="application/pdf"
+                              />
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  fileInputRefs.current[sample.id]?.click()
+                                }
+                                disabled={uploadingResults[sample.id]}
+                              >
+                                {uploadingResults[sample.id] ? (
+                                  <Loader2 className="mr-2 size-4 animate-spin" />
+                                ) : (
+                                  <Upload className="mr-2 size-4" />
+                                )}
+                                Upload Result
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))
                 ) : (

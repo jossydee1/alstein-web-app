@@ -88,7 +88,7 @@ const RequestHistory = () => {
     setSelectedOrder(order);
     const params = new URLSearchParams(window.location.search);
     params.set("orderId", order.id);
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}&tab=bookings`);
   };
 
   const handleCloseDetails = () => {

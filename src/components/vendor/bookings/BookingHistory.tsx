@@ -28,8 +28,9 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps, OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import BookedOrderDetails from "@/components/client/order-history/BookedOrderDetails";
+import { useSearchParams } from "next/navigation";
 
 const tableHeads = [
   {
@@ -56,8 +57,8 @@ const tableHeads = [
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
   const router = useRouter();
-
   const navRef = useRef(null);
+  const searchParams = useSearchParams();
 
   const filterOptions = ["all", "approved", "declined", "canceled"];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
@@ -96,6 +97,16 @@ const BookingHistory = () => {
     }
   }, [listingError, orderHistory]);
 
+  useEffect(() => {
+    const orderId = searchParams.get("orderId");
+    if (orderId && orderHistory?.data) {
+      const order = orderHistory.data.find(o => o.id === orderId);
+      if (order) {
+        setSelectedOrder(order);
+      }
+    }
+  }, [searchParams, orderHistory?.data]);
+
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -118,6 +129,7 @@ const BookingHistory = () => {
     setSelectedOrder(null);
     const params = new URLSearchParams(window.location.search);
     params.delete("orderId");
+    params.delete("tab");
     router.push(`?${params.toString()}`);
   };
 
@@ -250,7 +262,7 @@ const BookingHistory = () => {
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => handleViewDetails(order)}
                         >
                           <Eye className="size-4 text-[#6B7280]" />
