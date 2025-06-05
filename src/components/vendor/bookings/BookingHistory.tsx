@@ -19,45 +19,39 @@ import {
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import {
-  GetOrderStatusPill,
-  GetPaymentStatusPill,
-  LoadingState,
-} from "@/components/common";
+import { GetOrderStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps, OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import BookedOrderDetails from "@/components/client/order-history/BookedOrderDetails";
+import { useSearchParams } from "next/navigation";
 
 const tableHeads = [
   {
-    label: "LISTED DATE",
+    label: "DATE Ordered",
   },
   {
-    label: "SERVICE/EQUIPMENT",
+    label: "EQUIPMENT name",
   },
   {
-    label: "PRICE",
+    label: "TOTAL AMOUNT",
     className: "text-right",
   },
   {
     label: "Booking STATUS",
   },
   {
-    label: "Payment STATUS",
-  },
-  {
-    label: "ACTIONS",
+    label: "Actions",
   },
 ];
 
 const BookingHistory = () => {
   const { token, businessProfile } = useAuth();
   const router = useRouter();
-
   const navRef = useRef(null);
+  const searchParams = useSearchParams();
 
   const filterOptions = ["all", "approved", "declined", "canceled"];
   const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
@@ -96,6 +90,16 @@ const BookingHistory = () => {
     }
   }, [listingError, orderHistory]);
 
+  useEffect(() => {
+    const orderId = searchParams.get("orderId");
+    if (orderId && orderHistory?.data) {
+      const order = orderHistory.data.find(o => o.id === orderId);
+      if (order) {
+        setSelectedOrder(order);
+      }
+    }
+  }, [searchParams, orderHistory?.data]);
+
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -118,6 +122,7 @@ const BookingHistory = () => {
     setSelectedOrder(null);
     const params = new URLSearchParams(window.location.search);
     params.delete("orderId");
+    params.delete("tab");
     router.push(`?${params.toString()}`);
   };
 
@@ -155,7 +160,7 @@ const BookingHistory = () => {
   };
 
   return (
-    <main className="dashboard-section-card">
+    <main className=".dashboard-section-card">
       {isLoading && <LoadingState />}
 
       {/* Overlay */}
@@ -186,7 +191,7 @@ const BookingHistory = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Booked Equipments</h1>
       </header>
-      <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+      <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
             <nav
@@ -240,17 +245,9 @@ const BookingHistory = () => {
                       {GetOrderStatusPill(order?.status)}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      {GetPaymentStatusPill(
-                        order?.payment_status as
-                          | "awaiting_payment_confirmation"
-                          | "confirmed"
-                          | "default",
-                      )}
-                    </TableCell>
-                    <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => handleViewDetails(order)}
                         >
                           <Eye className="size-4 text-[#6B7280]" />

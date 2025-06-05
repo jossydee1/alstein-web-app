@@ -60,7 +60,7 @@ const VendorSettingsContent = () => {
         documents: partnerDetails?.partner_doc
           ? partnerDetails?.partner_doc.map(doc => ({
               ...doc,
-              path: `${DOCUMENT_URL}${doc?.path}`,
+              path: doc?.path,
               name: doc?.name || "Unnamed Document",
             }))
           : [],
@@ -304,7 +304,6 @@ const VendorSettingsContent = () => {
                   name="name"
                   value={formData?.name}
                   onChange={handleChange}
-                  placeholder="Enter business name"
                   required
                   readOnly
                 />
@@ -320,7 +319,6 @@ const VendorSettingsContent = () => {
                   name="address"
                   value={formData?.address}
                   onChange={handleChange}
-                  placeholder="Enter business address"
                   required
                   readOnly
                 />
@@ -336,7 +334,6 @@ const VendorSettingsContent = () => {
                   name="email"
                   value={formData?.email}
                   onChange={handleChange}
-                  placeholder="Enter business email"
                   required
                   readOnly
                 />
@@ -418,7 +415,6 @@ const VendorSettingsContent = () => {
                   name="supportMessage"
                   rows={4}
                   className="w-full rounded-md border border-[#E5E7EB] p-4"
-                  placeholder="Type your message here..."
                   required
                   value={supportMessage}
                   onChange={e => setSupportMessage(e.target.value)}

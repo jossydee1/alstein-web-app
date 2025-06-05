@@ -98,7 +98,7 @@ const ListingDetailsContent = () => {
             />
           </div>
 
-          <div className="min-w-[340px] max-w-[340px]">
+          <div className="max-w-[340px] sm:min-w-[340px]">
             <Summary listingInfo={listingInfo} />
           </div>
         </div>

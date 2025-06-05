@@ -61,12 +61,24 @@ const Profile = ({
 
             <p className="grid gap-1 md:w-full">
               <span className="flex items-center gap-1 text-2xl font-black text-[#161616]">
-                {formatDateToRelativeTimeYearWithTime(
-                  partnerData?.updated_at || "",
-                )}
+                {parseInt(
+                  formatDateToRelativeTimeYearWithTime(
+                    partnerData?.created_at || "",
+                  ),
+                ) > 1
+                  ? formatDateToRelativeTimeYearWithTime(
+                      partnerData?.created_at || "",
+                    )
+                  : "< 1 "}
               </span>
               <span className="whitespace-nowrap text-sm font-medium text-[#8B8B8B]">
-                Years of service
+                {parseInt(
+                  formatDateToRelativeTimeYearWithTime(
+                    partnerData?.created_at || "",
+                  ),
+                ) < 1
+                  ? "year service"
+                  : "Years of service"}
               </span>
             </p>
 

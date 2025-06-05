@@ -220,7 +220,7 @@ const PayoutRequests = () => {
 
         <form
           onSubmit={handleRequest}
-          className="flex min-w-[300px] max-w-[430px] flex-1 flex-col items-start justify-start gap-4"
+          className="flex max-w-[430px] flex-1 flex-col items-start justify-start gap-4 sm:min-w-[300px]"
         >
           <div className="w-full">
             <Label htmlFor="amount" className="mb-2">
@@ -259,7 +259,7 @@ const PayoutRequests = () => {
             </p>
           </div>
         </header>
-        <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+        <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
           <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
             <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
               {/* <nav

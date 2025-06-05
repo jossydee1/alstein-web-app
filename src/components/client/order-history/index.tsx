@@ -193,7 +193,7 @@ const OrderHistoryContent = () => {
       </div>
 
       <h1 className="hidden">Order History</h1>
-      <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+      <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
             <nav
@@ -249,7 +249,7 @@ const OrderHistoryContent = () => {
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => handleViewDetails(order)}
                         >
                           <Eye className="size-4 text-[#6B7280]" />
