@@ -193,7 +193,7 @@ const OrderHistoryContent = () => {
       </div>
 
       <h1 className="hidden">Order History</h1>
-      <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+      <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
             <nav

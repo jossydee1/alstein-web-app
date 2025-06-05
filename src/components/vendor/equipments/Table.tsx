@@ -138,7 +138,7 @@ const EquipmentListings = () => {
           </Link>
         </Button>
       </header>
-      <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+      <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <Table>
             <TableHeader className="border-y border-y-[#E5E7EB] bg-[#F8FAFC] text-xs font-medium uppercase text-[#6B7280]">

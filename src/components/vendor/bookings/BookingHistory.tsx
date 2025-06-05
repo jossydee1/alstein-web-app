@@ -160,7 +160,7 @@ const BookingHistory = () => {
   };
 
   return (
-    <main className="dashboard-section-card">
+    <main className=".dashboard-section-card">
       {isLoading && <LoadingState />}
 
       {/* Overlay */}
@@ -191,7 +191,7 @@ const BookingHistory = () => {
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Booked Equipments</h1>
       </header>
-      <section className="rounded-[25px] bg-[#F8FAFC] p-6">
+      <section className="rounded-[25px] bg-[#F8FAFC] p-3 md:p-6">
         <div className="rounded-[6px] border border-[#E5E7EB] bg-white">
           <div className="border-grey-400 overflow-hidden border-b-[0.2px]">
             <nav
