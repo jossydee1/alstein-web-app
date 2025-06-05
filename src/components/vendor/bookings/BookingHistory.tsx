@@ -19,11 +19,7 @@ import {
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import {
-  GetOrderStatusPill,
-  GetPaymentStatusPill,
-  LoadingState,
-} from "@/components/common";
+import { GetOrderStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps, OrderProps } from "@/types";
@@ -34,23 +30,20 @@ import { useSearchParams } from "next/navigation";
 
 const tableHeads = [
   {
-    label: "LISTED DATE",
+    label: "DATE Ordered",
   },
   {
-    label: "SERVICE/EQUIPMENT",
+    label: "EQUIPMENT name",
   },
   {
-    label: "PRICE",
+    label: "TOTAL AMOUNT",
     className: "text-right",
   },
   {
     label: "Booking STATUS",
   },
   {
-    label: "Payment STATUS",
-  },
-  {
-    label: "ACTIONS",
+    label: "Actions",
   },
 ];
 
@@ -250,14 +243,6 @@ const BookingHistory = () => {
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       {GetOrderStatusPill(order?.status)}
-                    </TableCell>
-                    <TableCell className="px-5 py-3">
-                      {GetPaymentStatusPill(
-                        order?.payment_status as
-                          | "awaiting_payment_confirmation"
-                          | "confirmed"
-                          | "default",
-                      )}
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">

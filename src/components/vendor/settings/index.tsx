@@ -60,7 +60,7 @@ const VendorSettingsContent = () => {
         documents: partnerDetails?.partner_doc
           ? partnerDetails?.partner_doc.map(doc => ({
               ...doc,
-              path: `${DOCUMENT_URL}${doc?.path}`,
+              path: doc?.path,
               name: doc?.name || "Unnamed Document",
             }))
           : [],
