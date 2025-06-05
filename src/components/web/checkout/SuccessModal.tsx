@@ -1,5 +1,6 @@
 "use client";
 
+import { useSampleDetails } from "@/context";
 import { dashboardRoutes, webRoutes } from "@/utils";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -8,12 +9,16 @@ const SuccessModal = ({
   showSuccessModal,
   setShowSuccessModal,
   isPerSample,
+  shouldClearContext,
 }: {
   showSuccessModal: boolean;
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   isPerSample: boolean;
+  shouldClearContext?: boolean;
 }) => {
   const router = useRouter();
+  const { clearContext } = useSampleDetails();
+
   if (!showSuccessModal) return null;
 
   const handleClose = () => {
@@ -22,6 +27,9 @@ const SuccessModal = ({
         ? webRoutes.sample_details_form
         : dashboardRoutes?.client_order_history,
     );
+    if (shouldClearContext) {
+      clearContext(); // Clear the sample details context after successful submission
+    }
     setShowSuccessModal(false);
   };
 

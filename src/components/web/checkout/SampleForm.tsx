@@ -7,30 +7,35 @@ import { ApiResponseProps } from "@/types";
 import { toast } from "react-toastify";
 import SuccessModal from "./SuccessModal";
 import { Button } from "@/components/ui/button";
+import { LoadingState } from "@/components/common";
 
 export interface SampleProps {
   booking_id: string;
   sample_name: string;
   sample_type: string;
   sample_weight: string;
-  pickup_location: string;
-  pickup_longitude: string;
-  pickup_latitude: string;
-  pickup_date: string;
-  pickup_time: string;
-  contact_person_phone_number: string;
   delivery_type: string;
+  contact_person_phone_number: string;
+  pickup_location?: string;
+  pickup_longitude?: string;
+  pickup_latitude?: string;
+  pickup_date?: string;
+  pickup_time?: string;
 }
 
 const SampleForm = () => {
-  const { bookingId, numberOfSamples, listingName, clearContext } =
-    useSampleDetails();
+  const { bookingId, numberOfSamples, listingName } = useSampleDetails();
   const { token } = useAuth();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [samples, setSamples] = useState<SampleProps[]>([]);
   const [countryCodes, setCountryCodes] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     // Initialize samples array based on numberOfSamples
@@ -116,13 +121,14 @@ const SampleForm = () => {
 
       toast.success("Sample details submitted successfully");
       setShowSuccessModal(true);
-      clearContext(); // Clear the context after successful submission
     } catch (error) {
       toast.error(formatError(error, "Failed to initiate booking"));
     } finally {
       setIsProcessing(false);
     }
   };
+
+  if (isLoading) return <LoadingState />;
 
   // Add this check at the beginning of the component
   if (!bookingId || !numberOfSamples) {
@@ -161,7 +167,7 @@ const SampleForm = () => {
 
         <form onSubmit={handleSubmit} className="">
           <section
-            className={`grid gap-8 ${numberOfSamples > 1 ? "md:grid-cols-2" : ""}`}
+            className={`grid gap-8 ${numberOfSamples > 1 ? "md:grid-cols-2" : "mx-auto max-w-[600px]"}`}
           >
             {samples.map((sample, index) => (
               <div key={index} className="dashboard-section-card mb-8 bg-white">
@@ -222,99 +228,6 @@ const SampleForm = () => {
                   </div>
 
                   <div className="inputGroup">
-                    <label htmlFor={`pickup_location_${index}`}>
-                      Pickup Location*
-                    </label>
-                    <input
-                      type="text"
-                      id={`pickup_location_${index}`}
-                      required
-                      placeholder="Enter pickup location"
-                      value={sample.pickup_location}
-                      onChange={e =>
-                        handleSampleChange(
-                          index,
-                          "pickup_location",
-                          e.target.value,
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div className="inputGroup">
-                    <label htmlFor={`pickup_date_${index}`}>Pickup Date*</label>
-                    <input
-                      type="date"
-                      id={`pickup_date_${index}`}
-                      required
-                      value={sample.pickup_date}
-                      onChange={e =>
-                        handleSampleChange(index, "pickup_date", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="inputGroup">
-                    <label htmlFor={`pickup_time_${index}`}>Pickup Time*</label>
-                    <input
-                      type="time"
-                      id={`pickup_time_${index}`}
-                      required
-                      value={sample.pickup_time}
-                      onChange={e =>
-                        handleSampleChange(index, "pickup_time", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="inputGroup">
-                    <label htmlFor={`contact_phone_${index}`}>
-                      Contact Phone Number*
-                    </label>
-                    <div className="flex gap-2">
-                      <select
-                        className="w-32 rounded-lg border border-gray-300 px-4 py-3"
-                        value={countryCodes[index]}
-                        onChange={e =>
-                          handleSampleChange(
-                            index,
-                            "country_code",
-                            e.target.value,
-                            true,
-                          )
-                        }
-                        required
-                      >
-                        <option value="">🌐 Select</option>
-                        {countriesList.map(country => (
-                          <option key={country.code} value={country.dial_code}>
-                            {country.flag} {country.dial_code}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="tel"
-                        id={`contact_phone_${index}`}
-                        required
-                        className="flex-1"
-                        placeholder="Enter phone number"
-                        value={sample.contact_person_phone_number.replace(
-                          countryCodes[index],
-                          "",
-                        )}
-                        onChange={e =>
-                          handleSampleChange(
-                            index,
-                            "contact_person_phone_number",
-                            e.target.value,
-                            true,
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  <div className="inputGroup">
                     <label htmlFor={`delivery_type_${index}`}>
                       Delivery Type*
                     </label>
@@ -336,6 +249,120 @@ const SampleForm = () => {
                       <option value="dropoff">Dropoff</option>
                     </select>
                   </div>
+
+                  {/* Only show these fields if delivery type is pickup */}
+                  {sample.delivery_type === "pickup" && (
+                    <>
+                      <div className="inputGroup">
+                        <label htmlFor={`contact_phone_${index}`}>
+                          Contact Phone Number*
+                        </label>
+                        <div className="flex gap-2">
+                          <select
+                            className="w-32 rounded-lg border border-gray-300 px-4 py-3"
+                            value={countryCodes[index]}
+                            onChange={e =>
+                              handleSampleChange(
+                                index,
+                                "country_code",
+                                e.target.value,
+                                true,
+                              )
+                            }
+                            required
+                          >
+                            <option value="">🌐 Select</option>
+                            {countriesList.map(country => (
+                              <option
+                                key={country.code}
+                                value={country.dial_code}
+                              >
+                                {country.flag} {country.dial_code}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="tel"
+                            id={`contact_phone_${index}`}
+                            required
+                            className="flex-1"
+                            placeholder="Enter phone number"
+                            value={sample.contact_person_phone_number.replace(
+                              countryCodes[index],
+                              "",
+                            )}
+                            onChange={e =>
+                              handleSampleChange(
+                                index,
+                                "contact_person_phone_number",
+                                e.target.value,
+                                true,
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="inputGroup">
+                        <label htmlFor={`pickup_location_${index}`}>
+                          Pickup Location*
+                        </label>
+                        <input
+                          type="text"
+                          id={`pickup_location_${index}`}
+                          required={sample.delivery_type === "pickup"}
+                          placeholder="Enter pickup location"
+                          value={sample.pickup_location}
+                          onChange={e =>
+                            handleSampleChange(
+                              index,
+                              "pickup_location",
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div className="inputGroup">
+                        <label htmlFor={`pickup_date_${index}`}>
+                          Pickup Date*
+                        </label>
+                        <input
+                          type="date"
+                          id={`pickup_date_${index}`}
+                          required={sample.delivery_type === "pickup"}
+                          value={sample.pickup_date}
+                          onChange={e =>
+                            handleSampleChange(
+                              index,
+                              "pickup_date",
+                              e.target.value,
+                            )
+                          }
+                          min={new Date().toISOString().split("T")[0]}
+                        />
+                      </div>
+
+                      <div className="inputGroup">
+                        <label htmlFor={`pickup_time_${index}`}>
+                          Pickup Time*
+                        </label>
+                        <input
+                          type="time"
+                          id={`pickup_time_${index}`}
+                          required={sample.delivery_type === "pickup"}
+                          value={sample.pickup_time}
+                          onChange={e =>
+                            handleSampleChange(
+                              index,
+                              "pickup_time",
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -353,6 +380,7 @@ const SampleForm = () => {
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
         isPerSample={false}
+        shouldClearContext
       />
     </>
   );

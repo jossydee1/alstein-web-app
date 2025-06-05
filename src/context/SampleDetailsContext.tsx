@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface SampleDetailsContextType {
   bookingId: string;
@@ -22,9 +28,33 @@ export const SampleDetailsProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [bookingId, setBookingId] = useState("");
-  const [numberOfSamples, setNumberOfSamples] = useState(0);
-  const [listingName, setListingName] = useState("");
+  const [bookingId, setBookingId] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("sample_booking_id") || "";
+    }
+    return "";
+  });
+  const [numberOfSamples, setNumberOfSamples] = useState(() => {
+    if (typeof window !== "undefined") {
+      return parseInt(localStorage.getItem("sample_number_of_samples") || "0");
+    }
+    return 0;
+  });
+  const [listingName, setListingName] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("sample_listing_name") || "";
+    }
+    return "";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("sample_booking_id", bookingId);
+    localStorage.setItem(
+      "sample_number_of_samples",
+      numberOfSamples.toString(),
+    );
+    localStorage.setItem("sample_listing_name", listingName);
+  }, [bookingId, numberOfSamples, listingName]);
 
   const setSampleDetails = (details: {
     bookingId: string;
@@ -40,6 +70,9 @@ export const SampleDetailsProvider = ({
     setBookingId("");
     setNumberOfSamples(0);
     setListingName("");
+    localStorage.removeItem("sample_booking_id");
+    localStorage.removeItem("sample_number_of_samples");
+    localStorage.removeItem("sample_listing_name");
   };
 
   return (
