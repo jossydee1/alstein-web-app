@@ -36,3 +36,21 @@ export interface OrderHistoryProps {
   total_items?: number;
   data: OrderProps[];
 }
+
+export interface SampleResultProps {
+  id: string;
+  booking_id: string;
+  sample_name: string;
+  sample_type: string;
+  sample_weight: number;
+  pickup_location: string;
+  pickup_longitude: string;
+  pickup_latitude: string;
+  contact_person_phone_number: string;
+  pickup_date: string;
+  pickup_time: string;
+  delivery_type: string;
+  result_file: string | null;
+  created_at: string;
+  updated_at: string;
+}

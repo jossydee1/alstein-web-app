@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -16,35 +17,22 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
-import {
-  GetOrderStatusPill,
-  GetPaymentStatusPill,
-  LoadingState,
-} from "@/components/common";
+import { GetOrderStatusPill, LoadingState } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { OrderHistoryProps } from "@/types";
-import { differenceInDays } from "date-fns";
+import { OrderHistoryProps, OrderProps } from "@/types";
+import { Button } from "@/components/ui/button";
+import OrderDetails from "./OrderDetails";
 
 const tableHeads = [
   {
-    label: "Booking DATE",
+    label: " DATE Ordered",
   },
   {
     label: "EQUIPMENT name",
-  },
-  {
-    label: "SERVICE TYPE",
-  },
-  {
-    label: "Billing method",
-  },
-  {
-    label: "No of days/samples",
-    className: "text-right",
   },
   {
     label: "TOTAL AMOUNT",
@@ -54,13 +42,15 @@ const tableHeads = [
     label: "Booking STATUS",
   },
   {
-    label: "Payment STATUS",
+    label: "Actions",
   },
 ];
 
 const OrderHistoryContent = () => {
   const { token } = useAuth();
   const navRef = useRef(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const filterOptions = [
     "all",
@@ -73,6 +63,7 @@ const OrderHistoryContent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedOrder, setSelectedOrder] = useState<OrderProps | null>(null);
 
   const url =
     activeFilter === "all"
@@ -104,6 +95,16 @@ const OrderHistoryContent = () => {
     }
   }, [listingError, orderHistory]);
 
+  useEffect(() => {
+    const orderId = searchParams.get("orderId");
+    if (orderId && orderHistory?.data) {
+      const order = orderHistory.data.find(o => o.id === orderId);
+      if (order) {
+        setSelectedOrder(order);
+      }
+    }
+  }, [searchParams, orderHistory?.data]);
+
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -113,6 +114,20 @@ const OrderHistoryContent = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     refetch();
+  };
+
+  const handleViewDetails = (order: OrderProps) => {
+    setSelectedOrder(order);
+    const params = new URLSearchParams(window.location.search);
+    params.set("orderId", order.id);
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedOrder(null);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("orderId");
+    router.push(`?${params.toString()}`);
   };
 
   const renderPaginationItems = () => {
@@ -149,8 +164,29 @@ const OrderHistoryContent = () => {
   };
 
   return (
-    <main className="dashboard-section-card">
+    <main className="dashboard-section-card relative">
       {isLoading && <LoadingState />}
+
+      {/* Overlay */}
+      {selectedOrder && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          onClick={handleCloseDetails}
+        />
+      )}
+
+      {/* Slide Panel */}
+      <div
+        className={cn(
+          "fixed inset-y-0 right-0 z-50 w-full max-w-[800px] transform bg-white shadow-lg transition-transform duration-300 ease-in-out",
+          selectedOrder ? "translate-x-0" : "translate-x-full",
+        )}
+        onClick={e => e.stopPropagation()}
+      >
+        {selectedOrder && (
+          <OrderDetails order={selectedOrder} onClose={handleCloseDetails} />
+        )}
+      </div>
 
       <h1 className="hidden">Order History</h1>
       <section className="rounded-[25px] bg-[#F8FAFC] p-6">
@@ -200,16 +236,6 @@ const OrderHistoryContent = () => {
                     <TableCell className="min-w-[200px] px-5 py-3 font-medium text-[#1F2937]">
                       {order?.equipment?.name}
                     </TableCell>
-                    <TableCell className="px-5 py-3 font-medium capitalize text-[#1F2937]">
-                      {order?.equipment?.service_type.replace(/_/g, " ")}
-                    </TableCell>
-                    <TableCell className="px-5 py-3 font-medium capitalize text-[#1F2937]">
-                      {order?.equipment?.bill_type?.replace(/_/g, " ") || "-"}
-                    </TableCell>
-                    <TableCell className="px-5 py-3 text-right font-medium capitalize text-[#1F2937]">
-                      {order?.number_of_samples ||
-                        differenceInDays(order?.end_date, order?.start_date)}
-                    </TableCell>
                     <TableCell className="px-5 py-3 text-right">
                       {formatPrice(order?.booking_amount, "NGN")}
                     </TableCell>
@@ -217,7 +243,15 @@ const OrderHistoryContent = () => {
                       {GetOrderStatusPill(order?.status)}
                     </TableCell>
                     <TableCell className="px-5 py-3">
-                      {GetPaymentStatusPill(order?.payment_status)}
+                      <div className="flex items-center gap-2.5">
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleViewDetails(order)}
+                        >
+                          <Eye className="size-4 text-[#6B7280]" />
+                          View Details
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

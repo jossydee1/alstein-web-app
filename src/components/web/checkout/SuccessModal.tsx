@@ -17,15 +17,16 @@ const SuccessModal = ({
   shouldClearContext?: boolean;
 }) => {
   const router = useRouter();
-  const { clearContext } = useSampleDetails();
+  const { clearContext, bookingId } = useSampleDetails();
 
   if (!showSuccessModal) return null;
 
+  const bookingDetailsUrl =
+    dashboardRoutes?.client_order_history + `?orderId=${bookingId}`;
+
   const handleClose = () => {
     router.push(
-      isPerSample
-        ? webRoutes.sample_details_form
-        : dashboardRoutes?.client_order_history,
+      isPerSample ? webRoutes.sample_details_form : bookingDetailsUrl,
     );
     if (shouldClearContext) {
       clearContext(); // Clear the sample details context after successful submission
@@ -105,7 +106,7 @@ const SuccessModal = ({
                     is confirmed. Track your booking progress in your
                     <a
                       className="focus:outline-hidden inline-flex items-center gap-x-1.5 font-medium text-blue-600 decoration-2 hover:underline focus:underline"
-                      href={dashboardRoutes?.client_order_history}
+                      href={bookingDetailsUrl}
                     >
                       {" "}
                       personal account
