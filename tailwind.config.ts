@@ -24,7 +24,7 @@ export default {
         serif: ["Merriweather", "serif"],
       },
       colors: {
-        brandColor: " #1045E4",
+        brandColor: "#1045E4",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -18,3 +18,5 @@ export const COOKIE_OPTIONS = {
   sameSite: "Strict" as const,
   expires: 1 / 4.8, // ~5 hours
 };
+
+export const INTERCOM_APP_ID = "yt0f6x96";
