@@ -118,7 +118,7 @@ const WhyUs = () => {
                   style={{ width: `${slideWidth}px` }}
                 >
                   <article
-                    className="max-w-[390px] rounded-md px-8 py-12 text-white"
+                    className="max-w-[320px] rounded-md px-8 py-12 text-white sm:max-w-[390px]"
                     style={{ background: slide?.bg }}
                   >
                     <slide.icon size="48" />

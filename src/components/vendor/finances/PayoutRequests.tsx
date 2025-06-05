@@ -220,7 +220,7 @@ const PayoutRequests = () => {
 
         <form
           onSubmit={handleRequest}
-          className="flex min-w-[300px] max-w-[430px] flex-1 flex-col items-start justify-start gap-4"
+          className="flex max-w-[430px] flex-1 flex-col items-start justify-start gap-4 sm:min-w-[300px]"
         >
           <div className="w-full">
             <Label htmlFor="amount" className="mb-2">

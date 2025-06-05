@@ -116,8 +116,8 @@ const OrderDetails = ({
           Order Review
         </h2>
 
-        <div className="flex gap-5">
-          <div className="w-1/2 rounded-l-lg">
+        <div className="flex flex-col gap-5 md:flex-row">
+          <div className="overflow-hidden rounded-lg md:w-1/2 md:rounded-l-lg">
             <Image
               src={DOCUMENT_URL + listingInfo?.equipment_file[0]?.path}
               alt={listingInfo?.name}
@@ -126,7 +126,7 @@ const OrderDetails = ({
               className="max-h-[150px] w-full rounded-l-lg bg-neutral-50 object-cover"
             />
           </div>
-          <div className="w-1/2">
+          <div className="md:w-1/2">
             <h3 className="mb-4 font-semibold uppercase text-[#172554]">
               {listingInfo?.name}
             </h3>

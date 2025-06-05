@@ -111,11 +111,11 @@ const StepOne = ({
                   id="serviceType"
                   name="serviceType"
                 >
-                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                  <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor sm:max-w-[300px]">
                     <RadioGroupItem value="lease" id="lease" />
                     <Label htmlFor="lease">Lease</Label>
                   </div>
-                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                  <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor sm:max-w-[300px]">
                     <RadioGroupItem value="on_site" id="on_site" />
                     <Label htmlFor="on_site">Onsite</Label>
                   </div>
@@ -132,11 +132,11 @@ const StepOne = ({
                   id="billingType"
                   name="billingType"
                 >
-                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                  <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor sm:max-w-[300px]">
                     <RadioGroupItem value="per_day" id="per_day" />
                     <Label htmlFor="per_day">Per Day</Label>
                   </div>
-                  <div className="flex w-full max-w-[300px] items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                  <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor sm:max-w-[300px]">
                     <RadioGroupItem value="per_Sample" id="per_Sample" />
                     <Label htmlFor="per_Sample">Per Sample</Label>
                   </div>
