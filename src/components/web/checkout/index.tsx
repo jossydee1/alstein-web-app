@@ -156,7 +156,6 @@ const CheckoutContent = () => {
     resetDateTime();
     setShowSuccessModal(true);
     setIsBooking(false);
-    setBookingId(null);
     setPaystackTrigger(false);
   };
 
@@ -301,8 +300,12 @@ const CheckoutContent = () => {
   return (
     <>
       <SuccessModal
+        isPerSample={isPerSample}
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
+        bookingId={bookingId || ""}
+        numberOfSamples={numberOfSamples}
+        listingName={listingInfo?.name}
       />
 
       {isBooking && <LoadingState />}

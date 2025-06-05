@@ -5,6 +5,7 @@ export const webRoutes = {
   listings: "/listings",
   partners: "/partners",
   checkout: "/checkout",
+  sample_details_form: "/sample-details-form",
   confirmation: "/confirmation",
   contact: "/contact",
   blog: "/blog",
