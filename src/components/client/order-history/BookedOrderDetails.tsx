@@ -21,7 +21,6 @@ import { useClientFetch } from "@/hooks";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
 import ConfirmationModal from "@/components/vendor/bookings/ConfirmationModal";
-import axios from "axios";
 import { Loader2 } from "lucide-react";
 
 interface OrderDetailsProps {
@@ -122,8 +121,20 @@ const BookedOrderDetails = ({ order, onClose, role }: OrderDetailsProps) => {
   // Function to upload file to S3 using pre-signed URL
   const uploadFileToS3 = async (file: File, uploadLink: string) => {
     try {
-      const response = await axios.put(uploadLink, file, {
-        headers: { "Content-Type": file.type },
+      const response = await api.put(uploadLink, file, {
+        headers: {
+          "Content-Type": file?.type,
+        },
+        // This ensures no auth headers are sent with this specific request
+        transformRequest: [
+          (data, headers) => {
+            // Remove Authorization header if it exists
+            if (headers && "Authorization" in headers) {
+              delete headers.Authorization;
+            }
+            return data;
+          },
+        ],
       });
 
       if (response.status !== 200) {
