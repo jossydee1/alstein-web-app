@@ -9,6 +9,7 @@ import { AppProviders } from "@/context";
 import { Suspense } from "react";
 import { LoadingState } from "@/components/common";
 import { SessionProvider } from "next-auth/react";
+import IntercomWidget from "./providers/IntercomWidget";
 
 export const metadata: Metadata = {
   title: "Alstein | Book Scientific and Diagnostic Laboratory Services",
@@ -31,6 +32,7 @@ export default function RootLayout({
           <SessionProvider>
             <ReactQueryProvider>
               <AppProviders>
+                <IntercomWidget />
                 <ToastContainer />
                 {children}
               </AppProviders>
