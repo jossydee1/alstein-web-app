@@ -25,7 +25,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps, OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import OrderDetails from "./OrderDetails";
+import BookedOrderDetails from "./BookedOrderDetails";
 
 const tableHeads = [
   {
@@ -184,7 +184,11 @@ const OrderHistoryContent = () => {
         onClick={e => e.stopPropagation()}
       >
         {selectedOrder && (
-          <OrderDetails order={selectedOrder} onClose={handleCloseDetails} />
+          <BookedOrderDetails
+            role="client"
+            order={selectedOrder}
+            onClose={handleCloseDetails}
+          />
         )}
       </div>
 

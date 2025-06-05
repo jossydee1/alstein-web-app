@@ -26,9 +26,12 @@ import {
 } from "@/components/common";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context";
-import { OrderHistoryProps } from "@/types";
+import { OrderHistoryProps, OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
+import BookedOrderDetails from "@/components/client/order-history/BookedOrderDetails";
 
 const tableHeads = [
   {
@@ -54,16 +57,8 @@ const tableHeads = [
 
 const RequestHistory = () => {
   const { token, businessProfile } = useAuth();
-  // const navRef = useRef(null);
-
-  // const filterOptions = [
-  //   "all",
-  //   "initiated",
-  //   "approved",
-  //   "canceled",
-  //   "declined",
-  // ];
-  // const [activeFilter, setActiveFilter] = useState(filterOptions[0]);
+  const router = useRouter();
+  const [selectedOrder, setSelectedOrder] = useState<OrderProps | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [totalPages, setTotalPages] = useState(1);
@@ -90,11 +85,19 @@ const RequestHistory = () => {
     }
   }, [listingError, orderHistory]);
 
-  // const handleFilterChange = (filter: string) => {
-  //   setActiveFilter(filter);
-  //   setCurrentPage(1);
-  //   refetch();
-  // };
+  const handleViewDetails = (order: OrderProps) => {
+    setSelectedOrder(order);
+    const params = new URLSearchParams(window.location.search);
+    params.set("orderId", order.id);
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedOrder(null);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("orderId");
+    router.push(`?${params.toString()}`);
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -137,6 +140,32 @@ const RequestHistory = () => {
   return (
     <main className="dashboard-section-card">
       {isLoading && <LoadingState />}
+
+      {/* Overlay */}
+      {selectedOrder && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          onClick={handleCloseDetails}
+        />
+      )}
+
+      {/* Slide Panel */}
+      <div
+        className={cn(
+          "fixed inset-y-0 right-0 z-50 w-full max-w-[800px] transform bg-white shadow-lg transition-transform duration-300 ease-in-out",
+          selectedOrder ? "translate-x-0" : "translate-x-full",
+        )}
+        onClick={e => e.stopPropagation()}
+      >
+        {selectedOrder && (
+          <BookedOrderDetails
+            role="partner"
+            order={selectedOrder}
+            onClose={handleCloseDetails}
+          />
+        )}
+      </div>
+
       <header className="mb-6 flex items-center justify-between pb-2.5">
         <h1 className="text-2xl font-bold">Pending Requests</h1>
       </header>
@@ -203,6 +232,13 @@ const RequestHistory = () => {
                     </TableCell>
                     <TableCell className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
+                        <Button
+                          variant="outline"
+                          onClick={() => handleViewDetails(order)}
+                        >
+                          <Eye className="size-4 text-[#6B7280]" />
+                          View Details
+                        </Button>
                         <Button asChild variant="outline">
                           <Link
                             href={`${dashboardRoutes?.vendor_bookings}/process?booking=${order?.id}`}
