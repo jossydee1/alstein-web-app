@@ -17,7 +17,7 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn, dashboardRoutes, formatIOSToDate, formatPrice } from "@/utils";
+import { cn, formatIOSToDate, formatPrice } from "@/utils";
 import { useClientFetch } from "@/hooks";
 import {
   GetOrderStatusPill,
@@ -28,7 +28,6 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context";
 import { OrderHistoryProps, OrderProps } from "@/types";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import BookedOrderDetails from "@/components/client/order-history/BookedOrderDetails";
@@ -238,13 +237,6 @@ const RequestHistory = () => {
                         >
                           <Eye className="size-4 text-[#6B7280]" />
                           View Details
-                        </Button>
-                        <Button asChild variant="outline">
-                          <Link
-                            href={`${dashboardRoutes?.vendor_bookings}/process?booking=${order?.id}`}
-                          >
-                            Process Booking
-                          </Link>
                         </Button>
                       </div>
                     </TableCell>

@@ -41,7 +41,7 @@ const BookedOrderDetails = ({ order, onClose, role }: OrderDetailsProps) => {
   const { data: sampleResults, isLoading: isLoadingSamples } = useClientFetch<
     SampleResultProps[]
   >({
-    endpoint: `/client/api/v1/booking/get-booking-sample?booking_id=${order?.id}`,
+    endpoint: `/${role}/api/v1/booking/get-booking-sample?booking_id=${order?.id}`,
     token,
     enabled: !!token && isPerSample,
   });
