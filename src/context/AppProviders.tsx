@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect } from "react";
 import { AuthProvider } from "./AuthContext";
 import { DateTimeProvider } from "./DateTimeContext";
+import { SampleDetailsProvider } from "./SampleDetailsContext";
 
 export const AppProviders = ({ children }: { children: ReactNode }) => {
   // Clean up URL params if _rsc is present
@@ -16,8 +17,10 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
     }
   }, []);
   return (
-    <AuthProvider>
-      <DateTimeProvider>{children}</DateTimeProvider>
-    </AuthProvider>
+    <SampleDetailsProvider>
+      <AuthProvider>
+        <DateTimeProvider>{children}</DateTimeProvider>
+      </AuthProvider>
+    </SampleDetailsProvider>
   );
 };

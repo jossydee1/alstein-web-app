@@ -19,6 +19,7 @@ import dynamic from "next/dynamic";
 import SuccessModal from "./SuccessModal";
 import { useDateTime } from "@/context/DateTimeContext";
 import { toast } from "react-toastify";
+import { useSampleDetails } from "@/context";
 
 const OrderDetails = dynamic(
   () => import("./OrderDetails"),
@@ -37,6 +38,7 @@ export interface FormData {
   address: string;
 }
 const CheckoutContent = () => {
+  const { setSampleDetails } = useSampleDetails();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [isBooking, setIsBooking] = useState(false);
@@ -154,6 +156,13 @@ const CheckoutContent = () => {
   // On Paystack payment success
   const handlePaymentSuccess = () => {
     resetDateTime();
+    if (isPerSample && bookingId) {
+      setSampleDetails({
+        bookingId,
+        numberOfSamples,
+        listingName: listingInfo?.name || "Unknown Listing",
+      });
+    }
     setShowSuccessModal(true);
     setIsBooking(false);
     setPaystackTrigger(false);
@@ -303,9 +312,6 @@ const CheckoutContent = () => {
         isPerSample={isPerSample}
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
-        bookingId={bookingId || ""}
-        numberOfSamples={numberOfSamples}
-        listingName={listingInfo?.name}
       />
 
       {isBooking && <LoadingState />}

@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, Fragment } from "react";
-import { useSearchParams } from "next/navigation";
-import { api, countriesList, formatError } from "@/utils";
-import { useAuth } from "@/context";
+import { api, countriesList, formatError, webRoutes } from "@/utils";
+import { useAuth, useSampleDetails } from "@/context";
 import { ApiResponseProps } from "@/types";
 import { toast } from "react-toastify";
 import SuccessModal from "./SuccessModal";
@@ -24,13 +23,9 @@ export interface SampleProps {
 }
 
 const SampleForm = () => {
+  const { bookingId, numberOfSamples, listingName, clearContext } =
+    useSampleDetails();
   const { token } = useAuth();
-  const searchParams = useSearchParams();
-  const bookingId = searchParams.get("booking_id") || "";
-  const numberOfSamples = parseInt(
-    searchParams.get("number_of_samples") || "0",
-  );
-  const listingName = searchParams.get("listing_name") || "";
 
   const [samples, setSamples] = useState<SampleProps[]>([]);
   const [countryCodes, setCountryCodes] = useState<string[]>([]);
@@ -108,9 +103,7 @@ const SampleForm = () => {
         "/client/api/v1/booking/add-booking-sample",
         { samples },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
@@ -123,12 +116,33 @@ const SampleForm = () => {
 
       toast.success("Sample details submitted successfully");
       setShowSuccessModal(true);
+      clearContext(); // Clear the context after successful submission
     } catch (error) {
       toast.error(formatError(error, "Failed to initiate booking"));
     } finally {
       setIsProcessing(false);
     }
   };
+
+  // Add this check at the beginning of the component
+  if (!bookingId || !numberOfSamples) {
+    return (
+      <main className="section-container flex min-h-96 flex-col items-center justify-center gap-4 py-8">
+        <h1 className="text-center text-2xl font-semibold text-gray-800">
+          No Sample Details Found
+        </h1>
+        <p className="text-center text-gray-600">
+          Please book a listing first to provide sample details.
+        </p>
+        <a
+          href={webRoutes.listings}
+          className="mt-4 rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+        >
+          View Listings
+        </a>
+      </main>
+    );
+  }
 
   return (
     <>
@@ -339,7 +353,6 @@ const SampleForm = () => {
         showSuccessModal={showSuccessModal}
         setShowSuccessModal={setShowSuccessModal}
         isPerSample={false}
-        bookingId={bookingId}
       />
     </>
   );

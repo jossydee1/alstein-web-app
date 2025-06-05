@@ -8,30 +8,18 @@ const SuccessModal = ({
   showSuccessModal,
   setShowSuccessModal,
   isPerSample,
-  bookingId = "",
-  numberOfSamples = 0,
-  listingName = "Unknown Listing",
 }: {
   showSuccessModal: boolean;
   setShowSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   isPerSample: boolean;
-  bookingId: string;
-  numberOfSamples?: number;
-  listingName?: string;
 }) => {
   const router = useRouter();
   if (!showSuccessModal) return null;
 
   const handleClose = () => {
-    const params = new URLSearchParams({
-      booking_id: bookingId,
-      number_of_samples: numberOfSamples.toString(),
-      listing_name: listingName,
-    }).toString();
-
     router.push(
       isPerSample
-        ? `${webRoutes.sample_details_form}?${params}`
+        ? webRoutes.sample_details_form
         : dashboardRoutes?.client_order_history,
     );
     setShowSuccessModal(false);
