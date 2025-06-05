@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { api, countriesList, formatError, webRoutes } from "@/utils";
 import { useAuth, useSampleDetails } from "@/context";
 import { ApiResponseProps } from "@/types";
@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import SuccessModal from "./SuccessModal";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/common";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export interface SampleProps {
   booking_id: string;
@@ -228,26 +230,27 @@ const SampleForm = () => {
                   </div>
 
                   <div className="inputGroup">
-                    <label htmlFor={`delivery_type_${index}`}>
-                      Delivery Type*
-                    </label>
-                    <select
-                      id={`delivery_type_${index}`}
+                    <label>Delivery Type*</label>
+                    <RadioGroup
                       value={sample.delivery_type}
-                      onChange={e =>
-                        handleSampleChange(
-                          index,
-                          "delivery_type",
-                          e.target.value,
-                        )
+                      onValueChange={value =>
+                        handleSampleChange(index, "delivery_type", value)
                       }
-                      className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                      className="flex gap-3"
                       required
                     >
-                      <option value="">Select</option>
-                      <option value="pickup">Pickup</option>
-                      <option value="dropoff">Dropoff</option>
-                    </select>
+                      <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                        <RadioGroupItem
+                          value="dropoff"
+                          id={`dropoff_${index}`}
+                        />
+                        <Label htmlFor={`dropoff_${index}`}>Dropoff</Label>
+                      </div>
+                      <div className="flex w-full items-center gap-2.5 rounded-md border border-[#E5E7EB] p-4 focus-within:border-brandColor">
+                        <RadioGroupItem value="pickup" id={`pickup_${index}`} />
+                        <Label htmlFor={`pickup_${index}`}>Pickup</Label>
+                      </div>
+                    </RadioGroup>
                   </div>
 
                   {/* Only show these fields if delivery type is pickup */}
